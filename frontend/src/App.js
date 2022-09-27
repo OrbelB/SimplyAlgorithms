@@ -1,13 +1,10 @@
-import './App.css';
+import Frame from './components/ui/Frame'
+import MainNavigation from "./components/ui/MainNavigation";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Hello World
-        </p>
-      </header>
+        <MainNavigation/>
     </div>
   );
 }
