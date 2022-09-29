@@ -1,8 +1,29 @@
-import {NavLink} from "react-router-dom";
+import {Navigate, NavLink} from "react-router-dom";
+import {useState} from "react";
+import Bell from "./Bell";
+import DropdownMenu from "./dropdown-menu/DropdownMenu";
 
+const nestedDropdownMenu = [
+    {
+        title: "Sorting",
+        selections: ["Selection Sort", "Quick Sort"],
+        links: ["selection-sort", "quick-sort"]
+
+    },
+    {
+        title: "Trees",
+        selections: ["Binary Trees", "Two Trees"],
+        links: ["binary-tree", "two-tree"]
+    },
+    {
+        title: "Graphs",
+        selections: ["DFS", "BFS"],
+        links: ["dfs", "bfs"]
+    }
+
+]
 export default function MainNavigation() {
     return (
-
         <nav className="navbar navbar-expand-lg bg-light">
             <div className="container-fluid">
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -12,35 +33,28 @@ export default function MainNavigation() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                Categories
-                            </a>
-                            <ul className="dropdown-menu">
-                                <li><a className="dropdown-item" href="#">Sorting</a></li>
-                                <li><a className="dropdown-item" href="#">Trees</a></li>
-                                <li><a className="dropdown-item" href="#">Graphs</a></li>
-                            </ul>
+                        <DropdownMenu dropdownTitle="Categories" nestedDropdownSelections={nestedDropdownMenu}/>
+                        <li className="nav-item">
+                            <NavLink className="nav-link" aria-current="page" to={"home"}>Home</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#">Home</a>
+                            <NavLink className="nav-link" to={"dashboard"}>Dashboard</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Dashboard</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Forums</a>
+                            <NavLink className="nav-link" to={"forums"}>Forums</NavLink>
                         </li>
                     </ul>
                     <form className="d-flex" role="search">
-                        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                            <button className="btn btn-outline-success" type="submit">Search</button>
+                        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                        <button className="btn btn-outline-primary" type="submit"><span className="bi bi-search"></span>
+                        </button>
                     </form>
-
-                    <div className="nav-item dropdown m-2">
+                    <div className="nav-item ms-2">
+                        <Bell/>
+                    </div>
+                    <div className="nav-item dropdown ms-3">
                         <a
-                            className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            className="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown"
                             aria-expanded="false"
                             id="navbarDropdownMenuAvatar"
                         >
@@ -57,19 +71,18 @@ export default function MainNavigation() {
                             aria-labelledby="navbarDropdownMenuAvatar"
                         >
                             <li>
-                                <a className="dropdown-item" href="#">My profile</a>
+                                <NavLink className="dropdown-item" to={"my-profile"}>My profile</NavLink>
                             </li>
                             <li>
-                                <a className="dropdown-item" href="#">Settings</a>
+                                <NavLink className="dropdown-item" to={"settings"}> Settings </NavLink>
                             </li>
                             <li>
-                                <a className="dropdown-item" href="#">Logout</a>
+                                <NavLink className="dropdown-item" to={"logout"}>Logout</NavLink>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </nav>
-
     );
 }
