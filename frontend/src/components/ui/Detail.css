@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
+
+.detail {
+    text-align: center;
+    background-color: #FDFCF4;
+    font-family: 'Readex Pro', sans-serif;
+}
+ 
+.top {
+    padding: 5%;
+}
+ 
+.list-group-item {
+    background: #FDFCF4;
+}
+ 
+.mid {
+    background-color: #d3fef4;
+    border-radius: 50px;
+    padding:5% 15%;
+}
+
+.bot {
+    padding: 5% 15%;
+}
+
+.fr {
+    margin: 5%;
+    float: left;
+}
+
+.vid {
+    margin: 5%;
+}
