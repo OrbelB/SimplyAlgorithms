@@ -1,3 +1,11 @@
+:root{
+    --color-bg-main:#97F9FF;
+    --color-bg-second: #FDFCF4;
+    --color-bg-alg-dash:#E8ADAD;
+    --color-border:black;
+}
+
+
 .dropdown-menu li {
     position: relative;
 }
@@ -13,4 +21,7 @@
 }
 .dropdown-menu > li:hover > .dropdown-submenu {
     display: block;
+}
+body{
+    background:#97F9FF;
 }

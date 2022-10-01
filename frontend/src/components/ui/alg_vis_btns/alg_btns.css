@@ -1,0 +1,13 @@
+.alg_visualizer{
+    background:var(--color-bg-alg-dash);
+    position: relative;
+    width: 100rem; 
+    margin-left: auto;
+    margin-right: auto;
+    height: 5rem;
+    top: -1rem;
+    border: 2px solid;
+    border-color: var(--color-border);
+
+    border-radius: 1rem 1rem 1rem 1rem;
+}
