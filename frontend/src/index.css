@@ -1,8 +1,21 @@
+*{
+    margin: 0;
+    padding:0;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+  }
+  
 :root{
     --color-bg-main:#97F9FF;
     --color-bg-second: #FDFCF4;
     --color-bg-alg-dash:#E8ADAD;
+    --color-bg-white:white;
     --color-border:black;
+    --color-black:black;
+
 }
 
 
@@ -25,3 +38,4 @@
 body{
     background:#97F9FF;
 }
+

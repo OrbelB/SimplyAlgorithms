@@ -5,7 +5,7 @@
     height: 31px;
     width: 85%;
     outline: none;
-    transition: background 450ms ease-in;
+    transition: 450ms ease-in;
     -webkit-appearance: none;
 
 }
