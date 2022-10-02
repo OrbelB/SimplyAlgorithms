@@ -57,6 +57,33 @@
 }
 
 .alg_vis_btn_prev{
+    position: relative;
+    border: 1px solid var(--color-black);
+    background-color: var(--color-bg-alg-dash);
+    width: 2.5rem;
+    left: 45rem;
+    top:2.8rem;
+    border-radius: 1.5rem .5rem .5rem 1.5rem;
+}
+.alg_vis_btn_prev:hover{
+    background-color: var(--color-bg-white);
+}
+
+.alg_vis_btn_next{
+    position: relative;
+    border: 1px solid var(--color-black);
+    background-color: var(--color-bg-alg-dash);
+    width: 2.5rem;
+    left: 50rem;
+    top:2.8rem;
+    border-radius: 1rem 1.5rem 1.5rem 1rem;
+}
+.alg_vis_btn_next:hover{
+    background-color: var(--color-bg-white);
+}
+
+/* 
+    padding-top: -100px;
     border: 1px solid;
     position: absolute;
     align-items: left;
@@ -65,6 +92,7 @@
     background-color: var(--color-bg-alg-dash);
     color: var(--color-black);
     width: 5em;
-    height: 1.5rem;
+    height: 1.4rem;
     border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;   
-}
+
+*/
