@@ -1,0 +1,12 @@
+.input-comment-style {
+    background: #5778EE;
+}
+
+.btn-style {
+    background: #0A0B28;
+}
+
+.btn-style:hover {
+    background: #282d83 !important;
+
+}

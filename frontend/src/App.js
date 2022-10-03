@@ -1,8 +1,10 @@
 import Detail from './components/ui/Detail'
-import AlgoFrame from './components/ui/AlgoFrame'
+import AlgoFrame from './components/ui/algo-frame/AlgoFrame'
 import CodeSnippet from './components/ui/CodeSnippet'
-import MainNavigation from "./components/ui/MainNavigation";
+import MainNavigation from "./components/ui/main-navigation/MainNavigation";
 import Alg_vis_btns from './components/ui/alg_vis_btns/Alg_vis_btns'
+import InputComment from "./components/ui/comment/InputComment";
+import Comment from "./components/ui/comment/Comment";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Alg_vis_btns/>
         <Detail />
         <CodeSnippet/>
+        <InputComment/>
+        <Comment/>
     </div>
   );
 }
