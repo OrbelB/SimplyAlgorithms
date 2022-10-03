@@ -1,0 +1,28 @@
+h1 {
+    padding-bottom: 20px;
+    padding-top: 10px;
+    text-align: center;
+}
+
+.languages {
+    background-color: #636160;
+    border-radius: 20px;
+    color: azure;
+    font-size: 30px;
+    font-weight: bold;
+    margin-left: 30%;
+    margin-right: 30%;
+    text-align: left;
+}
+
+.description {
+    background-color: black;
+    border-radius: 25px;
+    border-style: solid;
+    color: white;
+    font-size: 25px;
+    height: 300px;
+    margin-left: 30%;
+    margin-right: 30%;
+    white-space: pre-wrap;
+}

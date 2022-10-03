@@ -1,5 +1,5 @@
 import React from 'react'
-import Alg_vis_stps from './Alg_vis_stps'
+import Alg_vis_stps from './alg_vis_stps'
 import './alg_btns.css'
 import {GrPlay} from 'react-icons/gr';
 import {GrPrevious} from 'react-icons/gr';
