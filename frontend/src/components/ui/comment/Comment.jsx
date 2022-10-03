@@ -1,47 +1,131 @@
 import Upvotes from "./Upvotes";
+import ChildComment from "./ChildComment";
+import {useEffect, useState} from "react";
 
-export default function Comment() {
+export default function Comment({
+                                    parentId, name, photo_link, comment, created_at, upVotes, replies,
+                                    onNewCommentChild, comment_component_id
+                                }) {
+    const [showReplies, setShowReplies] = useState(false);
+    const [inputChildComment, setInputChildComment] = useState(false);
+    const [childComment, setChildComment] = useState("");
+    useEffect(() => {
+
+    }, [showReplies]);
+    const hasReplies = showReplies && replies.length > 0;
+
+    const handleShowReplies = () => {
+        setShowReplies(!showReplies);
+    };
+
+    const handleAddChildComment = () => {
+        setInputChildComment(!inputChildComment);
+        setChildComment("");
+    };
+
+    const getChildComment = () => {
+        setChildComment("");
+        setInputChildComment(!inputChildComment)
+        onNewCommentChild(childComment, parentId, comment_component_id,name, photo_link);
+    }
+
+    const handleInputChildCommentUpdate = (event) => {
+        setChildComment(event.target.value);
+    }
+
 
     return (
-        <div className={"container-fluid mt-3"}>
+        <div className={"container-fluid p-3"}>
             <div className="grid">
-                <div className="row">
+                <div className="row justify-content-center">
                     <div className="col-sm-2">
-                        <Upvotes/>
+                        <Upvotes upVotes={upVotes}/>
                     </div>
-                    <div className="col">
+                    <div className="col me-lg-5">
                         <div className="row">
-                            <div className="col-sm-1">
+                            <div className="col-sm-auto">
                                 <img
-                                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                                    src={photo_link}
                                     className="rounded-circle"
                                     height="40"
                                     alt="Black and White Portrait of a Man"
                                     loading="lazy"
                                 />
                             </div>
-                            <div className="col-sm-1">
-                                <p className={"text-primary"}>name</p>
+                            <div className="col-auto">
+                                <p className={"text-primary"}>{name}</p>
                             </div>
-                            <div className="col-4">
-                                <p className={"text-secondary"}>2 months ago</p>
+                            <div className="col-auto me-lg-auto">
+                                <p className={"text-secondary"}>{created_at}</p>
                             </div>
                             <div className="col-sm-auto">
-                                <i className={"bi bi-trash text-danger"}>{" "}Delete</i>
+                                <button className={"btn btn-outline-primary bi bi-trash text-danger"}>{" "}Delete
+                                </button>
                             </div>
                             <div className="col-sm-auto ">
-                                <i className={"bi bi-pencil-fill "}> Edit</i>
+                                <button className={"btn btn-outline-primary bi bi-pencil-fill "}> Edit</button>
                             </div>
                             <div className="col-sm-auto">
-                                <i className={"bi bi-arrow-return-left text-info"} >{" "}Reply</i>
+                                <button
+                                    className={"btn btn-outline-primary bi bi-arrow-return-left text-info"}
+                                    onClick={handleAddChildComment}
+                                >{" "}Reply
+                                </button>
                             </div>
 
                         </div>
-                        <div className="row mt-2">
-                            <p>Impressive! Though it seems the drag feature could be improved. But overall it looks
-                                incredible. You’ve nailed the design and the responsiveness at various breakpoints works
-                                really well.</p>
+                        <div className="row justify-content-start mt-2">
+                            <p>{comment}</p>
                         </div>
+                        {inputChildComment &&
+                            <div className={"row justify-content-end mt-2"}>
+                                <div className={"col-sm-auto p-1"}>
+                                    <img
+                                        src={photo_link}
+                                        className="rounded-circle"
+                                        height="40"
+                                        alt="Profile Picture of Current User"
+                                        loading="lazy"
+                                    />
+                                </div>
+                                <div className={"col-md-11 p-1"}>
+                                    <input className={"form-control"} placeholder={"add a reply.."}
+                                           value={childComment} onInput={handleInputChildCommentUpdate}/>
+                                </div>
+                                <div className={"row justify-content-end p-1"}>
+                                    <div className={"col-sm-auto"}>
+                                        <button className={"btn"} onClick={handleAddChildComment}>CANCEL</button>
+
+                                    </div>
+                                    <div className={"col-sm-auto"}>
+                                        <button className={"btn"} onClick={getChildComment}>REPLY</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        {replies.length
+                            > 0 &&
+                            <div className={"row "}>
+                                <div className={"col-sm-auto"}>
+                                    {!showReplies ? <a className={"btn  bi bi-caret-down"} type={"button"}
+                                                       onClick={handleShowReplies}>{" " + replies.length + " "} replies</a> :
+                                        <a className={"btn bi bi-caret-up"} type={"button"}
+                                           onClick={handleShowReplies}>{" " + replies.length + " "} replies</a>}
+                                </div>
+                            </div>
+                        }
+                        {hasReplies &&
+                            <div className={"row"}>
+                                {replies.map((reply, index) => (
+                                    <ChildComment key={(index + (reply.name)).toString()} comment={reply.comment}
+                                                  created_at={reply.created_at} photo_link={reply.photo}
+                                                  name={reply.name}
+                                                  upVotes={upVotes}
+                                    />
+                                ))
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
