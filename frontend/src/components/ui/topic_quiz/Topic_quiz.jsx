@@ -17,20 +17,21 @@ const Topic_quiz = () => {
             <h4 className={cx(styles['topic_quiz_header'])}>Q: What is a cat?</h4>
           </div>
           <div className='row'>
-            <div className='col'>
+          <div className='col-sm-2'></div>
+            <div className='col-sm'>
               <div className='row '>
-                <div className='col'>
+                <div className='col-sm-auto'>
                   <button className={cx(styles['quiz_buttons_select_a'])}>{option_arr[0]}</button>
                 </div>
-                <div className='col'>
+                <div className='col-sm-auto' >
                  <button className={cx(styles['quiz_buttons_select_b'])}>{option_arr[1]}</button>
                 </div>
               </div>
               <div className='row'>
-                <div className='col'>
+                <div className='col-sm-auto'>
                  <button className={cx(styles['quiz_buttons_select_b'])}>{option_arr[2]}</button>
                 </div>
-                <div className='col'>
+                <div className='col-sm-auto'>
                   <button className={cx(styles['quiz_buttons_select_a'])}>{option_arr[3]}</button>
                 </div>
               </div>
@@ -39,8 +40,9 @@ const Topic_quiz = () => {
               <button className={cx(styles['quiz_buttons_cont'])}>continue quiz</button>
             </div>
             <div className='row'>
-              <div className='col col-lg'>
-                <a className={cx(styles['quiz_info'])} href='https://developer.mozilla.org/en-US/' target="_blank">QUIZ NAME</a>
+              <div className='col-sm-8'></div>
+              <div className='col-sm-auto'>
+                <a className={cx(styles['quiz_info'], ' p-2')} href='https://developer.mozilla.org/en-US/' target="_blank">QUIZ NAME</a>
               </div>
             </div>
           </div>

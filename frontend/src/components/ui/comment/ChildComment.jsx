@@ -1,13 +1,35 @@
 import Upvotes from "./Upvotes";
-
-export default function childComment({
-                                         photo_link, name, created_at, upVotes, comment,deleteChildComment, comment_id,parent_comment_id
+import {useState} from "react";
+import AddEditComment from "./AddEditComment";
+//TODO make users capable to change their comments only
+export default function ChildComment({
+                                         photo_link,
+                                         name,
+                                         created_at,
+                                         upVotes,
+                                         comment,
+                                         deleteChildComment,
+                                         comment_id,
+                                         parent_comment_id,
+                                         editChildComment, user_id
 
                                      }) {
-    const onDeleteComment = () => {
-        deleteChildComment(parent_comment_id,comment_id);
 
+    const [isEditButtonClicked, setIsEditButtonClicked] = useState(false);
+
+    const handleIsEditButtonClicked = () => {
+        setIsEditButtonClicked(!isEditButtonClicked);
+    };
+    const onDeleteComment = () => {
+        deleteChildComment(parent_comment_id, comment_id);
     }
+
+    const onEditComment = (newEditedComment) => {
+        setIsEditButtonClicked(!isEditButtonClicked)
+        editChildComment(newEditedComment, comment_id, user_id)
+    }
+
+
     return (
         <div className={"container-fluid p-3"}>
             <div className="grid">
@@ -33,15 +55,19 @@ export default function childComment({
                                 <p className={"text-secondary"}>{created_at}</p>
                             </div>
                             <div className="col-sm-auto">
-                                <button className={"btn btn-outline-primary bi bi-trash text-danger"} onClick={onDeleteComment}>{" "}Delete
+                                <button className={"btn btn-outline-primary bi bi-trash text-danger"}
+                                        onClick={onDeleteComment}>{" "}Delete
                                 </button>
                             </div>
                             <div className="col-sm-auto ">
-                                <button className={"btn btn-outline-primary bi bi-pencil-fill "}> Edit</button>
+                                <button className={"btn btn-outline-primary bi bi-pencil-fill "} onClick={handleIsEditButtonClicked}> Edit</button>
                             </div>
                         </div>
                         <div className="row mt-2">
-                            <p>{comment}</p>
+                            {isEditButtonClicked ?
+                                <AddEditComment comment={comment} handleAddEditComment={onEditComment}
+                                                cancelReplyElement={handleIsEditButtonClicked} photo_link={photo_link}/> :
+                                <p>{comment}</p>}
                         </div>
                     </div>
                 </div>

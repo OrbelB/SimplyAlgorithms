@@ -26,7 +26,8 @@
     background-color: var(--color-bg-alg-dash);
     border-radius: 1rem;
     border: 2px solid var(--color-border);
-    font-size: x-small;
+    margin-left: -4rem;
+    /* font-size: xx-large; */
     text-decoration: none;
     color: var(--color-black);
 }
