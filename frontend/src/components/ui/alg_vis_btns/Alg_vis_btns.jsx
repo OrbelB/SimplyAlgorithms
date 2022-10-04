@@ -55,7 +55,7 @@ const Alg_vis_btns = () => {
                             <div className={"col-sm-auto"} unselectable={"on"}>{dislikes}</div>
                         </button>
                     </div>
-                    <div className={"col-sm-auto small align-self-center me-3 ps-5 "}>
+                    <div className={"col-sm-auto small align-self-center me-3 ps-0"}>
                         <button className={cx(styles['alg_vis_btn_report'], "p-1 p-lg-auto")}>REPORT</button>
                     </div>
                 </div>
