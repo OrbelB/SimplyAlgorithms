@@ -1,12 +1,14 @@
 import React, {useState} from 'react'
 import styles  from './topic_quiz.module.css'
-import cn from "classnames"
+import cx from "classnames"
 
 
 const Topic_quiz = () => {
+
+  const oprtion_arr = ["option_a", "option_b", "option_c", "option_d"];
   return (
     //This is the start of the container
-    <div className={cn(styles['quiz_topic'], 'continer-fluid')}>
+    <div className={cx(styles['quiz_topic'], 'continer-fluid')}>
         <div className='grid p-2'>
           <div className='row'>
               Test Your knowlege
@@ -15,19 +17,27 @@ const Topic_quiz = () => {
           <div className='row'>
             <div className='col'>
               <div className='row'>
-                <div className='col'>Q1</div>
-                <div className='col'>Q2</div>
+                <div className='col'>
+                  <button className={cx(styles['quiz_buttons_select_a'])}></button>
+                </div>
+                <div className='col'>
+                 <button className={cx(styles['quiz_buttons_select_b'])}></button>
+                </div>
               </div>
               <div className='row'>
-                <div className='col'>Q3</div>
-                <div className='col'>Q4</div>
+                <div className='col'>
+                 <button className={cx(styles['quiz_buttons_select_b'])}></button>
+                </div>
+                <div className='col'>
+                  <button className={cx(styles['quiz_buttons_select_a'])}></button>
+                </div>
               </div>
             </div>
             <div className='col'>
-              Continue Quiz
+            <button className={cx(styles['quiz_buttons_cont'])}></button>
             </div>
             <div className='row'>
-              Quiz information
+              <a className={cx(styles['quiz_info'])} href='https://developer.mozilla.org/en-US/' target="_blank">QUIZ NAME</a>
             </div>
           </div>
         </div>
