@@ -1,4 +1,4 @@
-import MainNavigation from "../ui/main-navigation/MainNavigation";
+import MainNavigation from "../main-navigation/MainNavigation";
 
 export default function Layout(
     props

@@ -1,17 +1,16 @@
-import React, {useState} from 'react'
-import styles  from './topic_quiz.module.css'
+import styles  from './TopicQuiz.module.css'
 import cx from "classnames"
 
 
-const Topic_quiz = () => {
+const TopicQuiz = () => {
 
   const option_arr = ["option A", "option B", "option C", "option D"];
   return (
     //This is the start of the container
-    <div className={cx(styles['quiz_topic_container'], 'continer-fluid')}>
+    <div className={cx(styles['quiz_topic_container'], 'container-fluid')}>
         <div className='grid p-4'>
           <div className='row'>
-              <h2 className={cx(styles['topic_quiz_header'])}>Test Your knowlege</h2>
+              <h2 className={cx(styles['topic_quiz_header'])}>Test Your knowledge</h2>
           </div>
           <div className='row'>
             <h4 className={cx(styles['topic_quiz_header'])}>Q: What is a cat?</h4>
@@ -42,7 +41,7 @@ const Topic_quiz = () => {
             <div className='row'>
               <div className='col-sm-8'></div>
               <div className='col-sm-auto'>
-                <a className={cx(styles['quiz_info'], ' p-2')} href='https://developer.mozilla.org/en-US/' target="_blank">QUIZ NAME</a>
+                <a className={cx(styles['quiz_info'], ' p-2')} href='https://developer.mozilla.org/en-US/' target="_blank" rel="noreferrer">QUIZ NAME</a>
               </div>
             </div>
           </div>
@@ -51,5 +50,5 @@ const Topic_quiz = () => {
   )
 }
 
-export default Topic_quiz
+export default TopicQuiz
 

@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
-import styles from './alg_btns.module.css'
+import styles from './AlgBtns.module.css'
 import {GrPlay} from 'react-icons/gr';
 import {GrPrevious} from 'react-icons/gr';
 import {GrNext} from 'react-icons/gr'
 import cx from "classnames";
 
-const Alg_vis_btns = () => {
+const AlgVisBtns = () => {
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
     const handleLike = () => {
@@ -67,4 +67,4 @@ const Alg_vis_btns = () => {
     )
 }
 
-export default Alg_vis_btns
+export default AlgVisBtns

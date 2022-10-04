@@ -1,18 +1,18 @@
-import AlgoFrame from "../../components/ui/algo-frame/AlgoFrame";
-import Alg_vis_btns from "../../components/ui/alg_vis_btns/Alg_vis_btns";
-import Detail from "../../components/ui/detail/Detail";
-import CodeSnippet from "../../components/ui/code-snippet/CodeSnippet";
-import Topic_quiz from "../../components/ui/topic_quiz/Topic_quiz";
-import CommentFrame from "../../components/ui/comment/CommentFrame";
+import AlgoFrame from "../../components/topic_page/algo-frame/AlgoFrame";
+import AlgVisBtns from "../../components/topic_page/alg_vis_btns/AlgVisBtns";
+import Detail from "../../components/topic_page/detail/Detail";
+import CodeSnippet from "../../components/topic_page/code-snippet/CodeSnippet";
+import TopicQuiz from "../../components/topic_page/topic_quiz/TopicQuiz";
+import CommentFrame from "../../components/comment/CommentFrame";
 
 export default function TemplateTopicPage() {
     return (
         <>
             <AlgoFrame/>
-            <Alg_vis_btns/>
+            <AlgVisBtns/>
             <Detail/>
             <CodeSnippet/>
-            <Topic_quiz/>
+            <TopicQuiz/>
             <CommentFrame/>
         </>
     );

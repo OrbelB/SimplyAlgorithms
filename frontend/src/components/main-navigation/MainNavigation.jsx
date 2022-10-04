@@ -1,7 +1,6 @@
-import {Navigate, NavLink} from "react-router-dom";
-import {useState} from "react";
+import {NavLink} from "react-router-dom";
 import Bell from "./Bell";
-import DropdownMenu from "../dropdown-menu/DropdownMenu";
+import DropdownMenu from "./dropdown-menu/DropdownMenu";
 
 const nestedDropdownMenu = [
     {
