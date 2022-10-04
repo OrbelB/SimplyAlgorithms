@@ -3,7 +3,7 @@ import cx from "classnames";
 import styles from "./Bell.module.css"
 export default function Bell() {
     const [clickedBell, setClickedBell] = useState(false);
-    const handleBellButtonClicked = (event) => {
+    const handleBellButtonClicked = () => {
         setClickedBell(!clickedBell);
     }
     return (
