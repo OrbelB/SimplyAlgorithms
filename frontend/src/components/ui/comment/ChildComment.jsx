@@ -1,9 +1,13 @@
 import Upvotes from "./Upvotes";
 
 export default function childComment({
-                                         photo_link, name, created_at, upVotes, comment
+                                         photo_link, name, created_at, upVotes, comment,deleteChildComment, comment_id,parent_comment_id
 
                                      }) {
+    const onDeleteComment = () => {
+        deleteChildComment(parent_comment_id,comment_id);
+
+    }
     return (
         <div className={"container-fluid p-3"}>
             <div className="grid">
@@ -18,7 +22,7 @@ export default function childComment({
                                     src={photo_link}
                                     className="rounded-circle"
                                     height="40"
-                                    alt="Black and White Portrait of a Man"
+                                    alt="profile picture"
                                     loading="lazy"
                                 />
                             </div>
@@ -29,7 +33,7 @@ export default function childComment({
                                 <p className={"text-secondary"}>{created_at}</p>
                             </div>
                             <div className="col-sm-auto">
-                                <button className={"btn btn-outline-primary bi bi-trash text-danger"}>{" "}Delete
+                                <button className={"btn btn-outline-primary bi bi-trash text-danger"} onClick={onDeleteComment}>{" "}Delete
                                 </button>
                             </div>
                             <div className="col-sm-auto ">

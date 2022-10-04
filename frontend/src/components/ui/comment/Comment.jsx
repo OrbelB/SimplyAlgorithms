@@ -2,9 +2,11 @@ import Upvotes from "./Upvotes";
 import ChildComment from "./ChildComment";
 import {useEffect, useState} from "react";
 
+
 export default function Comment({
                                     parentId, name, photo_link, comment, created_at, upVotes, replies,
-                                    onNewCommentChild, comment_component_id
+                                    onNewCommentChild, comment_component_id, editComment, deleteParentComment,
+                                    deleteChildComment
                                 }) {
     const [showReplies, setShowReplies] = useState(false);
     const [inputChildComment, setInputChildComment] = useState(false);
@@ -26,11 +28,19 @@ export default function Comment({
     const getChildComment = () => {
         setChildComment("");
         setInputChildComment(!inputChildComment)
-        onNewCommentChild(childComment, parentId, comment_component_id,name, photo_link);
+        onNewCommentChild(childComment, parentId, comment_component_id, name, photo_link);
     }
 
     const handleInputChildCommentUpdate = (event) => {
         setChildComment(event.target.value);
+    }
+
+    const handleDeleteMessage = () => {
+        deleteParentComment(comment_component_id, parentId);
+    }
+
+    const handleEditComment = () => {
+        editComment(comment_component_id, parentId);
     }
 
 
@@ -59,11 +69,14 @@ export default function Comment({
                                 <p className={"text-secondary"}>{created_at}</p>
                             </div>
                             <div className="col-sm-auto">
-                                <button className={"btn btn-outline-primary bi bi-trash text-danger"}>{" "}Delete
+                                <button className={"btn btn-outline-primary bi bi-trash text-danger"}
+                                        onClick={handleDeleteMessage}>{" "}Delete
                                 </button>
                             </div>
                             <div className="col-sm-auto ">
-                                <button className={"btn btn-outline-primary bi bi-pencil-fill "}> Edit</button>
+                                <button className={"btn btn-outline-primary bi bi-pencil-fill"}
+                                        onClick={handleEditComment}> Edit
+                                </button>
                             </div>
                             <div className="col-sm-auto">
                                 <button
@@ -72,7 +85,6 @@ export default function Comment({
                                 >{" "}Reply
                                 </button>
                             </div>
-
                         </div>
                         <div className="row justify-content-start mt-2">
                             <p>{comment}</p>
@@ -116,11 +128,12 @@ export default function Comment({
                         }
                         {hasReplies &&
                             <div className={"row"}>
-                                {replies.map((reply, index) => (
-                                    <ChildComment key={(index + (reply.name)).toString()} comment={reply.comment}
-                                                  created_at={reply.created_at} photo_link={reply.photo}
-                                                  name={reply.name}
-                                                  upVotes={upVotes}
+                                {replies.map((reply) => (
+                                    <ChildComment key={reply.comment_id} comment={reply.comment} comment_id={reply.comment_id}
+                                                  parent_comment_id={comment_component_id} created_at={reply.created_at} photo_link={reply.photo}
+                                                  name={reply.name} upVotes={upVotes} deleteChildComment={deleteChildComment}
+
+
                                     />
                                 ))
                                 }
