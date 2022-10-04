@@ -35,6 +35,14 @@ h1 {
     white-space: pre-wrap;
 }
 
+.react-tabs__tab--selected {
+    background: #173fcf;
+    color: white;
+    border-radius: 10px 10px 10px 10px;
+    border-style: none;
+  }
+
 .bottom {
     height: 70px;
 }
+
