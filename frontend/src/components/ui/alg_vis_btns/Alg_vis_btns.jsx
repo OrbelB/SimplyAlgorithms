@@ -45,14 +45,14 @@ const Alg_vis_btns = () => {
                         {/* TODO when setting up the server a user can only either like or dislike; A like/dislike must be unique per user */}
                         <button className={cx(styles['alg_vis_btn_like'], "row bi bi-hand-thumbs-up p-1 p-lg-auto")}
                              onClick={handleLike}>
-                            <div className={"col-sm-auto "} unselectable={"on"}>{likes=== 0 ? 0 : likes}</div>
+                            <div className={"col-sm-auto "} unselectable={"on"}>{likes}</div>
                         </button>
                     </div>
                     <div className={"col-sm-auto small align-self-center"}>
                         {/* TODO when setting up the server a user can only either like or dislike; A like/dislike must be unique per user */}
                         <button className={cx(styles['alg_vis_btn_dislike'], "row bi bi-hand-thumbs-down p-1 p-lg-auto")}
                              onClick={handleDislike}>
-                            <div className={"col-sm-auto"} unselectable={"on"}>{dislikes === 0 ? 0 : dislikes}</div>
+                            <div className={"col-sm-auto"} unselectable={"on"}>{dislikes}</div>
                         </button>
                     </div>
                     <div className={"col-sm-auto small align-self-center me-3 ps-0 "}>

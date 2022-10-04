@@ -106,18 +106,3 @@
 .alg_vis_btn_report:hover{
     background-color: var(--color-bg-white);
 }
-
-/* 
-    padding-top: -100px;
-    border: 1px solid;
-    position: absolute;
-    align-items: left;
-    top: 2.5rem;
-    left: 45rem;
-    background-color: var(--color-bg-alg-dash);
-    color: var(--color-black);
-    width: 5em;
-    height: 1.4rem;
-    border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;   
-
-*/

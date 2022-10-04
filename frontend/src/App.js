@@ -4,6 +4,7 @@ import CodeSnippet from './components/ui/CodeSnippet'
 import MainNavigation from "./components/ui/main-navigation/MainNavigation";
 import Alg_vis_btns from './components/ui/alg_vis_btns/Alg_vis_btns'
 import CommentFrame from "./components/ui/comment/CommentFrame";
+import Topic_quiz from './components/ui/topic_quiz/Topic_quiz';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Alg_vis_btns/>
         <Detail />
         <CodeSnippet/>
+        <Topic_quiz/>
         <CommentFrame/>
     </div>
   );
