@@ -3,15 +3,15 @@ import 'react-tabs/style/react-tabs.css';
 import "./CodeSnippet.css";
 
 var Java = ' class HelloWorld {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello, World!");\n\t}\n }'
-var JavaScript = ' console.log("I HATE MY LIFE")'
+var JavaScript = ' console.log("Hello World")'
 var C = ' #include <stdio.h>\n\tint main() {\n\t\tprintf("Hello world");\n\t\treturn 0;\n\t}';
 var Cplusplus = ' #include <iostream>\nint main() {\n\tstd::cout << "Hello world!";\n\treturn 0;\n}'
-var Python = ' def JoeMama():\n\tprint("yo mama")\n\nJoeMama()'
+var Python = ' def Greeting():\n\tprint("Hello World")\n\nGreeting()'
  
 export default function CodeSnippet() {
     return (
       <div className="component">
-        <h1>Code Implementation</h1>
+        <h1>CODE IMPLEMENTATION</h1>
         <Tabs>
           <TabList className='languages'>
             <Tab>Java</Tab>
@@ -48,6 +48,7 @@ export default function CodeSnippet() {
             </TabPanel>
         </div>
       </Tabs>
+      <div className='bottom'></div>
   </div>
     );
 }
