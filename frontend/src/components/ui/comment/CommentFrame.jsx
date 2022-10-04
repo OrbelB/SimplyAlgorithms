@@ -87,7 +87,7 @@ export default function CommentFrame() {
     return (<div className="bg-white mt-4">
             <InputComment onNewComment={onNewComment}/>
             {comments.map((staticComment) => (
-                <Comment key={staticComment.comment_component_id} parentId={staticComment.id} name={staticComment.name}
+                <Comment key={staticComment.comment_id} parentId={staticComment.id} name={staticComment.name}
                          comment_component_id={staticComment.comment_id}
                          photo_link={staticComment.photo} comment={staticComment.comment}
                          created_at={staticComment.created_at} upVotes={staticComment.upVotes}

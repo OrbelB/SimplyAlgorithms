@@ -6,7 +6,7 @@ export default function AlgoFrame() {
     return (
         <div className={cx(styles["container-style"], "container-fluid")}>
             <div className="row">
-                <div className="col-10 mt-3 ms-3">
+                <div className="col-10 mt-2">
                     <h1 className="ms-auto text-start">
                         Algorithm Title
                     </h1>
