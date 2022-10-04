@@ -36,6 +36,6 @@
     display: block;
 }
 body{
-    background:#97F9FF;
+    background: var(--color-bg-main);
 }
 
