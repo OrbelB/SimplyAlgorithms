@@ -1,24 +1,14 @@
 .alg_visualizer{
-    position: relative;
     background:var(--color-bg-alg-dash);
-    width: 80%; 
-    margin-left: auto;
-    margin-right: auto;
-    height: 5rem;
-    top: -1rem;
     border: 2px solid;
     border-color: var(--color-border);
     border-radius: 1rem 1rem 1rem 1rem;
 }
 
 .alg_vis_btn_play{
-    position: absolute;
-    top: 1rem;
-    left: .4rem;
     background-color: var(--color-bg-alg-dash);
     color: var(--color-black);
     width: 5rem;
-    height: 2.5rem;
     border: 1px solid;
     border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
 }
@@ -26,43 +16,42 @@
     background-color: var(--color-bg-white);
 }
 
-
 .alg_vis_btn_inData{
-    position: absolute;
-    top: 1rem;
-    left: 6.5rem;
     border: 1px solid;
     background-color: var(--color-bg-alg-dash);
     color: var(--color-black);
-    width: 8.5rem;
-    height: 2.5rem;
     border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
 }
 .alg_vis_btn_inData:hover{
     background-color: var(--color-bg-white);
 }
-/* .alg_vis_btn_steps{
-    position: absolute;
-    top: 1rem;
-    left: 16.5rem;
+.alg_vis_btn_steps{
     background-color: var(--color-bg-alg-dash);
     color: var(--color-black);
-    width: 8.5rem;
-    height: 2.5rem;
+    border: 1px solid;
+    width: 5.5rem;
     border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
-} */
+}
 
-.alg_vis_btn_steps:hover{
+.alg_vis_btn_steps:hover {
+    background-color: var(--color-bg-white);
+}
+
+.alg_vis_btn_steps_amount {
+    background-color: var(--color-bg-alg-dash);
+    border: 1px solid;
+    color: var(--color-black);
+    width: 8.5rem;
+    border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+}
+.alg_vis_btn_steps_amount:hover{
     background-color: var(--color-bg-white);
 }
 
 .alg_vis_btn_prev{
-    position: relative;
+
     border: 1px solid var(--color-black);
     background-color: var(--color-bg-alg-dash);
-    width: 2.5rem;
-    left: 45%;
-    top:2.8rem;
     border-radius: 1.5rem .5rem .5rem 1.5rem;
 }
 .alg_vis_btn_prev:hover{
@@ -70,18 +59,53 @@
 }
 
 .alg_vis_btn_next{
-    position: relative;
+
     border: 1px solid var(--color-black);
     background-color: var(--color-bg-alg-dash);
-    width: 2.5rem;
-    left: 50%;
-    top:2.8rem;
-    border-radius: 1rem 1.5rem 1.5rem 1rem;
+    border-radius: .5rem 1.5rem 1.5rem .5rem;
 }
 .alg_vis_btn_next:hover{
     background-color: var(--color-bg-white);
 }
 
+.alg_vis_btn_like {
+
+    border: 1px solid;
+    height: 100%;
+    width: 5.2em;
+    background-color: var(--color-bg-alg-dash);
+    color: var(--color-black);
+    border-radius: 1.5rem 0 0 1.5rem;
+}
+.alg_vis_btn_like:hover{
+    background-color: var(--color-bg-white);
+}
+
+.alg_vis_btn_dislike {
+
+    border: 1px solid;
+    height: 100%;
+    width: 5.2em;
+    background-color: var(--color-bg-alg-dash);
+    color: var(--color-black);
+    border-radius: 0;
+}
+.alg_vis_btn_dislike:hover{
+    background-color: var(--color-bg-white);
+}
+
+.alg_vis_btn_report {
+
+    border: 1px solid;
+    height: 100%;
+    width: 5.2em;
+    background-color: var(--color-bg-alg-dash);
+    color: var(--color-black);
+    border-radius: 0 1.5rem 1.5rem 0;
+}
+.alg_vis_btn_report:hover{
+    background-color: var(--color-bg-white);
+}
 
 /* 
     padding-top: -100px;
