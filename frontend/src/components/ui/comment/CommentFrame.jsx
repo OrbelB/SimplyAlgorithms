@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {NavLink} from "react-router-dom";
 import InputComment from "./InputComment";
 import Comment from "./Comment";
 
@@ -81,10 +82,29 @@ export default function CommentFrame() {
         setComments(tempArray);
     }
 
-    const editComment = (comment_id, parent_id) => {
+    const editComment = (comment, comment_id, parent_id) => {
         //TODO
+        console.log(comment
+        )
+        let tempArray = [...comments];
+        tempArray.find(comment_component => comment_component.id === parent_id &&
+            comment_component.comment_id === comment_id).comment = comment;
+        setComments(tempArray);
+
     }
-    return (<div className="bg-white mt-4">
+
+    const editChildComment = (newComment, child_comment_id, child_user_id, comment_component_id) => {
+        let tempArray = [...comments];
+        tempArray.find(comment_parent => comment_parent.comment_id === comment_component_id)
+            .replies
+            .find(reply => reply.comment_id = child_comment_id && reply.id === child_user_id).comment = newComment;
+        setComments(tempArray);
+    }
+    return (
+        <div className="bg-white mt-4">
+            <div>
+                <p>Have a question? Check our {<NavLink className={"link-warning"} to={"/forums"}>forums </NavLink>}</p>
+            </div>
             <InputComment onNewComment={onNewComment}/>
             {comments.map((staticComment) => (
                 <Comment key={staticComment.comment_id} parentId={staticComment.id} name={staticComment.name}
@@ -93,7 +113,7 @@ export default function CommentFrame() {
                          created_at={staticComment.created_at} upVotes={staticComment.upVotes}
                          onNewCommentChild={handleOnNewCommentChild} replies={staticComment.replies}
                          deleteParentComment={deleteParentComment} deleteChildComment={deleteChildComment}
-                         editComment={editComment}
+                         editComment={editComment} editChildComment={editChildComment}
                 />
             ))}
         </div>
