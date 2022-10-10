@@ -22,12 +22,10 @@ export default function Comment({
     };
 
     const handleCancelComment = () => {
-        //TODO
         setInputChildComment(!inputChildComment);
     };
 
     const getChildComment = (passedChildComment) => {
-        //TODO
         setInputChildComment(!inputChildComment);
         onNewCommentChild(passedChildComment, parentId, comment_component_id, name, photo_link);
     };

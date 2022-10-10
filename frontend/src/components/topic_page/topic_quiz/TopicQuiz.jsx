@@ -7,8 +7,8 @@ const TopicQuiz = () => {
   const option_arr = ["option A", "option B", "option C", "option D"];
   return (
     //This is the start of the container
-    <div className={cx(styles['quiz_topic_container'], 'container-fluid')}>
-        <div className='grid p-4'>
+    <div className={'container-fluid'}>
+        <div className={cx(styles['quiz_topic_container'],'grid p-4 m-5')}>
           <div className='row'>
               <h2 className={cx(styles['topic_quiz_header'])}>Test Your knowledge</h2>
           </div>

@@ -1,7 +1,6 @@
 .quiz_topic_container{
     background-color: var(--color-bg-second);
     border-radius: 1rem;
-    margin: 1%;
     border: 2px solid var(--color-border);
 }
 .topic_quiz_header{

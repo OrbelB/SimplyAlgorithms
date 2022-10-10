@@ -23,7 +23,7 @@ const nestedDropdownMenu = [
 ]
 export default function MainNavigation() {
     return (
-        <nav className="navbar navbar-expand-lg bg-light">
+        <nav className="navbar navbar-expand-lg bg-light border-bottom  border-dark">
             <div className="container-fluid">
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -76,7 +76,7 @@ export default function MainNavigation() {
                                 <NavLink className="dropdown-item" to={"settings"}> Settings </NavLink>
                             </li>
                             <li>
-                                <NavLink className="dropdown-item" to={"logout"}>Logout</NavLink>
+                                <NavLink className="dropdown-item" to={"login"}>Login</NavLink>
                             </li>
                         </ul>
                     </div>
