@@ -1,9 +1,9 @@
+import Intro from "../components/home_page/Intro/Intro";
 
 export default function HomePage() {
     return (
-        <div>
-            <p>place your home page components here</p>
-        </div>
-
-    )
+        <>
+           <Intro/>
+        </>
+    );
 }

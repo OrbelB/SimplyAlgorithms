@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
+
+.section {
+    height: 500px;
+    background-color: aqua;
+    text-align: center;
+}
+
+.title {
+    color: white;
+    font-size: 70px;
+    padding-top: 100px;
+}
+
+.slogan {
+    font-size: 40px;
+    font-style: italic;
+    font-weight: 500;
+    padding-bottom: 50px;
+}
+
+.button {
+    background-color: black;
+    border-radius: 10px 10px 10px 10px;
+    color: white;
+    font-family: 'Readex Pro', sans-serif;
+    font-size: 35px;
+}   
