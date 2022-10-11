@@ -1,0 +1,47 @@
+.forum-section {
+    background-color: #D3FFE2;
+    height: auto;
+    text-align: center;
+}
+
+.quiz-section {
+    background-color: #EDEFFF;
+    height: auto;
+    text-align: center;
+}
+
+.forum-body {
+    margin-left: 13%;
+    margin-right: 5%;
+    display: flex;
+}
+
+.quiz-body {
+    margin-left: 5%;
+    margin-right: 15%;
+    display: flex;
+}
+
+.pic {
+    background-color: white;
+    width: 800px;
+    height: 200px;
+}
+
+.b {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 10px 10px 10px 10px;
+    padding: 10px;
+}
+
+.b1 {
+    background-color: #F52658;
+    border-color: #971a37;
+}
+
+.b2 {
+    background-color: #2647F5;
+    border-color: #1e39be;
+}
