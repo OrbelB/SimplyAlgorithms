@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
+
 .cat1 { background: rgb(31, 211, 31);}
 .cat2 {background: rgb(230, 43, 43);}
-.cat3 {background: rgb(233, 152, 3);}
-.cat4 {background: rgb(12, 12, 250);}
-
+.cat3 {background: rgb(12, 12, 250);}
+.cat4 {background: rgb(233, 152, 3);}
 
 input[type='checkbox'] { 
     display: none; } 
@@ -11,10 +12,14 @@ input[type='checkbox'] {
     margin: 1.2rem 0; 
 } 
 
+.space {
+    height: 25px;
+}
+
 .lbl-toggle { 
     display: block;
     font-weight: bold; 
-    font-family: monospace; 
+    font-family: 'Readex Pro', sans-serif; 
     font-size: 2.5rem; 
     text-transform: uppercase; 
     text-align: center; 
@@ -64,17 +69,29 @@ input[type='checkbox'] {
  
 .collapsible-content .content-inner { 
     text-align: center;
-    background: rgba(0, 105, 255, .2); 
+    background: rgb(197, 240, 255); 
     border-bottom: 1px solid rgba(0, 105, 255, .45); 
     border-bottom-left-radius: 7px; 
     border-bottom-right-radius: 7px; 
     padding: .5rem 1rem;
     margin-left: 20%;
     margin-right: 20%;
-    margin-bottom: 100px; 
+    margin-bottom: 20px; 
 } 
 
 .collapsible-content p { 
     margin-bottom: 0; 
 }
 
+.topic {
+    background: rgb(197, 240, 255);
+    border: none;
+    font-size: 25px;  
+    font-weight: 500;
+    padding-left: 40px;
+    padding-right: 40px; 
+}
+
+.bottom {
+    height: 80px;
+}
