@@ -53,24 +53,24 @@ export default function Comment({
             <div className={"container-fluid p-3"}>
                 <div className="grid">
                     <div className="row justify-content-center">
-                        <div className="col-sm-2">
+                        <div className="col-2 col-sm-auto">
                             <Upvotes upVotes={upVotes}/>
                         </div>
-                        <div className="col me-lg-5">
+                        <div className="col me-lg-5 me-auto">
                             <div className="row">
-                                <div className="col-sm-auto">
+                                <div className="col-auto col-sm-auto m-1">
                                     <img
                                         src={photo_link}
                                         className="rounded-circle"
-                                        height="40"
+                                        height="45"
                                         alt="Black and White Portrait of a Man"
                                         loading="lazy"
                                     />
                                 </div>
-                                <div className="col-auto">
+                                <div className="col-auto me-1">
                                     <p className={"text-primary"}>{name}</p>
                                 </div>
-                                <div className="col-auto me-lg-auto">
+                                <div className="col-auto me-lg-auto me-md-auto">
                                     <p className={"text-secondary"}>{created_at}</p>
                                 </div>
                                 <div className="col-sm-auto">
@@ -78,14 +78,14 @@ export default function Comment({
                                             onClick={handleDeleteMessage}>{" "}Delete
                                     </button>
                                 </div>
-                                <div className="col-sm-auto ">
+                                <div className="col-sm-auto">
                                     <button className={"btn btn-outline-primary bi bi-pencil-fill"}
                                             onClick={handleIsEditCommentOpen} type={"button"}> Edit
                                     </button>
                                 </div>
                                 <div className="col-sm-auto">
                                     <button
-                                        className={"btn btn-outline-primary bi bi-arrow-return-left text-info"}
+                                        className={"btn btn-outline-dark bi bi-arrow-return-left text-info"}
                                         onClick={handleCancelComment}
                                     >{" "}Reply
                                     </button>

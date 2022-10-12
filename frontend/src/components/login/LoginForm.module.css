@@ -1,0 +1,17 @@
+.input-style {
+    width: 100%;
+    padding: 12px 25px;
+    border: 0;
+    border-radius: 25px;
+    margin: 0;
+    outline: none;
+}
+
+.row-input-style {
+    border-color: var(--color-border-input-form) !important;
+}
+
+.row-input-style-invalid {
+    border-color: var(--color-border-input-form-invalid) !important;
+}
+

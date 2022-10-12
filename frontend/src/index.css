@@ -15,7 +15,8 @@
     --color-bg-white:white;
     --color-border:black;
     --color-black:black;
-
+    --color-border-input-form: #789ADE;
+    --color-border-input-form-invalid: #d78585;
 }
 
 
@@ -35,7 +36,13 @@
 .dropdown-menu > li:hover > .dropdown-submenu {
     display: block;
 }
-body{
+body {
     background: var(--color-bg-white);
 }
 
+input[type=checkbox]
+{
+    -webkit-appearance:checkbox;
+    display: block !important;
+
+}
