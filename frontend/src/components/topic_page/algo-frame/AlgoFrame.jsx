@@ -5,13 +5,13 @@ import cx from 'classnames';
 export default function AlgoFrame() {
     return (
         <div className={cx(styles["container-style"], "container-fluid")}>
-            <div className="row">
-                <div className="col-10 mt-2">
-                    <h1 className="ms-auto text-start">
+            <div className="row justify-content-between">
+                <div className="col col-sm-auto mt-3">
+                    <h1 className="ms-auto m-0 p-3 text-start">
                         Algorithm Title
                     </h1>
                 </div>
-                <div className="col mt-2">
+                <div className="col col-sm-auto mt-3">
                     <RangeSlider/>
                 </div>
             </div>

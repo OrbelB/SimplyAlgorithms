@@ -7,7 +7,9 @@ export default function Layout(
                                ) {
     return (
         <>
+            <header>
             <MainNavigation/>
+            </header>
             <main>
                 {props.children}
             </main>

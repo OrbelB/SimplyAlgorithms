@@ -40,9 +40,23 @@ body {
     background: var(--color-bg-white);
 }
 
-input[type=checkbox]
-{
-    -webkit-appearance:checkbox;
-    display: block !important;
+@media only screen and (max-width: 578px) {
+    h1{
+        font-size: 30px;
 
+    }
+    p {
+        font-size: 8px;
+
+    }
+    button {
+        font-size: 8px;
+
+    }
+}
+
+@media only screen and (max-width: 868px) {
+    p {
+        font-size: 12px;
+    }
 }
