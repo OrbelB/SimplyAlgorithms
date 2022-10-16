@@ -1,6 +1,5 @@
 .quiz_topic_container{
     background-color: var(--color-bg-second);
-    border-radius: 1rem;
     border: 2px solid var(--color-border);
 }
 .topic_quiz_header{
@@ -25,15 +24,19 @@
     background-color: var(--color-bg-alg-dash);
     border-radius: 1rem;
     border: 2px solid var(--color-border);
-    margin-left: -4rem;
+    width:auto;
     /* font-size: xx-large; */
     text-decoration: none;
     color: var(--color-black);
 }
 .quiz_buttons_cont{
-    margin-top: 2rem;
     background-color: rgb(255, 0, 123);
-    border-radius: 1rem;
     border: 2px solid var(--color-border);
     font-size: xx-large;
+}
+
+.quiz-section {
+    width: 100%;
+    height: auto;
+    margin-bottom: 4rem;
 }

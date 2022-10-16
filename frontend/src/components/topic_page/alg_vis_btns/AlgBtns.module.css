@@ -8,7 +8,6 @@
 .alg_vis_btn_play{
     background-color: var(--color-bg-alg-dash);
     color: var(--color-black);
-    width: 5rem;
     border: 1px solid;
     border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
 }
@@ -29,7 +28,6 @@
     background-color: var(--color-bg-alg-dash);
     color: var(--color-black);
     border: 1px solid;
-    width: 5.5rem;
     border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
 }
 
@@ -41,7 +39,6 @@
     background-color: var(--color-bg-alg-dash);
     border: 1px solid;
     color: var(--color-black);
-    width: 8.5rem;
     border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
 }
 .alg_vis_btn_steps_amount:hover{
@@ -49,7 +46,6 @@
 }
 
 .alg_vis_btn_prev{
-
     border: 1px solid var(--color-black);
     background-color: var(--color-bg-alg-dash);
     border-radius: 1.5rem .5rem .5rem 1.5rem;
@@ -71,8 +67,7 @@
 .alg_vis_btn_like {
 
     border: 1px solid;
-    height: 100%;
-    width: 5.2em;
+    height: 32px;
     background-color: var(--color-bg-alg-dash);
     color: var(--color-black);
     border-radius: 1.5rem 0 0 1.5rem;
@@ -84,8 +79,7 @@
 .alg_vis_btn_dislike {
 
     border: 1px solid;
-    height: 100%;
-    width: 5.2em;
+    height: 32px;
     background-color: var(--color-bg-alg-dash);
     color: var(--color-black);
     border-radius: 0;
@@ -97,8 +91,7 @@
 .alg_vis_btn_report {
 
     border: 1px solid;
-    height: 100%;
-    width: 5.2em;
+    height: 32px;
     background-color: var(--color-bg-alg-dash);
     color: var(--color-black);
     border-radius: 0 1.5rem 1.5rem 0;

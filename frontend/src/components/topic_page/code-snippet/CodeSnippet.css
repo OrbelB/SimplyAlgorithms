@@ -15,7 +15,7 @@ h1 {
     background-color: #636160;
     border-radius: 20px;
     color: azure;
-    font-size: 30px;
+    font-size: 18px;
     font-weight: bold;
     margin-left: 30%;
     margin-right: 30%;
@@ -38,11 +38,23 @@ h1 {
 .react-tabs__tab--selected {
     background: #173fcf;
     color: white;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 10px;
     border-style: none;
   }
 
 .bottom {
     height: 70px;
+}
+
+@media only screen and (max-width: 576px) {
+    .description {
+        font-size: 8px;
+    }
+}
+
+@media only screen and (max-width: 868px) {
+    .description {
+        font-size: 12px;
+    }
 }
 

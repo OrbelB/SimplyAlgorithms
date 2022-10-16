@@ -5,10 +5,11 @@
 .cat3 {background: rgb(12, 12, 250);}
 .cat4 {background: rgb(233, 152, 3);}
 
-input[type='checkbox'] { 
-    display: none; } 
+.input-space input[type='checkbox'] {
+    display: none;
+}
     
-.wrap-collabsible { 
+.wrap-collabsible {
     margin: 1.2rem 0; 
 } 
 
@@ -52,8 +53,7 @@ input[type='checkbox'] {
     transform: rotate(90deg) translateX(-3px); 
 } 
 
-.collapsible-content { 
-    max-height: 0px; 
+.collapsible-content {
     overflow: hidden; 
     transition: max-height .25s ease-in-out; 
 }
