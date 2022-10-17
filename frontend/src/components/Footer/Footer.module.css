@@ -1,0 +1,37 @@
+li{
+    list-style: none;
+}
+.box{
+    background-color: var(--color-nav-foot);
+    /* temp to just see whre it starts & ends */
+    background-color: beige;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.web_nav{
+    pad: 5rem;
+    position: relative;
+    border-left: 1px solid black;
+}
+.web_soc{
+    margin-right: auto;
+    position: relative;
+    border-left: 1px solid black;
+}
+.web_service{
+    position: relative;
+    text-align: center;
+    border: 1px solid black;
+}
+.ojkj_team{
+    position: relative;
+    text-align: center;
+    border: 1px solid black;
+}
+.web_logo img {
+    position: relative;
+    left: 42%;
+    display: block;
+    max-width: 10rem;
+}
