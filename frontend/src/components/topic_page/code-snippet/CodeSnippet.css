@@ -9,29 +9,25 @@ h1 {
 
 .component {
     background-color: #d3fef4;
+    padding : 0 5rem 0 5rem;
 }
 
 .languages {
     background-color: #636160;
-    border-radius: 20px;
     color: azure;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
-    margin-left: 30%;
-    margin-right: 30%;
-    text-align: left;
+    text-align: center;
 }
 
 .description {
     font-family: 'Readex Pro', sans-serif;
     background-color: black;
-    border-radius: 25px;
-    border-style: solid;
+    padding: 3em;
     color: white;
-    font-size: 25px;
-    height: 300px;
-    margin-left: 30%;
-    margin-right: 30%;
+    font-size: 15px;
+    height: auto;
+    width: auto;
     white-space: pre-wrap;
 }
 
@@ -56,5 +52,10 @@ h1 {
     .description {
         font-size: 12px;
     }
+}
+
+code {
+    color: white;
+
 }
 

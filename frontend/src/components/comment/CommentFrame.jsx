@@ -84,13 +84,11 @@ export default function CommentFrame() {
 
     const editComment = (comment, comment_id, parent_id) => {
         //TODO
-        console.log(comment
-        )
+        console.log(comment)
         let tempArray = [...comments];
         tempArray.find(comment_component => comment_component.id === parent_id &&
             comment_component.comment_id === comment_id).comment = comment;
         setComments(tempArray);
-
     }
 
     const editChildComment = (newComment, child_comment_id, child_user_id, comment_component_id) => {
@@ -101,7 +99,7 @@ export default function CommentFrame() {
         setComments(tempArray);
     }
     return (
-        <div className="bg-white mt-4">
+        <div className="bg-white mt-5 mb-2">
             <div>
                 <p>Have a question? Check our {<NavLink className={"link-warning"} to={"/forums"}>forums </NavLink>}</p>
             </div>

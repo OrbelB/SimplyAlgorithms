@@ -39,7 +39,6 @@
 body {
     background: var(--color-bg-white);
 }
-
 @media only screen and (max-width: 578px) {
     h1{
         font-size: 30px;

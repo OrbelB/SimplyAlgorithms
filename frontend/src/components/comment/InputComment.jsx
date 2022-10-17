@@ -19,21 +19,21 @@ export default function InputComment({
     return (
         <div className={cx("container-fluid", styles["input-comment-style"])}>
             <div className={cx("grid p-3")}>
-                <div className="row">
-                    <div className="col col-sm-auto m-auto align-self-center">
+                <div className="row justify-content-evenly">
+                    <div className="col-auto col-sm-auto m-auto align-self-center">
                         <img
                             src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
                             className="rounded-circle"
                             height="50"
-                            alt="Black and White Portrait of a Man"
+                            alt="profile"
                             loading="lazy"
                         />
                     </div>
-                    <div className="col-9 col-md-9 col-sm-auto align-self-center">
-                        <input className="form-control  m-auto p-3 p-sm-auto" onInput={handleInputText} value={text}
+                    <div className="col-auto col-md-9 col-sm-auto m-auto align-self-center">
+                        <input className="form-control  m-1 p-3 p-sm-auto" onInput={handleInputText} value={text}
                                placeholder={"add a comment..."}/>
                     </div>
-                    <div className="col col-sm-auto  align-self-center m-auto">
+                    <div className="col-auto col-sm-auto  align-self-center m-auto">
                         <button className={cx("btn btn-outline-primary text-white p-auto", styles["btn-style"])}
                                 onClick={handleSendButton}>Send
                         </button>

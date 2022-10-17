@@ -3,7 +3,6 @@ import "./Categories.css"
 export default function Categories() {
     return (
         <div className="wrap-collabsible">
-
             <div className="space"></div>
             <div className="input-space">
                 <input id="collapsible" className="toggle row1" type="checkbox"/>
@@ -47,7 +46,6 @@ export default function Categories() {
                     </div>
                 </div>
             </div>
-
             <div className="space"></div>
             <div className="input-space">
                 <input id="collapsible4" className="toggle" type="checkbox"/>
