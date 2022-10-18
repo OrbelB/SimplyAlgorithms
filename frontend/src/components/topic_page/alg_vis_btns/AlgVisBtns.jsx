@@ -20,7 +20,7 @@ const AlgVisBtns = () => {
         <div className={cx(styles['alg_visualizer'], 'container-fluid')}>
             <div className={"grid p-2"}>
                 <div className={"row justify-content-evenly p-0"}>
-                    <div className={"col-auto col-sm-auto small align-self-center m-0 p-1"}>
+                    <div className={"col-auto col-sm-auto small align-self-center m-0 p-2 p-sm-1"}>
                         <button className={cx(styles['alg_vis_btn_play'], 'rounded-4 ps-2 pe-2 small')}><GrPlay/></button>
                     </div>
                     <div className={"col-auto col-sm-auto small align-self-center p-0"}>

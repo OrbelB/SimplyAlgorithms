@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .section {
-    height: 500px;
-    background-color: aqua;
+    height: auto;
+    background-color: var(--color-bg-main );
     text-align: center;
 }
 

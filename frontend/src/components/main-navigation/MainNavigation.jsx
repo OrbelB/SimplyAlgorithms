@@ -23,14 +23,14 @@ const nestedDropdownMenu = [
 ]
 export default function MainNavigation() {
     return (
-        <nav className="navbar navbar-expand-lg bg-light border-bottom  border-dark">
+        <nav className="navbar navbar-expand-lg bg-light border-bottom border-dark">
             <div className="container-fluid">
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <div className="collapse navbar-collapse mt-4  mt-md-0 mb-3 mb-md-0" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <DropdownMenu dropdownTitle="Categories" nestedDropdownSelections={nestedDropdownMenu}/>
                         <li className="nav-item">
@@ -43,43 +43,43 @@ export default function MainNavigation() {
                             <NavLink className="nav-link" to={"forums"}>Forums</NavLink>
                         </li>
                     </ul>
-                    <form className="d-flex" role="search">
+                    <form className="d-flex me-4" role="search">
                         <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
                         <button className="btn btn-outline-primary" type="submit"><span className="bi bi-search"></span>
                         </button>
                     </form>
-                    <div className="nav-item ms-2">
-                        <Bell/>
-                    </div>
-                    <div className="nav-item dropdown ms-3">
-                        <a
-                            className="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                            id="navbarDropdownMenuAvatar"
-                        >
-                            <img
-                                src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                                className="rounded-circle"
-                                height="25"
-                                alt="Black and White Portrait of a Man"
-                                loading="lazy"
-                            />
-                        </a>
-                        <ul
-                            className="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="navbarDropdownMenuAvatar"
-                        >
-                            <li>
-                                <NavLink className="dropdown-item" to={"my-profile"}>My profile</NavLink>
-                            </li>
-                            <li>
-                                <NavLink className="dropdown-item" to={"settings"}> Settings </NavLink>
-                            </li>
-                            <li>
-                                <NavLink className="dropdown-item" to={"login"}>Login</NavLink>
-                            </li>
-                        </ul>
-                    </div>
+                </div>
+                <div className="nav-item ms-auto me-4">
+                    <Bell/>
+                </div>
+                <div className="nav-item dropdown me-2">
+                    <a
+                        className="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        id="navbarDropdownMenuAvatar"
+                    >
+                        <img
+                            src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                            className="rounded-circle"
+                            height="25"
+                            alt="Black and White Portrait of a Man"
+                            loading="lazy"
+                        />
+                    </a>
+                    <ul
+                        className="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="navbarDropdownMenuAvatar"
+                    >
+                        <li>
+                            <NavLink className="dropdown-item" to={"my-profile"}>My profile</NavLink>
+                        </li>
+                        <li>
+                            <NavLink className="dropdown-item" to={"settings"}> Settings </NavLink>
+                        </li>
+                        <li>
+                            <NavLink className="dropdown-item" to={"login"}>Login</NavLink>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>

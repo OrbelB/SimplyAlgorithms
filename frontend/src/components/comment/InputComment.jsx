@@ -11,14 +11,15 @@ export default function InputComment({
         setText(event?.target.value);
     }
 
-    const handleSendButton = () => {
+    const handleSubmitForm = (event) => {
+        event?.preventDefault();
         if (text.length === 0 || text === "") return
         onNewComment(text);
         setText("");
     }
     return (
         <div className={cx("container-fluid", styles["input-comment-style"])}>
-            <div className={cx("grid p-3")}>
+            <form className={cx("grid p-3")} onSubmit={handleSubmitForm}>
                 <div className="row justify-content-evenly">
                     <div className="col-auto col-sm-auto m-auto align-self-center">
                         <img
@@ -35,11 +36,11 @@ export default function InputComment({
                     </div>
                     <div className="col-auto col-sm-auto  align-self-center m-auto">
                         <button className={cx("btn btn-outline-primary text-white p-auto", styles["btn-style"])}
-                                onClick={handleSendButton}>Send
+                                type={"submit"}>Send
                         </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
 
     )

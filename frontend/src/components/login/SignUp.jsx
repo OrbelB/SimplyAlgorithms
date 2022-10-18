@@ -139,10 +139,10 @@ export default function SignUp({showSignup, handleOnClose}) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Row content={"center"}>
-                        <p className="text-center text-muted">Have already an account? <a role={"button"}
+                        <p className="text-center text-muted ">Have already an account? <i role={"button"}
                                                                                           variant="secondary"
                                                                                           onClick={handleClose}>Login
-                            here</a>
+                            here</i>
                         </p>
                     </Row>
                     <Row>

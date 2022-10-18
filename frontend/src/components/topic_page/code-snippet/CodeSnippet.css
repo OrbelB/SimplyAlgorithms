@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
+.container {
+    padding: 0 5%;
+
+}
 h1 {
     font-family: 'Readex Pro', sans-serif;
     padding-bottom: 20px;

@@ -11,8 +11,8 @@ var Python = ' def Greeting():\n\tprint("Hello World")\n\nGreeting()'
 export default function CodeSnippet() {
     return (
         <div className={"component"}>
-            <h1>Code Implementations</h1>
-            <div className={"container w-75"}>
+            <h1>Implementations</h1>
+            <div className={"container"}>
             <nav className={"bg-secondary rounded-top"}>
                 <div className="nav nav-pills " id="nav-tab" role="tablist">
                     <button className="nav-link text-white active" id="nav-java-tab" data-bs-toggle="tab"

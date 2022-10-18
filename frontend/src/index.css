@@ -40,23 +40,32 @@
 body {
     background: var(--color-bg-white);
 }
-@media only screen and (max-width: 578px) {
+
+@media only screen and (max-width: 720px) {
     h1{
-        font-size: 30px;
+        font-size: 8vw !important;
 
     }
-    p {
-        font-size: 8px;
+    p, i {
+        font-size: 3vw !important;
 
     }
     button {
-        font-size: 8px;
+        font-size: 2.5vw !important;
 
     }
+
+    h2 {
+       font-size: 4vw !important;
+
+    }
+
+    h3 {
+        font-size: 3.50vw !important;
+
+    }
+
 }
-
-@media only screen and (max-width: 868px) {
-    p {
-        font-size: 12px;
-    }
+i {
+    font-style: normal;
 }

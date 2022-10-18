@@ -24,7 +24,9 @@ const staticComments = [{
 }];
 
 export default function CommentFrame() {
+
     const [comments, setComments] = useState(staticComments);
+
     useEffect(() => {
     }, [comments]);
 
@@ -65,12 +67,12 @@ export default function CommentFrame() {
             }
         );
         setComments(tempArray);
-    }
+    };
 
     const deleteParentComment = (comment_id) => {
         let tempArray = [...comments];
         setComments(tempArray.filter(parentComment => parentComment.comment_id !== comment_id));
-    }
+    };
 
     const deleteChildComment = (parent_comment_id, comment_id) => {
         console.log(parent_comment_id, comment_id);
@@ -80,28 +82,28 @@ export default function CommentFrame() {
             .replies
             .filter(childComment => childComment.comment_id !== comment_id));
         setComments(tempArray);
-    }
+    };
 
     const editComment = (comment, comment_id, parent_id) => {
-        //TODO
-        console.log(comment)
+        console.log(comment);
         let tempArray = [...comments];
         tempArray.find(comment_component => comment_component.id === parent_id &&
             comment_component.comment_id === comment_id).comment = comment;
         setComments(tempArray);
-    }
+    };
 
     const editChildComment = (newComment, child_comment_id, child_user_id, comment_component_id) => {
         let tempArray = [...comments];
         tempArray.find(comment_parent => comment_parent.comment_id === comment_component_id)
             .replies
-            .find(reply => reply.comment_id = child_comment_id && reply.id === child_user_id).comment = newComment;
+            .find(reply => (reply.comment_id === child_comment_id) && (reply.id === child_user_id)).comment = newComment;
         setComments(tempArray);
-    }
+    };
+
     return (
         <div className="bg-white mt-5 mb-2">
             <div>
-                <p>Have a question? Check our {<NavLink className={"link-warning"} to={"/forums"}>forums </NavLink>}</p>
+                <p>Have a question? Check our {<NavLink className={"link-warning"} to={"/forums"}>forums</NavLink>}</p>
             </div>
             <InputComment onNewComment={onNewComment}/>
             {comments.map((staticComment) => (
@@ -113,9 +115,9 @@ export default function CommentFrame() {
                          deleteParentComment={deleteParentComment} deleteChildComment={deleteChildComment}
                          editComment={editComment} editChildComment={editChildComment}
                 />
-            ))}
+            ))
+            }
         </div>
-
     );
 
 }

@@ -3,15 +3,19 @@ import "./Intro.css"
 export default function Intro() {
     return (
         <div className="section">
-            <h1 className="title">
-                SIMPLY ALGORITHMS
-            </h1>
-            <p className="slogan">
-                algorithms made easy
-            </p>
-            <button className="button">
-                SIGN UP
-            </button>
+            <div className="container-fluid pb-5">
+                <h1 className="row justify-content-center title m-1 m-sm-auto">
+                    SIMPLY ALGORITHMS
+                </h1>
+                <p className="row justify-content-center slogan m-1 m-md-auto">
+                    algorithms made easy
+                </p>
+                <div className="row justify-content-center m-1 m-md-auto">
+                    <button className="button w-auto">
+                        SIGN UP
+                    </button>
+                </div>
+            </div>
         </div>
     )
 

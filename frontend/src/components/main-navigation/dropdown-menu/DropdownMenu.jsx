@@ -6,7 +6,7 @@ export default function DropdownMenu({
                                      }) {
     return (
         <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle bg-primary text-white rounded-4" role="button"
+            <a className="nav-link dropdown-toggle bg-primary text-white rounded-3" role="button"
                data-bs-toggle="dropdown"
                aria-expanded="false"
                unselectable={"off"}

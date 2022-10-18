@@ -1,9 +1,9 @@
 export default function OptionMenu({
-                                       passedCommentID, handleDeleteMessage, handleIsEditCommentOpen, handleCancelComment = () => {}, canReply = true
+                                       handleDeleteMessage, handleIsEditCommentOpen, handleCancelComment = () => {}, canReply = true
                                    }) {
 
     const onDeleteMessage = () => {
-        handleDeleteMessage(passedCommentID);
+        handleDeleteMessage();
     }
 
     const onEditMessage = () => {

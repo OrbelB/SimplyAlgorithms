@@ -42,7 +42,7 @@ export default function Categories() {
                         <button className="topic">DEPTH FIRST SEARCH</button>
                         <br/><br/>
                         <button className="topic">TOPOLOGICAL SORT</button>
-                        <button className="topic">DJISKTRA GRAPH</button>
+                        <button className="topic">DIJKSTRA GRAPH</button>
                     </div>
                 </div>
             </div>

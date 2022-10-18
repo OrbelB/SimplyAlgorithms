@@ -2,3 +2,9 @@
     color: var(--color-border-input-form);
     font-style: normal;
 }
+
+@media only screen and (max-width: 1000px) {
+    .hide-style {
+        display: none;
+    }
+}

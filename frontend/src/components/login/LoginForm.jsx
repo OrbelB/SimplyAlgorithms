@@ -33,7 +33,7 @@ export default function LoginForm() {
     }
 
     const handleCheckBoxChange = () => {
-        //TODO send data to server to validate user
+        //TODO save jwt to cookies if true
         setHandleCheckbox(!handleCheckbox);
     }
 
@@ -54,13 +54,12 @@ export default function LoginForm() {
                     <label className={"form-label m-0 mb-2 p-0"} htmlFor={"username-form"}>Username</label>
                 </div>
                 {usernameInputHasError && <div className={"col ms-0 p-0 alert alert-danger align-content-center"}>
-                    <p className={"text-center"}>username cannot be empty!</p>
+                    <p className={"text-center small"}>username cannot be empty!</p>
                 </div>
                 }
             </div>
-            <div
-                className={!usernameInputHasError ? cx("row border border-2 rounded-5", styles["row-input-style"]) :
-                    cx("row border border-2 rounded-5", styles["row-input-style-invalid"])}>
+            <div className={cx("row border border-2 rounded-5",
+                styles[`row-input-style${!usernameInputHasError ? '' : '-invalid'}`])}>
                 <input type={"username"} id={"username-form"} placeholder={"username"}
                        className={cx("p-auto", styles["input-style"])} onChange={usernameChangedHandler}
                        onBlur={usernameBlurHandler}
@@ -70,37 +69,34 @@ export default function LoginForm() {
                 <div className={"col m-0 p-0"}>
                     <label className={"form-label m-0 mb-2 p-0"} htmlFor={"password-form"}>Password</label>
                 </div>
-                {passwordInputHasError && <div className={"col ms-0 p-0 alert alert-danger justify-content-center"}>
-                    <p className={"text-center"}>password cannot be empty!</p>
+                {passwordInputHasError && <div className={"col ms-0 p-0 alert alert-danger align-content-center"}>
+                    <p className={"text-center small"}>password cannot be empty!</p>
                 </div>
                 }
             </div>
             <div
-                className={!passwordInputHasError ? cx("row border border-2 rounded-5", styles["row-input-style"]) :
-                    cx("row border border-2 rounded-5", styles["row-input-style-invalid"])}>
-                <div className={"col-11 col-md-auto col-lg-10 col-sm-auto me-sm-auto align-self-center"}>
+                className={cx("row justify-content-between border border-2 rounded-5", styles[`row-input-style${!passwordInputHasError ? '' : '-invalid'}`])}>
+                <div className={"col-auto col-sm-10 col-md-10 col-lg-10 col-sm-auto align-self-center"}>
                     <input autoComplete={"off"} type={isPasswordVisible ? "text" : "password"} id={"password-form"}
                            placeholder={"*******"} onChange={passwordChangedHandler} onBlur={passwordBlurHandler}
                            value={password}
                            className={cx("p-auto", styles["input-style"])} required={true}/>
                 </div>
-                <div className={"col-auto col-sm-auto align-self-center me-lg-2 me-sm-auto"}>
-                    {isPasswordVisible ?
-                        <i role={"button"} className={cx(" bi bi-eye ")} onClick={handlePasswordVisibility}></i> :
-                        <i className={"bi bi-eye-slash"} role={"button"} onClick={handlePasswordVisibility}></i>}
+                <div className={"col-auto col-sm-auto align-self-center me-auto me-lg-2"}>
+                    <i role={"button"} className={cx(`bi bi-eye${isPasswordVisible ? '' : '-slash'}`, styles["password-visible-style"])} onClick={handlePasswordVisibility}></i>
                 </div>
             </div>
-            <div className={"row justify-content-between mt-5"}>
-                <div className="col-4 col-sm-auto p-2">
+            <div className={"row justify-content-center justify-content-sm-between mt-5"}>
+                <div className="col-auto ">
                     <div className="form-check">
-                        <input className="form-check-input rounded-circle" type="checkbox" id="flexCheckDefault"/>
-                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                        <input className="form-check-input rounded-circle" type="checkbox" id="flexCheckbox"/>
+                        <label className="form-check-label" htmlFor="flexCheckbox">
                             Remember me
                         </label>
                     </div>
                 </div>
-                <div className="col-4 col-sm-auto">
-                    <NavLink className={"m-auto p-auto"} to="check" role={"link"}>Forgot password?</NavLink>
+                <div className="col-auto align-items-end">
+                    <NavLink className={"m-sm-auto p-sm-auto"} to="check" role={"link"}>Forgot password?</NavLink>
                 </div>
             </div>
             <div className={"row justify-content-center mt-5"}>

@@ -1,6 +1,7 @@
 import image from "../../assets/Screenshot 2022-10-09 190501.png";
 import LoginForm from "./LoginForm";
 import styles from "./Login.module.css"
+import cx from "classnames";
 import SignUp from "./SignUp";
 import React, {useState} from "react";
 
@@ -15,8 +16,8 @@ export default function Login() {
             {showSignup && <SignUp showSignup={true} handleOnClose={handleShowSingUpModal}/>}
             <div className={"container-fluid"}>
                 <div className={"grid ms-5 me-5 p-5"}>
-                    <div className={"row"}>
-                        <div className={"col-5 align-self-center col-lg-5 col-sm-auto"}>
+                    <div className={"row justify-content-center"}>
+                        <div className={"col-auto col-sm-5 align-self-center col-lg-5 col-sm-auto"}>
                             <div className={"row justify-content-start"}>
                                 <h2 className={"m-0 mb-2 p-0"}>
                                     WELCOME BACK!
@@ -33,15 +34,16 @@ export default function Login() {
                             </div>
                             <LoginForm/>
                             <div className={"row m-3 p-0 justify-content-evenly"}>
-
                                 <div
-                                    className={"col-4 col-md-auto col-lg-3 col-sm-auto border-top border-primary align-self-end mb-2 m-0"}></div>
+                                    className={cx("col-auto col-md-4 col-lg-3 col-sm-auto border-top border-primary align-self-end mb-2 m-0", styles["hide-style"])}>
+                                </div>
                                 <div
-                                    className={"col-auto col-md-auto col-lg-auto col-sm-auto align-self-center m-0 p-0"}>
+                                    className={"col-auto col-md-4 col-lg-auto col-sm-auto align-self-center m-0 p-0"}>
                                     or continue with
                                 </div>
                                 <div
-                                    className={"col-3 col-md-auto col-lg-3 col-sm-auto border-top border-primary align-self-end mb-2 m-0"}></div>
+                                    className={cx("col-auto col-md-4 col-lg-3 col-sm-auto border-top border-primary align-self-end mb-2 m-0",styles["hide-style"])}>
+                                </div>
                             </div>
                             <div className="row m-1  justify-content-evenly">
                                 <div className={"col-4 col-sm-auto"}>
@@ -55,9 +57,8 @@ export default function Login() {
                                     </button>
                                 </div>
                             </div>
-
                         </div>
-                        <div className={"col-7 col-lg-5 ms-auto col-sm-auto align-self-center text-center"}>
+                        <div className={"col-auto col-sm-5 col-lg-5 ms-auto col-sm-auto align-self-center text-center"}>
                             <img
                                 src={image}
                                 height="90%"
