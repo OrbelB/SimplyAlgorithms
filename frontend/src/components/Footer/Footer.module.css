@@ -4,7 +4,7 @@ li{
 .box{
     background-color: var(--color-nav-foot);
     /* temp to just see whre it starts & ends */
-    background-color: beige;
+    background-color: var(--color-nav-foot);
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
@@ -22,16 +22,34 @@ li{
 .web_service{
     position: relative;
     text-align: center;
-    border: 1px solid black;
 }
 .ojkj_team{
     position: relative;
     text-align: center;
     border: 1px solid black;
+    border-radius: 30px;
 }
-.web_logo img {
+.web_logo{
     position: relative;
     left: 42%;
     display: block;
-    max-width: 10rem;
+    max-width: 20%;
+    min-width: 10%;
+}
+
+@media only screen and (max-width: 1200px) {
+    .web_nav{
+        display: none;
+    }
+    .web_soc{
+        display: none;
+    }
+    .web_logo{
+        display: none;
+    }
+    .web_service{
+        position: relative;
+        left: -5rem;
+    }
+
 }
