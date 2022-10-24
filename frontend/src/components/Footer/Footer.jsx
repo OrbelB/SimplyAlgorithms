@@ -11,7 +11,7 @@ const Footer = () => {
         <div className={'col-.5'}></div>
         <div className={'col-1'}>
             <div className={cx(style['web_nav'], 'row')}>
-              <ul className={"web_nav_list"}>
+              <ul>
                 <li>
                   <NavLink className="nav-link" aria-current="page" to={"home"}>Home</NavLink>  
                 </li>
@@ -35,12 +35,11 @@ const Footer = () => {
         </div>
         <div className={'col-1 align-self-center'}>
             <div className={cx(style['web_soc'], 'row')}>
-              <ul className={"web_soc_list"}>
-                <li>twitter</li>
-                <li>Youtube</li>
-                <li>linkedin</li>
-                <li>Quizes</li>
-                <li>Facebook</li>
+              <ul>
+                <li><a href="url">Twitter</a></li>
+                <li><a href="url">Youtube</a></li>
+                <li><a href="url">Linkedin</a></li>
+                <li><a href="url">Instagram</a></li>
               </ul>
             </div>
         </div>
