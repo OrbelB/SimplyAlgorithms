@@ -1,4 +1,5 @@
 import './Forums.css'
+import Post from './post/Post'
 
 export default function Forums() {
     return (
@@ -19,17 +20,13 @@ export default function Forums() {
                 </div>
             </div>
             <div className="column middle">
-                <div className='new-post'>
-                    <br/>
-                    <input type="text" className="post-bar" placeholder="Create Post"/>
-                </div>
-                <br/><br/>
                 <button className='filter-button first-filter'>Top Rated</button>
                 <button className='filter-button'>New</button>
                 <button className='filter-button'>Alphabetically</button>
-                <button className='filter-button'>Other</button>
                 <button className='filter-button last-filter'>Other</button>
-                <br/><br/><br/><br/>
+                <br/><br/>
+                <Post/>
+                <br/><br/>
                 <div className='posts'>
                 </div>
             </div>

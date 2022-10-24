@@ -2,7 +2,7 @@ import cx from "classnames";
 import styles from "./LoginForm.module.css";
 import {NavLink} from "react-router-dom";
 import {useState} from "react";
-import useValidateInput from "../../hooks/use-ValidateInput";
+import useValidateInput from "../../hooks/use-ValidateInput.js";
 
 
 export default function LoginForm() {
