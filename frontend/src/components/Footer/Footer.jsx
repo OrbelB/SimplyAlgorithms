@@ -13,7 +13,7 @@ const Footer = () => {
             <div className={cx(style['web_nav'], 'row')}>
               <ul>
                 <li>
-                  <NavLink className="nav-link" aria-current="page" to={"home"}>Home</NavLink>  
+                  <NavLink className="nav-link" aria-current="page" to={"home"}>Home</NavLink>
                 </li>
                 <li>
                   <NavLink className="nav-link" aria-current="page" to={"algorithms"}>Algorithms</NavLink>  

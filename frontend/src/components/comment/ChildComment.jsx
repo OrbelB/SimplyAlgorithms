@@ -2,16 +2,11 @@ import CommentBox from "./CommentBox";
 
 //TODO make users capable to change their comments only
 export default function ChildComment({
-                                         photo_link,
-                                         name,
-                                         created_at,
-                                         upVotes,
-                                         comment,
-                                         deleteChildComment,
-                                         comment_id,
-                                         parent_comment_id,
+                                         photo_link, name,
+                                         created_at, upVotes,
+                                         comment, deleteChildComment,
+                                         comment_id, parent_comment_id,
                                          editChildComment, user_id
-
                                      }) {
 
     const onDeleteComment = () => {

@@ -4,9 +4,9 @@ import OptionMenu from "./OptionsMenu";
 import {useState} from "react";
 
 export default function CommentBox({
-                                       children,
-                                       upVotes, photoLink, name, createdAt, comment, cancelComment = () => {
-    }, deleteParentComment, editComment, canReply = true
+                                       children, upVotes, photoLink,
+                                       name, createdAt, comment, cancelComment = () => { },
+                                       deleteParentComment, editComment, canReply = true
                                    }) {
     const [isEditClicked, setIsEditClicked] = useState(false);
 
@@ -14,14 +14,12 @@ export default function CommentBox({
         cancelComment();
     };
 
-
     const handleDeleteMessage = () => {
         deleteParentComment();
     };
 
     const handleIsEditCommentOpen = () => {
         setIsEditClicked(!isEditClicked);
-
     };
 
     const handleEditComment = (newComment) => {
@@ -53,11 +51,11 @@ export default function CommentBox({
                 </div>
                 <div className="row justify-content-between mt-2">
                     <div className={"col-8 col-sm-10 m-2 p-1 col-lg-10"}>
-                        {isEditClicked ?
+                        { isEditClicked ?
                             <AddEditComment handleAddEditComment={handleEditComment} photo_link={photoLink}
                                             comment={comment}
                                             cancelReplyElement={handleIsEditCommentOpen}/> :
-                            <p className={"text-wrap"}>{comment}</p>}
+                            <p className={"text-wrap"}>{comment}</p> }
                     </div>
                     <div className={"col-2 col-sm-auto align-self-start p-3 p-lg-0 p-md-0"}>
                         <OptionMenu handleDeleteMessage={handleDeleteMessage}

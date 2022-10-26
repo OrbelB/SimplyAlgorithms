@@ -5,8 +5,8 @@ import CommentBox from "./CommentBox";
 
 export default function Comment({
                                     parentId, name, photo_link, comment, created_at, upVotes, replies,
-                                    onNewCommentChild, comment_component_id, editComment, deleteParentComment,
-                                    deleteChildComment, editChildComment
+                                    onNewCommentChild, comment_component_id, editComment,
+                                    deleteParentComment, deleteChildComment, editChildComment
                                 }) {
 
     const [showReplies, setShowReplies] = useState(false);
