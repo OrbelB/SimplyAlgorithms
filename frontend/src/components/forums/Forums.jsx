@@ -6,38 +6,40 @@ export default function Forums() {
     <div className="forums-section">
         <h1 className="forum-title">FORUMS</h1>
         <div className="row">
-            <div className="column side">
-                <h1 className="category-label">Categories</h1>
-                <input type="text" className="search-bar" placeholder="Search Category..."/>
-                <div className="btn-group">
-                    <button className='category' >Sorting</button>
-                    <button className='category'>Searching</button>
-                    <button className='category'>Graphs</button>
-                    <button className='category'>Trees</button>
-                    <button className='category'>Arrays</button>
-                    <button className='category'>Linked List</button>
-                    <button className="last-button">Explore More...</button>
+            <div className="column">
+                <div className="side1">
+                    <h1 className="category-label">Categories</h1>
+                    <input type="text" className="search-bar" placeholder="Search Category..."/>
+                    <div className="btn-group">
+                        <button className='category' >Sorting</button>
+                        <button className='category'>Searching</button>
+                        <button className='category'>Graphs</button>
+                        <button className='category'>Trees</button>
+                        <button className='category'>Arrays</button>
+                        <button className='category'>Linked List</button>
+                        <button className="last-button">Explore More...</button>
+                    </div>
                 </div>
-            </div>
-            <div className="column middle">
-                <button className='filter-button first-filter'>Top Rated</button>
-                <button className='filter-button'>New</button>
-                <button className='filter-button'>Alphabetically</button>
-                <button className='filter-button last-filter'>Other</button>
-                <br/><br/>
-                <Post/>
-                <br/><br/>
-                <div className='posts'>
+                <div className="middle">
+                    <button className='filter-button first-filter'>Top Rated</button>
+                    <button className='filter-button'>New</button>
+                    <button className='filter-button'>Alphabetically</button>
+                    <button className='filter-button last-filter'>Other</button>
+                    <br/><br/>
+                    <Post/>
+                    <br/><br/>
+                    <div className='posts'>
+                    </div>
                 </div>
-            </div>
-            <div className="column side">
-                <h1 className="category-label">Recently Viewed Posts</h1>
-                <div className="recent-posts">
+                <div className="side2">
+                    <h1 className="category-label">Recently Viewed Posts</h1>
+                    <div className="recent-posts">
 
-                </div>
-                <h1 className="category-label">Related Posts</h1>
-                <div className="related-posts">
+                    </div>
+                    <h1 className="category-label">Related Posts</h1>
+                    <div className="related-posts">
 
+                    </div>
                 </div>
             </div>
         </div>

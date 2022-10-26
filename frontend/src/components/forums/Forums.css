@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .forums-section {
-    height: 1500px;
+    width: fit-content;
 }
 
 .forum-title {
-    font-size: 80px;
+    font-size: 8vh;
     font-family: 'Readex Pro', sans-serif;
-    padding-bottom: 20px;
+    padding-bottom: 1%;
 }
 
 .category-label {
-    font-size: 30px;
+    font-size: 3vh;
     text-decoration: underline;
 }
 
@@ -19,22 +19,22 @@
     background-color: #D9D9D9;
     border-radius: 5px 5px 5px 5px;
     color: black;
-    font-size: 20px;
-    padding: 10px 70px 10px 70px;
+    font-size: 2vh;
+    padding: 2% 15% 2% 15%;
 }
 
 .btn-group {
     color: black;
     flex-direction: column; 
-    padding-top: 30px;
+    padding-top: 5%;
 }
 
 .category {
     background-color: #D9D9D9;
     border-radius: 10px 10px 10px 10px;
     border: none;
-    font-size: 30px;
-    width: 370px;
+    font-size: 2vh;
+    width: 40vh;
     margin-bottom: 20px;
 }
 
@@ -42,16 +42,17 @@
     background-color: #A9A9A9;
     font-weight: bold;
     border-radius: 10px 10px 10px 10px;
-    font-size: 25px;
+    font-size: 3vh;
     border: 1px solid black;
 }
 
 .filter-button {
     background-color: #D9D9D9;
     border-right: 1px solid black;
-    font-size: 25px;
-    width: 185px;
-    height: 60px;
+    font-size: 2.5vh;
+    width: 180px;
+    width: 20vh;
+    height: 6.5vh;
 }
 
 .first-filter {
@@ -62,46 +63,61 @@
     border-radius: 0px 10px 10px 0px;
 }
 
-
-.post-bar {
-    border-radius: 10px 10px 10px 10px;
-    color: black;
-    font-size: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 700px;
-}
-
 .posts {
     height: 1000px;
     background-color: #D9D9D9;
 }
+
 .recent-posts {
-    margin-left: 60px;
-    height: 200px;
-    width: 350px;
+    margin-left: 6vh;
+    height: 20vh;
+    width: 35vh;
     background-color: #D9D9D9;
 }
 
 .related-posts {
-    margin-left: 60px;
-    height: 200px;
-    width: 350px;
+    margin-left: 6vh;
+    height: 20vh;
+    width: 35vh;
     background-color: #D9D9D9;
 }
 
-.column {
-    text-align: center;
-    height: 1000px;
-   
+.row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 }
 
-.side {
-    width: 25%;
+.column {
+    display: flex;
+    flex-direction: row;
+    flex-basis: 100%;
+}
+
+.side1 {
+    text-align: center;
+    flex: 0.3;
+    margin-right: 3%;
+}
+
+.side2 {
+    text-align: center;
+    flex: 0.3;
+    margin-left: 3%;
 }
 
 .middle {
-    width: 50%;
+    text-align: center;
+    flex: 0.6;
 }
-    
 
+/* Device specific sizing */
+@media only screen and (max-width: 700px) {
+    .forum-title {
+        font-size: 1vh;
+    }
+
+    .category-label {
+        font-size: 1vh;
+    }
+  }
