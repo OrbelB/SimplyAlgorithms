@@ -23,7 +23,7 @@ export default function Forums() {
                 <div className="middle">
                     <button className='filter-button first-filter'>Top Rated</button>
                     <button className='filter-button'>New</button>
-                    <button className='filter-button'>Alphabetically</button>
+                    <button className='filter-button'>Alphabetical</button>
                     <button className='filter-button last-filter'>Other</button>
                     <br/><br/>
                     <Post/>

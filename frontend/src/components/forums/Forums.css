@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .forums-section {
-    width: fit-content;
+    width: auto;
 }
 
 .forum-title {
@@ -11,12 +11,12 @@
 }
 
 .category-label {
-    font-size: 3vh;
+    font-size: 3.5vh;
     text-decoration: underline;
 }
 
 .search-bar {
-    background-color: #D9D9D9;
+    background-color: #eff8f8;
     border-radius: 5px 5px 5px 5px;
     color: black;
     font-size: 2vh;
@@ -30,24 +30,23 @@
 }
 
 .category {
-    background-color: #D9D9D9;
+    background-color: var(--color-bg-main);
     border-radius: 10px 10px 10px 10px;
     border: none;
-    font-size: 2vh;
+    font-size: 3vh;
     width: 40vh;
     margin-bottom: 20px;
 }
 
 .last-button {
-    background-color: #A9A9A9;
-    font-weight: bold;
+    background-color: var(--color-border-input-form);
     border-radius: 10px 10px 10px 10px;
     font-size: 3vh;
     border: 1px solid black;
 }
 
 .filter-button {
-    background-color: #D9D9D9;
+    background-color: var(--color-bg-alg-dash);
     border-right: 1px solid black;
     font-size: 2.5vh;
     width: 180px;
@@ -65,21 +64,21 @@
 
 .posts {
     height: 1000px;
-    background-color: #D9D9D9;
+    background-color: var(--color-bg-main);
 }
 
 .recent-posts {
     margin-left: 6vh;
     height: 20vh;
     width: 35vh;
-    background-color: #D9D9D9;
+    background-color: var(--color-bg-main);
 }
 
 .related-posts {
     margin-left: 6vh;
     height: 20vh;
     width: 35vh;
-    background-color: #D9D9D9;
+    background-color: var(--color-bg-main);
 }
 
 .row {
@@ -110,14 +109,3 @@
     text-align: center;
     flex: 0.6;
 }
-
-/* Device specific sizing */
-@media only screen and (max-width: 700px) {
-    .forum-title {
-        font-size: 1vh;
-    }
-
-    .category-label {
-        font-size: 1vh;
-    }
-  }
