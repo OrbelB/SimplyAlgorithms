@@ -3,6 +3,7 @@ import Categories from "../components/home_page/categories/Categories";
 import About from "../components/home_page/about-us/About";
 import Forum from "../components/home_page/forum-quiz/Forum_Quiz";
 
+
 const types_topics = [
     {
         type: 'SORTING',
@@ -22,6 +23,23 @@ const types_topics = [
     }
 
 ];
+
+//object
+// const forum_post = {
+//     user:   "Mack",
+//     title:  "First Post",
+//     text:   "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!",
+//     like:   50,
+//     dislike:10,
+//     posted: "2 months ago",
+//     tags:   "#temp",
+//     photo:  "add later",
+//     video:  "add later",
+
+//     LD_ratio: function() {
+//         return ((this.like-this.dislike) / (this.like+this.dislike)) * 100;
+//     }
+// };
 export default function HomePage() {
     console.log(types_topics);
     return (

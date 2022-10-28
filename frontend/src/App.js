@@ -4,6 +4,7 @@ import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import ForumPage from "./pages/ForumPage";
+import ForumPost  from "./components/forums/post_template/ForumPost";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path="/home" element={<HomePage/>}/>
                 <Route path="/login" element={<LoginPage/>} />
                 <Route path="/forums" element={<ForumPage/>} />
+                <Route path={"/forums/:id"} element={<ForumPost/>}/> 
                 <Route path="*" element={<Navigate replace to={"/"}/>}/>
             </Routes>
         </Layout>
