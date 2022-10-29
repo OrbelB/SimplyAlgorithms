@@ -13,7 +13,7 @@ export default function Votes({
     }
 
     const handleDownVotes = () => {
-        setVotes(votes <= 1 ? 0 : votes - 1);
+        setVotes(votes - 1);
     }
 
     return (

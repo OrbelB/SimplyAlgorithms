@@ -1,4 +1,21 @@
-.e{
-    width: 800px;
-    height: 800px;
+.window{
+    width: auto;
+    height: auto;
+}
+.post{
+    position: relative;
+    left:5%;
+    margin-top: 2%;
+}
+.user{
+    margin-top: 2%;
+    margin-left: 2%;
+}
+.title{
+    margin-top: 1%;
+    text-align: center;
+}
+.quetion{
+    padding: 2% 5% 5% 5%;
+    text-align: left;
 }
