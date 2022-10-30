@@ -16,7 +16,6 @@ const AlgVisBtns = () => {
     }
 
     return (
-
         <div className={cx(styles['alg_visualizer'], 'container-fluid')}>
             <div className={"grid p-2"}>
                 <div className={"row justify-content-evenly p-0"}>
@@ -41,30 +40,29 @@ const AlgVisBtns = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={"col-auto col-xs-auto  col-sm-auto small align-self-center"}>
+                    <div className={"col-auto col-sm-auto small align-self-center p-0"}>
                         {/* TODO when setting up the server a user can only either like or dislike; A like/dislike must be unique per user */}
                         <button
-                            className={cx(styles['alg_vis_btn_like'], "row bi bi-hand-thumbs-up p-1 p-lg-auto ")}
+                            className={cx(styles['alg_vis_btn_like'], "row justify-content-center align-content-center  bi bi-hand-thumbs-up p-1 m-1 p-lg-auto small ")}
                             onClick={handleLike}>
                             <div className={"col-sm-auto small"} unselectable={"on"}>{likes}</div>
                         </button>
                     </div>
-                    <div className={"col-auto col-xs-auto  col-sm-auto small align-self-center"}>
+                    <div className={"col-auto  col-sm-auto small align-self-center p-0 m-0"}>
                         {/* TODO when setting up the server a user can only either like or dislike; A like/dislike must be unique per user */}
                         <button
-                            className={cx(styles['alg_vis_btn_dislike'], "row bi bi-hand-thumbs-down p-1 p-lg-auto ")}
+                            className={cx(styles['alg_vis_btn_dislike'], "row justify-content-center align-content-center bi bi-hand-thumbs-down p-1 m-1 p-lg-auto small ")}
                             onClick={handleDislike}>
                             <div role="button" className={"col-sm-auto small"} unselectable={"on"}>{dislikes}</div>
                         </button>
                     </div>
-                    <div className={"col-auto  col-xs-auto  col-sm-auto small align-self-center me-3 ps-0"}>
-                        <button className={cx(styles['alg_vis_btn_report'], "p-1 small ")}>REPORT</button>
+                    <div className={"col-auto  col-xs-auto  col-sm-auto small align-self-center m-0 p-0"}>
+                        <button className={cx(styles['alg_vis_btn_report'], "p-1 m-1  ")}>REPORT</button>
                     </div>
                 </div>
             </div>
             {/* <Alg_vis_stps/> */}
         </div>
-
     )
 }
 

@@ -19,13 +19,13 @@ export default function Votes({
     return (
         <div className={cx("container-fluid square", styles["container-style"])}>
             <div className="grid">
-                <div className="row row-cols-sm-auto justify-content-center align-self-start text-center p-2">
+                <div className="row-cols-auto justify-content-center align-self-start text-center p-2">
                     <i className={cx("bi bi-plus", styles["btn-sign-style"])} onClick={handleUpVotes}></i>
                 </div>
-                <div className="row row-cols-sm-auto justify-content-center align-self-center text-center p-2">
+                <div className="row-cols-auto justify-content-center align-self-center text-center p-2">
                     <p className={styles["num-style"]}>{votes}</p>
                 </div>
-                <div className="row row-cols-sm-auto justify-content-center align-self-end text-center p-2">
+                <div className="row-cols-auto justify-content-center align-self-end text-center p-2">
                     <i className={cx("bi bi-dash", styles["btn-sign-style"])} onClick={handleDownVotes}></i>
                 </div>
             </div>
