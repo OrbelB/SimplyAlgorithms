@@ -48,12 +48,13 @@ a:hover{
     max-width: 20%;
     min-width: 10%;
 }
-
 @media only screen and (max-width: 1800px) {
     .web_nav{
-        display: none;
+        /* display: none; */
+        font-size:1.2vw;
     }
     .web_soc{
+        
         display: none;
     }
     .web_logo{
@@ -61,7 +62,14 @@ a:hover{
     }
     .web_service{
         position: relative;
-        left: -5rem;
     }
-
+    .nav-link{
+        font-size: small;
+    }
+}
+@media only screen and (max-width: 1000px){
+    .web_nav{
+        /* display: none; */
+        font-size:2vw;
+    }    
 }
