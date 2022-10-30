@@ -4,12 +4,13 @@ import cx from "classnames";
 import fp from "./ForumPost.module.css";
 import { BiLike, BiDislike } from 'react-icons/bi';
 import {useState} from "react";
+import CommentFrame from "../../comment/CommentFrame";
 let forum_post = {
   user:   "Mack",
   title:  "sectetur adipisicing elit. Error, culpa tempora, obca?",
   text:   "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!",
-  like:   50,
-  dislike:10,
+  like:   500,
+  dislike:5000,
   posted: "2 months ago",
   tags:   "#temp, #temp2, #temp3",
   photo:  "add later",
@@ -63,8 +64,15 @@ export default function ForumPost ()  {
     }
 
   return (
-    <div key={id} className={cx(fp["window"], "contaainer-fluid")}>
-      <div className={cx(fp["post"], "border border-success p-2 rounded-bottom rounded-4 border-info bg-secondary text-dark bg-opacity-50 w-75 h-auto d-inline-block ")}> 
+    <div key={id} className={cx(fp["window"], "container-fluid")}>
+      <div className={cx()}>
+        
+      <div className={cx(fp["side2"])}>
+        <h1 className={cx(fp["category-label"])}>Related Posts</h1>
+          <div className={cx(fp["related-posts"])}>
+         </div>
+      </div>
+      <div className={cx(fp["post"], "border border-success p-2 rounded-bottom rounded-4 border-info bg-secondary text-dark bg-opacity-50 h-auto d-inline-block ")}> 
         <div className={cx(fp['user'])}>
           <h4 >
             {
@@ -74,16 +82,14 @@ export default function ForumPost ()  {
         </div>
         <h3 className={cx(fp['title'])}>{forum_post.title}</h3>
         <div className={cx(fp['quetion'], "overflow-auto fw-normal lh-base")}>{forum_post.text}</div>
-        <div className={cx(fp["vote"])}>
+        <div className={cx(fp["vote"], "border rounded-pill bg-info bg-opacity-50")}>
           <button onClick={like_forum} className={cx(fp["ld"])}> <BiLike/></button>{like}
           <button onClick={dislike_forum} className={cx(fp["ld"])}> <BiDislike/></button>{dislike}
-          
-          reply btn
-          report btn
-          </div>
+        </div>
+        </div>
       </div>
       <div>
-        comment section
+        <CommentFrame/>
         
       </div>
     </div>
