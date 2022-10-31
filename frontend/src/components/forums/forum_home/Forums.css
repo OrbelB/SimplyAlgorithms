@@ -62,11 +62,6 @@
     border-radius: 0px 10px 10px 0px;
 }
 
-.posts {
-    height: 1000px;
-    background-color: var(--color-bg-main);
-}
-
 .recent-posts {
     margin-left: 6vh;
     height: 20vh;

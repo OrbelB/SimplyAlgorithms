@@ -1,0 +1,41 @@
+.preview-section {
+    height: auto;
+    background-color: #EDEDED;
+    border: 1px solid black;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.first-line {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-pic {
+    padding: 10px 0px 0px 20px;
+}
+
+.preview-username {
+    font-size: 20px;
+    text-align: left;
+    padding: 10px 0px 30px 20px;
+}
+
+.preview-title {
+    text-align: left;
+    padding-left: 20px;
+    padding-bottom: 40px;
+} 
+
+.third-line {
+    display: flex;
+    flex-direction: row;    
+}
+
+.left-side {
+    padding-left: 5%;
+}
+
+.right-side {
+    padding-left: 80%;
+}
+

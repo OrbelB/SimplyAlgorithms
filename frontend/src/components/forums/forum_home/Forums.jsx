@@ -1,5 +1,7 @@
 import './Forums.css'
-import Post from './post/Post'
+import PostPreview from './PostPreview'
+import Post from '../post/Post'
+
 
 export default function Forums() {
     return (
@@ -28,8 +30,7 @@ export default function Forums() {
                     <br/><br/>
                     <Post/>
                     <br/><br/>
-                    <div className='posts'>
-                    </div>
+                    <PostPreview/>
                 </div>
                 <div className="side2">
                     <h1 className="category-label">Recently Viewed Posts</h1>
