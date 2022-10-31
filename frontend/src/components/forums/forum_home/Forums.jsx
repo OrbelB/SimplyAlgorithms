@@ -1,6 +1,7 @@
 import './Forums.css'
 import PostPreview from './PostPreview'
 import Post from '../post/Post'
+import Related_RecentPosts from './Related_RecentPosts'
 
 
 export default function Forums() {
@@ -33,13 +34,13 @@ export default function Forums() {
                     <PostPreview/>
                 </div>
                 <div className="side2">
-                    <h1 className="category-label">Recently Viewed Posts</h1>
                     <div className="recent-posts">
-
+                        <h1 className="category-label">Recently Viewed Posts</h1>
+                        <Related_RecentPosts/>
                     </div>
-                    <h1 className="category-label">Related Posts</h1>
                     <div className="related-posts">
-
+                        <h1 className="category-label">Related Posts</h1>
+                        <Related_RecentPosts/>
                     </div>
                 </div>
             </div>

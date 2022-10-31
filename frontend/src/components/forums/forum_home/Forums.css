@@ -62,20 +62,6 @@
     border-radius: 0px 10px 10px 0px;
 }
 
-.recent-posts {
-    margin-left: 6vh;
-    height: 20vh;
-    width: 35vh;
-    background-color: var(--color-bg-main);
-}
-
-.related-posts {
-    margin-left: 6vh;
-    height: 20vh;
-    width: 35vh;
-    background-color: var(--color-bg-main);
-}
-
 .row {
     display: flex;
     flex-direction: row;
@@ -97,7 +83,11 @@
 .side2 {
     text-align: center;
     flex: 0.3;
-    margin-left: 3%;
+    margin-left: 5%;
+}
+
+.related-posts {
+    padding-bottom: 50px;
 }
 
 .middle {

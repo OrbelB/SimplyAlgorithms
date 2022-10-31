@@ -2,17 +2,18 @@ import './PostPreview.css'
 import {FaThumbsUp} from 'react-icons/fa';
 import { FaThumbsDown } from 'react-icons/fa';
 import {GoReport} from 'react-icons/go';
+export { post_previews }
 
+
+const post_previews = [
+  {id: 1, name: 'Bob', title: "Lorem ipsum dolor sit amet, duo dolore erroribus ut?"},
+  {id: 2, name: 'Jimmy', title: "An atqui vocent est, an dicunt iuvaret comprehensam eam?"},
+  {id: 3, name: 'Steve', title: "Quo no quot virtute, te est paulo civibus facilisi, melius hendrerit has at?"},
+  {id: 4, name: 'SuperLongUsername', title:  "An sit purto melius recusabo. Vocibus delectus vim at, eros viderer referrentur et has?"},
+  {id: 5, name: 'Your Mom', title: "An epicurei rationibus vituperata mei, ea odio veri reque nec."},
+];
 
 export default function PostPreview() {
-    const post_previews = [
-      {id: 1, name: 'Bob', title: "I'm totally lost"},
-      {id: 2, name: 'Jimmy', title: "How do I do this?"},
-      {id: 3, name: 'Steve', title: "Why does this happen when I do this?"},
-      {id: 4, name: 'SuperLongUsername', title:  "Where can I find more info?"},
-      {id: 5, name: 'Your Mom', title: "Can someone explain this to me?"},
-    ];
-  
     return (
       <div>
         {post_previews.map(({id, name, title}) => {
