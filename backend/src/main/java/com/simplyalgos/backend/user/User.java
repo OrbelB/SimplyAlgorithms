@@ -99,4 +99,10 @@ public class User {
 
     @OneToMany(mappedBy = "pageReportedBy")
     private List<PageReport> pageReports = new ArrayList<>();
+
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private Set<UserHistory> userHistories = new LinkedHashSet<>();
+
 }
