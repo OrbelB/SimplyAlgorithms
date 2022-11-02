@@ -114,7 +114,7 @@ entity
 | page_id             | binary(16)  | NO   | PRI | uuid_to_bin(uuid()) | DEFAULT_GENERATED |
 | is_forum_topic_page | varchar(10) | NO   |     | NULL                |                   |
 +---------------------+-------------+------+-----+---------------------+-------------------+
-
+2022-11-01 21:25:01
 
 
 parent_child_comment
@@ -131,9 +131,26 @@ forum_page;
 +------------------+--------------+------+-----+-----------+-------------------+
 | page_id          | binary(16)   | NO   | PRI | NULL      |                   |
 | description_text | text         | NO   |     | NULL      |                   |
+| user_id          | binary(16)   | NO   |     | NULL      |                   |
 | title            | varchar(60)  | NO   |     | NULL      |                   |
 | created_date     | timestamp    | YES  |     | curtime() | DEFAULT_GENERATED |
 | photo            | varchar(255) | YES  |     | NULL      |                   |
 | video            | varchar(255) | YES  |     | NULL      |                   |
 +------------------+--------------+------+-----+-----------+-------------------+
 
+
+tag
++--------+-------------+------+-----+---------------------+-------------------+
+| Field  | Type        | Null | Key | Default             | Extra             |
++--------+-------------+------+-----+---------------------+-------------------+
+| tag_id | binary(16)  | NO   | PRI | uuid_to_bin(uuid()) | DEFAULT_GENERATED |
+| tag    | varchar(35) | YES  |     | NULL                |                   |
++--------+-------------+------+-----+---------------------+-------------------+
+
+page_tag
++---------+------------+------+-----+---------+-------+
+| Field   | Type       | Null | Key | Default | Extra |
++---------+------------+------+-----+---------+-------+
+| tag_id  | binary(16) | NO   | PRI | NULL    |       |
+| page_id | binary(16) | NO   | PRI | NULL    |       |
++---------+------------+------+-----+---------+-------+
