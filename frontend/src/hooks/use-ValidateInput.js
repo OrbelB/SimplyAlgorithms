@@ -22,8 +22,6 @@ export default function useValidateInput(validateValue)  {
         setIsTouched(false);
     }
 
-
-
     return {
         value: enteredValue,
         valueIsValid,

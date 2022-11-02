@@ -2,7 +2,7 @@ import React from 'react'
 import {RiQuestionnaireFill} from 'react-icons/ri'
 
 
-export default function Pos(){
+export default function Post(){
 
     return (
     <>
