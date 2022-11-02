@@ -23,7 +23,7 @@ a:hover{
 }
 .web_soc{
     font-size: 2vh;
-    margin-right: auto;
+    pad: 5rem;
     position: relative;
     border-left: 1px solid black;
 
@@ -41,6 +41,9 @@ a:hover{
 .ojkj_team:hover{
     color: var(--color-socials-hover);
 }
+.nav-link:hover{
+    color: var(--color-socials-hover);
+}
 .web_logo{
     position: relative;
     left: 42%;
@@ -48,28 +51,20 @@ a:hover{
     max-width: 20%;
     min-width: 10%;
 }
-@media only screen and (max-width: 1800px) {
+@media only screen and (max-width: 1500px) {
     .web_nav{
-        /* display: none; */
         font-size:1.2vw;
     }
     .web_soc{
-        
-        display: none;
-    }
-    .web_logo{
-        display: none;
+        font-size:1.2vw;
     }
     .web_service{
         position: relative;
     }
-    .nav-link{
-        font-size: small;
-    }
 }
 @media only screen and (max-width: 1000px){
-    .web_nav{
-        /* display: none; */
-        font-size:2vw;
-    }    
+    .web_soc{
+        font-size: ;
+        margin-left: 3px;
+    }
 }
