@@ -7,7 +7,7 @@ import java.util.UUID;
 @Builder
 public record UserDto(
         String username
-        , UUID user_id
+        , UUID userId
         , String email
 ) {
 }

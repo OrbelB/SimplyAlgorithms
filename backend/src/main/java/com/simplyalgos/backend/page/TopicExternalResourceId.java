@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -21,9 +20,8 @@ public class TopicExternalResourceId implements Serializable {
     @Column(name = "page_id")
     private UUID pageId;
 
-    @Builder
-    public TopicExternalResourceId(String externalResourceLink, UUID topic) {
+    public TopicExternalResourceId(String externalResourceLink, UUID pageId) {
         this.externalResourceLink = externalResourceLink;
-        this.pageId = topic;
+        this.pageId = pageId;
     }
 }

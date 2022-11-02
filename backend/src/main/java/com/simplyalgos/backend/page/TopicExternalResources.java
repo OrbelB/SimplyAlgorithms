@@ -1,8 +1,8 @@
 package com.simplyalgos.backend.page;
 
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
+
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "page_external_resources")
+@Entity(name = "page_external_resource")
 public class TopicExternalResources {
 
     @EmbeddedId
@@ -21,9 +21,8 @@ public class TopicExternalResources {
 
     @CreationTimestamp
     private Timestamp createdDate;
-
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "page_id")
+    @JoinColumn(name = "page_id", referencedColumnName = "page_id")
     @MapsId("pageId")
     private Topic externalTopicPageId;
 

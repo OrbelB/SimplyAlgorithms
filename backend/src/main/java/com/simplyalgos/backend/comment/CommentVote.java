@@ -32,10 +32,4 @@ public class CommentVote {
     private User userVoteReference;
 
 
-
-
-
-
-
-
 }

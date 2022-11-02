@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.page;
 
 
+import com.simplyalgos.backend.user.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -16,7 +17,6 @@ import java.util.UUID;
 @Entity(name = "forum_page")
 public class Forum extends BaseEntity {
 
-
     public Forum(UUID pageID, Timestamp createdDate, String title, String descriptionText, String photo, String video) {
         super(pageID, createdDate, title);
         this.descriptionText = descriptionText;
@@ -31,10 +31,13 @@ public class Forum extends BaseEntity {
 
     private String video;
 
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id", nullable = false)
     @MapsId("pageID")
     private PageEntity pageEntityId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User createdBy;
 
 }
