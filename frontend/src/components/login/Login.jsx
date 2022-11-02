@@ -4,7 +4,6 @@ import styles from "./Login.module.css"
 import cx from "classnames";
 import SignUp from "./SignUp";
 import React, {useState} from "react";
-
 export default function Login() {
     const [showSignup, setShowSingup] = useState(false);
 

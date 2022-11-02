@@ -1,18 +1,27 @@
 import cx from "classnames";
 import styles from "./InputComment.module.css"
 import {useState} from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function InputComment({
                                          onNewComment
                                      }) {
+    const profilePicture = useSelector(state => state.user.profilePicture);
     const [text, setText] = useState("");
-
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const navigate = useNavigate();
     const handleInputText = (event) => {
         setText(event?.target.value);
     }
 
     const handleSubmitForm = (event) => {
         event?.preventDefault();
+        console.log(isLoggedIn)
+        if(!isLoggedIn) {
+            //show users to login 
+            navigate("/login")
+        }
         if (text.length === 0 || text === "") return
         onNewComment(text);
         setText("");
@@ -24,7 +33,7 @@ export default function InputComment({
                 <div className="row justify-content-evenly">
                     <div className="col-auto col-sm-auto m-auto align-self-center">
                         <img
-                            src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                            src={profilePicture}
                             className="rounded-circle"
                             height="50"
                             alt="profile"
