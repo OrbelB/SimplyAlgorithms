@@ -1,7 +1,9 @@
 package com.simplyalgos.backend.user;
 
+import com.fasterxml.jackson.annotation.*;
 import com.simplyalgos.backend.comment.Comment;
 import com.simplyalgos.backend.comment.CommentVote;
+import com.simplyalgos.backend.page.Forum;
 import com.simplyalgos.backend.page.PageVote;
 import com.simplyalgos.backend.page.Views;
 import com.simplyalgos.backend.quiz.TakeQuiz;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 @Entity(name = "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class User implements UserDetails, CredentialsContainer {
 
     @Id
@@ -113,8 +116,8 @@ public class User implements UserDetails, CredentialsContainer {
     @Singular
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")})
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name="user_id"))},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id", foreignKey = @ForeignKey(name="role_id"))})
     private Set<Role> roles;
 
     //Transient annotation is used to exclude this field from the object
@@ -128,7 +131,8 @@ public class User implements UserDetails, CredentialsContainer {
                 .collect(Collectors.toSet());
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     //maps user page votes
@@ -153,4 +157,8 @@ public class User implements UserDetails, CredentialsContainer {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private Set<UserHistory> userHistories = new LinkedHashSet<>();
+
+
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    private Set<Forum> forumsCreated = new HashSet<>();
 }

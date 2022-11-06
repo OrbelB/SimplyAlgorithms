@@ -1,6 +1,8 @@
 package com.simplyalgos.backend.comment;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.user.User;
 import lombok.*;
 
@@ -12,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "comment_vote")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "commentVoteId")
 @Builder
 public class CommentVote {
 

@@ -31,6 +31,7 @@ public class PageReport extends BaseEntity {
     @JoinColumn(name = "page_id")
     private PageEntity reportedPage;
 
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User pageReportedBy;

@@ -1,8 +1,10 @@
 package com.simplyalgos.backend.tag;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.page.PageEntity;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -18,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity(name = "tag")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "tagId")
 public class Tag {
 
     @Id
@@ -28,14 +31,14 @@ public class Tag {
     )
     @Type(type = "org.hibernate.type.UUIDCharType")
     @Column(name = "tag_id")
-    private UUID tagID;
+    private UUID tagId;
 
     private String tag;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "page_tag",
-            joinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")},
-            inverseJoinColumns = {@JoinColumn(name = "page_id", referencedColumnName = "page_id")})
+            joinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id", foreignKey =@ForeignKey(name ="tag_id"))},
+            inverseJoinColumns = {@JoinColumn(name = "page_id", referencedColumnName = "page_id" , foreignKey =@ForeignKey(name ="page_id") )})
     private Set<PageEntity> pageEntities = new HashSet<>();
 
 

@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.page;
 
 
+import com.fasterxml.jackson.annotation.*;
 import com.simplyalgos.backend.user.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,10 +16,11 @@ import java.util.UUID;
 @SuperBuilder
 @AllArgsConstructor
 @Entity(name = "forum_page")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "pageId")
 public class Forum extends BaseEntity {
 
-    public Forum(UUID pageID, Timestamp createdDate, String title, String descriptionText, String photo, String video) {
-        super(pageID, createdDate, title);
+    public Forum(UUID pageId, Timestamp createdDate, String title, String descriptionText, String photo, String video) {
+        super(pageId, createdDate, title);
         this.descriptionText = descriptionText;
         this.photo = photo;
         this.video = video;
@@ -31,13 +33,19 @@ public class Forum extends BaseEntity {
 
     private String video;
 
+    @Column(name = "down_votes")
+    private int downVotes;
+
+    @Column(name ="up_votes")
+    private int upVotes;
+
+    @JsonIncludeProperties({"tags", "pageComments" })
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id", nullable = false)
-    @MapsId("pageID")
     private PageEntity pageEntityId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIncludeProperties({"userId" , "username", "profilePicture"})
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "user_id"))
     private User createdBy;
-
 }

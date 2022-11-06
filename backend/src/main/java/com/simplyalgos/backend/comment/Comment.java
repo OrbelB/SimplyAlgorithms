@@ -1,6 +1,9 @@
 package com.simplyalgos.backend.comment;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.simplyalgos.backend.page.PageEntity;
 import com.simplyalgos.backend.report.CommentReport;
 import com.simplyalgos.backend.user.User;
 import lombok.*;
@@ -17,6 +20,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "comments")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "commentId")
 @Builder
 public class Comment {
     @Id
@@ -30,7 +34,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User userId;
 
     @Column(name = "comment_text")
     private String commentText;
@@ -41,9 +45,9 @@ public class Comment {
     @Column(name = "is_parent_child")
     private String isParenChild;
 
-    private int likes;
+    private Integer likes;
 
-    private int dislikes;
+    private Integer dislikes;
 
     @OneToMany(mappedBy = "commentVoteReference")
     private Set<CommentVote> commentVotes = new HashSet<>();
@@ -57,5 +61,9 @@ public class Comment {
 
     @OneToMany(mappedBy = "reportedComment")
     private Set<CommentReport> commentReports = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "page_id", referencedColumnName = "page_id",foreignKey = @ForeignKey(name = "page_id"))
+    private PageEntity pageComment;
 
 }

@@ -44,7 +44,7 @@ public class SecurityConfig {
     //injects the rsa keys
     private final KeyUtils keyUtils;
 
-    //allow spring context to work with  jpa spel queries to retrieve data from db
+    //allow spring context to work with  jpa Spel queries to retrieve data from db
     @Bean
     public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
         return new SecurityEvaluationContextExtension();
@@ -86,7 +86,8 @@ public class SecurityConfig {
                         .antMatchers("/css/**", "/js/**", "/images/**",
                                 "/webjars/**", "/**/*.html", "/**/*.css", "/**/*.js",
                                 "/favicon.ico").permitAll()
-                        .antMatchers("/api/public/**").permitAll())
+                        .antMatchers("/api/public/**").permitAll()
+                        .antMatchers("/forums/list**","/forums/*", "/forums//by-categories**").permitAll())
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated().and()

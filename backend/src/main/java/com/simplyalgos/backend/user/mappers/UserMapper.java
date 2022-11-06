@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.user.mappers;
 
 import com.simplyalgos.backend.user.User;
-import com.simplyalgos.backend.user.dtos.UserDto;
+import com.simplyalgos.backend.user.dtos.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -9,8 +9,8 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
 
     @Mapping(source = "userId", target = "userId")
-    UserDto userDtoTOUser(User user);
+    UserDTO userDtoTOUser(User user);
 
-    User userToUserDto(UserDto user);
+    User userToUserDto(UserDTO user);
 
 }

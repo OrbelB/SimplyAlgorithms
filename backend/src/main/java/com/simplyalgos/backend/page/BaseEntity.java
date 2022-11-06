@@ -29,8 +29,8 @@ public class BaseEntity {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Type(type = "org.hibernate.type.UUIDCharType")
-    @Column(length = 16, name = "page_id")
-    private UUID pageID;
+    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false , name = "page_id")
+    private UUID pageId;
 
     @CreationTimestamp
     @Column(name = "created_date")
@@ -39,8 +39,8 @@ public class BaseEntity {
     private String title;
 
     @Builder
-    public BaseEntity(UUID pageID, Timestamp createdDate, String title) {
-        this.pageID = pageID;
+    public BaseEntity(UUID pageId, Timestamp createdDate, String title) {
+        this.pageId = pageId;
         this.createdDate = createdDate;
         this.title = title;
     }

@@ -9,9 +9,7 @@ import lombok.*;
 @Getter
 @Builder
 public class TokenDTO {
-
     String userId;
     String accessToken;
     String refreshToken;
-
 }

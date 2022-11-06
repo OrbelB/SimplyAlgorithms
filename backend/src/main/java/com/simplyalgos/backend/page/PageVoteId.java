@@ -1,12 +1,9 @@
 package com.simplyalgos.backend.page;
 
-import com.simplyalgos.backend.user.User;
 import lombok.*;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedEntityGraph;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -15,17 +12,17 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
+@SuperBuilder
 @Embeddable
 public class PageVoteId implements Serializable {
-
-
-    @Column(name = "page_id")
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(length = 36, columnDefinition = "varchar", nullable = false, name = "page_id")
     private UUID pageId;
 
-    @Column(name = "user_id")
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(length = 36, columnDefinition = "varchar", nullable = false,name = "user_id")
     private UUID userId;
 
-    @Builder
     public PageVoteId(UUID pageId, UUID userId) {
         this.pageId = pageId;
         this.userId = userId;

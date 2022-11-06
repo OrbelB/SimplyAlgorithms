@@ -1,5 +1,7 @@
 package com.simplyalgos.backend.bootstrap;
 
+import com.simplyalgos.backend.page.ForumRepository;
+import com.simplyalgos.backend.page.TopicRepository;
 import com.simplyalgos.backend.user.*;
 import com.simplyalgos.backend.user.security.Authority;
 import com.simplyalgos.backend.user.security.AuthorityRepository;
@@ -24,7 +26,6 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
     private final AuthorityRepository authorityRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -49,12 +50,25 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         Authority readForum = authorityRepository.save(Authority.builder().permission("forum.read").build());
         Authority deleteForum = authorityRepository.save(Authority.builder().permission("forum.delete").build());
 
+        Authority createVote = authorityRepository.save(Authority.builder().permission("vote.create").build());
+        Authority removeVote = authorityRepository.save(Authority.builder().permission("vote.remove").build());
+
+        Authority createReport = authorityRepository.save(Authority.builder().permission("report.create").build());
+        Authority removeReport = authorityRepository.save(Authority.builder().permission("report.remove").build());
+        Authority updateReport = authorityRepository.save(Authority.builder().permission("report.update").build());
+        Authority readReport = authorityRepository.save(Authority.builder().permission("report.read").build());
+
         Role studentRole = roleRepository.save(Role.builder().roleName("STUDENT").build());
 
         Role adminRole = roleRepository.save(Role.builder().roleName("ADMIN").build());
 
-        adminRole.setAuthorities(new HashSet<>(Set.of(createForum, updateForum, readForum, deleteForum, updateUser, readUser, deleteUser, usersCRUD)));
-        studentRole.setAuthorities(new HashSet<>(Set.of(createForum, updateForum, readForum, deleteForum, updateUser, readUser, deleteUser)));
+        adminRole.setAuthorities(new HashSet<>(Set.of(createForum,
+                updateForum, readForum, deleteForum,
+                updateUser, readUser, deleteUser,
+                usersCRUD, createVote, removeVote,
+                createReport, removeReport, updateReport, readReport)));
+        studentRole.setAuthorities(new HashSet<>(Set.of(createForum, updateForum, readForum, deleteForum,
+                updateUser, readUser, deleteUser, createVote, removeVote, createReport, removeReport)));
 
         roleRepository.saveAll(Arrays.asList(studentRole, adminRole));
 
@@ -67,7 +81,7 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                         .dob(Date.valueOf(LocalDate.of(2000, 1, 1)))
                         .firstName("admin_name")
                         .lastName("admin_lastName")
-                        .profilePicture("this is a picture link")
+                        .profilePicture("https://cdn2.thecatapi.com/images/_8WxuPwzw.jpg")
                         .role(adminRole)
                         .build()
         );

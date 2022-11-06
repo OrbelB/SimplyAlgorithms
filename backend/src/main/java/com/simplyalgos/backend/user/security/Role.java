@@ -1,5 +1,7 @@
 package com.simplyalgos.backend.user.security;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.user.User;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity(name = "role")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "roleId")
 public class Role {
 
     @Id
