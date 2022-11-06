@@ -71,26 +71,26 @@ SELECT DISTINCT parent_child_pages.parent_page_id, FROM topic_page INNER JOIN pa
 
 -------------------------------
 
-users
-+-------------------------+--------------+------+-----+---------------------+-------------------+
-| Field                   | Type         | Null | Key | Default             | Extra             |
-+-------------------------+--------------+------+-----+---------------------+-------------------+
-| user_id                 | binary(16)   | NO   | PRI | uuid_to_bin(uuid()) | DEFAULT_GENERATED |
-| first_name              | varchar(60)  | YES  |     | NULL                |                   |
-| last_name               | varchar(60)  | YES  |     | NULL                |                   |
-| username                | varchar(255) | NO   |     | NULL                |                   |
-| email                   | varchar(255) | NO   |     | NULL                |                   |
-| dob                     | date         | YES  |     | NULL                |                   |
-| profile_picture         | varchar(255) | YES  |     | NULL                |                   |
-| password                | varchar(255) | YES  |     | NULL                |                   |
-| credentials_non_expired | tinyint(1)   | YES  |     | NULL                |                   |
-| account_non_locked      | tinyint(1)   | YES  |     | NULL                |                   |
-| created_date            | timestamp    | YES  |     | curtime()           | DEFAULT_GENERATED |
-| last_modified_date      | timestamp    | YES  |     | NULL                |                   |
-| days_logged_in          | int          | YES  |     | 1                   | DEFAULT_GENERATED |
-| account_non_expired     | bit(1)       | YES  |     | NULL                |                   |
-| enabled                 | bit(1)       | YES  |     | NULL                |                   |
-+-------------------------+--------------+------+-----+---------------------+-------------------+
+users;
++-------------------------+--------------+------+-----+-----------+-------------------+
+| Field                   | Type         | Null | Key | Default   | Extra             |
++-------------------------+--------------+------+-----+-----------+-------------------+
+| user_id                 | varchar(36)  | NO   | PRI | uuid()    | DEFAULT_GENERATED |
+| first_name              | varchar(60)  | YES  |     | NULL      |                   |
+| last_name               | varchar(60)  | YES  |     | NULL      |                   |
+| username                | varchar(255) | NO   |     | NULL      |                   |
+| email                   | varchar(255) | NO   |     | NULL      |                   |
+| dob                     | date         | YES  |     | NULL      |                   |
+| profile_picture         | varchar(255) | YES  |     | NULL      |                   |
+| password                | varchar(255) | YES  |     | NULL      |                   |
+| credentials_non_expired | tinyint(1)   | YES  |     | NULL      |                   |
+| account_non_locked      | tinyint(1)   | YES  |     | NULL      |                   |
+| created_date            | timestamp    | YES  |     | curtime() | DEFAULT_GENERATED |
+| last_modified_date      | timestamp    | YES  |     | NULL      |                   |
+| days_logged_in          | int          | YES  |     | 1         | DEFAULT_GENERATED |
+| account_non_expired     | bit(1)       | YES  |     | NULL      |                   |
+| enabled                 | bit(1)       | YES  |     | NULL      |                   |
++-------------------------+--------------+------+-----+-----------+-------------------+
 
 
 comments
@@ -129,13 +129,15 @@ forum_page;
 +------------------+--------------+------+-----+-----------+-------------------+
 | Field            | Type         | Null | Key | Default   | Extra             |
 +------------------+--------------+------+-----+-----------+-------------------+
-| page_id          | binary(16)   | NO   | PRI | NULL      |                   |
+| page_id          | varchar(36)  | NO   | PRI | NULL      |                   |
 | description_text | text         | NO   |     | NULL      |                   |
-| user_id          | binary(16)   | NO   |     | NULL      |                   |
 | title            | varchar(60)  | NO   |     | NULL      |                   |
 | created_date     | timestamp    | YES  |     | curtime() | DEFAULT_GENERATED |
 | photo            | varchar(255) | YES  |     | NULL      |                   |
+| user_id          | varchar(36)  | NO   | MUL | NULL      |                   |
 | video            | varchar(255) | YES  |     | NULL      |                   |
+| up_votes         | int          | NO   |     | 0         |                   |
+| down_votes       | int          | YES  |     | 0         |                   |
 +------------------+--------------+------+-----+-----------+-------------------+
 
 
@@ -154,3 +156,66 @@ page_tag
 | tag_id  | binary(16) | NO   | PRI | NULL    |       |
 | page_id | binary(16) | NO   | PRI | NULL    |       |
 +---------+------------+------+-----+---------+-------+
+
+comment_vote
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| comment_id   | varchar(36) | NO   | PRI | NULL    |       |
+| user_id      | varchar(36) | NO   | PRI | NULL    |       |
+| like_dislike | tinyint(1)  | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+
+===========================================================
+
+
+topic_page;
++-----------------+--------------+------+-----+-----------+-------------------+
+| Field           | Type         | Null | Key | Default   | Extra             |
++-----------------+--------------+------+-----+-----------+-------------------+
+| page_id         | varchar(36)  | NO   | PRI | NULL      |                   |
+| video           | varchar(500) | NO   |     | NULL      |                   |
+| running_time    | text         | NO   |     | NULL      |                   |
+| time_complexity | text         | NO   |     | NULL      |                   |
+| explanation     | text         | NO   |     | NULL      |                   |
+| title           | varchar(60)  | NO   |     | NULL      |                   |
+| created_date    | timestamp    | YES  |     | curtime() | DEFAULT_GENERATED |
++-----------------+--------------+------+-----+-----------+-------------------+
+
+topic_page_steps;
++--------------+-------------+------+-----+---------+-------------------+
+| Field        | Type        | Null | Key | Default | Extra             |
++--------------+-------------+------+-----+---------+-------------------+
+| step_id      | varchar(36) | NO   | PRI | uuid()  | DEFAULT_GENERATED |
+| page_id      | varchar(36) | NO   | MUL | NULL    |                   |
+| step_number  | tinyint     | NO   |     | NULL    |                   |
+| step         | text        | NO   |     | NULL    |                   |
+| created_date | timestamp   | YES  |     | NULL    |                   |
++--------------+-------------+------+-----+---------+-------------------+
+
+page_external_resource;
++------------------------+--------------+------+-----+-----------+-------------------+
+| Field                  | Type         | Null | Key | Default   | Extra             |
++------------------------+--------------+------+-----+-----------+-------------------+
+| external_resource_link | varchar(500) | NO   | PRI | NULL      |                   |
+| created_date           | timestamp    | YES  |     | curtime() | DEFAULT_GENERATED |
+| page_id                | varchar(36)  | NO   | PRI | NULL      |                   |
++------------------------+--------------+------+-----+-----------+-------------------+
+
+code_snippet;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| page_id        | varchar(36) | NO   | PRI | NULL    |       |
+| language_title | varchar(20) | NO   | PRI | NULL    |       |
+| code_text      | text        | NO   |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+
+views;
++--------------+-------------+------+-----+-----------+-------------------+
+| Field        | Type        | Null | Key | Default   | Extra             |
++--------------+-------------+------+-----+-----------+-------------------+
+| page_id      | varchar(36) | NO   | PRI | NULL      |                   |
+| user_id      | varchar(36) | NO   | PRI | NULL      |                   |
+| visited_date | timestamp   | YES  |     | curtime() | DEFAULT_GENERATED |
++--------------+-------------+------+-----+-----------+-------------------+

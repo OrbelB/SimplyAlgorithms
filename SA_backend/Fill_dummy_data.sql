@@ -47,3 +47,35 @@ INSERT INTO page_tag (tag_id, page_id) values (0x3130000000000000000000000000000
 (0x33350000000000000000000000000000,0x32350000000000000000000000000000),
 (0x31300000000000000000000000000000,0x32350000000000000000000000000000),
 (0x35350000000000000000000000000000,0x32350000000000000000000000000000);
+
+INSERT INTO users
+(user_id,first_name, last_name, username, email) VALUES
+('00000000-0000-0000-0000-000000000000','Joe', 'Shmo', 'JS', 'j@gmail.com');
+INSERT INTO views (page_id, user_id) VALUES
+('079d135b-4a17-4d0a-9af3-a66fad2ab096' ,'729e4ea9-4b2c-41cb-8009-38b4a4bddc60'),
+('1e8854af-8e73-4a94-b07b-af162024c631' ,'729e4ea9-4b2c-41cb-8009-38b4a4bddc60'),
+('6624b9f4-998d-46f5-a6e8-fde5c412d680' ,'729e4ea9-4b2c-41cb-8009-38b4a4bddc60'),
+('67112887-b77c-4bf3-81e3-e7cdbfafaf7e' ,'729e4ea9-4b2c-41cb-8009-38b4a4bddc60'),
+
+('1e8854af-8e73-4a94-b07b-af162024c631', '9970b4cd-5da6-11ed-9875-982cbcce9e55'), 
+('67112887-b77c-4bf3-81e3-e7cdbfafaf7e', '9970b4cd-5da6-11ed-9875-982cbcce9e55'), 
+('faaa3ae2-d2b0-4edc-94d4-18f46657cd15', '9970b4cd-5da6-11ed-9875-982cbcce9e55');
+
+select * from forum_page;
+select * from topic_page;
+select * from page_tag;
+select * from tag where tag.tag_id = '19896b07-5c8c-11ed-b3ae-0edd86af7d23';
+select * from users;
+select * from views;
+-- binary search tree & TAG_B
+INSERT INTO page_tag (tag_id, page_id) values
+('19896b07-5c8c-11ed-b3ae-0edd86af7d23' ,'079d135b-4a17-4d0a-9af3-a66fad2ab096'),
+('8c9c61fb-5ba5-11ed-818a-0eb6b37eb50d' ,'079d135b-4a17-4d0a-9af3-a66fad2ab096');
+
+INSERT INTO page_tag (tag_id, page_id) values
+('a79dd78c-5c87-11ed-b3ae-0edd86af7d23', '1a6b989a-1cdf-43ad-91a3-29fb181287a9'),
+('19896b07-5c8c-11ed-b3ae-0edd86af7d23','1a6b989a-1cdf-43ad-91a3-29fb181287a9');
+
+1a6b989a-1cdf-43ad-91a3-29fb181287a9
+
+1e8854af-8e73-4a94-b07b-af162024c631

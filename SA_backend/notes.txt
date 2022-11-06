@@ -53,8 +53,6 @@ for topics
 
 
 
-
-
 querries: 
 select
 
@@ -63,3 +61,24 @@ updating
 deleting
 
 inserting
+
+
+
+============================
+
+
+-- QUERRY 
+-- comment vote 
+-- topic page information ok
+-- releated posts ok
+-- recently viewed post ok
+
+
+-- INSERTS
+-- comment vote
+-- inserting a new forum -> 
+-- inserting a comment parent & comment -> half way finished
+
+-- updating comment
+
+-- updating comment
