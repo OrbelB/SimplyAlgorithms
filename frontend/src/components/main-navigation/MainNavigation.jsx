@@ -106,14 +106,13 @@ export default function MainNavigation() {
               aria-labelledby="navbarDropdownMenuAvatar"
             >
               <li>
-                <NavLink className="dropdown-item" to={"my-profile"}>
+                <NavLink className="dropdown-item" to={"userprofile"}>
                   My profile
                 </NavLink>
               </li>
               <li>
-                <NavLink className="dropdown-item" to={"settings"}>
-                  {" "}
-                  Settings{" "}
+                <NavLink className="dropdown-item" to={"settings/profile"}>
+                  Settings
                 </NavLink>
               </li>
               <li>
