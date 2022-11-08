@@ -39,7 +39,7 @@ public class PageEntity {
     //only adding the tag and tag_id
     @JsonIgnoreProperties("pageEntities")
     @ManyToMany(mappedBy = "pageEntities")
-    private Set<Tag> tags = new HashSet<>();
+    private Set<Tag> tags;
 
 
     @OneToMany(mappedBy = "pageEntity")

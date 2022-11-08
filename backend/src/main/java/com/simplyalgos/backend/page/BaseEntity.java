@@ -1,11 +1,9 @@
 package com.simplyalgos.backend.page;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import net.bytebuddy.implementation.bind.annotation.Super;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -18,7 +16,6 @@ import java.util.UUID;
 @Setter
 @Getter
 @NoArgsConstructor
-@SuperBuilder
 @MappedSuperclass
 public class BaseEntity {
 
@@ -38,7 +35,6 @@ public class BaseEntity {
 
     private String title;
 
-    @Builder
     public BaseEntity(UUID pageId, Timestamp createdDate, String title) {
         this.pageId = pageId;
         this.createdDate = createdDate;

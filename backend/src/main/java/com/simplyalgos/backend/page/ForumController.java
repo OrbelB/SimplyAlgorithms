@@ -1,9 +1,9 @@
 package com.simplyalgos.backend.page;
 
 import com.simplyalgos.backend.page.dto.ForumDTO;
-import com.simplyalgos.backend.page.dto.LikeDislike;
+import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
 import com.simplyalgos.backend.page.security.perms.CreateForumPermission;
-import com.simplyalgos.backend.page.security.perms.CreateForumVotePermission;
+import com.simplyalgos.backend.page.security.perms.CreateVotePermission;
 import com.simplyalgos.backend.page.security.perms.DeleteForumPermission;
 import com.simplyalgos.backend.page.security.perms.UpdateForumPermission;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
@@ -22,20 +22,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @CrossOrigin
 @RequestMapping("forums")
-@RestController
 @Slf4j
+@RestController
 public class ForumController {
     private final ForumService forumService;
 
-    private static final Integer PAGE_FIXED_SIZE = 5;
-    private static final Integer PAGE_FIXED_PAGE = 0;
-
     @GetMapping("/list")
-    public ResponseEntity<?> getPageList(@RequestParam(name = "page", required = true) Integer page,
-                                         @RequestParam(name = "size", required = true) Integer size,
+    public ResponseEntity<?> getPageList(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
+                                         @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
                                          @RequestParam(name = "sortBy", required = false) String sortBy) {
-        if(page < PAGE_FIXED_PAGE) page = PAGE_FIXED_PAGE;
-        if(size == null) size = PAGE_FIXED_SIZE;
         if(sortBy != null) {
             if(sortBy.equals("upVotes")){
                 return ResponseEntity.ok(forumService.listForumPages(PageRequest.of(page, size, Sort.by(sortBy).descending())));
@@ -76,14 +71,14 @@ public class ForumController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @CreateForumVotePermission
+    @CreateVotePermission
     @GetMapping(path = "/like-dislike", consumes = "application/json")
-    public ResponseEntity<?> likeOrDislike(@RequestBody LikeDislike likeDislike) {
-        log.info(MessageFormat.format("userid {0}, pageId {1}, likeDislike {2}",
-                likeDislike.userId(),
-                likeDislike.pageId(),
-                likeDislike.likeDislike()));
-        forumService.userLikedOrDisliked(likeDislike.userId(), likeDislike.pageId(), likeDislike.likeDislike());
+    public ResponseEntity<?> likeOrDislike(@RequestBody LikeDislikeDTO likeDislikeDTO) {
+        log.info(MessageFormat.format("userid {0}, pageId {1}, likeDislikeDTO {2}",
+                likeDislikeDTO.userId(),
+                likeDislikeDTO.pageId(),
+                likeDislikeDTO.likeDislike()));
+        forumService.userLikedOrDisliked(likeDislikeDTO.userId(), likeDislikeDTO.pageId(), likeDislikeDTO.likeDislike());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -94,7 +89,7 @@ public class ForumController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping(path = "/by-categories")
+    @GetMapping(path = "/list/by-category")
     public ResponseEntity<?> listByCategories(@RequestParam Integer page,
                                               @RequestParam Integer size,
                                               @RequestParam(name="tagId") String tagId

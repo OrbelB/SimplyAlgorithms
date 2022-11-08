@@ -2,7 +2,7 @@ package com.simplyalgos.backend.page.dto;
 
 import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
 import com.simplyalgos.backend.tag.dto.TagDTO;
-import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class FullForumDTO {
     String video;
     int upVotes;
     int downVotes;
-    UserDTO userDto;
+    UserDataDTO userDto;
     Set<CommentBasicDTO> comments;
     Set<TagDTO> tags;
 

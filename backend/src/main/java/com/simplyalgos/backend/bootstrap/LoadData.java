@@ -58,6 +58,14 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         Authority updateReport = authorityRepository.save(Authority.builder().permission("report.update").build());
         Authority readReport = authorityRepository.save(Authority.builder().permission("report.read").build());
 
+        Authority createTopic = authorityRepository.save(Authority.builder().permission("topic.create").build());
+        Authority removeTopic = authorityRepository.save(Authority.builder().permission("topic.remove").build());
+        Authority updateTopic = authorityRepository.save(Authority.builder().permission("topic.update").build());
+
+        Authority createComment = authorityRepository.save(Authority.builder().permission("comment.create").build());
+        Authority removeComment = authorityRepository.save(Authority.builder().permission("comment.remove").build());
+        Authority updateComment = authorityRepository.save(Authority.builder().permission("comment.update").build());
+
         Role studentRole = roleRepository.save(Role.builder().roleName("STUDENT").build());
 
         Role adminRole = roleRepository.save(Role.builder().roleName("ADMIN").build());
@@ -66,24 +74,24 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                 updateForum, readForum, deleteForum,
                 updateUser, readUser, deleteUser,
                 usersCRUD, createVote, removeVote,
-                createReport, removeReport, updateReport, readReport)));
+                createReport, removeReport, updateReport, readReport, createTopic, removeTopic, updateTopic)));
         studentRole.setAuthorities(new HashSet<>(Set.of(createForum, updateForum, readForum, deleteForum,
                 updateUser, readUser, deleteUser, createVote, removeVote, createReport, removeReport)));
 
         roleRepository.saveAll(Arrays.asList(studentRole, adminRole));
 
         //add default user
-        userRepository.save(
-                User.builder()
-                        .username("admin")
-                        .password(passwordEncoder.encode("admin"))
-                        .email("this@email")
-                        .dob(Date.valueOf(LocalDate.of(2000, 1, 1)))
-                        .firstName("admin_name")
-                        .lastName("admin_lastName")
-                        .profilePicture("https://cdn2.thecatapi.com/images/_8WxuPwzw.jpg")
-                        .role(adminRole)
-                        .build()
-        );
+//        userRepository.save(
+//                User.builder()
+//                        .username("admin")
+//                        .password(passwordEncoder.encode("admin"))
+//                        .email("this@email")
+//                        .dob(Date.valueOf(LocalDate.of(2000, 1, 1)))
+//                        .firstName("admin_name")
+//                        .lastName("admin_lastName")
+//                        .profilePicture("https://cdn2.thecatapi.com/images/_8WxuPwzw.jpg")
+//                        .role(adminRole)
+//                        .build()
+//        );
     }
 }

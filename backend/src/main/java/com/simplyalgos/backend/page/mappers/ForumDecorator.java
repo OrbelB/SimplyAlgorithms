@@ -8,12 +8,14 @@ import com.simplyalgos.backend.page.dto.FullForumDTO;
 import com.simplyalgos.backend.tag.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import com.simplyalgos.backend.user.User;
-import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.user.dtos.UserDataDTO;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class ForumDecorator implements ForumMapper {
@@ -33,15 +35,21 @@ public class ForumDecorator implements ForumMapper {
         if ((forum.getCreatedBy()) != null) {
             forumDTO.setUserDto(mapUserToUserDto(forum));
         }
+
+        if (forum.getPageEntityId().getTags() != null) {
+            forumDTO.setTags(mapTagsToTagsDto(forum));
+        }
         return forumDTO;
     }
 
-    private UserDTO mapUserToUserDto(Forum forum) {
+    private UserDataDTO mapUserToUserDto(Forum forum) {
         User user = forum.getCreatedBy();
-        UserDTO.UserDTOBuilder userDTOBuilder = UserDTO.builder();
+        UserDataDTO.UserDataDTOBuilder userDTOBuilder = UserDataDTO.builder();
         userDTOBuilder.userId(user.getUserId())
                 .username(user.getUsername())
-                .profilePicture(user.getProfilePicture());
+                .profilePicture(user.getProfilePicture())
+                .lastName(user.getLastName())
+                .firstName(user.getFirstName());
         return userDTOBuilder.build();
     }
 
@@ -51,7 +59,7 @@ public class ForumDecorator implements ForumMapper {
     }
 
     @Override
-    public FullForumDTO forumToFullForumDto(Forum forum) {
+    public FullForumDTO forumToFullForumDto(@NotNull Forum forum) {
         FullForumDTO forumDTO = forumMapper.forumToFullForumDto(forum);
         forumDTO.setPageId(forum.getPageId());
         if (forum.getCreatedBy() != null) {
@@ -66,37 +74,40 @@ public class ForumDecorator implements ForumMapper {
         if (forum.getPageEntityId().getTags() != null) {
             forumDTO.setTags(mapTagsToTagsDto(forum));
         }
-
-
         return forumDTO;
 
     }
 
     private Set<TagDTO> mapTagsToTagsDto(Forum forum) {
         Set<Tag> tags = forum.getPageEntityId().getTags();
-        Set<TagDTO> commentBasicDTOS = new HashSet<>();
-        tags.forEach(tag -> commentBasicDTOS.add(
-                TagDTO.builder()
-                        .tagId(tag.getTagId())
-                        .tag(tag.getTag()).
-                        build())
-        );
-        return commentBasicDTOS;
+        return tags.stream().map(tag ->
+                        TagDTO.builder()
+                                .tagId(tag.getTagId())
+                                .tag(tag.getTag()).
+                                build())
+                .collect(Collectors.toSet());
     }
 
     //get comments from forum page
     private Set<CommentBasicDTO> mapCommentToCommentBasicDto(Forum forum) {
         Set<Comment> comments = forum.getPageEntityId().getPageComments();
-        Set<CommentBasicDTO> commentBasicDTOS = new HashSet<>();
-        comments.forEach(comment -> commentBasicDTOS.add(
+        return comments.stream().map(comment ->
                 CommentBasicDTO
                         .builder()
                         .commentId(comment.getCommentId())
                         .commentText(comment.getCommentText())
                         .createdDate(comment.getCreatedDate())
-                        .build())
-        );
-        return commentBasicDTOS;
+                        .userInfo(UserDataDTO.builder()
+                                .userId(comment.getUserId().getUserId())
+                                .firstName(comment.getUserId().getFirstName())
+                                .lastName(comment.getUserId().getLastName())
+                                .profilePicture(comment.getUserId().getProfilePicture())
+                                .username(comment.getUserId().getUsername())
+                                .build())
+                        .likes(comment.getLikes())
+                        .dislikes(comment.getDislikes())
+                        .build()
+        ).collect(Collectors.toSet());
     }
 
 

@@ -30,6 +30,4 @@ public class Views {
     @JoinColumn(name = "user_id")
     @MapsId("userId")
     private User userReferenceView;
-
-
 }

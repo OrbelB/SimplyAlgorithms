@@ -5,6 +5,11 @@ import com.simplyalgos.backend.page.dto.FullForumDTO;
 import com.simplyalgos.backend.page.mappers.ForumMapper;
 import com.simplyalgos.backend.report.PageReportRepository;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
+import com.simplyalgos.backend.tag.Tag;
+import com.simplyalgos.backend.tag.TagRepository;
+import com.simplyalgos.backend.tag.dto.TagDTO;
+import com.simplyalgos.backend.user.User;
+import com.simplyalgos.backend.user.UserRepository;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +33,10 @@ public class ForumServiceImpl implements ForumService {
     private final ForumMapper forumMapper;
     private final PageVoteRepository pageVoteRepository;
     private final PageReportRepository pageReportRepository;
+    private final UserRepository userRepository;
+    private final TagRepository tagRepository;
+
+    private final PageEntityRepository pageEntityRepository;
 
     @Override
     public ObjectPagedList<ForumDTO> listForumPages(Pageable pageable) {
@@ -39,20 +48,67 @@ public class ForumServiceImpl implements ForumService {
                         .collect(Collectors.toList()),
                 PageRequest.of(
                         forumPage.getPageable().getPageNumber(),
-                        forumPage.getPageable().getPageSize()),
+                        forumPage.getPageable().getPageSize(),
+                        forumPage.getSort()),
                 forumPage.getTotalElements()
         );
     }
 
+    //missing mapping tag to page
     @Transactional
     @Override
     public void createForum(ForumDTO forumDTO) {
-        //TODO check if a user has been created
-        forumRepository.createForum(UUID.randomUUID().toString(), forumDTO.getTitle(),
-                forumDTO.getDescriptionText(), forumDTO.getPhoto(), forumDTO.getVideo(),
-                forumDTO.getUserDto().getUserId().toString());
+        // check if a user has been created
+        Optional<User> user = userRepository.findById(forumDTO.getUserDto().getUserId());
+        if (user.isPresent()) {
+            Forum forum = forumRepository.saveAndFlush(
+                    Forum.builder()
+                            .pageId(UUID.randomUUID())
+                            .createdBy(user.get())
+                            .descriptionText(forumDTO.getDescriptionText())
+                            .photo(forumDTO.getPhoto())
+                            .video(forumDTO.getVideo())
+                            .title(forumDTO.getTitle())
+                            .build()
+            );
+
+            //get the page entity
+            Optional<PageEntity> forumType = pageEntityRepository.findById(forum.getPageId());
+
+
+            if (forumType.isPresent()) {
+                log.debug(MessageFormat.format("trying to get data from page entity {0}", forumType.get().getPageId()));
+
+                mapTagToPageId(forumType.get(), forumDTO.getTags());
+            } else {
+                throw new NoSuchElementException("page entity could not be initialized");
+            }
+
+        }
     }
 
+    private void mapTagToPageId(PageEntity page, Set<TagDTO> tags) {
+        //find all by id
+        Iterable<UUID> tagIds = tags.stream()
+                .map(TagDTO::getTagId)
+                .collect(Collectors.toSet());
+        List<Tag> retrievedTags = tagRepository.findAllById(tagIds);
+
+        //find those with no ids and create a tag
+        //map the new tag to the id
+        tags.stream().filter(tagDTO ->
+                        tagDTO.getTagId() == null)
+                .distinct()
+                .forEach(tagDTO -> retrievedTags.add(tagRepository.save(Tag.builder().tag(tagDTO.getTag()).build())));
+
+        retrievedTags.forEach(tag -> {
+            if (tag.getPageEntities() == null) {
+                tag.setPageEntities(new HashSet<>(Set.of(page)));
+            }
+            tag.getPageEntities().add(page);
+        });
+        tagRepository.saveAll(retrievedTags);
+    }
 
     @Deprecated
     @Transactional
@@ -136,17 +192,19 @@ public class ForumServiceImpl implements ForumService {
         forumToUpdate.ifPresentOrElse(forum -> {
             log.debug(MessageFormat.format("forum {0} is present", forum.getPageId()));
             if (forum.getCreatedBy().getUserId().equals(forumDTO.getUserDto().getUserId())) {
-                if (isNullAndEmpty(forumDTO.getTitle())) forum.setTitle(forumDTO.getTitle());
-                if (isNullAndEmpty(forumDTO.getPhoto())) forum.setPhoto(forumDTO.getPhoto());
-                if (isNullAndEmpty(forumDTO.getVideo())) forum.setVideo(forumDTO.getVideo());
-                if (isNullAndEmpty(forumDTO.getDescriptionText()))
+                if (isNotNullAndEmpty(forumDTO.getTitle())) forum.setTitle(forumDTO.getTitle());
+                if (isNotNullAndEmpty(forumDTO.getPhoto())) forum.setPhoto(forumDTO.getPhoto());
+                if (isNotNullAndEmpty(forumDTO.getVideo())) forum.setVideo(forumDTO.getVideo());
+                if (isNotNullAndEmpty(forumDTO.getDescriptionText()))
                     forum.setDescriptionText(forumDTO.getDescriptionText());
+                if (forumDTO.getTags() != null && forumDTO.getTags().size() != 0)
+                    mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags());
             }
             forumRepository.save(forum);
         }, () -> log.info(MessageFormat.format("no such an object", forumDTO.getPageId())));
     }
 
-    private boolean isNullAndEmpty(String xAttribute) {
+    private boolean isNotNullAndEmpty(String xAttribute) {
         return !xAttribute.isEmpty() || !xAttribute.isBlank();
     }
 
@@ -157,15 +215,16 @@ public class ForumServiceImpl implements ForumService {
     }
 
     @Override
-    public ObjectPagedList<ForumDTO> listForumPagesByTags(UUID tagId,Pageable pageable) {
-        Page<Forum> forumPage= forumRepository.findAllByPageEntityId_Tags_TagId(tagId, pageable);
+    public ObjectPagedList<ForumDTO> listForumPagesByTags(UUID tagId, Pageable pageable) {
+        Page<Forum> forumPage = forumRepository.findAllByPageEntityId_Tags_TagId(tagId, pageable);
         return new ObjectPagedList<>(
                 forumPage.stream()
                         .map(forumMapper::forumToForumDTO)
                         .collect(Collectors.toList()),
                 PageRequest.of(
                         forumPage.getPageable().getPageNumber(),
-                        forumPage.getPageable().getPageSize()),
+                        forumPage.getPageable().getPageSize(),
+                        forumPage.getSort()),
                 forumPage.getTotalElements()
         );
     }

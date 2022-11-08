@@ -35,7 +35,7 @@ public class Tag {
 
     private String tag;
 
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "page_tag",
             joinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id", foreignKey =@ForeignKey(name ="tag_id"))},
             inverseJoinColumns = {@JoinColumn(name = "page_id", referencedColumnName = "page_id" , foreignKey =@ForeignKey(name ="page_id") )})

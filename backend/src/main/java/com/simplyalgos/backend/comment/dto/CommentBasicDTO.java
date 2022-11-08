@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.comment.dto;
 
+import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class CommentBasicDTO {
     String createdDate;
     Integer likes;
     Integer dislikes;
+    UserDataDTO userInfo;
 }

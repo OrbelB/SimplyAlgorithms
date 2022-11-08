@@ -1,11 +1,13 @@
 package com.simplyalgos.backend.page.dto;
 
-import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.tag.dto.TagDTO;
+import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -21,5 +23,6 @@ public class ForumDTO {
     String video;
     int upVotes;
     int downVotes;
-    UserDTO userDto;
+    UserDataDTO userDto;
+    Set<TagDTO> tags;
 }

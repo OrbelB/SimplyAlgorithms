@@ -19,7 +19,7 @@ public interface ForumService {
 
     void deleteForum(String pageId, String userId);
 
-    FullForumDTO getForumPage(String pageId);
+   FullForumDTO getForumPage(String pageId);
 
     void updateForum(ForumDTO forumDTO);
 

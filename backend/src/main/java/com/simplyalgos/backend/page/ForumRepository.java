@@ -15,14 +15,13 @@ public interface ForumRepository extends JpaRepository<Forum, UUID> {
     @Modifying
     @Query(value = "INSERT INTO forum_page(page_id, title, description_text, photo, video, user_id)" +
             " VALUES (:page_id, :title, :description_text, :photo, :video, :user_id)", nativeQuery = true)
-    void createForum(@Param("page_id") String pageId,
+    Optional<Forum> createForum(@Param("page_id") String pageId,
                      @Param("title") String title,
                      @Param("description_text") String descriptionText,
                      @Param("photo") String photo,
                      @Param("video") String video,
                      @Param("user_id") String userId
     );
-
     @Modifying
     @Query(value = "DELETE FROM forum_page WHERE page_id = :page_id", nativeQuery = true)
     void deleteByPageID(@Param("page_id") String pageId);

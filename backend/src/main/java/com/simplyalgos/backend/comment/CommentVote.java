@@ -14,6 +14,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "comment_vote")
+@Table(
+        uniqueConstraints=
+        @UniqueConstraint(columnNames = {"comment_id", "user_id"})
+)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "commentVoteId")
 @Builder
 public class CommentVote {

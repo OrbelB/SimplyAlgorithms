@@ -17,11 +17,19 @@ public interface ForumMapper {
 
 
 
+
+    @Mapping(target = "userDto", ignore = true)
+    @Mapping(target = "tags", ignore = true)
     ForumDTO forumToForumDTO(Forum forum);
 
+    @Mapping(target = "pageEntityId", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
     @Mapping(source = "createdDate", target = "createdDate", qualifiedByName = "parseStringToDate")
     public Forum forumDTOToForum(ForumDTO forumDTO);
 
+    @Mapping(target = "userDto", ignore = true)
+    @Mapping(target = "tags", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     public FullForumDTO forumToFullForumDto(Forum forum);
     @Named("parseStringToDate")
     default Timestamp parseStringToDate(String createdDate) {

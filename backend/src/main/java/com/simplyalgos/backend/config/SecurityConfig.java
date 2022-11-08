@@ -87,7 +87,9 @@ public class SecurityConfig {
                                 "/webjars/**", "/**/*.html", "/**/*.css", "/**/*.js",
                                 "/favicon.ico").permitAll()
                         .antMatchers("/api/public/**").permitAll()
-                        .antMatchers("/forums/list**","/forums/*", "/forums//by-categories**").permitAll())
+                        .antMatchers("/forums/list**","/forums/*", "/forums/list/**").permitAll()
+                .antMatchers("/topics/list**", "/topics/*", "/topics/list/**", "/topics/**").permitAll()
+                        .antMatchers("/comments**"))
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated().and()
