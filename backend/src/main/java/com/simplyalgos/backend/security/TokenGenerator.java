@@ -4,6 +4,7 @@ import com.simplyalgos.backend.user.User;
 import com.simplyalgos.backend.web.dtos.TokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,8 +28,15 @@ import static java.util.stream.Collectors.joining;
 public class TokenGenerator {
 
     private final JwtEncoder accessTokenEncoder;
+
+
+    private  JwtEncoder refreshTokenEncoder;
+
+    @Autowired
     @Qualifier("jwtRefreshTokenEncoder")
-    private final JwtEncoder refreshTokenEncoder;
+    protected  void setRefreshTokenEncoder(JwtEncoder refreshTokenEncoder) {
+        this.refreshTokenEncoder = refreshTokenEncoder;
+    }
 
     private String createAccessToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();

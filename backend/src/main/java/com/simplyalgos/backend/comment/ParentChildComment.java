@@ -1,31 +1,38 @@
 package com.simplyalgos.backend.comment;
 
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
 
 import javax.persistence.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Table(
-        uniqueConstraints=
-        @UniqueConstraint(columnNames = {"parent_comment_id", "child_comment_id"})
-)
 @Entity(name = "parent_child_comment")
-public class ParentChildComment  {
-
+public class ParentChildComment {
     @EmbeddedId
     private ParentChildCommentId parentChildCommentId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "parent_comment_id", insertable = false, updatable = false)
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_comment_id", referencedColumnName = "comment_id")
+    @MapsId("parentComment")
     private Comment parentComment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "child_comment_id", insertable = false,updatable = false)
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "child_comment_id", referencedColumnName = "comment_id")
+    @MapsId("childComment")
     private Comment childComment;
+
+    @Builder
+    public ParentChildComment(ParentChildCommentId parentChildCommentId) {
+        this.parentChildCommentId = parentChildCommentId;
+    }
+
 
 }

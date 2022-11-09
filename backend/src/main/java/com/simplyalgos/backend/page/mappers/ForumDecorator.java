@@ -2,6 +2,7 @@ package com.simplyalgos.backend.page.mappers;
 
 import com.simplyalgos.backend.comment.Comment;
 import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
+import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.page.Forum;
 import com.simplyalgos.backend.page.dto.ForumDTO;
 import com.simplyalgos.backend.page.dto.FullForumDTO;
@@ -13,7 +14,6 @@ import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -91,24 +91,25 @@ public class ForumDecorator implements ForumMapper {
     //get comments from forum page
     private Set<CommentBasicDTO> mapCommentToCommentBasicDto(Forum forum) {
         Set<Comment> comments = forum.getPageEntityId().getPageComments();
-        return comments.stream().map(comment ->
+        return comments.stream().filter(comment -> comment.getIsParentChild().equals(CommentType.PARENT.label)).map(comment ->
                 CommentBasicDTO
                         .builder()
                         .commentId(comment.getCommentId())
                         .commentText(comment.getCommentText())
-                        .createdDate(comment.getCreatedDate())
-                        .userInfo(UserDataDTO.builder()
-                                .userId(comment.getUserId().getUserId())
-                                .firstName(comment.getUserId().getFirstName())
-                                .lastName(comment.getUserId().getLastName())
-                                .profilePicture(comment.getUserId().getProfilePicture())
-                                .username(comment.getUserId().getUsername())
+                        .createdDate(comment.getCreatedDate().toString())
+                        .createdBy(UserDataDTO.builder()
+                                .userId(comment.getCreatedBy().getUserId())
+                                .firstName(comment.getCreatedBy().getFirstName())
+                                .lastName(comment.getCreatedBy().getLastName())
+                                .profilePicture(comment.getCreatedBy().getProfilePicture())
+                                .username(comment.getCreatedBy().getUsername())
                                 .build())
                         .likes(comment.getLikes())
                         .dislikes(comment.getDislikes())
                         .build()
         ).collect(Collectors.toSet());
     }
+
 
 
 }

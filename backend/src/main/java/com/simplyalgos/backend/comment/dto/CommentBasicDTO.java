@@ -15,5 +15,5 @@ public class CommentBasicDTO {
     String createdDate;
     Integer likes;
     Integer dislikes;
-    UserDataDTO userInfo;
+    UserDataDTO createdBy;
 }

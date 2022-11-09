@@ -2,6 +2,7 @@ package com.simplyalgos.backend.page.mappers;
 
 import com.simplyalgos.backend.comment.Comment;
 import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
+import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.page.CodeSnippet;
 import com.simplyalgos.backend.page.Topic;
 import com.simplyalgos.backend.page.TopicExternalResource;
@@ -63,22 +64,22 @@ public class TopicDecorator implements TopicMapper {
     }
 
     private Set<CommentBasicDTO> mapCommentsToCommentsDTO(Set<Comment> pageComments) {
-        return pageComments.stream().map(pageComment ->
+        return pageComments.stream().filter(comment -> comment.getIsParentChild().equals(CommentType.CHILD.label)).map(pageComment ->
                 CommentBasicDTO.builder()
                         .commentId(pageComment.getCommentId())
-                        .userInfo(
+                        .createdBy(
                                 UserDataDTO
                                         .builder()
-                                        .userId(pageComment.getUserId().getUserId())
-                                        .username(pageComment.getUserId().getUsername())
-                                        .profilePicture(pageComment.getUserId().getProfilePicture())
-                                        .lastName(pageComment.getUserId().getLastName())
-                                        .firstName(pageComment.getUserId().getFirstName())
+                                        .userId(pageComment.getCreatedBy().getUserId())
+                                        .username(pageComment.getCreatedBy().getUsername())
+                                        .profilePicture(pageComment.getCreatedBy().getProfilePicture())
+                                        .lastName(pageComment.getCreatedBy().getLastName())
+                                        .firstName(pageComment.getCreatedBy().getFirstName())
                                         .build()
                         )
                         .commentText(pageComment.getCommentText())
                         .likes(pageComment.getLikes()).dislikes(pageComment.getDislikes())
-                        .createdDate(pageComment.getCreatedDate())
+                        .createdDate(pageComment.getCreatedDate().toString())
                         .build()).collect(Collectors.toSet());
     }
 

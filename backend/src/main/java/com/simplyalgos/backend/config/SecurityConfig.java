@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -87,9 +88,9 @@ public class SecurityConfig {
                                 "/webjars/**", "/**/*.html", "/**/*.css", "/**/*.js",
                                 "/favicon.ico").permitAll()
                         .antMatchers("/api/public/**").permitAll()
-                        .antMatchers("/forums/list**","/forums/*", "/forums/list/**").permitAll()
-                .antMatchers("/topics/list**", "/topics/*", "/topics/list/**", "/topics/**").permitAll()
-                        .antMatchers("/comments**"))
+                        .antMatchers(HttpMethod.GET,"/forums/list**","/forums/*", "/forums/list/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/topics/list**", "/topics/*", "/topics/list/**").permitAll()
+                        .antMatchers("/comments/**").permitAll())
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated().and()
@@ -152,7 +153,6 @@ public class SecurityConfig {
         provider.setJwtAuthenticationConverter(jwtAuthenticationConverter());
         return provider;
     }
-
 
     //communicates with the db and handles any security validation
     @Bean

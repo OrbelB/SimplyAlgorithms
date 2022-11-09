@@ -1,0 +1,92 @@
+package com.simplyalgos.backend.comment.mappers;
+
+import com.simplyalgos.backend.comment.Comment;
+import com.simplyalgos.backend.comment.ParentChildComment;
+import com.simplyalgos.backend.comment.dto.ChildrenCommentRetrieval;
+import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
+import com.simplyalgos.backend.user.User;
+import com.simplyalgos.backend.user.UserRepository;
+import com.simplyalgos.backend.user.dtos.UserDataDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Component
+@RequiredArgsConstructor
+public class CommentMapper {
+    private final UserRepository userRepository;
+
+    public CommentBasicDTO commentToBasicCommentDTO(ParentChildComment parentChildComment) {
+        CommentBasicDTO.CommentBasicDTOBuilder commentBasicDTOBuilder = CommentBasicDTO.builder();
+        if(parentChildComment.getParentChildCommentId().getChildComment() != null) {
+            Comment currentComment = parentChildComment.getParentChildCommentId().getChildComment();
+            commentBasicDTOBuilder
+                    .createdBy(mapUserToUserDataDTO(currentComment.getCreatedBy()))
+                    .createdDate(currentComment.getCreatedDate().toString())
+                    .commentId(currentComment.getCommentId())
+                    .commentText(currentComment.getCommentText())
+                    .dislikes(currentComment.getDislikes())
+                    .likes(currentComment.getLikes());
+
+
+        }
+        return commentBasicDTOBuilder.build();
+    }
+
+    @Deprecated
+    public ChildrenCommentRetrieval ParentChildCommentToChildrenCommentList(ParentChildComment parentChildComment) {
+        ChildrenCommentRetrieval.ChildrenCommentRetrievalBuilder childrenComments =  ChildrenCommentRetrieval.builder();
+        List<CommentBasicDTO> commentBasicDTOS = new ArrayList<>();
+        if (parentChildComment.getParentChildCommentId().getParentComment().getChildrenComments() != null) {
+            List<ParentChildComment> currentChildren = parentChildComment.getParentChildCommentId().getParentComment().getChildrenComments();
+            List<Comment> comments = currentChildren
+                    .stream()
+                    .map(currentChild -> currentChild
+                            .getParentChildCommentId()
+                            .getChildComment()).toList();
+            commentBasicDTOS = comments.stream().map(comment -> CommentBasicDTO.builder()
+                    .commentId(comment.getCommentId())
+                    .commentText(comment.getCommentText())
+                    .likes(comment.getLikes())
+                    .dislikes(comment.getDislikes())
+                    .createdDate(comment.getCreatedDate().toString())
+                    .createdBy(mapUserToUserDataDTO(comment.getCreatedBy())).build()).collect(Collectors.toList());
+
+        }
+        return childrenComments.childrenComments(commentBasicDTOS).build();
+    }
+
+    //later on check if it ever goes to the else statement
+    private UserDataDTO mapUserToUserDataDTO(User createdBy) {
+        UserDataDTO.UserDataDTOBuilder userToBuild = UserDataDTO.builder();
+        if (createdBy != null) {
+            if (createdBy.getUserId() != null) {
+                userToBuild.userId(createdBy.getUserId());
+                if (isNotNullNorBlankNorEmpty(createdBy.getUsername())) userToBuild.username(createdBy.getUsername());
+                if (isNotNullNorBlankNorEmpty(createdBy.getFirstName()))
+                    userToBuild.firstName(createdBy.getFirstName());
+                if (isNotNullNorBlankNorEmpty(createdBy.getLastName())) userToBuild.lastName(createdBy.getLastName());
+                if (isNotNullNorBlankNorEmpty((createdBy.getProfilePicture())))
+                    userToBuild.profilePicture(createdBy.getProfilePicture());
+            } else {
+                Optional<User> user = userRepository.findById(UUID.fromString(createdBy.toString()));
+                user.ifPresent(currUser -> userToBuild
+                        .userId(currUser.getUserId())
+                        .username(currUser.getUsername())
+                        .profilePicture(currUser.getProfilePicture())
+                        .lastName(currUser.getLastName()).
+                        firstName(currUser.getFirstName()).build());
+            }
+        }
+        return userToBuild.build();
+    }
+
+    private boolean isNotNullNorBlankNorEmpty(String xAttribute) {
+        return !(xAttribute != null && xAttribute.isEmpty() && xAttribute.isBlank());
+    }
+}

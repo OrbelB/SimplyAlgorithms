@@ -1,12 +1,11 @@
 package com.simplyalgos.backend.comment;
 
 import lombok.*;
-import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 @Setter
 @Getter
@@ -15,15 +14,19 @@ import java.util.UUID;
 @Embeddable
 public class ParentChildCommentId implements Serializable {
 
-    @Column(name =  "parent_comment_id")
-    private UUID parentCommentId;
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_comment_id", referencedColumnName = "comment_id")
+    private Comment parentComment;
 
-    @Column(name = "child_comment_id")
-    private UUID childCommentId;
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "child_comment_id", referencedColumnName = "comment_id")
+    private Comment childComment;
 
     @Builder
-    public ParentChildCommentId(UUID parentCommentId, UUID childCommentId) {
-        this.parentCommentId = parentCommentId;
-        this.childCommentId = childCommentId;
+    public ParentChildCommentId(Comment parentComment, Comment childComment) {
+        this.parentComment = parentComment;
+        this.childComment = childComment;
     }
 }

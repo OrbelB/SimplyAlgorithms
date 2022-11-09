@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 
@@ -32,15 +34,20 @@ public class AuthController {
     private final JpaUserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
     private final TokenGenerator tokenGenerator;
+    private JwtAuthenticationProvider refreshTokenAuthProvider;
 
+    @Autowired
     @Qualifier("jwtRefreshTokenAuthProvider")
-    private final JwtAuthenticationProvider refreshTokenAuthProvider;
+    private void setJwtAuthenticationProvider(JwtAuthenticationProvider jwtAuthenticationProvider){
+        this.refreshTokenAuthProvider = jwtAuthenticationProvider;
+    }
+
 
     @PostMapping(path = "/register", consumes = "application/json")
-    public ResponseEntity<?> register(@RequestBody SignupDTO singupDTO) throws Exception {
-        userDetailsService.createUser(singupDTO);
+    public ResponseEntity<?> register(@RequestBody SignupDTO signupDTO) throws Exception {
+        userDetailsService.createUser(signupDTO);
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(singupDTO.username(), singupDTO.password()));
+                new UsernamePasswordAuthenticationToken(signupDTO.username(), signupDTO.password()));
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 

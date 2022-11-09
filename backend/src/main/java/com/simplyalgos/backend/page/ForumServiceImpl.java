@@ -5,9 +5,7 @@ import com.simplyalgos.backend.page.dto.FullForumDTO;
 import com.simplyalgos.backend.page.mappers.ForumMapper;
 import com.simplyalgos.backend.report.PageReportRepository;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
-import com.simplyalgos.backend.tag.Tag;
-import com.simplyalgos.backend.tag.TagRepository;
-import com.simplyalgos.backend.tag.dto.TagDTO;
+import com.simplyalgos.backend.tag.TagService;
 import com.simplyalgos.backend.user.User;
 import com.simplyalgos.backend.user.UserRepository;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
@@ -34,7 +32,7 @@ public class ForumServiceImpl implements ForumService {
     private final PageVoteRepository pageVoteRepository;
     private final PageReportRepository pageReportRepository;
     private final UserRepository userRepository;
-    private final TagRepository tagRepository;
+    private final TagService tagService;
 
     private final PageEntityRepository pageEntityRepository;
 
@@ -79,7 +77,7 @@ public class ForumServiceImpl implements ForumService {
             if (forumType.isPresent()) {
                 log.debug(MessageFormat.format("trying to get data from page entity {0}", forumType.get().getPageId()));
 
-                mapTagToPageId(forumType.get(), forumDTO.getTags());
+                tagService.mapTagToPageId(forumType.get(), forumDTO.getTags());
             } else {
                 throw new NoSuchElementException("page entity could not be initialized");
             }
@@ -87,28 +85,6 @@ public class ForumServiceImpl implements ForumService {
         }
     }
 
-    private void mapTagToPageId(PageEntity page, Set<TagDTO> tags) {
-        //find all by id
-        Iterable<UUID> tagIds = tags.stream()
-                .map(TagDTO::getTagId)
-                .collect(Collectors.toSet());
-        List<Tag> retrievedTags = tagRepository.findAllById(tagIds);
-
-        //find those with no ids and create a tag
-        //map the new tag to the id
-        tags.stream().filter(tagDTO ->
-                        tagDTO.getTagId() == null)
-                .distinct()
-                .forEach(tagDTO -> retrievedTags.add(tagRepository.save(Tag.builder().tag(tagDTO.getTag()).build())));
-
-        retrievedTags.forEach(tag -> {
-            if (tag.getPageEntities() == null) {
-                tag.setPageEntities(new HashSet<>(Set.of(page)));
-            }
-            tag.getPageEntities().add(page);
-        });
-        tagRepository.saveAll(retrievedTags);
-    }
 
     @Deprecated
     @Transactional
@@ -198,20 +174,24 @@ public class ForumServiceImpl implements ForumService {
                 if (isNotNullAndEmpty(forumDTO.getDescriptionText()))
                     forum.setDescriptionText(forumDTO.getDescriptionText());
                 if (forumDTO.getTags() != null && forumDTO.getTags().size() != 0)
-                    mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags());
+                    tagService.mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags());
             }
             forumRepository.save(forum);
         }, () -> log.info(MessageFormat.format("no such an object", forumDTO.getPageId())));
     }
 
     private boolean isNotNullAndEmpty(String xAttribute) {
+        if (xAttribute == null) return false;
         return !xAttribute.isEmpty() || !xAttribute.isBlank();
     }
 
     @Transactional
     @Override
     public void reportForum(PageReportDTO forumReport) {
-        pageReportRepository.createReport(forumReport.getReportMessage(), forumReport.getUserId().toString(), forumReport.getPageId().toString());
+        pageReportRepository
+                .createReport(forumReport.getReportMessage(),
+                        forumReport.getUserId().toString(),
+                        forumReport.getPageId().toString());
     }
 
     @Override

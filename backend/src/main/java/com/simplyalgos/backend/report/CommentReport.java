@@ -5,10 +5,8 @@ import com.simplyalgos.backend.user.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -19,6 +17,7 @@ import java.util.UUID;
 @SuperBuilder
 @Entity(name = "comment_report")
 public class CommentReport extends BaseEntity {
+
 
     public CommentReport(UUID reportId, Timestamp createdDate, String report, Comment reportedComment, User commentReportedBy) {
         super(reportId, createdDate, report);

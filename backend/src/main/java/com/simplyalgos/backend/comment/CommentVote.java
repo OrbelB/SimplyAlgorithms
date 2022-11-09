@@ -11,32 +11,35 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "comment_vote")
 @Table(
-        uniqueConstraints=
+        uniqueConstraints =
         @UniqueConstraint(columnNames = {"comment_id", "user_id"})
 )
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "commentVoteId")
-@Builder
 public class CommentVote {
 
     @EmbeddedId
     private CommentVoteId commentVoteId;
 
 
-    private boolean like_dislike;
+    @Column(name = "like_dislike")
+    private boolean vote;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "comment_id")
-    @MapsId("commentId")
-    private Comment commentVoteReference;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "comment_id", insertable = false, updatable = false)
+    private Comment commentVoteReference=  new Comment();
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    @MapsId("userId")
-    private User userVoteReference;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User userVoteReference = new User();
 
-
+    @Builder
+    public CommentVote(CommentVoteId commentVoteId, boolean like_dislike, Comment commentVoteReference, User userVoteReference) {
+        this.vote = like_dislike;
+        this.commentVoteReference = commentVoteReference;
+        this.userVoteReference = userVoteReference;
+        this.commentVoteId = commentVoteId;
+    }
 }

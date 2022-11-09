@@ -89,6 +89,7 @@ public class User implements UserDetails, CredentialsContainer {
 
     @Column(name = "days_logged_in")
     private int daysLoggedIn;
+
     @Override
     public boolean isAccountNonExpired() {
         return this.accountNonExpired;
@@ -113,11 +114,12 @@ public class User implements UserDetails, CredentialsContainer {
     public void eraseCredentials() {
         this.password = null;
     }
+
     @Singular
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name="user_id"))},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id", foreignKey = @ForeignKey(name="role_id"))})
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "user_id"))},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id", foreignKey = @ForeignKey(name = "role_id"))})
     private Set<Role> roles;
 
     //Transient annotation is used to exclude this field from the object
@@ -132,7 +134,7 @@ public class User implements UserDetails, CredentialsContainer {
     }
 
 
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     //maps user page votes

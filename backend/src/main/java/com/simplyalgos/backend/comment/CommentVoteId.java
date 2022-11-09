@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.comment;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,9 +15,12 @@ import java.util.UUID;
 @Embeddable
 public class CommentVoteId implements Serializable {
 
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
     @Column(name = "comment_id")
     private UUID commentId;
 
+    @Type(type = "org.hibernate.type.UUIDCharType")
     @Column(name = "user_id")
     private UUID userId;
 

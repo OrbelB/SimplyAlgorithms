@@ -9,6 +9,7 @@ import com.simplyalgos.backend.report.PageReportRepository;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.tag.Tag;
 import com.simplyalgos.backend.tag.TagRepository;
+import com.simplyalgos.backend.tag.TagService;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import lombok.AllArgsConstructor;
@@ -41,7 +42,8 @@ public class TopicServiceImpl implements TopicService {
     private final PageReportRepository pageReportRepository;
 
     private final CodeSnippetRepository codeSnippetRepository;
-    private final TagRepository tagRepository;
+
+    private final TagService tagService;
 
     private final TopicStepRepository topicStepRepository;
 
@@ -90,7 +92,7 @@ public class TopicServiceImpl implements TopicService {
                     if (fullTopicDTO.getCodeSnippet() != null)
                         mapCodeSnippetToPageEntity(topic, fullTopicDTO.getCodeSnippet());
                     if (fullTopicDTO.getTags() != null)
-                        mapTagToPageId(topic.getPageEntityId(), fullTopicDTO.getTags());
+                        tagService.mapTagToPageId(topic.getPageEntityId(), fullTopicDTO.getTags());
                     topicRepository.save(topic);
                 }
                 , () ->
@@ -126,7 +128,7 @@ public class TopicServiceImpl implements TopicService {
 
         if (topicPageType.isPresent()) {
             log.debug(MessageFormat.format("Page {0} exists", topicPageType.get().getPageId()));
-            mapTagToPageId(topicPageType.get(), fullTopicDTO.getTags());
+            tagService.mapTagToPageId(topicPageType.get(), fullTopicDTO.getTags());
             if (fullTopicDTO.getCodeSnippet() != null)
                 createdTopic.setCodeSnippets(mapCodeSnippetToPageEntity(createdTopic, fullTopicDTO.getCodeSnippet()));
             if (fullTopicDTO.getExternalResources() != null)
@@ -239,28 +241,6 @@ public class TopicServiceImpl implements TopicService {
         }).toList();
     }
 
-    private void mapTagToPageId(PageEntity page, Set<TagDTO> tags) {
-        //find all by id
-        Iterable<UUID> tagIds = tags.stream()
-                .map(TagDTO::getTagId)
-                .collect(Collectors.toSet());
-        List<Tag> tagOptional = tagRepository.findAllById(tagIds);
-
-        //find those with no ids and create a tag
-        //map the new tag to the id
-        tags.stream().filter(tagDTO ->
-                        tagDTO.getTagId() == null)
-                .distinct()
-                .forEach(tagDTO -> tagOptional.add(tagRepository.save(Tag.builder().tag(tagDTO.getTag()).build())));
-
-        tagOptional.forEach(tag -> {
-            if (tag.getPageEntities() == null) {
-                tag.setPageEntities(new HashSet<>(Set.of(page)));
-            }
-            tag.getPageEntities().add(page);
-        });
-        tagRepository.saveAll(tagOptional);
-    }
 
     @Override
     public void userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike) {

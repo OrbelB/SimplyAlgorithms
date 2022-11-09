@@ -1,7 +1,5 @@
 package com.simplyalgos.backend.bootstrap;
 
-import com.simplyalgos.backend.page.ForumRepository;
-import com.simplyalgos.backend.page.TopicRepository;
 import com.simplyalgos.backend.user.*;
 import com.simplyalgos.backend.user.security.Authority;
 import com.simplyalgos.backend.user.security.AuthorityRepository;
@@ -74,24 +72,26 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                 updateForum, readForum, deleteForum,
                 updateUser, readUser, deleteUser,
                 usersCRUD, createVote, removeVote,
-                createReport, removeReport, updateReport, readReport, createTopic, removeTopic, updateTopic)));
+                createReport, removeReport, updateReport, readReport, createTopic,
+                removeTopic, updateTopic, createComment, removeComment, updateComment)));
         studentRole.setAuthorities(new HashSet<>(Set.of(createForum, updateForum, readForum, deleteForum,
-                updateUser, readUser, deleteUser, createVote, removeVote, createReport, removeReport)));
+                updateUser, readUser, deleteUser, createVote, removeVote, createReport, removeReport,
+                createComment, removeComment, updateComment)));
 
         roleRepository.saveAll(Arrays.asList(studentRole, adminRole));
 
         //add default user
-//        userRepository.save(
-//                User.builder()
-//                        .username("admin")
-//                        .password(passwordEncoder.encode("admin"))
-//                        .email("this@email")
-//                        .dob(Date.valueOf(LocalDate.of(2000, 1, 1)))
-//                        .firstName("admin_name")
-//                        .lastName("admin_lastName")
-//                        .profilePicture("https://cdn2.thecatapi.com/images/_8WxuPwzw.jpg")
-//                        .role(adminRole)
-//                        .build()
-//        );
+        userRepository.save(
+                User.builder()
+                        .username("admin")
+                        .password(passwordEncoder.encode("admin"))
+                        .email("this@email")
+                        .dob(Date.valueOf(LocalDate.of(2000, 1, 1)))
+                        .firstName("admin_name")
+                        .lastName("admin_lastName")
+                        .profilePicture("https://cdn2.thecatapi.com/images/_8WxuPwzw.jpg")
+                        .role(adminRole)
+                        .build()
+        );
     }
 }

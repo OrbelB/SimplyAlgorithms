@@ -17,7 +17,6 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     public Set<UserDTO> parseUsers() {
-
         return userRepository
                 .findAll()
                 .stream()
@@ -30,6 +29,17 @@ public class UserServiceImpl implements UserService {
                 .findById(UUID.fromString(userId))
                 .orElseThrow(() -> new UsernameNotFoundException("Username: " + userId + " not found"))
         );
+    }
+
+    public User getUser(UUID userId) {
+        return userRepository
+                .findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("Username: " + userId + " Not Found"));
+    }
+
+    @Override
+    public boolean userExists(UUID userId) {
+        return userRepository.existsById(userId);
     }
 
 }

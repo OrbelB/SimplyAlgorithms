@@ -72,7 +72,7 @@ public class ForumController {
     }
 
     @CreateVotePermission
-    @GetMapping(path = "/like-dislike", consumes = "application/json")
+    @PostMapping(path = "/like-dislike", consumes = "application/json")
     public ResponseEntity<?> likeOrDislike(@RequestBody LikeDislikeDTO likeDislikeDTO) {
         log.info(MessageFormat.format("userid {0}, pageId {1}, likeDislikeDTO {2}",
                 likeDislikeDTO.userId(),
@@ -85,6 +85,7 @@ public class ForumController {
     @CreateReportPermission
     @GetMapping(path = "/report", consumes = "application/json")
     public ResponseEntity<?> reportForum(@RequestBody PageReportDTO pageReport) {
+        log.debug(MessageFormat.format("report comment id {0}" , pageReport.getPageId()));
         forumService.reportForum(pageReport);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
