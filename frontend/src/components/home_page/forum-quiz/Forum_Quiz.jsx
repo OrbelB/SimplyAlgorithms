@@ -1,5 +1,5 @@
 import "./Forum_Quiz.css"
-
+import { NavLink } from "react-router-dom";
 export default function Forum() {
     return (
         <div>
@@ -25,7 +25,9 @@ export default function Forum() {
                 <img alt="quiz pic" className="pic"/>
             </div>
             <br/><br/>
-            <button className="b b2">GO TO QUIZZES</button>
+            <button className="b b2">
+                <NavLink to={"/underconstruction"}>GO TO QUIZZES</NavLink>
+            </button>
             <div className="bottom"></div>
         </div>
 
