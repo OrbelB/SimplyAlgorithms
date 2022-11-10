@@ -38,10 +38,6 @@ export default function Forums() {
                         <h1 className="category-label">Recently Viewed Posts</h1>
                         <Related_RecentPosts/>
                     </div>
-                    <div className="related-posts">
-                        <h1 className="category-label">Related Posts</h1>
-                        <Related_RecentPosts/>
-                    </div>
                 </div>
             </div>
         </div>

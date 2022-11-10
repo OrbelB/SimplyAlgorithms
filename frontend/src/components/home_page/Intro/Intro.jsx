@@ -1,4 +1,5 @@
 import "./Intro.css"
+import { NavLink } from "react-router-dom";
 
 export default function Intro() {
     return (
@@ -11,9 +12,9 @@ export default function Intro() {
                     algorithms made easy
                 </p>
                 <div className="row justify-content-center m-1 m-md-auto">
-                    <button className="button w-auto">
-                        SIGN UP
-                    </button>
+                    <NavLink to={"/login"}>
+                        <button className="button w-auto">SIGN UP</button>
+                    </NavLink>
                 </div>
             </div>
         </div>

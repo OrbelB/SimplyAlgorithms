@@ -12,7 +12,9 @@ export default function Forum() {
                                     Vitae et leo duis ut diam quam nulla porttitor. Sed turpis tincidunt id aliquet risus feugiat in ante metus.</p>
             </div>
             <br/><br/>
-            <button className="b b1">GO TO FORUMS</button>
+            <button className="b b1">
+                <NavLink to={"/forums"}>GO TO FORUMS</NavLink>
+            </button>
             <div className="bottom"></div>
         </div>
 
