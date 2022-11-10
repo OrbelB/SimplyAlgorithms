@@ -1,6 +1,8 @@
 package com.simplyalgos.backend.tag;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.page.PageEntity;
 import lombok.*;
@@ -35,7 +37,8 @@ public class Tag {
 
     private String tag;
 
-    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "page_tag",
             joinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id", foreignKey =@ForeignKey(name ="tag_id"))},
             inverseJoinColumns = {@JoinColumn(name = "page_id", referencedColumnName = "page_id" , foreignKey =@ForeignKey(name ="page_id") )})

@@ -38,8 +38,16 @@ public class PageEntity {
 
     //only adding the tag and tag_id
     @JsonIgnoreProperties("pageEntities")
-    @ManyToMany(mappedBy = "pageEntities")
+    @ManyToMany(mappedBy = "pageEntities", cascade = CascadeType.ALL)
     private Set<Tag> tags;
+
+
+    @PreRemove
+    public void removeTagFromPage(){
+        for(Tag t : tags){
+            t.getPageEntities().remove(this);
+        }
+    }
 
 
     @OneToMany(mappedBy = "pageEntity")

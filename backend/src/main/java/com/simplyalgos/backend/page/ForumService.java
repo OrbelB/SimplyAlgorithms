@@ -13,15 +13,15 @@ public interface ForumService {
 
     ObjectPagedList<ForumDTO> listForumPages(Pageable pageable);
 
-    void createForum(ForumDTO forumDTO);
+    UUID createForum(ForumDTO forumDTO);
 
     void userLikedOrDisliked(UUID userId, UUID pageId, Boolean passedLikeDislike);
 
-    void deleteForum(String pageId, String userId);
+    UUID deleteForum(String pageId, String userId);
 
    FullForumDTO getForumPage(String pageId);
 
-    void updateForum(ForumDTO forumDTO);
+    UUID updateForum(ForumDTO forumDTO);
 
     void reportForum(PageReportDTO pageReportDTO);
 

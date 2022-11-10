@@ -13,6 +13,6 @@ public class CustomAuthManager {
 
     public boolean userIdMatches(Authentication authentication, String userId) {
         log.debug(MessageFormat.format("this is the owner of the comment {0}", userId));
-        return authentication.getName().equals(userId);
+        return authentication.getName().equals(userId.trim());
     }
 }

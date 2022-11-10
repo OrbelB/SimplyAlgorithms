@@ -31,7 +31,7 @@ public class Forum extends BaseEntity {
     private int upVotes;
 
     @JsonIncludeProperties({"tags", "pageComments"})
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "page_id", nullable = false)
     private PageEntity pageEntityId;
 

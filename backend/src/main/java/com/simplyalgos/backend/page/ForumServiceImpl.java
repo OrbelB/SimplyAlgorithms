@@ -14,11 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 
@@ -52,10 +54,9 @@ public class ForumServiceImpl implements ForumService {
         );
     }
 
-    //missing mapping tag to page
     @Transactional
     @Override
-    public void createForum(ForumDTO forumDTO) {
+    public UUID createForum(ForumDTO forumDTO) {
         // check if a user has been created
         Optional<User> user = userRepository.findById(forumDTO.getUserDto().getUserId());
         if (user.isPresent()) {
@@ -73,16 +74,20 @@ public class ForumServiceImpl implements ForumService {
             //get the page entity
             Optional<PageEntity> forumType = pageEntityRepository.findById(forum.getPageId());
 
-
             if (forumType.isPresent()) {
                 log.debug(MessageFormat.format("trying to get data from page entity {0}", forumType.get().getPageId()));
-
                 tagService.mapTagToPageId(forumType.get(), forumDTO.getTags());
+                return forum.getPageId();
             } else {
                 throw new NoSuchElementException("page entity could not be initialized");
             }
-
         }
+        throw new UsernameNotFoundException(
+                MessageFormat
+                        .format("User with id {0} could not be found", forumDTO.getUserDto().getUserId())
+        );
+
+
     }
 
 
@@ -151,8 +156,9 @@ public class ForumServiceImpl implements ForumService {
 
     @Transactional
     @Override
-    public void deleteForum(String pageId, String userId) {
+    public UUID deleteForum(String pageId, String userId) {
         forumRepository.deleteByPageID(pageId);
+        return UUID.fromString(userId);
     }
 
     @Override
@@ -163,10 +169,11 @@ public class ForumServiceImpl implements ForumService {
     }
 
     @Override
-    public void updateForum(ForumDTO forumDTO) {
-        Optional<Forum> forumToUpdate = forumRepository.findById(forumDTO.getPageId());
-        forumToUpdate.ifPresentOrElse(forum -> {
-            log.debug(MessageFormat.format("forum {0} is present", forum.getPageId()));
+    public UUID updateForum(ForumDTO forumDTO) {
+        Optional<Forum> optionalForumToUpdate = forumRepository.findById(forumDTO.getPageId());
+        Forum forum;
+        if (optionalForumToUpdate.isPresent()) {
+            forum = optionalForumToUpdate.get();
             if (forum.getCreatedBy().getUserId().equals(forumDTO.getUserDto().getUserId())) {
                 if (isNotNullAndEmpty(forumDTO.getTitle())) forum.setTitle(forumDTO.getTitle());
                 if (isNotNullAndEmpty(forumDTO.getPhoto())) forum.setPhoto(forumDTO.getPhoto());
@@ -176,9 +183,11 @@ public class ForumServiceImpl implements ForumService {
                 if (forumDTO.getTags() != null && forumDTO.getTags().size() != 0)
                     tagService.mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags());
             }
-            forumRepository.save(forum);
-        }, () -> log.info(MessageFormat.format("no such an object", forumDTO.getPageId())));
+            return forumRepository.save(forum).getPageId();
+        }
+        throw new NoSuchElementException(MessageFormat.format("no such an object", forumDTO.getPageId()));
     }
+
 
     private boolean isNotNullAndEmpty(String xAttribute) {
         if (xAttribute == null) return false;

@@ -32,7 +32,7 @@ public class ForumController {
                                          @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
                                          @RequestParam(name = "sortBy", required = false) String sortBy) {
         if(sortBy != null) {
-            if(sortBy.equals("upVotes")){
+            if(sortBy.equals("upVotes") || sortBy.equals("createdDate")){
                 return ResponseEntity.ok(forumService.listForumPages(PageRequest.of(page, size, Sort.by(sortBy).descending())));
             }
             return ResponseEntity.ok(forumService.listForumPages(PageRequest.of(page, size, Sort.by(sortBy).ascending())));
@@ -47,28 +47,25 @@ public class ForumController {
     }
 
     @CreateForumPermission
-    @PostMapping(path = "/create", consumes = "application/json")
+    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createForum(@RequestBody ForumDTO forumDTO) {
         log.info("this is the object data " + forumDTO.getUserDto().getUserId());
-        forumService.createForum(forumDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(forumService.createForum(forumDTO));
     }
 
     @UpdateForumPermission
-    @PutMapping(path = "/update", consumes = "application/json")
+    @PutMapping(path = "/update", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateForum(@RequestBody ForumDTO forumDTO) {
-        forumService.updateForum(forumDTO);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.accepted().body(forumService.updateForum(forumDTO));
     }
 
 
     @DeleteForumPermission
-    @DeleteMapping(path = "/delete")
+    @DeleteMapping(path = "/delete", produces = "application/json")
     public ResponseEntity<?> deleteForum(@RequestParam(name = "userId", required = true) String userId,
                                          @RequestParam(name = "pageId", required = true) String pageId) {
         log.info(MessageFormat.format("this is userId {0}, and this is pageId {1} ", userId, pageId));
-        forumService.deleteForum(pageId, userId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.accepted().body(forumService.deleteForum(pageId, userId));
     }
 
     @CreateVotePermission

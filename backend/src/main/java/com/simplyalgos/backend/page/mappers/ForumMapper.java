@@ -15,9 +15,6 @@ import java.sql.Timestamp;
 @DecoratedWith(ForumDecorator.class)
 public interface ForumMapper {
 
-
-
-
     @Mapping(target = "userDto", ignore = true)
     @Mapping(target = "tags", ignore = true)
     ForumDTO forumToForumDTO(Forum forum);
