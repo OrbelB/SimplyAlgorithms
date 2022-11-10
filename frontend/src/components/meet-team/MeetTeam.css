@@ -1,0 +1,35 @@
+.teampage {
+    height: auto;
+    margin: 0% 5% 15% 5%;
+}
+
+.teampage-title {
+    font-size: 3vw;
+}
+
+.title-description {
+    font-size: 1vw;
+}
+
+.teampage-top {
+    text-align: center;
+    margin-bottom: 4%;
+}
+
+.team-members {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+}
+
+.portrait {
+    background-color: lightgray;
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+}
+
+.member-bio {
+    font-size: 1vw;
+}

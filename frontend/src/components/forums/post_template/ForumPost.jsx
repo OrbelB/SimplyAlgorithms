@@ -6,6 +6,7 @@ import fp from "./ForumPost.module.css";
 // import {useState} from "react";
 import CommentFrame from "../../comment/CommentFrame";
 import Vote from "../../vote_comp/Vote"
+import Related_RecentPosts from '../forum_home/Related_RecentPosts';
 let forum_post = {
   user:   "Mack",
   title:  "sectetur adipisicing elit. Error, culpa tempora, obca?",
@@ -71,6 +72,7 @@ export default function ForumPost ()  {
       <div className={cx(fp["side2"])}>
         <h1 className={cx(fp["category-label"])}>Related Posts</h1>
           <div className={cx(fp["related-posts"])}>
+            <Related_RecentPosts/>
          </div>
       </div>
       <div className={cx(fp["post"], "border border-success p-2 rounded-bottom rounded-4 border-info bg-secondary text-dark bg-opacity-50 h-auto d-inline-block ")}> 

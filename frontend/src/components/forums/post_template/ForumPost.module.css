@@ -50,8 +50,6 @@
 .related-posts {
     margin-left: 6vh;
     height: 250px;
-    width: 350px;
-    background-color: var(--color-bg-main);
 }
 @media only screen and (min-width: 0px) and (max-width: 1400px) {
     .side2{

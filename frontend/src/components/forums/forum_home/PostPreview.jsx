@@ -1,9 +1,6 @@
 import './PostPreview.css'
-import {FaThumbsUp} from 'react-icons/fa';
-import { FaThumbsDown } from 'react-icons/fa';
 import {GoReport} from 'react-icons/go';
-export { post_previews }
-
+import Vote from '../../vote_comp/Vote.jsx';
 
 const post_previews = [
   {id: 1, name: 'Bob', title: "Lorem ipsum dolor sit amet, duo dolore erroribus ut?"},
@@ -12,6 +9,8 @@ const post_previews = [
   {id: 4, name: 'SuperLongUsername', title:  "An sit purto melius recusabo. Vocibus delectus vim at, eros viderer referrentur et has?"},
   {id: 5, name: 'Your Mom', title: "An epicurei rationibus vituperata mei, ea odio veri reque nec."},
 ];
+
+export { post_previews }
 
 export default function PostPreview() {
     return (
@@ -27,9 +26,7 @@ export default function PostPreview() {
                 <h2 className="preview-title">{title}</h2>
                     <div className="third-line">  
                       <div className="left-side">  
-                        <FaThumbsUp className="thumbsUp"/>
-                        |
-                        <FaThumbsDown className="thumbsDown"/>
+                        <Vote/>
                       </div>
                       <div className="right-side">
                         <GoReport className="report"/>

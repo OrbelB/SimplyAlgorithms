@@ -11,6 +11,7 @@ import AccountTab from "./components/settings/AccountTab/AccountTab";
 import NotificationTab from "./components/settings/NotificationTab/NotificationTab";
 import SettingsPage from "./pages/SettingsPage";
 import UnderConstructionPage from "./pages/UnderConstructionPage";
+import MeetTeamPage from "./pages/MeetTeamPage";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/settings/security" element={<SecurityTab/>}/>
                 <Route path="/settings/notifications" element={<NotificationTab/>}/>
                 <Route path="/underconstruction" element={<UnderConstructionPage/>}/>
+                <Route path="/team" element={<MeetTeamPage/>}/>
                 <Route path={"/forums/:id"} element={<ForumPost/>}/> 
                 <Route path="*" element={<Navigate replace to={"/"}/>}/>
             </Routes>
