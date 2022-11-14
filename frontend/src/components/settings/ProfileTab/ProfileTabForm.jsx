@@ -19,7 +19,7 @@ export default function ProfileTabForm(){
                                 />
                             </div>
                         </div>
-                        <div className="form-group mt-2mb-2">
+                        <div className="form-group mt-2 mb-2">
                             <label for="bioInput" className="mb-2">Biography</label>
                             <textarea className={"form-control"} id="bioInput" rows="5">{bio}</textarea>
                         </div>

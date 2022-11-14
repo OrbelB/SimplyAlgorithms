@@ -1,6 +1,7 @@
 import { currentUserInfo } from "../../../pages/UserProfilePage";
 import React, { useState } from 'react';
 export default function AccountTabForm({username}){
+
   const [input, setInput] = useState({
     usrname: '',
     em: '',
@@ -12,7 +13,6 @@ export default function AccountTabForm({username}){
     em: '',
     phone: ''
   })
- 
   const onInputChange = e => {
     const { name, value } = e.target;
     setInput(prev => ({
@@ -57,10 +57,31 @@ export default function AccountTabForm({username}){
   }
     return (
       <div>
-            {currentUserInfo.map(({username,email,number}) => {
+            {currentUserInfo.map(({fname,lname,username,email,number,dob}) => {
               return (
                 <div>
-                    <form className="m-1">
+                    <form className="mb-2">
+                      <div className="row">
+                        <div className="form-group col-md-5">
+                          <label className="mb-1">First Name</label>
+                          <input
+                            type="text"
+                            className={"form-control"}
+                            id="firstname"
+                            value={fname}
+                          />
+                        </div>
+
+                        <div className="form-group col-md-5">
+                          <label className="mb-1">Last Name</label>
+                          <input
+                            type="text"
+                            className={"form-control"}
+                            id="lastname"
+                            value={lname}
+                          />
+                        </div>
+                      </div>
                       <label className="mt-2" for="username">Username</label>
                       <div className="form-group">
                         <small className="text-secondary mb-1"> Current Username: {username}</small>
@@ -76,6 +97,17 @@ export default function AccountTabForm({username}){
                         </input>
                         {error.usrname && <span className='err text-danger'>{error.usrname}</span>}
                       </div>
+
+                      <label className="mt-2">Birthdate</label>
+                      <div className="form-group">
+                        <small className="text-secondary mb-1"> Current birthdate: {dob}</small>
+                        <input
+                          type="date"
+                          className={"form-control"}
+                          id="birthday"
+                        />
+                      </div>
+
                       <label className="mt-2" for="emailInput">Email</label>
                       <div className="form-group">
                         <small className="text-secondary mb-1"> Current Email: {email}</small>

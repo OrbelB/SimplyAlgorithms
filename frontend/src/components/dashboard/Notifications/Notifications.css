@@ -1,0 +1,9 @@
+.btr, .bts {
+    background-color: #D4BAFF;
+}
+
+.bts {
+    border: 1px solid black;
+    border-radius: 25px;
+    
+}

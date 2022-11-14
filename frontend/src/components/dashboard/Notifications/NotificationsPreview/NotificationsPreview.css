@@ -1,0 +1,21 @@
+.line-one {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-pic {
+    height: 50px;
+    width: 100px;
+    padding: 10px 0px 0px 20px;
+}
+
+.preview-department {
+    text-align: left;
+    padding: 10px 0px 30px 20px;
+}
+
+.line-two {
+    text-align: left;
+    padding-left: 20px;
+    padding-bottom: 40px;
+} 
