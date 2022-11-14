@@ -23,7 +23,7 @@ function App() {
                 <Route path="/login" element={<LoginPage/>} />
                 <Route path="/forums" element={<ForumPage/>} />
                 <Route path="/userprofile" element={<UserProfile/>}/>
-                <Route path="/dashboard" elemenet={<DashboardPage/>}/>
+                <Route path="/dashboard" element={<DashboardPage/>}/>
                 <Route path="/settings/profile" element={<SettingsPage/>}/>
                 <Route path="/settings/account" element={<AccountTab/>}/>
                 <Route path="/settings/security" element={<SecurityTab/>}/>
