@@ -4,16 +4,16 @@
 }
 
 .teampage-title {
-    font-size: 3vw;
+    font-size: 4em;
 }
 
 .title-description {
-    font-size: 1vw;
+    font-size: 1.5em;
 }
 
 .teampage-top {
     text-align: center;
-    margin-bottom: 4%;
+    margin-bottom: 4em;
 }
 
 .team-members {
@@ -21,6 +21,10 @@
     display: flex;
     flex-direction: row;
     gap: 5%;
+}
+
+.member-name {
+    font-size: 2em;
 }
 
 .portrait {
@@ -31,5 +35,19 @@
 }
 
 .member-bio {
-    font-size: 1vw;
+    font-size: 1.4em;
+}
+
+@media (max-width: 500px) {
+    .team-members {
+        flex-direction: column;
+    }
+
+    .member-name {
+        font-size: 30px;
+    }
+
+    .bio-space {
+        margin-bottom: 10%;
+    }
 }

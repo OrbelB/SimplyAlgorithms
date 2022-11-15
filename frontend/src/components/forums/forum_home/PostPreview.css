@@ -15,15 +15,15 @@
 }
 
 .preview-username {
-    font-size: 20px;
+    font-size: 1.5em;
     text-align: left;
     padding: 10px 0px 30px 20px;
 }
 
 .preview-title {
     text-align: left;
-    padding-left: 20px;
-    padding-bottom: 40px;
+    padding-left: 1em;
+    padding-bottom: 1em;
 } 
 
 .third-line {
@@ -32,11 +32,11 @@
 }
 
 .left-side {
-    padding-left: 5%;
+    flex-wrap: left;
 }
 
 .right-side {
-    padding-left: 80%;
+    margin-left: 40vw;
 }
 
 
@@ -59,14 +59,13 @@
 }
 
 .side-username {
-    font-size: 16px;
+    font-size: 1em;
     text-align: left;
     padding: 10px 0px 30px 20px;
 }
 
 .line-two {
-    font-size: 20px;
+    font-size: 1.2em;
     text-align: left;
-    padding-left: 20px;
-    padding-bottom: 40px;
+    padding-left: 1em;
 } 

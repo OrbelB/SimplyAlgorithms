@@ -6,7 +6,7 @@ export default function TopicNames({topic_names}) {
             {topic_names.map((topic_name, index) => (
                 <>
                     <button className="topic">{topic_name}</button>
-                    {index + 1 % 2 === 0 && <><br/><br/></>}
+                    {index + 1 % 2 === 0 && <></>}
                 </>
             ))}
         </>

@@ -12,7 +12,7 @@ export default function MeetTeam() {
                 </div>
             </div>
             <div className="team-members">
-                <div>
+                <div className="bio-space">
                     <img className="portrait" alt="beautiful face pic"/>
                     <h2 className="member-name">Orbel Baghdasian</h2>
                     <div className="member-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -21,7 +21,7 @@ export default function MeetTeam() {
                         ac turpis egestas sed tempus. Consectetur purus ut faucibus pulvinar elementum 
                         integer enim. Sit amet consectetur adipiscing elit duis</div>
                 </div>
-                <div>
+                <div className="bio-space">
                     <img className="portrait" alt="beautiful face pic"/>
                     <h2 className="member-name">Kevin Flores</h2>
                     <div className="member-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -30,7 +30,7 @@ export default function MeetTeam() {
                         ac turpis egestas sed tempus. Consectetur purus ut faucibus pulvinar elementum 
                         integer enim. Sit amet consectetur adipiscing elit duis</div>     
                 </div>
-                <div>
+                <div className="bio-space">
                     <img className="portrait" alt="beautiful face pic"/>
                     <h2 className="member-name">Jefferson Perez</h2>
                     <div className="member-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -39,7 +39,7 @@ export default function MeetTeam() {
                         ac turpis egestas sed tempus. Consectetur purus ut faucibus pulvinar elementum 
                         integer enim. Sit amet consectetur adipiscing elit duis</div>
                 </div>
-                <div>
+                <div className="bio-space">
                     <img className="portrait" alt="beautiful face pic"/>
                     <h2 className="member-name">Joseph Wang</h2>
                     <div className="member-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
