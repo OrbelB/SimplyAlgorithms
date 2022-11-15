@@ -1,6 +1,6 @@
 import './PostPreview.css'
-import {GoReport} from 'react-icons/go';
 import Vote from '../../vote_comp/Vote.jsx';
+import Report from '../report/Report';
 
 const post_previews = [
   {id: 1, name: 'Bob', title: "Lorem ipsum dolor sit amet, duo dolore erroribus ut?"},
@@ -20,7 +20,7 @@ export default function PostPreview() {
             <div>
                 <div key={id} className="preview-section">
                     <div className='first-line'>
-                        <img alt="Profile Pic" className="profile-pic"/>
+                        <img alt="Profile" className="profile-pic"/>
                         <h2 className="preview-username">{name}</h2>
                     </div>
                 <h2 className="preview-title">{title}</h2>
@@ -29,8 +29,7 @@ export default function PostPreview() {
                         <Vote/>
                       </div>
                       <div className="right-side">
-                        <GoReport className="report"/>
-                        Report
+                        <Report/>
                       </div>
                     </div>
                 </div>

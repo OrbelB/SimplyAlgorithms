@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .forums-section {
-    width: auto;
+    width: fit-content;
 }
 
 .forum-title {
-    font-size: 8vh;
+    font-size: 5em;
     font-family: 'Readex Pro', sans-serif;
-    padding-bottom: 1%;
+    padding-bottom: 0.5em;
 }
 
 .category-label {
-    font-size: 3.5vh;
+    font-size: 2.5em;
     text-decoration: underline;
 }
 
@@ -19,39 +19,39 @@
     background-color: #eff8f8;
     border-radius: 5px 5px 5px 5px;
     color: black;
-    font-size: 2vh;
-    padding: 2% 15% 2% 15%;
+    font-size: 1.0em;
+    padding: 0.5em 1.5em 0.5em 1em;
+    width: 100%;
 }
 
 .btn-group {
     color: black;
     flex-direction: column; 
-    padding-top: 5%;
+    padding-top: 1em;
 }
 
 .category {
     background-color: var(--color-bg-main);
     border-radius: 10px 10px 10px 10px;
     border: none;
-    font-size: 3vh;
-    width: 40vh;
-    margin-bottom: 20px;
+    font-size: 1.5em;
+    width: 19em;
+    margin-bottom: 0.8em;
 }
 
 .last-button {
     background-color: var(--color-border-input-form);
     border-radius: 10px 10px 10px 10px;
     font-size: 3vh;
-    border: 1px solid black;
+    border: 0.1em solid black;
 }
 
 .filter-button {
     background-color: var(--color-bg-alg-dash);
-    border-right: 1px solid black;
+    border-right: 0.1em solid black;
     font-size: 2.5vh;
-    width: 180px;
-    width: 20vh;
-    height: 6.5vh;
+    width: 9em;
+    height: 3em;
 }
 
 .first-filter {
@@ -83,14 +83,22 @@
 .side2 {
     text-align: center;
     flex: 0.3;
-    margin-left: 5%;
-}
-
-.related-posts {
-    padding-bottom: 50px;
+    margin-left: 3%;
 }
 
 .middle {
     text-align: center;
     flex: 0.6;
+}
+
+/*For mobile */
+
+@media (max-width: 800px) {
+    .column {
+        flex-direction: column;
+    }
+    
+    .category {
+        font-size: 1.5em;
+    }
 }

@@ -9,7 +9,7 @@ export default function Related_RecentPosts() {
                 <div>
                     <div key={id} className="side-section">
                         <div className='line-one'>
-                            <img alt="Profile Pic" className="profile-pic"/>
+                            <img alt="Profile" className="profile-pic"/>
                             <h2 className="side-username">{name}</h2>
                         </div>
                     <h2 className="line-two">{title}</h2>
