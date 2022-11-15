@@ -13,7 +13,7 @@ import SettingsPage from "./pages/SettingsPage";
 import UnderConstructionPage from "./pages/UnderConstructionPage";
 import MeetTeamPage from "./pages/MeetTeamPage";
 import DashboardPage from "./pages/DashboardPage";
-
+import Bubble_sort from "./pages/t_pages/Bubble_sort";
 function App() {
     return (
         <Layout>
@@ -31,6 +31,7 @@ function App() {
                 <Route path="/underconstruction" element={<UnderConstructionPage/>}/>
                 <Route path="/team" element={<MeetTeamPage/>}/>
                 <Route path={"/forums/:id"} element={<ForumPost/>}/> 
+                <Route path="/topics/Bubble_sort" element={<Bubble_sort/>}/>
                 <Route path="*" element={<Navigate replace to={"/"}/>}/>
             </Routes>
         </Layout>
