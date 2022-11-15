@@ -1,4 +1,5 @@
 import { currentUserInfo } from "../../../pages/UserProfilePage";
+import TeacherRequest from "./TeacherRequestForm";
 import React, { useState } from 'react';
 export default function AccountTabForm({username}){
 
@@ -64,21 +65,25 @@ export default function AccountTabForm({username}){
                       <div className="row">
                         <div className="form-group col-md-5">
                           <label className="mb-1">First Name</label>
+                          <div className="row">
+                            <small className="text-secondary"> Current First Name: {fname}</small>
+                          </div>
                           <input
                             type="text"
                             className={"form-control"}
                             id="firstname"
-                            value={fname}
                           />
                         </div>
 
                         <div className="form-group col-md-5">
                           <label className="mb-1">Last Name</label>
+                          <div className="row">
+                          <small className="text-secondary"> Current Last Name: {lname}</small>
+                          </div>
                           <input
                             type="text"
                             className={"form-control"}
                             id="lastname"
-                            value={lname}
                           />
                         </div>
                       </div>
@@ -141,16 +146,18 @@ export default function AccountTabForm({username}){
                       <div className="form group mt-2 mb-2">
                         <label for="usetTypeInput" className="col-sm-4 col-md-4 control-label text-right">User Type: <br/></label>
                           <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"/>
-                          <label class="form-check-label active" for="inlineRadio1">Student</label>
+                          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked/>
+                          <label class="form-check-label" for="inlineRadio1">Student</label>
                           </div>
                           <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"/>
+                          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" disabled/>
                           <label class="form-check-label" for="inlineRadio2">Teacher</label>
                           </div>
                       </div>
                       <button type="button" class="btn btn-primary">Confirm</button>
                       <button type="reset" class="btn btn-light">Reset Changes</button>
+                      <hr/>
+                        <TeacherRequest/>
                       <hr/>
                       <div class="form-group">
                         <label class="d-block text-danger">Delete Account</label>
