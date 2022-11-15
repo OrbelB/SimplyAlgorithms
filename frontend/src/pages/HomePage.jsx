@@ -4,24 +4,35 @@ import About from "../components/home_page/about-us/About";
 import Forum from "../components/home_page/forum-quiz/Forum_Quiz";
 
 
+// const types_topics = [
+//     {
+//         type: 'SORTING',
+//         topic_name: [
+//             {'SELECTION SORT': path='/topics/Bubble_sort'},
+//         ]
+//     }
+// ];
 const types_topics = [
     {
         type: 'SORTING',
-        topic_name: ['SELECTION SORT', 'QUICK SORT', 'BUBBLE SORT', 'RADIX SORT']
+        topic_name: ['SELECTION SORT', 'QUICK SORT', 'BUBBLE SORT', 'RADIX SORT'],
+        topic_link: ['/underconstruction', '/underconstruction', '/sort/bubblesort' ,'/underconstruction']
     },
     {
-        type: 'TREES',
-        topic_name: ['BINARY TREES', 'TWO-TREE', 'THREE-TREE', 'RED-BLACK']
+        type: 'DATA STRUCTURES',
+        topic_name: ['BINARY SEARCH STREES', 'TWO-TREE', 'THREE-TREE', 'RED-BLACK'],
+        topic_link: ['/search/binarysearchtree','/underconstruction','/underconstruction','/underconstruction']
     },
     {
         type: 'GRAPHS',
-        topic_name: ['BREADTH-FIRST SEARCH', 'DEPTH FIRST SEARCH', 'TOPOLOGICAL SORT', 'DIJKSTRA GRAPH']
+        topic_name: ['BREADTH-FIRST SEARCH', 'DEPTH FIRST SEARCH', 'TOPOLOGICAL SORT', 'DIJKSTRA GRAPH'],
+        topic_link: ['/search/bfs','/underconstruction','/underconstruction','/underconstruction']
     },
     {
         type: 'Data Structures',
-        topic_name: ['ARRAY', 'LINKED LIST', 'STACK', 'QUEUE']
+        topic_name: ['ARRAY', 'LINKED LIST', 'STACK', 'QUEUE'],
+        topic_link: ['/datastructures/arrays','/underconstruction','/underconstruction','/underconstruction', ]
     }
-
 ];
 
 //object

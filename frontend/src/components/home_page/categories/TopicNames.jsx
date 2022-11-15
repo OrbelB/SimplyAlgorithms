@@ -1,11 +1,13 @@
 import "./Categories.css"
-export default function TopicNames({topic_names}) {
+import { NavLink } from "react-router-dom";
+export default function TopicNames({topic_names, topic_link}) {
 
     return (
-        <>
+        <> 
+        {/* change it to a navlink */}
             {topic_names.map((topic_name, index) => (
                 <>
-                    <button className="topic">{topic_name}</button>
+                    <NavLink className="topic" exact to={topic_link[index]}>{topic_name}</NavLink>
                     {index + 1 % 2 === 0 && <></>}
                 </>
             ))}

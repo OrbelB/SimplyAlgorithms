@@ -13,7 +13,7 @@ export default function TypeAlgorithms({type_topic, index}) {
                        className={`lbl-toggle cat${index+1}`}>{type_topic?.type}</label>
                 <div className="collapsible-content">
                     <div className="content-inner">
-                        <TopicNames topic_names={type_topic?.topic_name} index={index}/>
+                        <TopicNames topic_link={type_topic?.topic_link} topic_names={type_topic?.topic_name} index={index}/>
                     </div>
                 </div>
             </div>
