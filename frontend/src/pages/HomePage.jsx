@@ -2,6 +2,7 @@ import Intro from "../components/home_page/Intro/Intro";
 import Categories from "../components/home_page/categories/Categories";
 import About from "../components/home_page/about-us/About";
 import Forum from "../components/home_page/forum-quiz/Forum_Quiz";
+<<<<<<< HEAD
 
 
 // const types_topics = [
@@ -33,6 +34,30 @@ const types_topics = [
         topic_name: ['ARRAY', 'LINKED LIST', 'STACK', 'QUEUE'],
         topic_link: ['/datastructures/arrays','/underconstruction','/underconstruction','/underconstruction', ]
     }
+=======
+const types_topics = [
+  {
+    type: "SORTING",
+    topic_name: ["SELECTION SORT", "QUICK SORT", "BUBBLE SORT", "RADIX SORT"],
+  },
+  {
+    type: "TREES",
+    topic_name: ["BINARY TREES", "TWO-TREE", "THREE-TREE", "RED-BLACK"],
+  },
+  {
+    type: "GRAPHS",
+    topic_name: [
+      "BREADTH-FIRST SEARCH",
+      "DEPTH FIRST SEARCH",
+      "TOPOLOGICAL SORT",
+      "DIJKSTRA GRAPH",
+    ],
+  },
+  {
+    type: "Data Structures",
+    topic_name: ["ARRAY", "LINKED LIST", "STACK", "QUEUE"],
+  },
+>>>>>>> 8952237ff02f6a3a9f934adcd316b9ae9efe6921
 ];
 
 //object
@@ -52,13 +77,12 @@ const types_topics = [
 //     }
 // };
 export default function HomePage() {
-    console.log(types_topics);
-    return (
-        <>
-            <Intro/>
-            <Categories types_topics={types_topics}/>
-            <About/>
-            <Forum/>
-        </>
-    );
+  return (
+    <>
+      <Intro />
+      <Categories types_topics={types_topics} />
+      <About />
+      <Forum />
+    </>
+  );
 }

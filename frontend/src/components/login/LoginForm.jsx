@@ -1,29 +1,15 @@
 import cx from "classnames";
 import styles from "./LoginForm.module.css";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import useValidateInput from "../../hooks/use-ValidateInput.js";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../../store/reducers/auth-reducer";
-import useHttp from "../../hooks/use-http";
-import { useEffect } from "react";
 import { login } from "../../services/auth";
-import { statusActions } from "../../store/reducers/httpStatus-reducer";
 export default function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [handleCheckbox, setHandleCheckbox] = useState(false);
-  const [submitApiRequest, setSubmitApiEndpoint] = useState(false);
-  const statusCode = useSelector(state=> state.http.statusCode);
-  const jwtRefreshToken = useSelector((state) => state.auth.jwtRefreshToken);
-  const navigate = useNavigate();
+  const { status, error, jwtRefreshToken } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const location = useLocation();
-  const {
-    sendRequest,
-    status,
-    data: contentData,
-    error,
-  } = useHttp(login, false);
 
   const {
     value: username,
@@ -54,45 +40,22 @@ export default function LoginForm() {
   const onSubmitFormHandler = (event) => {
     event.preventDefault();
     if (!isFormValid) return;
-    setSubmitApiEndpoint(true);
-  };
-
-  useEffect(() => {
-    if (submitApiRequest) {
-      sendRequest({ username, password });
-      setSubmitApiEndpoint(false);
+    dispatch(login({ username, password }));
       resetPasswordHandler();
       resetUsernameHandler();
-    }
-  }, [sendRequest, submitApiRequest, handleCheckbox]);
+  };
 
   if (status === "success") {
-    dispatch(
-      authActions.setVals({
-        jwtAccessToken: contentData?.accessToken,
-        jwtRefreshToken: contentData?.refreshToken,
-        userId: contentData?.userId
-      })
-      
-    );
-    dispatch(authActions.setIsLoggedIn());
     if (handleCheckbox) {
       document.cookie = `refresh_token=${jwtRefreshToken}`;
     }
-    if(statusCode === 200){
-      navigate("/home", {
-        replace: true,
-      });
-      dispatch(statusActions.resetData({}));
-    }
-    
   }
-
+  
   let isFormValid = false;
   if (passwordIsValid && usernameIsValid) isFormValid = true;
   return (
     <>
-      {error !== null && (
+      {error !== "" && (
         <div className={"col ms-0 p-0 alert alert-danger align-content-center"}>
           <p className={"text-center small"}>credentials are wrong!</p>
         </div>

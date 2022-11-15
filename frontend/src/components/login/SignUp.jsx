@@ -1,18 +1,11 @@
 import Modal from "react-bootstrap/Modal";
 import { Container, Row } from "react-bootstrap";
 import useValidateInput from "../../hooks/use-ValidateInput";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { register } from "../../services/auth";
-import useHttp from "../../hooks/use-http";
-import { authActions } from "../../store/reducers/auth-reducer";
-import { statusActions } from "../../store/reducers/httpStatus-reducer";
-import { useNavigate } from "react-router-dom";
-
 export default function SignUp({ showSignup, handleOnClose }) {
-  const navigate = useNavigate();
-  const statusCode = useSelector((state) => state.http.statusCode);
+  const { status } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   const [image, setImage] = useState(undefined);
@@ -20,61 +13,9 @@ export default function SignUp({ showSignup, handleOnClose }) {
   const [submitPostRegister, setSubmitPostRegister] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  
-  const {
-    sendRequest,
-    status,
-    data: contentData,
-    error,
-  } = useHttp(register, false);
-
-  useEffect(() => {
-    if (image !== undefined) {
-      console.log(image);
-    }
-    if (submitPostRegister) {
-      sendRequest({
-        lastName,
-        firstName,
-        username,
-        password,
-        email,
-        dob,
-        profilePicture: image?.name,
-        
-      });
-      emailReset();
-      usernameReset();
-      rePasswordReset();
-      passwordReset();
-      setImage(undefined);
-      setDob("");
-      setFirstName("");
-      setLastName("");
-      setSubmitPostRegister(!submitPostRegister);
-      
-    }
-
-    
-  }, [image, sendRequest, submitPostRegister,statusCode]);
 
   if (status === "success") {
-    dispatch(
-      authActions.setVals({
-        jwtAccessToken: contentData?.accessToken,
-        jwtRefreshToken: contentData?.refreshToken,
-        userId: contentData?.userId,
-      })
-    );
-    dispatch(authActions.setIsLoggedIn());
-    if (statusCode === 200) {
-      navigate("/home", {
-        replace: true,
-      });
-      dispatch(statusActions.resetData());
-    }
     handleOnClose(!showSignup);
-    
   }
 
   const {
@@ -119,6 +60,25 @@ export default function SignUp({ showSignup, handleOnClose }) {
   const registerUserInfo = (e) => {
     e.preventDefault();
     if (!isFormValid) return;
+    dispatch(
+      register({
+        lastName,
+        firstName,
+        username,
+        password,
+        email,
+        dob,
+        profilePicture: image?.name,
+      })
+    );
+    emailReset();
+    usernameReset();
+    rePasswordReset();
+    passwordReset();
+    setImage(undefined);
+    setDob("");
+    setFirstName("");
+    setLastName("");
     setSubmitPostRegister(!submitPostRegister);
   };
 
@@ -144,11 +104,11 @@ export default function SignUp({ showSignup, handleOnClose }) {
 
   const handleName = (e) => {
     setFirstName(e.target.value);
-  }
+  };
 
   const handleLastName = (e) => {
     setLastName(e.target.value);
-  }
+  };
   return (
     <>
       <Modal
@@ -167,7 +127,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
         <Modal.Body>
           <Container>
             <form onSubmit={registerUserInfo}>
-            <div className={"row"}>
+              <div className={"row"}>
                 <div className="col form-outline mb-4">
                   <input
                     type="text"
@@ -182,7 +142,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
                     name
                   </label>
                 </div>
-              
+
                 <div className="col form-outline mb-4">
                   <input
                     type="text"
@@ -200,15 +160,28 @@ export default function SignUp({ showSignup, handleOnClose }) {
                 </div>
               </div>
               <div className={"row"}>
-                                <div className="col form-outline mb-4">
-                                    <input type="text" id="form3Example1cg" className="form-control form-control-lg"
-                                           value={username} required onChange={usernameChangeHandler}
-                                           onBlur={usernameBlurHandler}/>
-                                    <label className="form-label" htmlFor="form3Example1cg">username</label>
-                                </div>
-                                {usernameHasError && <div className={"col col-sm-auto small m-2 p-0"}><span
-                                    className={"alert alert-danger small p-2"}>Username is empty </span></div>}
-                            </div>
+                <div className="col form-outline mb-4">
+                  <input
+                    type="text"
+                    id="form3Example1cg"
+                    className="form-control form-control-lg"
+                    value={username}
+                    required
+                    onChange={usernameChangeHandler}
+                    onBlur={usernameBlurHandler}
+                  />
+                  <label className="form-label" htmlFor="form3Example1cg">
+                    username
+                  </label>
+                </div>
+                {usernameHasError && (
+                  <div className={"col col-sm-auto small m-2 p-0"}>
+                    <span className={"alert alert-danger small p-2"}>
+                      Username is empty{" "}
+                    </span>
+                  </div>
+                )}
+              </div>
               <div className={"row"}>
                 <div className="col form-outline mb-4">
                   <input

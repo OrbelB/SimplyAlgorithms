@@ -1,11 +1,13 @@
 import {useState} from "react";
+import { useSelector } from "react-redux";
 
 export default function AddEditComment({
-                                           photo_link, comment, handleAddEditComment, cancelReplyElement
+                                            commentText, handleAddEditComment, cancelReplyElement
 
                                        }) {
-    const [checkComment, setCheckComment] = useState(comment || "");
-
+    const profilePicture = useSelector(state => state.user.profilePicture);                                   
+    const [checkComment, setCheckComment] = useState(commentText || "");
+    
     const handleInputChildCommentUpdate = (e) => {
         setCheckComment(e.target.value);
     };
@@ -22,10 +24,10 @@ export default function AddEditComment({
         <form onSubmit={getChildComment} className={"row justify-content-evenly mt-2"}>
             <div className={"col-auto col-sm-auto"}>
                 <img
-                    src={photo_link}
+                    src={profilePicture}
                     className="rounded-circle"
                     height="38"
-                    alt="Profile Picture of Current User"
+                    alt="Profile of Current User"
                     loading="lazy"
                 />
             </div>

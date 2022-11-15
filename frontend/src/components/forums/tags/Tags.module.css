@@ -1,0 +1,15 @@
+.category {
+    background-color: var(--color-bg-main);
+    border-radius: 10px 10px 10px 10px;
+    border: none;
+    font-size: 3vh;
+    width: 40vh;
+    margin-bottom: 20px;
+}
+
+.last-button {
+    background-color: var(--color-border-input-form);
+    border-radius: 10px 10px 10px 10px;
+    font-size: 3vh;
+    border: 1px solid black;
+}
