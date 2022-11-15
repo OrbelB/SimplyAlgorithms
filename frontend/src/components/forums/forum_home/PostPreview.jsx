@@ -1,16 +1,12 @@
 import './PostPreview.css'
-import {GoReport} from 'react-icons/go';
-import Vote from '../../vote_comp/Vote.jsx';
 import { useDispatch, useSelector } from "react-redux";
 import {
-  selectAllForums,
-  selectFilteredForums,
   selectSortedForums,
 } from "../../../store/reducers/forums-reducer";
 import { useState } from "react";
 import { fetchForumList } from "../../../services/forum";
 import ForumQuickView from "./ForumQuickView";
-const post_previews = [
+export const post_previews = [
   {
     id: 1,
     name: "Bob",
@@ -77,6 +73,8 @@ export default function PostPreview() {
           pageId={forum?.pageId}
           title={forum?.title}
           userDto={forum?.userDto}
+          upVotes={forum?.upVotes}
+          downVotes={forum?.downVotes}
         />
       ))}
       <div>
