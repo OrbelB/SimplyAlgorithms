@@ -26,7 +26,7 @@ export default function Dashboard(){
                     </div>
                     <div className="row mt-3 mb-3">
                             <div className="col-8">
-                                <div className="bottom mt-2">
+                                <div className="bottomdb mt-2">
                                     <h4 className="mt-2 text-center">Quizzes</h4>
                                     <QuizProgress/>
                                 </div>
