@@ -18,7 +18,6 @@ import Binary_search_tree from "./pages/t_pages/Binary_search_tree";
 import Breadth_first_search from "./pages/t_pages/Breadth_first_search";
 import Arrays from "./pages/t_pages/Arrays";
 function App() {
-<<<<<<< HEAD
     return (
         <Layout>
             <Routes>
@@ -46,31 +45,6 @@ function App() {
             </Routes>
         </Layout>
     );
-=======
-  return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<TemplateTopicPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/forums">
-          <Route index element={<ForumPage />} />
-          <Route path={":pageId"} element={<ForumPost />} />
-        </Route>
-        <Route path="/userprofile" element={<UserProfile />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/settings/profile" element={<SettingsPage />} />
-        <Route path="/settings/account" element={<AccountTab />} />
-        <Route path="/settings/security" element={<SecurityTab />} />
-        <Route path="/settings/notifications" element={<NotificationTab />} />
-        <Route path="/underconstruction" element={<UnderConstructionPage />} />
-        <Route path="/topics/Bubble_sort" element={<Bubble_sort />} />
-        <Route path="/team" element={<MeetTeamPage />} />
-        <Route path="*" element={<Navigate replace to={"/"} />} />
-      </Routes>
-    </Layout>
-  );
->>>>>>> 8952237ff02f6a3a9f934adcd316b9ae9efe6921
 }
 
 export default App;
