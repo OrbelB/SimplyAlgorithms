@@ -6,12 +6,12 @@
 }
 
 .head {
-    font-size: 60px;
+    font-size: 4em;
     font-family: 'Readex Pro', sans-serif;
 }
 
 .body {
-    font-size: 25px;
+    font-size: 1.5em;
     margin-left: 15%;
     margin-right: 15%;
 }
