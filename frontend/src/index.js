@@ -8,7 +8,16 @@ import store from "./store";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { fetchTags } from "./services/tag";
+import { interceptors } from "./services/Api/base";
 
+interceptors(store);
+store.dispatch(
+  fetchTags({
+    page: 0,
+    size: 5,
+  })
+);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(

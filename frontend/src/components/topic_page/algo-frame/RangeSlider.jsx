@@ -3,7 +3,7 @@ import styles from "./RangeSlider.module.css"
 import cx from "classnames";
 
 export default function RangeSlider() {
-
+    
     const [speed, setSpeed] = useState(0);
     useEffect(() => {
 

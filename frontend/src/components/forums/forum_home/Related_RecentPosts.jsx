@@ -1,5 +1,5 @@
-import './PostPreview.css'
-import { post_previews } from './PostPreview';
+import "./PostPreview.css";
+import { post_previews } from "./PostPreview";
 
 export default function Related_RecentPosts() { 
     return (
@@ -18,6 +18,7 @@ export default function Related_RecentPosts() {
             )
             })}
         </div>
-    );
-    
+      ))}
+    </>
+  );
 }
