@@ -20,30 +20,31 @@ import Arrays from "./pages/t_pages/Arrays";
 function App() {
     return (
         <Layout>
-            <Routes>
-                <Route path="/" element={<TemplateTopicPage/>}/>
-                <Route path="/home" element={<HomePage/>}/>
-                <Route path="/login" element={<LoginPage/>} />
-                <Route path="/forums" element={<ForumPage/>} />
-                <Route path="/userprofile" element={<UserProfile/>}/>
-                <Route path="/dashboard" element={<DashboardPage/>}/>
-                <Route path="/settings/profile" element={<SettingsPage/>}/>
-                <Route path="/settings/account" element={<AccountTab/>}/>
-                <Route path="/settings/security" element={<SecurityTab/>}/>
-                <Route path="/settings/notifications" element={<NotificationTab/>}/>
-                <Route path="/underconstruction" element={<UnderConstructionPage/>}/>
-                <Route path="/team" element={<MeetTeamPage/>}/>
-                <Route path={"/forums/:id"} element={<ForumPost/>}/>
-                
-                {/* SAMPLE TOPIC PAGES */}
-                <Route path="/sort/bubblesort" element={<Bubble_sort/>}/>
-                <Route path="/search/binarysearchtree" element={<Binary_search_tree/>}/>\
-                <Route path="/search/bfs" element={<Breadth_first_search/>}/>
-                <Route path="/datastructures/arrays" element={<Arrays/>}/>
+      <Routes>
+        <Route path="/" element={<TemplateTopicPage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/forums">
+          <Route index element={<ForumPage />} />
+          <Route path={":pageId"} element={<ForumPost />} />
+        </Route>
+        <Route path="/userprofile" element={<UserProfile />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/settings/profile" element={<SettingsPage />} />
+        <Route path="/settings/account" element={<AccountTab />} />
+        <Route path="/settings/security" element={<SecurityTab />} />
+        <Route path="/settings/notifications" element={<NotificationTab />} />
+        <Route path="/underconstruction" element={<UnderConstructionPage />} />
+        {/* SAMPLE TOPIC PAGES */}
+        <Route path="/sort/bubblesort" element={<Bubble_sort/>}/>
+        <Route path="/search/binarysearchtree" element={<Binary_search_tree/>}/>\
+        <Route path="/search/bfs" element={<Breadth_first_search/>}/>
+        <Route path="/datastructures/arrays" element={<Arrays/>}/>
 
-                <Route path="*" element={<Navigate replace to={"/"}/>}/>
-            </Routes>
-        </Layout>
+        <Route path="/team" element={<MeetTeamPage />} />
+        <Route path="*" element={<Navigate replace to={"/"} />} />
+      </Routes>
+    </Layout>
     );
 }
 
