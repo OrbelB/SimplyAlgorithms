@@ -13,10 +13,14 @@ import SettingsPage from "./pages/SettingsPage";
 import UnderConstructionPage from "./pages/UnderConstructionPage";
 import MeetTeamPage from "./pages/MeetTeamPage";
 import DashboardPage from "./pages/DashboardPage";
+import WikiPage from "./pages/WikiPage";
 import Bubble_sort from "./pages/t_pages/Bubble_sort";
 import Binary_search_tree from "./pages/t_pages/Binary_search_tree";
 import Breadth_first_search from "./pages/t_pages/Breadth_first_search";
 import Arrays from "./pages/t_pages/Arrays";
+import Sorting from "./components/wiki/topics/Sorting";
+
+
 function App() {
     return (
         <Layout>
@@ -41,6 +45,8 @@ function App() {
         <Route path="/search/bfs" element={<Breadth_first_search/>}/>
         <Route path="/datastructures/arrays" element={<Arrays/>}/>
 
+        <Route path="/wikihome" element={<WikiPage />} />
+        <Route path="/wiki/sorting" element={<Sorting/>}/>
         <Route path="/team" element={<MeetTeamPage />} />
         <Route path="*" element={<Navigate replace to={"/"} />} /> 
       </Routes>
