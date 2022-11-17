@@ -42,7 +42,7 @@ function App() {
         <Route path="/datastructures/arrays" element={<Arrays/>}/>
 
         <Route path="/team" element={<MeetTeamPage />} />
-        <Route path="*" element={<Navigate replace to={"/"} />} />
+        <Route path="*" element={<Navigate replace to={"/"} />} /> 
       </Routes>
     </Layout>
     );

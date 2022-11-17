@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
+ 
+.detail {
+    background-color: var(--color-bg-second);
+    font-family: 'Readex Pro', sans-serif;
+}
+ 
+.list-group-item {
+    background: var(--color-bg-second);
+}
+ 
+.mid {
+    background-color: var(--color-bg-main);
+    padding:5% 12%;
+
+}
+ 
+.bot {
+    padding: 5% 12%;
+}
+
+
+.fr {
+    display: block;
+}
+ 
+
+
+
+@media only screen and (min-width: 768px) {
+    .vid iframe {
+        width:  450px;
+        height: 300px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .vid iframe {
+        width: 200px;
+        height: 150px;
+    }
+}
+
