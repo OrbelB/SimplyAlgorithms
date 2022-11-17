@@ -46,7 +46,7 @@ export default function Detail() {
                     <br /><br />
                     A new key is always inserted at the leaf. We start searching for a key from the root until we hit a leaf node. Once a leaf node is found, the new node is added as a child of the leaf node.
                     <br /><br />
-When we delete a node, three possibilities arise. 
+                    When we delete a node, three possibilities arise. 
 
 
 
@@ -75,11 +75,11 @@ When we delete a node, three possibilities arise.
                 <div className={"col-auto col-sm-auto align-self-center"}>
                         <h3 className={"m-3 mb-4"}>FURTHER REFERENCES</h3>
                         <ul>
-                            <li><a href="https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/" target="_blank">geeksforgeeks - Binary Search Tree | Set 1 (Search and Insertion) (data structure)</a></li>
+                            <li><a href="https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/" target="_blank" rel="noreferrer">geeksforgeeks - Binary Search Tree | Set 1 (Search and Insertion) (data structure)</a></li>
                             -
-                            <li><a href="https://www.geeksforgeeks.org/deletion-in-binary-search-tree/" target="_blank">geeksforgeeks - Deletion in Binary Search Tree</a></li>
+                            <li><a href="https://www.geeksforgeeks.org/deletion-in-binary-search-tree/" target="_blank" rel="noreferrer">geeksforgeeks - Deletion in Binary Search Tree</a></li>
                             -
-                            <li><a href="https://en.wikipedia.org/wiki/Binary_tree" target="_blank">wikipedia - Binary tree</a></li>
+                            <li><a href="https://en.wikipedia.org/wiki/Binary_tree" target="_blank" rel="noreferrer">wikipedia - Binary tree</a></li>
                         </ul>
                     </div>
                     <div className={"col-auto  text-center vid"}>

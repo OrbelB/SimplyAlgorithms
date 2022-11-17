@@ -29,7 +29,7 @@ export default function Binary_search_tree(){
             <AlgoFram/>
             <AlgVisBtns/>
             <Detail/>
-            {/* <CodeSnippet/> */}
+            <CodeSnippet/>
             <TopicQuiz/>
             <CommentFrame passedComments={staticComments} pageId={1} />
         </>

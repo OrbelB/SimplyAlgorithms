@@ -31,13 +31,13 @@ The array can have one or more dimensions.
                     <div className={"col-auto col-sm-auto align-self-center"}>
                         <h3 className={"m-3 mb-4"}>FURTHER REFERENCES</h3>
                         <ul>
-                            <li><a href="https://en.wikipedia.org/wiki/Array_(data_structure)" target="_blank">Wiki - Array (data structure)</a></li>
+                            <li><a href="https://en.wikipedia.org/wiki/Array_(data_structure)" target="_blank" rel="noreferrer">Wiki - Array (data structure)</a></li>
                             -
-                            <li><a href="https://www.w3schools.com/java/java_arrays.asp" target="_blank">W3 - Java Arrays</a></li>
+                            <li><a href="https://www.w3schools.com/java/java_arrays.asp" target="_blank" rel="noreferrer">W3 - Java Arrays</a></li>
                             -
-                            <li><a href="https://www.geeksforgeeks.org/introduction-to-arrays/" target="_blank">geeksforgeeks - What is Array?</a></li>
+                            <li><a href="https://www.geeksforgeeks.org/introduction-to-arrays/" target="_blank" rel="noreferrer">geeksforgeeks - What is Array?</a></li>
                             -
-                            <li><a href="https://www.geeksforgeeks.org/multidimensional-arrays-c-cpp/" target="_blank">geeksforgeeks - Multidimensional Arrays in C / C++</a></li>
+                            <li><a href="https://www.geeksforgeeks.org/multidimensional-arrays-c-cpp/" target="_blank" rel="noreferrer">geeksforgeeks - Multidimensional Arrays in C / C++</a></li>
                         </ul>
                     </div>
                     <div className={"col-auto  text-center vid"}>

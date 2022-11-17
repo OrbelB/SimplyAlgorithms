@@ -71,11 +71,11 @@ export default function Detail() {
                     <div className={"col-auto col-sm-auto align-self-center"}>
                         <h3 className={"m-3 mb-4"}>FURTHER REFERENCES</h3>
                         <ul>
-                            <li><a href="https://www.freecodecamp.org/news/bubble-sort-algorithm-in-java-cpp-python-with-example-code/" target="_blank">Bubble Sort – Algorithm in Java, C++, Python with Example Code by Kolade Chrise</a></li>
+                            <li><a href="https://www.freecodecamp.org/news/bubble-sort-algorithm-in-java-cpp-python-with-example-code/" target="_blank" rel="noreferrer">Bubble Sort – Algorithm in Java, C++, Python with Example Code by Kolade Chrise</a></li>
                             -
-                            <li><a href="https://www.geeksforgeeks.org/bubble-sort/" target="_blank">geeksforgeeks - Bubble Sort Algorithm</a></li>
+                            <li><a href="https://www.geeksforgeeks.org/bubble-sort/" target="_blank" rel="noreferrer">geeksforgeeks - Bubble Sort Algorithm</a></li>
                             -
-                            <li><a href="https://en.wikipedia.org/wiki/Bubble_sort" target="_blank">wikipedia - Bubble sort</a></li>
+                            <li><a href="https://en.wikipedia.org/wiki/Bubble_sort" target="_blank" rel="noreferrer">wikipedia - Bubble sort</a></li>
                         </ul>
                     </div>
                     <div className={"col-auto  text-center vid"}>
