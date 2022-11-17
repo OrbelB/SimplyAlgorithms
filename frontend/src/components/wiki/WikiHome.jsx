@@ -19,7 +19,7 @@ export default function WikiHome() {
                                 <NavLink to="/wiki/bubblesort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Bubble Sort</NavLink>
                                 <NavLink to="/wiki/radixsort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Radix Sort</NavLink>
                                 <NavLink to="/wiki/trees"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded"}>TREES</NavLink>
-                                <NavLink to="/wiki/binarytrees"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Binary Trees</NavLink>
+                                <NavLink to="/wiki/binarytrees"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Binary Search Trees</NavLink>
                                 <NavLink to="/wiki/twotrees"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Two Trees</NavLink>
                                 <NavLink to="/wiki/graphs"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded"}>GRAPHS</NavLink>
                                 <NavLink to="/wiki/breadthfirst"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Breadth-First Search</NavLink>

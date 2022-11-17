@@ -16,7 +16,7 @@ const types_topics = [
     {
         type: 'SORTING',
         topic_name: ['SELECTION SORT', 'QUICK SORT', 'BUBBLE SORT', 'RADIX SORT'],
-        topic_link: ['/underconstruction', '/underconstruction', '/sort/bubblesort' ,'/underconstruction']
+        topic_link: ['/underconstruction', '/underconstruction', '/wiki/bubblesort' ,'/underconstruction']
     },
     {
         type: 'DATA STRUCTURES',

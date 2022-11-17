@@ -40,7 +40,7 @@ function App() {
         <Route path="/settings/notifications" element={<NotificationTab />} />
         <Route path="/underconstruction" element={<UnderConstructionPage />} />
         {/* SAMPLE TOPIC PAGES */}
-        <Route path="/sort/bubblesort" element={<Bubble_sort/>}/>
+        <Route path="/wiki/bubblesort" element={<Bubble_sort/>}/>
         <Route path="/search/binarysearchtree" element={<Binary_search_tree/>}/>\
         <Route path="/search/bfs" element={<Breadth_first_search/>}/>
         <Route path="/datastructures/arrays" element={<Arrays/>}/>
