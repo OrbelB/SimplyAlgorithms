@@ -1,6 +1,8 @@
 import { currentUserInfo } from "../../../pages/UserProfilePage";
-
+import {useDispatch, useSelector} from "react-redux"
+import { useNavigate } from "react-router-dom";
 export default function TeacherRequestForm(){
+    const {username, firstName, lastName, email} = useSelector(state => state.user);
 
     return (
     <>
@@ -26,18 +28,18 @@ export default function TeacherRequestForm(){
       </div>
       <div class="modal-body">
         <div>
-            {currentUserInfo.map(({fname,lname,username,email}) => {
+            {currentUserInfo.map(({}) => {
                 return(
                     <div>
                         <form>
                             <div className="row">
                                 <div className="form-group col">
                                     <label for="trfname">First Name</label>
-                                    <input type="text" className="form-control bg-secondary bg-gradient text-white" id="trfname" value={fname} readonly/>
+                                    <input type="text" className="form-control bg-secondary bg-gradient text-white" id="trfname" value={firstName} readonly/>
                                 </div>
                                 <div className="form-group col">
                                     <label for="trlname">Last Name</label>
-                                    <input type="text" className="form-control bg-secondary bg-gradient text-white" id="trlname" value={lname} readonly/>
+                                    <input type="text" className="form-control bg-secondary bg-gradient text-white" id="trlname" value={lastName} readonly/>
                                 </div>
                             </div>
                             <div className="form-group mt-2">

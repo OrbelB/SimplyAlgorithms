@@ -86,8 +86,6 @@ export default function Post() {
       navigate("/login", { state: { from: location }, replace: true });
     }
     if (!canFormBeSubmitted) return;
-
-    console.log(authUserId);
     dispatch(
       createForum({
         createdForum: {

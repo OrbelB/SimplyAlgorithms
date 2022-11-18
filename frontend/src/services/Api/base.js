@@ -1,8 +1,8 @@
 import axios from "axios";
 import { refreshAccessToken } from "../auth";
-
+const AWS_BASE_URL = "http://simplyalgosserver-env.eba-wmcrmidx.us-east-1.elasticbeanstalk.com:5000";
 const apiClient = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://localhost:5000",
 });
 
 export const interceptors = (store) => {
@@ -16,17 +16,21 @@ export const interceptors = (store) => {
         response: { status },
       } = error;
       const originalRequest = config;
-      if (status === 401 && store.getState().auth.jwtAccessToken !== "") {
-        console.log(store.getState().auth.jwtAccessToken);
-        store.dispatch(
+      if (
+        status === 401 &&
+        store.getState().auth.jwtAccessToken !== "" &&
+        !originalRequest?.sent
+      ) {
+        await store.dispatch(
           refreshAccessToken(store.getState().auth.jwtRefreshToken)
         );
-        console.log("second check", store.getState().auth.jwtAccessToken);
         // replace the expired token and retry
-        originalRequest.headers["Authorization"] =
-          "Bearer " + store.getState().auth.jwtAccessToken;
-        originalRequest.headers["Content-Type"] = "application/json";
-        return originalRequest;
+        originalRequest.sent = true;
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: `Bearer ${store.getState().auth.jwtAccessToken}`,
+        };
+        return apiClient(originalRequest);
       } else {
         return Promise.reject(error);
       }
@@ -36,4 +40,3 @@ export const interceptors = (store) => {
 const { get, post, put, delete: destroy } = apiClient;
 
 export { get, post, put, destroy };
- 

@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import cx from "classnames";
 import fp from "./ForumPost.module.css";
-// import { BiLike, BiDislike } from 'react-icons/bi';
-// import {useState} from "react";
+import { Chip } from "@mui/material";
+import { forumsActions } from "../../../store/reducers/forums-reducer";
 import CommentFrame from "../../comment/CommentFrame";
 import Related_RecentPosts from "../forum_home/Related_RecentPosts";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import { fetchSingleForum } from "../../../services/forum";
 import { beautifyTime } from "../../../utilities/beautify-time";
 import Vote from "../../vote_comp/Vote";
 import ForumOptionMenu from "./ForumOptionMenu";
+import { forumActions } from "../../../store/reducers/forum-reducer";
 let forum_post = {
   user: "Mack",
   title: "sectetur adipisicing elit. Error, culpa tempora, obca?",
@@ -30,12 +31,14 @@ let forum_post = {
 export default function ForumPost() {
   const { pageId } = useParams();
   const dispatch = useDispatch();
-  const { status, error, forum } = useSelector((state) => state.forum);
-  if (status === "idle" || status === "successToIdle") {
-    dispatch(fetchSingleForum(pageId));
-  }
-
-  if (status === "success") {
+  const { status, forum } = useSelector((state) => state.forum);
+  useEffect(() => {
+    if ((status === "idle" || status === "successToIdle")) {
+      dispatch(fetchSingleForum(pageId));
+    }
+  }, [status, pageId, dispatch]);
+  if (status === "success" || status === "completed") {
+    dispatch(forumsActions.updateForum({ forum: forum }));
     return (
       <div key={pageId} className={cx(fp["window"], "container-fluid")}>
         <div className={cx()}>
@@ -51,17 +54,23 @@ export default function ForumPost() {
           >
             <div className={cx(fp["user"])}>
               <div className="row">
-                <div className="col">{forum?.userDto?.username}</div>
+                <div className="col-1 col-md-3">{forum?.userDto?.username}</div>
                 {forum?.tags.map((tag) => (
-                  <div className="col" key={tag.tagId}>
-                    {tag.tag}
-                  </div>
+                  <Chip
+                    key={tag.tagId}
+                    className="col-auto me-2 ms-2"
+                    label={tag.tag}
+                    color="primary"
+                  />
                 ))}
-                <div className="col">
+                <div className="col-auto ms-md-5">
                   {beautifyTime({ createdDate: forum?.createdDate })}
                 </div>
                 <div className="col d-flex justify-content-end">
-                  <ForumOptionMenu userId={forum?.userDto?.userId} pageId={forum?.pageId} />
+                  <ForumOptionMenu
+                    userId={forum?.userDto?.userId}
+                    pageId={forum?.pageId}
+                  />
                 </div>
               </div>
             </div>

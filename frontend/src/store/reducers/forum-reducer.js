@@ -17,6 +17,7 @@ const initialState = {
   pageId: "",
   status: "idle",
   error: "",
+  reportId: "",
 };
 
 export const forumSlice = createSlice({
@@ -47,6 +48,8 @@ export const forumSlice = createSlice({
         return comment;
       });
     },
+    removeSingleReportId: (state) => void (state.reportId = ""),
+    switchStatus: (state, action) => {state.status = action.payload;}
   },
   extraReducers(builder) {
     builder
@@ -54,9 +57,8 @@ export const forumSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchSingleForum.fulfilled, (state, action) => {
+        console.log("in here")
         state.status = "success";
-        console.log("check");
-        console.log(action.payload);
         state.forum = {
           ...action.payload,
           createdDate: new Date(action.payload.createdDate).toISOString(),
@@ -65,7 +67,6 @@ export const forumSlice = createSlice({
       })
       .addCase(fetchSingleForum.rejected, (state, action) => {
         state.status = "failed";
-        console.log("check");
         state.error = action?.error?.message;
       })
       .addCase(createParentComment.fulfilled, (state, action) => {
@@ -89,7 +90,6 @@ export const forumSlice = createSlice({
           console.log("delete could not be done");
           return;
         } else {
-          console.log("delete performed");
           state.forum.comments = state.forum.comments.filter(
             (comment) => comment.commentId !== action.payload
           );
@@ -98,7 +98,6 @@ export const forumSlice = createSlice({
       .addCase(updateParentComment.fulfilled, (state, action) => {
         if (!action?.payload?.comment?.commentId) {
           console.log("The update could not be done");
-          console.log(action.payload);
           return;
         }
         const updatedComment = {
@@ -119,7 +118,8 @@ export const forumSlice = createSlice({
         }
         state.status = "successToIdle";
         state.pageId = action.payload;
-      }).addCase(deleteForum.fulfilled, (state, action) => {
+      })
+      .addCase(deleteForum.fulfilled, (state, action) => {
         if (action?.payload) {
           return;
         }
@@ -131,19 +131,25 @@ export const forumSlice = createSlice({
         }
       })
       .addCase(updateForum.pending, (state, action) => {
-        state.forum = "pending";
+        state.status = "pending";
       })
       .addCase(updateForum.fulfilled, (state, action) => {
-        state.status = "success";
-        console.log("check");
-        console.log(action.payload);
+        state.status = "completed";
         state.forum = {
           ...action.payload,
           createdDate: new Date(action.payload.createdDate).toISOString(),
         };
+        state.pageId = "";
       })
       .addCase(updateForum.rejected, (state, action) => {
         state.status = "failed";
+      })
+      .addCase(reportForum.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(reportForum.fulfilled, (state, action) => {
+        state.status = "success";
+        state.reportId = action.payload;
       });
   },
 });

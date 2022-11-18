@@ -35,6 +35,13 @@ export const forumsSlice = createSlice({
       state.filterBy = action.payload;
       state.sortBy = "createdDate";
     },
+    updateForum: (state, action) => {
+      console.log("inside update forum action", action.payload.forum);
+      forumsAdapter.upsertOne(state, action.payload?.forum);
+    },
+    deleteForum: (state, action) => {
+      forumsAdapter.removeOne(state, action.payload.pageId);
+    },
   },
   extraReducers(builder) {
     builder
@@ -71,8 +78,13 @@ export const selectSortedForums = createSelector(
   (allForums, sortBy) =>
     [...allForums].sort((a, b) => {
       if (isNaN(a[sortBy.toString().trim()])) {
-        return a[sortBy.toString().trim()].localeCompare(
-          b[sortBy.toString().trim()]
+        if(sortBy.toString().trim() === "title"){
+          return a[sortBy.toString().trim()].localeCompare(
+            b[sortBy.toString().trim()]
+          );
+        }
+        return b[sortBy.toString().trim()].localeCompare(
+          a[sortBy.toString().trim()]
         );
       } else {
         return b[sortBy.toString().trim()] - a[sortBy.toString().trim()];

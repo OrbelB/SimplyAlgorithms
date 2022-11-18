@@ -1,16 +1,18 @@
 import { startOfYesterday } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { deleteForum } from "../../../services/forum";
-
+import { forumsActions } from "../../../store/reducers/forums-reducer";
 export default function ForumOptionMenu({ pageId, userId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const location = useLocation();
   const { jwtAccessToken, userId: authUserId } = useSelector(
     (state) => state.auth
   );
   const onDeleteForum = () => {
+    dispatch(forumsActions.deleteForum({ pageId: pageId }));
     dispatch(
       deleteForum({
         pageId: pageId,
@@ -22,7 +24,10 @@ export default function ForumOptionMenu({ pageId, userId }) {
   };
   const onEditForum = () => {
     //missing component to update the forum
-    dispatch();
+    navigate(`/forums/edit/${pageId}`, {
+      state: { from: location },
+      replace: false,
+    });
   };
   let permission = authUserId === userId;
   return (

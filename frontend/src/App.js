@@ -15,12 +15,12 @@ import MeetTeamPage from "./pages/MeetTeamPage";
 import DashboardPage from "./pages/DashboardPage";
 import WikiPage from "./pages/WikiPage";
 import Bubble_sort from "./pages/t_pages/Bubble_sort";
+import ForumEdit from "./components/forums/post_template/ForumEdit";
+import RequireAuth from "./components/authentication/RequireAuth";
 import Binary_search_tree from "./pages/t_pages/Binary_search_tree";
 import Breadth_first_search from "./pages/t_pages/Breadth_first_search";
 import Arrays from "./pages/t_pages/Arrays";
 import Sorting from "./components/wiki/topics/Sorting";
-
-
 function App() {
     return (
         <Layout>
@@ -31,13 +31,25 @@ function App() {
         <Route path="/forums">
           <Route index element={<ForumPage />} />
           <Route path={":pageId"} element={<ForumPost />} />
+          <Route path={"edit/:pageId"} element={<ForumEdit />} />
         </Route>
-        <Route path="/userprofile" element={<UserProfile />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/settings/profile" element={<SettingsPage />} />
-        <Route path="/settings/account" element={<AccountTab />} />
-        <Route path="/settings/security" element={<SecurityTab />} />
-        <Route path="/settings/notifications" element={<NotificationTab />} />
+
+        <Route element={<RequireAuth />}>
+          <Route path="/userprofile" element={<UserProfile />} />
+        </Route>
+
+        <Route element={<RequireAuth />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Route>
+
+        <Route element={<RequireAuth />}>
+          <Route path="/settings">
+            <Route path="profile" element={<SettingsPage />} />
+            <Route path="account" element={<AccountTab />} />
+            <Route path="security" element={<SecurityTab />} />
+            <Route path="notifications" element={<NotificationTab />} />
+          </Route>
+        </Route>
         <Route path="/underconstruction" element={<UnderConstructionPage />} />
         {/* SAMPLE TOPIC PAGES */}
         <Route path="/wiki/bubblesort" element={<Bubble_sort/>}/>
@@ -48,8 +60,10 @@ function App() {
         <Route path="/wikihome" element={<WikiPage />} />
         <Route path="/wiki/sorting" element={<Sorting/>}/>
         <Route path="/team" element={<MeetTeamPage />} />
-        <Route path="*" element={<Navigate replace to={"/"} />} /> 
-      </Routes>
+        <Route
+          path="*"
+          element={<Navigate replace to={"/underconstruction"} />}
+        />
     </Layout>
     );
 }

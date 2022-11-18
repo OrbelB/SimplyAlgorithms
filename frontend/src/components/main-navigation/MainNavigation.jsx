@@ -86,7 +86,7 @@ export default function MainNavigation() {
             <Bell />
           </div>
           <div className="nav-item dropdown me-2">
-            <a
+            <i
               className="nav-link dropdown-toggle"
               role="button"
               data-bs-toggle="dropdown"
@@ -100,7 +100,7 @@ export default function MainNavigation() {
                 alt="profile"
                 loading="lazy"
               />
-            </a>
+            </i>
             <ul
               className="dropdown-menu dropdown-menu-end"
               aria-labelledby="navbarDropdownMenuAvatar"

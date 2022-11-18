@@ -1,11 +1,10 @@
-import './PostPreview.css'
+import "./PostPreview.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectSortedForums,
-} from "../../../store/reducers/forums-reducer";
+import { selectSortedForums } from "../../../store/reducers/forums-reducer";
 import { useState } from "react";
 import { fetchForumList } from "../../../services/forum";
 import ForumQuickView from "./ForumQuickView";
+import ReportModal from "./ReportModal";
 export const post_previews = [
   {
     id: 1,
@@ -52,40 +51,41 @@ export default function PostPreview() {
     showedForums = forums.filter((forum) =>
       forum.tags.find((tag) => tag.tagId === filterForumBy)
     );
-    // forums = forums.find().tags.filter(tag => tag?.tagId === filterForumBy);
-    
   }
-
   if (sortForumBy !== "createdDate") {
     showedForums = forums;
   }
-  const clickViewMorePages = (e) => {
-    e.preventDefault();
+  const clickViewMorePages = (event) => {
+    event.preventDefault();
     dispatch(fetchForumList({ page: page, size: 10, sortBy: sortBy }));
     setPage(page + 1);
     setLoadMorePages(!loadMorePages);
   };
+
   return (
-    <div>
-      {showedForums.map((forum) => (
-        <ForumQuickView
-          key={forum?.pageId}
-          pageId={forum?.pageId}
-          title={forum?.title}
-          userDto={forum?.userDto}
-          upVotes={forum?.upVotes}
-          downVotes={forum?.downVotes}
-        />
-      ))}
+    <>
+      <ReportModal />
       <div>
-        <button
-          type="button"
-          className="btn btn-outline-primary"
-          onClick={clickViewMorePages}
-        >
-          load more pages..
-        </button>
+        {showedForums.map((forum) => (
+          <ForumQuickView
+            key={forum?.pageId}
+            pageId={forum?.pageId}
+            title={forum?.title}
+            userDto={forum?.userDto}
+            upVotes={forum?.upVotes}
+            downVotes={forum?.downVotes}
+          />
+        ))}
+        <div className="row justify-content-center">
+          <button
+            type="button"
+            className="btn btn-outline-primary"
+            onClick={clickViewMorePages}
+          >
+            load more pages..
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

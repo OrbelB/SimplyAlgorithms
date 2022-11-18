@@ -6,7 +6,13 @@ import "./PostPreview.css";
 import { useDispatch } from "react-redux";
 import { forumActions } from "../../../store/reducers/forum-reducer.js";
 
-export default function ForumQuickView({ pageId, userDto, title, upVotes, downVotes }) {
+export default function ForumQuickView({
+  pageId,
+  userDto,
+  title,
+  upVotes,
+  downVotes,
+}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
@@ -40,14 +46,16 @@ export default function ForumQuickView({ pageId, userDto, title, upVotes, downVo
             navigate(`${pageId}`);
           }}
         >
-          {title.substring(0, 40).concat("...")}
+          {title.trim().length > 40
+            ? title.substring(0, 40).concat("...")
+            : title}
         </h2>
         <div className="third-line">
           <div className="left-side">
-            <Vote  like_={upVotes} dislike_={downVotes}/>
+            <Vote like_={upVotes} dislike_={downVotes} />
           </div>
           <div className="right-side">
-            <Report />
+            <Report pageId={pageId} />
           </div>
         </div>
       </article>

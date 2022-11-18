@@ -8,7 +8,6 @@ export const fetchChildrenComments = createAsyncThunk(
       .listChildren(page, size, parentCommentId)
       .catch((error) => {
         if (error) {
-          console.log(error?.message);
           return error;
         }
       });

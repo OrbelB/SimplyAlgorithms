@@ -24,9 +24,7 @@ export const tagSlice = createSlice(({
             state.status = "loading";
           })
           .addCase(fetchTags.fulfilled, (state, action) => {
-            console.log(action.payload.content)
             state.status = "success";
-            console.log(action.payload);
             //add tags
             tagAdapter.upsertMany(state, action?.payload?.content);
           })

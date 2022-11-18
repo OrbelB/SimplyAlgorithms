@@ -8,7 +8,6 @@ export const register = createAsyncThunk(
       .register(userToAuthenticate)
       .catch((error) => {
         if (error?.response) {
-          console.log(response);
           return error;
         }
       });
@@ -21,7 +20,6 @@ export const login = createAsyncThunk("login", async (userCredentials) => {
     .login(userCredentials?.username, userCredentials?.password)
     .catch((error) => {
       if (error?.response) {
-        console.log(response.status);
         return error;
       }
     });
@@ -35,7 +33,6 @@ export const refreshAccessToken = createAsyncThunk(
       .singleByRefreshToken(refreshAccessToken)
       .catch((error) => {
         if (error?.response) {
-          console.log(response);
           return error;
         }
       });

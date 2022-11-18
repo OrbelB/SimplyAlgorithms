@@ -13,13 +13,13 @@ export default function Bell() {
                 <span onClick={handleBellButtonClicked} data-bs-toggle="modal" data-bs-target="#featureunderconstruction" className={cx("bi bi-bell", styles["custom-bell"])}></span>}
 
 
-<div className="modal fade" id="featureunderconstruction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div className="modal fade" id="featureunderconstruction" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="modal-header">
+        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div className="modal-body">
         <div className={"text-center"}>
             <div className="font text-align-center">
                 <h2>This Feature is under Construction!</h2>

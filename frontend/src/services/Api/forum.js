@@ -48,7 +48,7 @@ export const forumEndpoints = {
         },
       }
     ),
-  update: (updatedForum, jwtAccessToken) => {
+  update: (updatedForum, jwtAccessToken) =>
     put(
       `${PUBLIC_ENDPOINT_ROUTE}/update`,
       {
@@ -60,7 +60,9 @@ export const forumEndpoints = {
         video: updatedForum?.video,
         upVotes: updatedForum?.upVotes,
         downVotes: updatedForum?.downVotes,
-        userDto: updatedForum?.userDto,
+        userDto: {
+          userId: updatedForum?.userDto.userId,
+        },
         tags: updatedForum?.tags,
       },
       {
@@ -69,8 +71,7 @@ export const forumEndpoints = {
           Authorization: "Bearer " + jwtAccessToken,
         },
       }
-    );
-  },
+    ),
   delete: (userId, pageId, jwtAccessToken) => {
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
       headers: {
@@ -83,7 +84,7 @@ export const forumEndpoints = {
       },
     });
   },
-  vote: (voteObject, jwtAccessToken) => {
+  vote: (voteObject, jwtAccessToken) =>
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/like-dislike`,
       {
@@ -97,14 +98,20 @@ export const forumEndpoints = {
           Authorization: "Bearer " + jwtAccessToken,
         },
       }
-    );
-  },
-  report: (reportedPage, jwtAccessToken) => {
-    post(`${PUBLIC_ENDPOINT_ROUTE}/report`, {
-      pageId: reportedPage?.pageId,
-      userId: reportedPage?.userId,
-      reportMessage: reportedPage?.reportMessage,
-      Authorization: "Bearer " + jwtAccessToken,
-    });
-  },
+    ),
+  report: (reportedPage, jwtAccessToken) =>
+    post(
+      `${PUBLIC_ENDPOINT_ROUTE}/report`,
+      {
+        pageId: reportedPage?.pageId,
+        userId: reportedPage?.userId,
+        reportMessage: reportedPage?.reportMessage,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + jwtAccessToken,
+        },
+      }
+    ),
 };

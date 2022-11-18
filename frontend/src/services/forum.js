@@ -9,7 +9,6 @@ export const fetchForumList = createAsyncThunk(
       .list(page, size, sortBy)
       .catch((error) => {
         if (error?.response) {
-          console.log(error.message);
           return error;
         }
       });
@@ -25,7 +24,6 @@ export const fetchForumsListByCategory = createAsyncThunk(
       .listByCategory(page, size, tagId)
       .catch((error) => {
         if (error?.response) {
-          console.log(error.message);
           return error;
         }
       });
@@ -37,7 +35,6 @@ export const fetchSingleForum = createAsyncThunk(
   "forum/singleForum",
   async (pageId) => {
     const response = await forumEndpoints.singleById(pageId).catch((error) => {
-      console.log(error?.message);
       return error;
     });
     return response.data;
@@ -47,12 +44,10 @@ export const fetchSingleForum = createAsyncThunk(
 export const createForum = createAsyncThunk(
   "forum/create",
   async (passedParams) => {
-    const { createdForum , accessToken } = passedParams;
-    console.log(createdForum);
+    const { createdForum, accessToken } = passedParams;
     const response = await forumEndpoints
       .create(createdForum, accessToken)
       .catch((error) => {
-        console.log(error.message);
         return error;
       });
     return response.data;
@@ -66,9 +61,11 @@ export const updateForum = createAsyncThunk(
     const response = await forumEndpoints
       .update(updatedForum, accessToken)
       .catch((error) => {
-        console.log(error.message);
-        return error;
+        if (error) {
+          return error;
+        }
       });
+      console.log(response.data);
     return response.data;
   }
 );
@@ -80,7 +77,6 @@ export const deleteForum = createAsyncThunk(
     const response = await forumEndpoints
       .delete(userId, pageId, accessToken)
       .catch((error) => {
-        console.log(error.message);
         return error;
       });
     return response.data;
@@ -94,7 +90,6 @@ export const voteForum = createAsyncThunk(
     const response = await forumEndpoints
       .vote(voteObject, accessToken)
       .catch((error) => {
-        console.log(error.message);
         return error;
       });
     return response.data;
@@ -108,7 +103,6 @@ export const reportForum = createAsyncThunk(
     const response = await forumEndpoints
       .report(reportedPage, accessToken)
       .catch((error) => {
-        console.log(error.message);
         return error;
       });
     return response.data;
