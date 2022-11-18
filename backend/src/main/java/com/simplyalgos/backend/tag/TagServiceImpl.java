@@ -26,14 +26,13 @@ public class TagServiceImpl implements TagService {
 
     @Transactional
     @Override
-    public void mapTagToPageId(PageEntity page, Set<TagDTO> tags) {
+    public List<Tag> mapTagToPageId(PageEntity page, Set<TagDTO> tags) {
         page.removeTagFromPage();
         //find all by id
         Collection<UUID> tagIds = tags.stream()
                 .map(TagDTO::getTagId)
                 .collect(Collectors.toSet());
         List<Tag> retrievedTags = tagRepository.findAllById(tagIds);
-
 
         //find those with no ids and create a tag
         //map the new tag to the id
@@ -55,8 +54,9 @@ public class TagServiceImpl implements TagService {
         });
 
         page.setTags(new HashSet<>(tagRepository.saveAll(retrievedTags)));
-        log.debug(MessageFormat.format("should only have one {0}", retrievedTags.size()));
+        log.debug(MessageFormat.format("should only have {0}", retrievedTags.size()));
         pageEntityService.savePageEntity(page);
+        return retrievedTags;
     }
 
     @Override

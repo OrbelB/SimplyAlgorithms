@@ -2,7 +2,6 @@ package com.simplyalgos.backend.comment;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.page.PageEntity;
@@ -71,7 +70,7 @@ public class Comment {
 
     @OneToMany(mappedBy = "reportedComment")
     private Set<CommentReport> commentReports;
-    @JsonIgnore
+    @JsonIncludeProperties({"pageId"})
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "page_id", referencedColumnName = "page_id", foreignKey = @ForeignKey(name = "page_id"))
     private PageEntity pageComment;

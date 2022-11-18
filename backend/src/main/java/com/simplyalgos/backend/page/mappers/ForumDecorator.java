@@ -4,9 +4,6 @@ import com.simplyalgos.backend.comment.Comment;
 import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
 import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.page.Forum;
-import com.simplyalgos.backend.page.ForumService;
-import com.simplyalgos.backend.page.PageEntity;
-import com.simplyalgos.backend.page.PageEntityService;
 import com.simplyalgos.backend.page.dto.ForumDTO;
 import com.simplyalgos.backend.page.dto.FullForumDTO;
 import com.simplyalgos.backend.tag.Tag;
@@ -31,6 +28,7 @@ public class ForumDecorator implements ForumMapper {
     public void setForumDecorator(ForumMapper forumMapper) {
         this.forumMapper = forumMapper;
     }
+
     @Override
     public ForumDTO forumToForumDTO(Forum forum) {
         ForumDTO forumDTO = forumMapper.forumToForumDTO(forum);
@@ -68,9 +66,9 @@ public class ForumDecorator implements ForumMapper {
         if (forum.getCreatedBy() != null) {
             forumDTO.setUserDto(mapUserToUserDto(forum));
         }
-        if(forum.getPageEntityId() != null) {
+        if (forum.getPageEntityId() != null) {
             if (forum.getPageEntityId().getPageComments() != null) {
-                forumDTO.setComments(mapCommentToCommentBasicDto(forum));
+                forumDTO.setComments(mapCommentToCommentBasicDto(forum, forumDTO));
             }
             if (forum.getPageEntityId().getTags() != null) {
                 forumDTO.setTags(mapTagsToTagsDto(forum));
@@ -92,7 +90,7 @@ public class ForumDecorator implements ForumMapper {
     }
 
     //get comments from forum page
-    private Set<CommentBasicDTO> mapCommentToCommentBasicDto(Forum forum) {
+    private Set<CommentBasicDTO> mapCommentToCommentBasicDto(Forum forum, FullForumDTO fullForumDTO) {
         Set<Comment> comments = forum.getPageEntityId().getPageComments();
         return comments.stream().filter(comment -> comment.getIsParentChild().equals(CommentType.PARENT.label)).map(comment ->
                 CommentBasicDTO
@@ -109,10 +107,8 @@ public class ForumDecorator implements ForumMapper {
                                 .build())
                         .likes(comment.getLikes())
                         .dislikes(comment.getDislikes())
+                        .replyCount(comment.getChildrenComments().size())
                         .build()
         ).collect(Collectors.toSet());
     }
-
-
-
 }

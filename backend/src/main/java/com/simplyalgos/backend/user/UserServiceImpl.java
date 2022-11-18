@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.text.MessageFormat;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,12 +24,12 @@ public class UserServiceImpl implements UserService {
         return userRepository
                 .findAll()
                 .stream()
-                .map(userMapper::userDtoTOUser)
+                .map(userMapper::userToUserDto)
                 .collect(Collectors.toSet());
     }
 
     public UserDTO getUser(String userId) {
-        return userMapper.userDtoTOUser(userRepository
+        return userMapper.userToUserDto(userRepository
                 .findById(UUID.fromString(userId))
                 .orElseThrow(() -> new UsernameNotFoundException("Username: " + userId + " not found"))
         );
@@ -37,9 +41,46 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Username: " + userId + " Not Found"));
     }
 
+    @Transactional
+    @Override
+    public UserDTO updateUser(UserDTO userToUpdate) {
+        Optional<User> optionalUser = userRepository.findById(userToUpdate.getUserId());
+        User user;
+        if(optionalUser.isPresent()){
+            user = optionalUser.get();
+            if(isNotNullNorEmptyNorBlank(userToUpdate.getBiography())) user.setBiography(userToUpdate.getBiography());
+            if(isNotNullNorEmptyNorBlank(userToUpdate.getEmail())) user.setBiography(userToUpdate.getEmail());
+            if(isNotNullNorEmptyNorBlank(userToUpdate.getUsername())) user.setUsername( userToUpdate.getUsername());
+            if(isNotNullNorEmptyNorBlank(userToUpdate.getFirstName())) user.setFirstName(userToUpdate.getFirstName());
+            if(isNotNullNorEmptyNorBlank(userToUpdate.getLastName())) user.setLastName(userToUpdate.getLastName());
+            if(userToUpdate.getDob() != null) user.setDob(userToUpdate.getDob());
+            if(isNotNullNorEmptyNorBlank(userToUpdate.getProfilePicture())) user.setProfilePicture(userToUpdate.getProfilePicture());
+            if(isNotNullNorEmptyNorBlank(userToUpdate.getPhoneNumber())) user.setPhoneNumber(userToUpdate.getPhoneNumber());
+            return userMapper.userToUserDto(user);
+        }
+       throw new NoSuchElementException(
+               MessageFormat
+                       .format("user with id {0} not found", userToUpdate.getUserId())
+       );
+    }
+
+    private boolean isNotNullNorEmptyNorBlank(String attribute) {
+        if(attribute == null) return false;
+        return !(attribute.isEmpty() && attribute.isBlank());
+    }
     @Override
     public boolean userExists(UUID userId) {
         return userRepository.existsById(userId);
+    }
+
+    @Override
+    public UUID removeUser(UUID userId) {
+        if(userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+            return userId;
+        }
+        throw new NoSuchElementException(MessageFormat.format("user with id {0} not found!",
+                userId.toString()));
     }
 
 }

@@ -6,7 +6,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 public interface PageVoteRepository extends JpaRepository<PageVote, PageVoteId> {
     Optional<PageVote> findByPageVoteId(PageVoteId pageVoteId);
@@ -15,10 +18,9 @@ public interface PageVoteRepository extends JpaRepository<PageVote, PageVoteId> 
     @Query(nativeQuery = true, value = "UPDATE page_vote " +
             "SET like_dislike = :like_dislike " +
             "WHERE user_id = :user_id  AND page_id = :page_id")
-    void updateLikeDislike(@Param("like_dislike") Boolean likeDislike,
+    void updateLikeDislike(@Param("like_dislike") boolean likeDislike,
                            @Param("user_id") String userId,
                            @Param("page_id") String pageId);
-
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM page_vote " +
             "WHERE like_dislike = :like_dislike AND page_id = :page_id")
@@ -26,4 +28,6 @@ public interface PageVoteRepository extends JpaRepository<PageVote, PageVoteId> 
                                              @Param("like_dislike") boolean likeDislike);
 
 
+
+    Set<PageVote> findAllByPageVoteId_PageId(UUID pageVoteId_pageId);
 }

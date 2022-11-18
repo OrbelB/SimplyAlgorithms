@@ -1,26 +1,20 @@
 package com.simplyalgos.backend.page;
 
-import com.simplyalgos.backend.page.dto.CodeSnippetDTO;
-import com.simplyalgos.backend.page.dto.FullTopicDTO;
-import com.simplyalgos.backend.page.dto.TopicExternalResourcesDTO;
-import com.simplyalgos.backend.page.dto.TopicStepsDTO;
+import com.simplyalgos.backend.page.dto.*;
 import com.simplyalgos.backend.page.mappers.TopicMapper;
-import com.simplyalgos.backend.report.PageReportRepository;
+import com.simplyalgos.backend.report.PageReportService;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
-import com.simplyalgos.backend.tag.Tag;
-import com.simplyalgos.backend.tag.TagRepository;
 import com.simplyalgos.backend.tag.TagService;
-import com.simplyalgos.backend.tag.dto.TagDTO;
+import com.simplyalgos.backend.user.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.text.MessageFormat;
 import java.util.*;
@@ -30,20 +24,21 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class TopicServiceImpl implements TopicService {
+    private final PageVoteService pageVoteService;
 
     private final TopicRepository topicRepository;
 
     private final TopicMapper topicMapper;
 
-    private final PageEntityRepository pageEntityRepository;
+    private final PageEntityService pageEntityService;
 
-    private final PageVoteRepository pageVoteRepository;
-
-    private final PageReportRepository pageReportRepository;
+    private final PageReportService pageReportService;
 
     private final CodeSnippetRepository codeSnippetRepository;
 
     private final TagService tagService;
+
+    private final UserService userService;
 
     private final TopicStepRepository topicStepRepository;
 
@@ -105,8 +100,9 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public void reportPage(PageReportDTO pageReportDTO) {
-        pageReportRepository.createReport(pageReportDTO.getReportMessage(), pageReportDTO.getUserId().toString(), pageReportDTO.getPageId().toString());
+    public UUID reportPage(PageReportDTO pageReportDTO) {
+        return pageReportService.createReport(pageReportDTO, pageEntityService.getPageEntity(pageReportDTO.getPageId()));
+
     }
 
     @Transactional
@@ -124,23 +120,21 @@ public class TopicServiceImpl implements TopicService {
         );
 
         //get page entity to map the other attributes
-        Optional<PageEntity> topicPageType = pageEntityRepository.findById(createdTopic.getPageId());
+        PageEntity topicPageType = pageEntityService.getPageEntity(createdTopic.getPageId());
 
-        if (topicPageType.isPresent()) {
-            log.debug(MessageFormat.format("Page {0} exists", topicPageType.get().getPageId()));
-            tagService.mapTagToPageId(topicPageType.get(), fullTopicDTO.getTags());
-            if (fullTopicDTO.getCodeSnippet() != null)
-                createdTopic.setCodeSnippets(mapCodeSnippetToPageEntity(createdTopic, fullTopicDTO.getCodeSnippet()));
-            if (fullTopicDTO.getExternalResources() != null)
-                createdTopic.setTopicExternalResources(mapExternalResourcesToTopic(createdTopic, fullTopicDTO.getExternalResources()));
-            if (fullTopicDTO.getSteps() != null)
-                createdTopic.setTopicSteps(mapStepsToTopic(createdTopic, fullTopicDTO.getSteps()));
-            //save changes
-            //topicRepository.save(createdTopic);
-        } else {
-            throw new NoSuchElementException("page entity could not be initialized");
-        }
+
+        log.debug(MessageFormat.format("Page {0} exists", topicPageType.getPageId()));
+        tagService.mapTagToPageId(topicPageType, fullTopicDTO.getTags());
+        if (fullTopicDTO.getCodeSnippet() != null)
+            createdTopic.setCodeSnippets(mapCodeSnippetToPageEntity(createdTopic, fullTopicDTO.getCodeSnippet()));
+        if (fullTopicDTO.getExternalResources() != null)
+            createdTopic.setTopicExternalResources(mapExternalResourcesToTopic(createdTopic, fullTopicDTO.getExternalResources()));
+        if (fullTopicDTO.getSteps() != null)
+            createdTopic.setTopicSteps(mapStepsToTopic(createdTopic, fullTopicDTO.getSteps()));
+        //save changes
+        //topicRepository.save(createdTopic);
     }
+
 
     //future --  improve logic
     private List<TopicSteps> mapStepsToTopic(Topic createdTopic, Set<TopicStepsDTO> stepsDTOS) {
@@ -170,12 +164,12 @@ public class TopicServiceImpl implements TopicService {
 
         List<TopicExternalResource> topicExternalResources = topicExternalResourceRepository
                 .findAllByTopicExternalResourceIdIsNotInAndTopicExternalResourceId_PageId(
-                topicExternalResource.stream().map(topicExternalR -> TopicExternalResourceId
-                                .builder()
-                                .externalResourceLink(topicExternalR.getExternalResourceLink())
-                                .pageId(topic.getPageId())
-                                .build())
-                        .collect(Collectors.toSet()), topic.getPageId()
+                        topicExternalResource.stream().map(topicExternalR -> TopicExternalResourceId
+                                        .builder()
+                                        .externalResourceLink(topicExternalR.getExternalResourceLink())
+                                        .pageId(topic.getPageId())
+                                        .build())
+                                .collect(Collectors.toSet()), topic.getPageId()
                 );
         log.debug(MessageFormat.format("objects to remove should be one 1 {0}", topicExternalResources.size()));
         topicExternalResourceRepository.deleteAll(topicExternalResources);
@@ -242,48 +236,35 @@ public class TopicServiceImpl implements TopicService {
     }
 
 
+    @Transactional
     @Override
-    public void userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike) {
-        //check if the like or dislike exists
-        pageVoteRepository.findByPageVoteId(
-                PageVoteId
-                        .builder()
-                        .pageId(pageId)
-                        .userId(userId)
-                        .build()
-        ).ifPresentOrElse(
-                page -> pageVoteRepository.updateLikeDislike(passedLikeDislike, userId.toString(), pageId.toString()), //invert the like/dislike
-                () -> pageVoteRepository //create the new user vote
-                        .save(PageVote.builder()
-                                .like_dislike(passedLikeDislike)
-                                .pageVoteId(
-                                        PageVoteId
-                                                .builder()
-                                                .userId(userId)
-                                                .pageId(pageId)
-                                                .build()
-                                ).build()
-                        )
-        );
-        //update forum
+    public LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike) {
+        if (topicRepository.existsById(pageId)) {
+            throw new NoSuchElementException(
+                    MessageFormat.format("page with Id {0} does not exits", pageId));
+        }
+        if (!userService.userExists(userId)) {
+            throw new UsernameNotFoundException(
+                    MessageFormat.format("Username with id {0} does not exists", userId));
+        }
+
+        LikeDislikeDTO newLikedDislikeDTO = pageVoteService.addPageVote(new LikeDislikeDTO(userId, pageId, passedLikeDislike));
         updateSingleTopicLikeDisliked(pageId);
+        return newLikedDislikeDTO;
+
     }
 
     private void updateSingleTopicLikeDisliked(UUID pageId) {
         topicRepository.findById(pageId).ifPresent(currentTopic -> {
             currentTopic.setUpVotes(
-                    getLikedOrDislikes(currentTopic.getPageId(), true)
+                    pageVoteService.countVotes(currentTopic.getPageId(), true)
             );
             currentTopic.setDownVotes(
-                    getLikedOrDislikes(currentTopic.getPageId(), false)
+                    pageVoteService.countVotes(currentTopic.getPageId(), false)
             );
             topicRepository.save(currentTopic);
         });
         log.debug(MessageFormat.format("object with page id {0}, could not be found ", pageId));
-    }
-
-    private Integer getLikedOrDislikes(UUID pageId, Boolean likeDislike) {
-        return pageVoteRepository.countLikeDislikeByPage(pageId.toString().trim(), likeDislike).orElse(0);
     }
 
     //TODO should return a list of uuid of pages filtered by category
@@ -296,6 +277,22 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void deleteTopicPage(UUID pageId, UUID userId) {
         topicRepository.deleteById(pageId);
+    }
 
+    @Override
+    public PageVoteId deleteVote(UUID userId, UUID pageId) {
+        PageVoteId pageVoteId = PageVoteId.builder().pageId(pageId).userId(userId).build();
+        if (pageVoteService.pageVoteExists(pageVoteId)) {
+            pageVoteService.deletePageVote(userId, pageId);
+            updateSingleTopicLikeDisliked(pageId);
+            return pageVoteId;
+        }
+        throw new NoSuchElementException(MessageFormat.
+                format("Vote for comment with id {0} is not present", pageId));
+    }
+
+    @Override
+    public Object listVotesByPage(UUID pageId) {
+        return pageVoteService.listVotesByPage(pageId);
     }
 }

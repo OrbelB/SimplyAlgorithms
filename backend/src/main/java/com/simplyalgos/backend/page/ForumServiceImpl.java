@@ -2,12 +2,13 @@ package com.simplyalgos.backend.page;
 
 import com.simplyalgos.backend.page.dto.ForumDTO;
 import com.simplyalgos.backend.page.dto.FullForumDTO;
+import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
 import com.simplyalgos.backend.page.mappers.ForumMapper;
-import com.simplyalgos.backend.report.PageReportRepository;
+import com.simplyalgos.backend.report.PageReportService;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.tag.TagService;
 import com.simplyalgos.backend.user.User;
-import com.simplyalgos.backend.user.UserRepository;
+import com.simplyalgos.backend.user.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 
@@ -29,22 +29,21 @@ import java.util.stream.Collectors;
 @Service
 public class ForumServiceImpl implements ForumService {
 
+    private final PageVoteService pageVoteService;
     private final ForumRepository forumRepository;
     private final ForumMapper forumMapper;
-    private final PageVoteRepository pageVoteRepository;
-    private final PageReportRepository pageReportRepository;
-    private final UserRepository userRepository;
     private final TagService tagService;
+    private final PageEntityService pageEntityService;
+    private final PageReportService pageReportService;
 
-    private final PageEntityRepository pageEntityRepository;
+    private final UserService userService;
 
     @Override
-    public ObjectPagedList<ForumDTO> listForumPages(Pageable pageable) {
-        //find a better way to update the likes and dislikes
+    public ObjectPagedList<?> listForumPages(Pageable pageable) {
         Page<Forum> forumPage = forumRepository.findAll(pageable);
         return new ObjectPagedList<>(
                 forumPage.stream()
-                        .map(forumMapper::forumToForumDTO)
+                        .map(forumMapper::forumToFullForumDto)
                         .collect(Collectors.toList()),
                 PageRequest.of(
                         forumPage.getPageable().getPageNumber(),
@@ -58,96 +57,49 @@ public class ForumServiceImpl implements ForumService {
     @Override
     public UUID createForum(ForumDTO forumDTO) {
         // check if a user has been created
-        Optional<User> user = userRepository.findById(forumDTO.getUserDto().getUserId());
-        if (user.isPresent()) {
-            Forum forum = forumRepository.saveAndFlush(
-                    Forum.builder()
-                            .pageId(UUID.randomUUID())
-                            .createdBy(user.get())
-                            .descriptionText(forumDTO.getDescriptionText())
-                            .photo(forumDTO.getPhoto())
-                            .video(forumDTO.getVideo())
-                            .title(forumDTO.getTitle())
-                            .build()
-            );
-
-            //get the page entity
-            Optional<PageEntity> forumType = pageEntityRepository.findById(forum.getPageId());
-
-            if (forumType.isPresent()) {
-                log.debug(MessageFormat.format("trying to get data from page entity {0}", forumType.get().getPageId()));
-                tagService.mapTagToPageId(forumType.get(), forumDTO.getTags());
-                return forum.getPageId();
-            } else {
-                throw new NoSuchElementException("page entity could not be initialized");
-            }
-        }
-        throw new UsernameNotFoundException(
-                MessageFormat
-                        .format("User with id {0} could not be found", forumDTO.getUserDto().getUserId())
+        log.debug(MessageFormat.format("user id {0} ", forumDTO.getUserDto().getUserId()));
+        User user = userService.getUser(forumDTO.getUserDto().getUserId());
+        Forum forum = forumRepository.saveAndFlush(
+                Forum.builder()
+                        .pageId(UUID.randomUUID())
+                        .createdBy(user)
+                        .descriptionText(forumDTO.getDescriptionText())
+                        .photo(forumDTO.getPhoto())
+                        .video(forumDTO.getVideo())
+                        .title(forumDTO.getTitle())
+                        .build()
         );
 
-
-    }
-
-
-    @Deprecated
-    @Transactional
-    protected void updateAmountOfUpVotesAndDownVotes() {
-        log.info("Updating amount of up votes and down votes for each page");
-        List<Forum> forumSet = forumRepository.findAll();
-        try {
-            forumSet.forEach(forum -> {
-                        forum.setUpVotes(getLikedOrDislikes(forum.getPageId(), true));
-                        forum.setDownVotes(getLikedOrDislikes(forum.getPageId(), false));
-                    }
-            );
-            forumRepository.saveAll(forumSet);
-        } catch (Exception ex) {
-            log.error(MessageFormat.format("the error is {0} in updateAmount... ", ex));
-        }
-
-    }
-
-    private Integer getLikedOrDislikes(UUID pageId, Boolean likeDislike) {
-        return pageVoteRepository.countLikeDislikeByPage(pageId.toString().trim(), likeDislike).orElse(0);
+        //get the page entity
+        PageEntity forumType = pageEntityService.getPageEntity(forum.getPageId());
+        log.debug(MessageFormat.format("trying to get data from page entity {0}", forumType.getPageId()));
+        tagService.mapTagToPageId(forumType, forumDTO.getTags());
+        return forum.getPageId();
     }
 
     @Transactional
     @Override
-    public void userLikedOrDisliked(UUID userId, UUID pageId, Boolean passedLikeDislike) {
-        //check if the like or dislike exists
-        pageVoteRepository.findByPageVoteId(
-                PageVoteId
-                        .builder()
-                        .pageId(pageId)
-                        .userId(userId)
-                        .build()
-        ).ifPresentOrElse(
-                page -> pageVoteRepository.updateLikeDislike(passedLikeDislike, userId.toString(), pageId.toString()), //invert the like/dislike
-                () -> pageVoteRepository //create the new user vote
-                        .save(PageVote.builder()
-                                .like_dislike(passedLikeDislike)
-                                .pageVoteId(
-                                        PageVoteId
-                                                .builder()
-                                                .userId(userId)
-                                                .pageId(pageId)
-                                                .build()
-                                ).build()
-                        )
-        );
-        //update forum
+    public LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike) {
+        if (forumRepository.existsById(pageId)) {
+            throw new NoSuchElementException(
+                    MessageFormat.format("page with Id {0} does not exits", pageId));
+        }
+        if (!userService.userExists(userId)) {
+            throw new UsernameNotFoundException(
+                    MessageFormat.format("Username with id {0} does not exists", userId));
+        }
+        LikeDislikeDTO likeDislikeDTO = pageVoteService.addPageVote(new LikeDislikeDTO(userId, pageId, passedLikeDislike));
         updateSingleForumLikeDisliked(pageId);
+        return likeDislikeDTO;
     }
 
     private void updateSingleForumLikeDisliked(UUID pageId) {
         forumRepository.findById(pageId).ifPresent(currentForum -> {
             currentForum.setUpVotes(
-                    getLikedOrDislikes(currentForum.getPageId(), true)
+                    pageVoteService.countVotes(currentForum.getPageId(), true)
             );
             currentForum.setDownVotes(
-                    getLikedOrDislikes(currentForum.getPageId(), false)
+                    pageVoteService.countVotes(currentForum.getPageId(), false)
             );
             forumRepository.save(currentForum);
         });
@@ -168,8 +120,9 @@ public class ForumServiceImpl implements ForumService {
         ));
     }
 
+
     @Override
-    public UUID updateForum(ForumDTO forumDTO) {
+    public FullForumDTO updateForum(ForumDTO forumDTO) {
         Optional<Forum> optionalForumToUpdate = forumRepository.findById(forumDTO.getPageId());
         Forum forum;
         if (optionalForumToUpdate.isPresent()) {
@@ -180,10 +133,9 @@ public class ForumServiceImpl implements ForumService {
                 if (isNotNullAndEmpty(forumDTO.getVideo())) forum.setVideo(forumDTO.getVideo());
                 if (isNotNullAndEmpty(forumDTO.getDescriptionText()))
                     forum.setDescriptionText(forumDTO.getDescriptionText());
-                if (forumDTO.getTags() != null && forumDTO.getTags().size() != 0)
-                    tagService.mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags());
+                forum.getPageEntityId().setTags(new HashSet<>(tagService.mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags())));
             }
-            return forumRepository.save(forum).getPageId();
+            return forumMapper.forumToFullForumDto(forumRepository.save(forum));
         }
         throw new NoSuchElementException(MessageFormat.format("no such an object", forumDTO.getPageId()));
     }
@@ -196,11 +148,23 @@ public class ForumServiceImpl implements ForumService {
 
     @Transactional
     @Override
-    public void reportForum(PageReportDTO forumReport) {
-        pageReportRepository
-                .createReport(forumReport.getReportMessage(),
-                        forumReport.getUserId().toString(),
-                        forumReport.getPageId().toString());
+    public UUID reportForum(PageReportDTO forumReport) {
+        return pageReportService.createReport(forumReport, pageEntityService.getPageEntity(forumReport.getPageId()));
+
+    }
+
+    @Transactional
+    @Override
+    public PageVoteId deleteVote(UUID userId, UUID pageId) {
+        PageVoteId pageVoteId = PageVoteId.builder().pageId(pageId).userId(userId).build();
+        if (pageVoteService.pageVoteExists(pageVoteId)) {
+            pageVoteService.deletePageVote(userId, pageId);
+            updateSingleForumLikeDisliked(pageId);
+            return pageVoteId;
+        }
+        throw new NoSuchElementException(MessageFormat.
+                format("Vote for comment with id {0} is not present", pageId));
+
     }
 
     @Override
@@ -216,6 +180,11 @@ public class ForumServiceImpl implements ForumService {
                         forumPage.getSort()),
                 forumPage.getTotalElements()
         );
+    }
+
+    @Override
+    public Object listVotesByPage(UUID pageId) {
+        return pageVoteService.listVotesByPage(pageId);
     }
 
 }

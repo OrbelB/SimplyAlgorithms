@@ -1,9 +1,7 @@
 package com.simplyalgos.backend.comment;
 
-import com.simplyalgos.backend.comment.dto.ChildCommentDTO;
+import com.simplyalgos.backend.comment.dto.*;
 
-import com.simplyalgos.backend.comment.dto.CommentDTO;
-import com.simplyalgos.backend.comment.dto.CommentLikeDislikeDTO;
 import com.simplyalgos.backend.report.dtos.CommentReportDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 
@@ -15,19 +13,23 @@ public interface CommentService {
 
     ObjectPagedList<?> listComments(Pageable pageable);
 
-    void createParentComment(CommentDTO commentDTO);
+    CommentToSendDTO createParentComment(CommentDTO commentDTO);
 
-    void createChildComment(ChildCommentDTO commentDTO);
+    CommentToSendDTO createChildComment(ChildCommentDTO commentDTO);
 
-    void updateComment(CommentDTO commentDTO);
+    CommentToSendDTO updateComment(CommentDTO commentDTO);
 
-    void deleteComment(UUID commentId);
+    UUID deleteComment(UUID commentId);
 
     ObjectPagedList<?> getChildrenComments(UUID parentComment, Pageable pageable);
 
-    void commentLikeOrDisliked(CommentLikeDislikeDTO likeDislikeDTO);
+    CommentLikeDislikeDTO commentLikeOrDisliked(CommentLikeDislikeDTO likeDislikeDTO);
+
+    void updateCommentVotes(UUID commentId);
 
     boolean isCommentPresent(UUID commentId);
 
-    void reportComment(CommentReportDTO commentReportDTO);
+    CommentVoteId deleteVote(UUID userId, UUID commentId);
+
+    UUID reportComment(CommentReportDTO commentReportDTO);
 }

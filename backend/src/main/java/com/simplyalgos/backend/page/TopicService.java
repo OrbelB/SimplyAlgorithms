@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.page;
 
 import com.simplyalgos.backend.page.dto.FullTopicDTO;
+import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
@@ -15,14 +16,17 @@ public interface TopicService  {
 
      void updateTopicPage(FullTopicDTO fullTopicDTO);
 
-     void reportPage(PageReportDTO pageReportDTO);
+    UUID reportPage(PageReportDTO pageReportDTO);
 
      void createPage(FullTopicDTO fullTopicDTO);
 
-     void userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike);
+     LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike);
 
      ObjectPagedList<?> listTopicPagesByTags(UUID tagId, Pageable pageable);
 
      void deleteTopicPage(UUID pageId, UUID userId);
+
+     PageVoteId deleteVote(UUID userId, UUID pageId);
+     Object listVotesByPage(UUID pageId);
 
 }

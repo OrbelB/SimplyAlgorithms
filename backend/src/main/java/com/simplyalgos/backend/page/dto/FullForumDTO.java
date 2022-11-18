@@ -26,5 +26,4 @@ public class FullForumDTO {
     UserDataDTO userDto;
     Set<CommentBasicDTO> comments;
     Set<TagDTO> tags;
-
 }

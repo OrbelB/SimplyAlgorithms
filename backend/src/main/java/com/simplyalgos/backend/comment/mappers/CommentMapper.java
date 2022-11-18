@@ -4,6 +4,7 @@ import com.simplyalgos.backend.comment.Comment;
 import com.simplyalgos.backend.comment.ParentChildComment;
 import com.simplyalgos.backend.comment.dto.ChildrenCommentRetrieval;
 import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
+import com.simplyalgos.backend.comment.dto.CommentToSendDTO;
 import com.simplyalgos.backend.user.User;
 import com.simplyalgos.backend.user.UserRepository;
 import com.simplyalgos.backend.user.dtos.UserDataDTO;
@@ -21,26 +22,54 @@ import java.util.stream.Collectors;
 public class CommentMapper {
     private final UserRepository userRepository;
 
-    public CommentBasicDTO commentToBasicCommentDTO(ParentChildComment parentChildComment) {
-        CommentBasicDTO.CommentBasicDTOBuilder commentBasicDTOBuilder = CommentBasicDTO.builder();
-        if(parentChildComment.getParentChildCommentId().getChildComment() != null) {
+    public CommentToSendDTO commentToChildCommentDTO(ParentChildComment parentChildComment) {
+        CommentToSendDTO.CommentToSendDTOBuilder commentBasicDTOBuilder = CommentToSendDTO.builder();
+        if (parentChildComment.getParentChildCommentId().getChildComment() != null) {
+            if(parentChildComment.getParentComment() != null){
+                commentBasicDTOBuilder.rootId(parentChildComment.getParentComment().getCommentId());
+            }
             Comment currentComment = parentChildComment.getParentChildCommentId().getChildComment();
             commentBasicDTOBuilder
-                    .createdBy(mapUserToUserDataDTO(currentComment.getCreatedBy()))
-                    .createdDate(currentComment.getCreatedDate().toString())
-                    .commentId(currentComment.getCommentId())
-                    .commentText(currentComment.getCommentText())
-                    .dislikes(currentComment.getDislikes())
-                    .likes(currentComment.getLikes());
-
-
+                    .comment(CommentBasicDTO.builder().createdBy(mapUserToUserDataDTO(currentComment.getCreatedBy()))
+                            .createdDate(currentComment.getCreatedDate().toString())
+                            .commentId(currentComment.getCommentId())
+                            .commentText(currentComment.getCommentText())
+                            .dislikes(currentComment.getDislikes())
+                            .likes(currentComment.getLikes())
+                            .replyCount(countReplies(currentComment.getChildrenComments()))
+                            .build());
         }
         return commentBasicDTOBuilder.build();
     }
 
+    public CommentToSendDTO commentToCommentBasicDTO(Comment comment, UUID pageId) {
+        return CommentToSendDTO
+                .builder()
+                .rootId(pageId)
+                .comment(CommentBasicDTO.builder().commentId(comment.getCommentId())
+                        .commentText(comment.getCommentText())
+                        .createdDate(comment.getCreatedDate().toString())
+                        .createdBy(UserDataDTO.builder()
+                                .userId(comment.getCreatedBy().getUserId())
+                                .firstName(comment.getCreatedBy().getFirstName())
+                                .lastName(comment.getCreatedBy().getLastName())
+                                .profilePicture(comment.getCreatedBy().getProfilePicture())
+                                .username(comment.getCreatedBy().getUsername())
+                                .build())
+                        .likes(comment.getLikes())
+                        .dislikes(comment.getDislikes())
+                        .replyCount(countReplies(comment.getChildrenComments())).build())
+                .build();
+    }
+
+    public Integer countReplies(List<ParentChildComment> comments) {
+        if (comments == null) return 0;
+        return comments.size();
+    }
+
     @Deprecated
     public ChildrenCommentRetrieval ParentChildCommentToChildrenCommentList(ParentChildComment parentChildComment) {
-        ChildrenCommentRetrieval.ChildrenCommentRetrievalBuilder childrenComments =  ChildrenCommentRetrieval.builder();
+        ChildrenCommentRetrieval.ChildrenCommentRetrievalBuilder childrenComments = ChildrenCommentRetrieval.builder();
         List<CommentBasicDTO> commentBasicDTOS = new ArrayList<>();
         if (parentChildComment.getParentChildCommentId().getParentComment().getChildrenComments() != null) {
             List<ParentChildComment> currentChildren = parentChildComment.getParentChildCommentId().getParentComment().getChildrenComments();

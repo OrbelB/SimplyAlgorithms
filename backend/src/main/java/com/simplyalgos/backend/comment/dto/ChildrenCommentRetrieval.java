@@ -13,5 +13,4 @@ import java.util.List;
 @Builder
 public class ChildrenCommentRetrieval{
         List<CommentBasicDTO> childrenComments = new ArrayList<>();
-
 }

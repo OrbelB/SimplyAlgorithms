@@ -11,7 +11,7 @@ public interface CommentReportRepository extends JpaRepository<CommentReport, UU
 
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO comment_report(comment_id, report, user_id) values (:comment_id, :report, :user_id)")
-    void createReport(@Param("report") String reportMessage,
+    CommentReport createReport(@Param("report") String reportMessage,
                       @Param("user_id") String userId,
                       @Param("comment_id") String commentId
     );

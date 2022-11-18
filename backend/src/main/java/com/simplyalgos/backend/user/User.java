@@ -86,6 +86,10 @@ public class User implements UserDetails, CredentialsContainer {
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
 
+    private String biography;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @Column(name = "days_logged_in")
     private int daysLoggedIn;

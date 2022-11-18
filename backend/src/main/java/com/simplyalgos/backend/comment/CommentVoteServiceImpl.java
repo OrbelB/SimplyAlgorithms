@@ -2,12 +2,17 @@ package com.simplyalgos.backend.comment;
 
 
 import com.simplyalgos.backend.comment.dto.CommentLikeDislikeDTO;
+import com.simplyalgos.backend.comment.mappers.CommentVoteMapper;
+import com.simplyalgos.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -16,31 +21,62 @@ public class CommentVoteServiceImpl implements CommentVoteService {
 
     private final CommentVoteRepository commentVoteRepository;
 
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final CommentVoteMapper commentVoteMapper;
+
     @Override
-    public void addCommentVote(CommentLikeDislikeDTO commentLikeDislikeDTO) {
+    public CommentLikeDislikeDTO addCommentVote(CommentLikeDislikeDTO commentLikeDislikeDTO) {
         Optional<CommentVote> optionalCommentVote = commentVoteRepository.findById(
                 CommentVoteId.builder()
                         .commentId(commentLikeDislikeDTO.commentId())
                         .userId(commentLikeDislikeDTO.userId()).
                         build()
         );
-        //if the comment exists revert the like otherwise, create a new like
-        optionalCommentVote.ifPresentOrElse(commentVote -> {
-                    commentVote.setVote(commentLikeDislikeDTO.likeDislike());
-                    commentVoteRepository.save(commentVote);
-                },
-                () -> commentVoteRepository.save(
-                        CommentVote.builder().commentVoteId(CommentVoteId
+        CommentVote commentVote;
+        if(optionalCommentVote.isPresent()){
+            commentVote = optionalCommentVote.get();
+            commentVote.setVote(commentLikeDislikeDTO.likeDislike());
+           CommentLikeDislikeDTO commentLikeDislikeDTO1 = commentVoteMapper.comentVoteToCommentVoteDTO(commentVoteRepository.save(commentVote));
+           log.info(MessageFormat.format("This is the freshly added comment created {0} {1}" , commentLikeDislikeDTO1.commentId(), commentLikeDislikeDTO1.userId()));
+            return commentLikeDislikeDTO1;
+        }
+        return commentVoteMapper.comentVoteToCommentVoteDTO(commentVoteRepository.save(
+                CommentVote.builder().commentVoteId(CommentVoteId
                                 .builder()
                                 .commentId(commentLikeDislikeDTO.commentId())
                                 .userId(commentLikeDislikeDTO.userId())
                                 .build())
-                                .like_dislike(commentLikeDislikeDTO.likeDislike()).build()
-                )
-        );
+                        .like_dislike(commentLikeDislikeDTO.likeDislike())
+                        .commentVoteReference(commentRepository.findById(commentLikeDislikeDTO.commentId()).get())
+                        .userVoteReference(userRepository.findById(commentLikeDislikeDTO.userId()).get())
+                        .build()));
     }
 
+
     public Integer countVotes(UUID commentID, boolean vote) {
-        return commentVoteRepository.countAllByCommentVoteId_CommentIdAndVoteIs(commentID, vote);
+        Integer value = commentVoteRepository.countAllByCommentVoteId_CommentIdAndVoteIs(commentID, vote);
+        log.debug("Current Count of votes " + value);
+        return value == null ? 0 : value;
+    }
+
+    @Override
+    public void deleteCommentVote(UUID userId, UUID commentId) {
+        commentVoteRepository.deleteCommentVote(userId.toString(), commentId.toString());
+    }
+
+
+    @Override
+    public boolean commentVoteExists(CommentVoteId commentVoteId) {
+        return commentVoteRepository.existsById(commentVoteId);
+    }
+
+    @Override
+    public Set<?> listVotesByComment(UUID commentId) {
+        return commentVoteRepository
+                .findAllByCommentVoteId_CommentId(commentId)
+                .stream()
+                .map(commentVoteMapper::comentVoteToCommentVoteDTO)
+                .collect(Collectors.toSet());
     }
 }

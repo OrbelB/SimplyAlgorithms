@@ -6,11 +6,12 @@ import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
 
 
+import java.util.List;
 import java.util.Set;
 
 
 public interface TagService {
-    void mapTagToPageId(PageEntity page, Set<TagDTO> tags);
+    List<Tag> mapTagToPageId(PageEntity page, Set<TagDTO> tags);
 
     ObjectPagedList<?> listTags(Pageable pageable);
 }

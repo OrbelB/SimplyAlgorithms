@@ -13,5 +13,9 @@ public interface UserService {
 
     User getUser(UUID user);
 
+    UserDTO updateUser(UserDTO userToUpdate);
+
     boolean userExists(UUID userId);
+
+    UUID removeUser(UUID userId);
 }

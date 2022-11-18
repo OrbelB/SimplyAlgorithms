@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.page;
 
+import com.simplyalgos.backend.comment.security.DeleteVotePermission;
 import com.simplyalgos.backend.page.dto.ForumDTO;
 import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
 import com.simplyalgos.backend.page.security.perms.CreateForumPermission;
@@ -31,8 +32,8 @@ public class ForumController {
     public ResponseEntity<?> getPageList(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
                                          @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
                                          @RequestParam(name = "sortBy", required = false) String sortBy) {
-        if(sortBy != null) {
-            if(sortBy.equals("upVotes") || sortBy.equals("createdDate")){
+        if (sortBy != null) {
+            if (sortBy.equals("upVotes") || sortBy.equals("createdDate")) {
                 return ResponseEntity.ok(forumService.listForumPages(PageRequest.of(page, size, Sort.by(sortBy).descending())));
             }
             return ResponseEntity.ok(forumService.listForumPages(PageRequest.of(page, size, Sort.by(sortBy).ascending())));
@@ -69,29 +70,37 @@ public class ForumController {
     }
 
     @CreateVotePermission
-    @PostMapping(path = "/like-dislike", consumes = "application/json")
+    @PostMapping(path = "/vote", consumes = "application/json")
     public ResponseEntity<?> likeOrDislike(@RequestBody LikeDislikeDTO likeDislikeDTO) {
-        log.info(MessageFormat.format("userid {0}, pageId {1}, likeDislikeDTO {2}",
-                likeDislikeDTO.userId(),
-                likeDislikeDTO.pageId(),
-                likeDislikeDTO.likeDislike()));
-        forumService.userLikedOrDisliked(likeDislikeDTO.userId(), likeDislikeDTO.pageId(), likeDislikeDTO.likeDislike());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.accepted().body(forumService.userLikedOrDisliked(likeDislikeDTO.userId(), likeDislikeDTO.pageId(), likeDislikeDTO.likeDislike()));
+
     }
 
     @CreateReportPermission
-    @GetMapping(path = "/report", consumes = "application/json")
+    @PostMapping(path = "/report", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> reportForum(@RequestBody PageReportDTO pageReport) {
-        log.debug(MessageFormat.format("report comment id {0}" , pageReport.getPageId()));
-        forumService.reportForum(pageReport);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        log.debug(MessageFormat.format("report comment id {0}", pageReport.getPageId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(forumService.reportForum(pageReport));
     }
 
     @GetMapping(path = "/list/by-category")
     public ResponseEntity<?> listByCategories(@RequestParam Integer page,
                                               @RequestParam Integer size,
-                                              @RequestParam(name="tagId") String tagId
-                                              ){
+                                              @RequestParam(name = "tagId") String tagId
+    ) {
         return ResponseEntity.ok(forumService.listForumPagesByTags(UUID.fromString(tagId), PageRequest.of(page, size)));
     }
+
+    @DeleteVotePermission
+    @DeleteMapping(path = "/delete-vote")
+    public ResponseEntity<?> deleteVote(@RequestParam(name = "userId") UUID userId,
+                                        @RequestParam(name = "pageId") UUID pageId) {
+        return ResponseEntity.ok(forumService.deleteVote(userId, pageId));
+    }
+
+    @GetMapping(path = "/list/votes")
+    public ResponseEntity<?> listVotesByCommentId(@RequestParam(name = "pageId") UUID pageId) {
+        return ResponseEntity.ok(forumService.listVotesByPage(pageId));
+    }
+
 }

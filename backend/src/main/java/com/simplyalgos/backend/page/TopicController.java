@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.page;
 
+import com.simplyalgos.backend.comment.security.DeleteVotePermission;
 import com.simplyalgos.backend.page.dto.FullTopicDTO;
 import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
 import com.simplyalgos.backend.page.security.perms.CreateVotePermission;
@@ -31,8 +32,8 @@ public class TopicController {
     public ResponseEntity<?> listPages(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
                                        @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
                                        @RequestParam(name = "sortBy", required = false) String sortBy) {
-        if(!(sortBy == null)) {
-            if(sortBy.equals("upVotes")){
+        if (!(sortBy == null)) {
+            if (sortBy.equals("upVotes")) {
                 return ResponseEntity.ok(topicService.listTopicPages(PageRequest.of(page, size, Sort.by(sortBy).descending())));
 
             }
@@ -42,7 +43,7 @@ public class TopicController {
     }
 
     @GetMapping("/{pageId}")
-    public ResponseEntity<?> getSingleTopicPage(@PathVariable UUID pageId){
+    public ResponseEntity<?> getSingleTopicPage(@PathVariable UUID pageId) {
         return ResponseEntity.ok(topicService.getTopicPage(pageId));
     }
 
@@ -64,35 +65,50 @@ public class TopicController {
 
     @PreAuthorize("hasAuthority('topic.update')")
     @PutMapping(path = "/update", consumes = "application/json")
-    public ResponseEntity<?> updateForum(@RequestBody FullTopicDTO fullTopicDTO){
+    public ResponseEntity<?> updateForum(@RequestBody FullTopicDTO fullTopicDTO) {
         topicService.updateTopicPage(fullTopicDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @CreateVotePermission
-    @GetMapping(path = "/like-dislike", consumes = "application/json")
+    @GetMapping(path = "/vote", consumes = "application/json")
     public ResponseEntity<?> likeOrDislike(@RequestBody LikeDislikeDTO likeDislikeDTO) {
         log.info(MessageFormat.format("userid {0}, pageId {1}, likeDislikeDTO {2}",
                 likeDislikeDTO.userId(),
                 likeDislikeDTO.pageId(),
                 likeDislikeDTO.likeDislike()));
         topicService.userLikedOrDisliked(likeDislikeDTO.userId(), likeDislikeDTO.pageId(), likeDislikeDTO.likeDislike());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.accepted().body(topicService.userLikedOrDisliked(likeDislikeDTO.userId(), likeDislikeDTO.pageId(), likeDislikeDTO.likeDislike()));
     }
 
     //not working
     @GetMapping(path = "/list/by-type")
     public ResponseEntity<?> listByType(@RequestParam Integer page,
                                         @RequestParam Integer size,
-                                        @RequestParam(name="tagId") String tagId){
+                                        @RequestParam(name = "tagId") String tagId) {
         return ResponseEntity.ok(topicService.listTopicPagesByTags(UUID.fromString(tagId), PageRequest.of(page, size)));
     }
 
     @CreateReportPermission
     @GetMapping(path = "/report", consumes = "application/json")
     public ResponseEntity<?> reportForum(@RequestBody PageReportDTO pageReport) {
-        topicService.reportPage(pageReport);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(topicService.reportPage(pageReport));
     }
+
+    @DeleteVotePermission
+    @DeleteMapping(path = "/delete-vote")
+    public ResponseEntity<?> deleteVote(@RequestParam(name = "userId") UUID userId,
+                                        @RequestParam(name = "pageId") UUID pageId) {
+        return ResponseEntity.ok(topicService.deleteVote(userId, pageId));
+    }
+
+    @GetMapping(path = "/list/votes")
+    public ResponseEntity<?> listVotesByCommentId(@RequestParam(name = "pageId") UUID pageId) {
+        return ResponseEntity.ok(topicService.listVotesByPage(pageId));
+    }
+
+
+
 
 }

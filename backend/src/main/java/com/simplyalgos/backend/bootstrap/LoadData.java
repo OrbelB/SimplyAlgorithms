@@ -40,6 +40,7 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         //user auth
         Authority usersCRUD = authorityRepository.save(Authority.builder().permission("users.crud").build());
         Authority updateUser = authorityRepository.save(Authority.builder().permission("user.update").build());
+        Authority updateUserPassword = authorityRepository.save(Authority.builder().permission("user.update-password").build());
         Authority readUser = authorityRepository.save(Authority.builder().permission("user.read").build());
         Authority deleteUser = authorityRepository.save(Authority.builder().permission("user.delete").build());
         //forum auths
@@ -73,10 +74,10 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                 updateUser, readUser, deleteUser,
                 usersCRUD, createVote, removeVote,
                 createReport, removeReport, updateReport, readReport, createTopic,
-                removeTopic, updateTopic, createComment, removeComment, updateComment)));
+                removeTopic, updateTopic, createComment, removeComment, updateComment, updateUserPassword)));
         studentRole.setAuthorities(new HashSet<>(Set.of(createForum, updateForum, readForum, deleteForum,
                 updateUser, readUser, deleteUser, createVote, removeVote, createReport, removeReport,
-                createComment, removeComment, updateComment)));
+                createComment, removeComment, updateComment, updateUserPassword)));
 
         roleRepository.saveAll(Arrays.asList(studentRole, adminRole));
 

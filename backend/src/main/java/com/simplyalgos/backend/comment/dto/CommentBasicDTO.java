@@ -16,4 +16,5 @@ public class CommentBasicDTO {
     Integer likes;
     Integer dislikes;
     UserDataDTO createdBy;
+    Integer replyCount;
 }
