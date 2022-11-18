@@ -36,7 +36,6 @@ export const forumsSlice = createSlice({
       state.sortBy = "createdDate";
     },
     updateForum: (state, action) => {
-      console.log("inside update forum action", action.payload.forum);
       forumsAdapter.upsertOne(state, action.payload?.forum);
     },
     deleteForum: (state, action) => {
@@ -78,7 +77,7 @@ export const selectSortedForums = createSelector(
   (allForums, sortBy) =>
     [...allForums].sort((a, b) => {
       if (isNaN(a[sortBy.toString().trim()])) {
-        if(sortBy.toString().trim() === "title"){
+        if (sortBy.toString().trim() === "title") {
           return a[sortBy.toString().trim()].localeCompare(
             b[sortBy.toString().trim()]
           );

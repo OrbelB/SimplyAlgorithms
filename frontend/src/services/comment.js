@@ -18,7 +18,7 @@ export const fetchChildrenComments = createAsyncThunk(
 export const createChildComment = createAsyncThunk(
   "childComment/create",
   async (passedCommentToSave) => {
-    const {childComment, parentCommentId, accessToken} = passedCommentToSave;
+    const { childComment, parentCommentId, accessToken } = passedCommentToSave;
     const response = await commentEndpoints
       .createChild(childComment, parentCommentId, accessToken)
       .catch((error) => {
@@ -32,11 +32,10 @@ export const createParentComment = createAsyncThunk(
   "parentComment/create",
   async (data) => {
     const { commentToSave, accessToken } = data;
-    const response = await commentEndpoints
-      .createParent(commentToSave, accessToken)
-      .catch((error) => {
-        if (error) return error;
-      });
+    const response = await commentEndpoints.createParent(
+      commentToSave,
+      accessToken
+    );
 
     return response.data;
   }
@@ -45,7 +44,7 @@ export const createParentComment = createAsyncThunk(
 export const updateChildComment = createAsyncThunk(
   "ChildComment/update",
   async (passedCommentToUpdateParams) => {
-    const {commentToUpdate, accessToken} = passedCommentToUpdateParams;
+    const { commentToUpdate, accessToken } = passedCommentToUpdateParams;
     const response = await commentEndpoints
       .update(commentToUpdate, accessToken)
       .catch((error) => {
@@ -58,7 +57,7 @@ export const updateChildComment = createAsyncThunk(
 export const updateParentComment = createAsyncThunk(
   "parentComment/update",
   async (updateCommentParams) => {
-    const {accessToken, commentToUpdate} = updateCommentParams
+    const { accessToken, commentToUpdate } = updateCommentParams;
     const response = await commentEndpoints
       .update(commentToUpdate, accessToken)
       .catch((error) => {
@@ -71,7 +70,7 @@ export const updateParentComment = createAsyncThunk(
 export const deleteChildComment = createAsyncThunk(
   "childComment/delete",
   async (deleteParams) => {
-    const {userId, commentId, accessToken} = deleteParams;
+    const { userId, commentId, accessToken } = deleteParams;
     const response = await commentEndpoints
       .delete(userId, commentId, accessToken)
       .catch((error) => {
@@ -103,6 +102,43 @@ export const reportComment = createAsyncThunk(
         if (error) return error;
       });
 
+    return response.data;
+  }
+);
+
+export const listVotesByComment = createAsyncThunk(
+  "commentVote/list",
+  async (passedParams) => {
+    const { commentId } = passedParams;
+    const response = await commentEndpoints
+      .listVotes(commentId)
+      .catch((error) => {
+        if (error) return error;
+      });
+
+    return response.data;
+  }
+);
+
+export const deleteCommentVote = createAsyncThunk(
+  "commentVote/delete",
+  async (passedParams) => {
+    const { userId, commentId, accessToken } = passedParams;
+    const response = await commentEndpoints.deleteVote(
+      userId,
+      commentId,
+      accessToken
+    );
+
+    return response.data;
+  }
+);
+
+export const voteComment = createAsyncThunk(
+  "comment/vote",
+  async (passedParams) => {
+    const { votedComment, accessToken } = passedParams;
+    const response = await commentEndpoints.vote(votedComment, accessToken);
     return response.data;
   }
 );

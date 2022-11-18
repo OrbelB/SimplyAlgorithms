@@ -23,6 +23,7 @@ export default function Comment({
   replies = [], //will be removed
   replyCount,
   parentCommentId,
+  downVotes
 }) {
   const [showReplies, setShowReplies] = useState(false);
   const [inputChildComment, setInputChildComment] = useState(false);
@@ -121,12 +122,14 @@ export default function Comment({
       <div className="grid">
         <div className="row justify-content-center">
           <CommentBox
+            commentId={parentCommentId}
             userId={userId}
             commentText={commentText}
             cancelComment={handleCancelComment}
             editComment={handleEditComment}
             username={username}
             upVotes={upVotes}
+            downVotes={downVotes}
             deleteParentComment={handleDeleteMessage}
             createdDate={createdDate}
             profilePicture={profilePicture}

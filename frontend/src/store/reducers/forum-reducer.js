@@ -49,7 +49,8 @@ export const forumSlice = createSlice({
       });
     },
     removeSingleReportId: (state) => void (state.reportId = ""),
-    switchStatus: (state, action) => {state.status = action.payload;}
+    switchStatus: (state, action) => {state.status = action.payload;},
+
   },
   extraReducers(builder) {
     builder
@@ -71,7 +72,6 @@ export const forumSlice = createSlice({
       })
       .addCase(createParentComment.fulfilled, (state, action) => {
         if (!action?.payload?.rootId) {
-          console.log("Comment id not provided");
           return;
         }
 

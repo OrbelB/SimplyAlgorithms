@@ -5,12 +5,13 @@ import { useState } from "react";
 import useValidateInput from "../../hooks/use-ValidateInput.js";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../services/auth";
+import { useEffect } from "react";
 export default function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [handleCheckbox, setHandleCheckbox] = useState(false);
   const { status, error, jwtRefreshToken } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const [errorMsg, setErrorMsg] = useState("");
   const {
     value: username,
     hasError: usernameInputHasError,
@@ -37,12 +38,14 @@ export default function LoginForm() {
     setHandleCheckbox(event.target.checked);
   };
 
+  useEffect(() => {}, [errorMsg]);
   const onSubmitFormHandler = (event) => {
     event.preventDefault();
     if (!isFormValid) return;
+
     dispatch(login({ username, password }));
-      resetPasswordHandler();
-      resetUsernameHandler();
+    resetPasswordHandler();
+    resetUsernameHandler();
   };
 
   if (status === "success") {
@@ -50,16 +53,19 @@ export default function LoginForm() {
       document.cookie = `refresh_token=${jwtRefreshToken}`;
     }
   }
-  
+
   let isFormValid = false;
   if (passwordIsValid && usernameIsValid) isFormValid = true;
   return (
     <>
-      {error !== "" && (
-        <div className={"col ms-0 p-0 alert alert-danger align-content-center"}>
-          <p className={"text-center small"}>credentials are wrong!</p>
-        </div>
-      )}
+      {errorMsg !== "" ||
+        (error !== "" && (
+          <div
+            className={"col ms-0 p-0 alert alert-danger align-content-center"}
+          >
+            <p className={"text-center small"}>credentials are wrong!</p>
+          </div>
+        ))}
       <form onSubmit={onSubmitFormHandler}>
         <div className={"row mt-5 m-0"}>
           <div className={"col m-0 p-0"}>

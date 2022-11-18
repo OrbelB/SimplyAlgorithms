@@ -6,6 +6,7 @@ import { beautifyTime } from "../../utilities/beautify-time";
 export default function CommentBox({
   children,
   upVotes,
+  downVotes,
   userId,
   profilePicture,
   username,
@@ -15,6 +16,7 @@ export default function CommentBox({
   deleteParentComment,
   editComment,
   canReply = true,
+  commentId
 }) {
   const [isEditClicked, setIsEditClicked] = useState(false);
 
@@ -37,7 +39,7 @@ export default function CommentBox({
   return (
     <>
       <div className="col-auto col-sm-2 col-lg-2 p-2 p-lg-0 p-sm-0 p-md-0">
-        <Votes passedVotes={upVotes} />
+        <Votes upVotes={upVotes} commentId={commentId} downVotes={downVotes} />
       </div>
       <div className="col me-lg-5 me-auto">
         <div className="row">

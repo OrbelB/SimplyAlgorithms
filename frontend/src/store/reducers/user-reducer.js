@@ -1,3 +1,4 @@
+import { stepLabelClasses } from "@mui/material";
 import { createSlice } from "@reduxjs/toolkit";
 import noUserImageTemplate from "../../assets/noPictureTemplate.png";
 import {
@@ -54,6 +55,7 @@ export const userSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
+        if(!action.payload) return;
         state.status = "succeeded";
         state.userId = action?.payload?.userId;
         state.email = action?.payload?.email;
@@ -69,9 +71,11 @@ export const userSlice = createSlice({
 
         state.role = action?.payload?.role;
         console.log(action?.payload?.createdDate);
-        state.createdDate = new Date(
-          action?.payload?.createdDate
-        ).toISOString();
+        state.createdDate = "";
+        if (action.payload.createdDate !== undefined)
+          state.createdDate = new Date(
+            action?.payload?.createdDate
+          ).toISOString();
         state.dob = action?.payload?.dob;
         if (action?.payload?.dob === null) state.dob = "";
       })
@@ -81,7 +85,7 @@ export const userSlice = createSlice({
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         if (!action.payload) return;
-        state.status = "success";
+        state.status = "succeeded";
         state.error = "";
         state.email = "";
         state.profilePicture = noUserImageTemplate;
@@ -106,7 +110,8 @@ export const userSlice = createSlice({
       .addCase(updatePassword.fulfilled, (state, action) => {
         if (!action.payload) return;
         if (action.payload === state.userId) {
-          state.status = "success";
+          console.log("check");
+          state.status = "idle";
           state.error = "";
           state.email = "";
           state.profilePicture = noUserImageTemplate;

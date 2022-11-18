@@ -22,8 +22,8 @@ import Breadth_first_search from "./pages/t_pages/Breadth_first_search";
 import Arrays from "./pages/t_pages/Arrays";
 import Sorting from "./components/wiki/topics/Sorting";
 function App() {
-    return (
-        <Layout>
+  return (
+    <Layout>
       <Routes>
         <Route path="/" element={<TemplateTopicPage />} />
         <Route path="/home" element={<HomePage />} />
@@ -33,15 +33,12 @@ function App() {
           <Route path={":pageId"} element={<ForumPost />} />
           <Route path={"edit/:pageId"} element={<ForumEdit />} />
         </Route>
-
         <Route element={<RequireAuth />}>
           <Route path="/userprofile" element={<UserProfile />} />
         </Route>
-
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
-
         <Route element={<RequireAuth />}>
           <Route path="/settings">
             <Route path="profile" element={<SettingsPage />} />
@@ -52,20 +49,23 @@ function App() {
         </Route>
         <Route path="/underconstruction" element={<UnderConstructionPage />} />
         {/* SAMPLE TOPIC PAGES */}
-        <Route path="/wiki/bubblesort" element={<Bubble_sort/>}/>
-        <Route path="/search/binarysearchtree" element={<Binary_search_tree/>}/>\
-        <Route path="/search/bfs" element={<Breadth_first_search/>}/>
-        <Route path="/datastructures/arrays" element={<Arrays/>}/>
-
+        <Route path="/wiki/bubblesort" element={<Bubble_sort />} />
+        <Route
+          path="/search/binarysearchtree"
+          element={<Binary_search_tree />}
+        />
+        <Route path="/search/bfs" element={<Breadth_first_search />} />
+        <Route path="/datastructures/arrays" element={<Arrays />} />
         <Route path="/wikihome" element={<WikiPage />} />
-        <Route path="/wiki/sorting" element={<Sorting/>}/>
+        <Route path="/wiki/sorting" element={<Sorting />} />
         <Route path="/team" element={<MeetTeamPage />} />
         <Route
           path="*"
           element={<Navigate replace to={"/underconstruction"} />}
         />
+      </Routes>
     </Layout>
-    );
+  );
 }
 
 export default App;

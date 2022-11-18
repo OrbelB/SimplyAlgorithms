@@ -34,7 +34,7 @@ export default function ProfileTabForm() {
         updatedUserData: {
           userId: authUserId,
           biography: newBio,
-          profilePicture: image.name,
+          profilePicture: image === undefined ? "" : image.name,
         },
         accessToken: jwtAccessToken,
       })

@@ -39,6 +39,7 @@ export const authSlice = createSlice({
         state.status = "loading";
       })
       .addCase(login.fulfilled, (state, action) => {
+        if(!action.payload) return;
         state.userId = action.payload?.userId;
         state.jwtAccessToken = action.payload?.accessToken;
         state.jwtRefreshToken = action.payload?.refreshToken;
@@ -53,6 +54,7 @@ export const authSlice = createSlice({
         state.status = "loading";
       })
       .addCase(register.fulfilled, (state, action) => {
+        if(!action.payload) return;
         state.userId = action.payload?.userId;
         state.jwtAccessToken = action.payload?.accessToken;
         state.jwtRefreshToken = action.payload?.refreshToken;

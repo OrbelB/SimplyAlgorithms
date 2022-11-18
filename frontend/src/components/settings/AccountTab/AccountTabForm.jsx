@@ -123,7 +123,8 @@ export default function AccountTabForm({ username1 }) {
               <input
                 type="text"
                 className={"form-control"}
-                id="firstName"
+                name="firstName"
+                id="firstNameInput"
                 value={input.firstName}
                 onChange={onInputChange}
                 onBlur={validateInput}
@@ -141,7 +142,8 @@ export default function AccountTabForm({ username1 }) {
               <input
                 type="text"
                 className={"form-control"}
-                id="lastName"
+                name="lastName"
+                id="lastNameInput"
                 value={input.lastName}
                 onChange={onInputChange}
                 onBlur={validateInput}
@@ -179,8 +181,9 @@ export default function AccountTabForm({ username1 }) {
             </small>
             <input
               type="date"
+              name="dob"
               className={"form-control"}
-              id="dob"
+              id="dobInput"
               value={input.dob}
               onChange={onInputChange}
               onBlur={validateInput}

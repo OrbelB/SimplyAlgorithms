@@ -90,9 +90,38 @@ export const commentEndpoints = {
       }
     ),
   report: (reportMade, accessToken) =>
-    post(`${PUBLIC_ENDPOINT_ROUTE}/report`, {
-      userId: reportMade?.userId,
-      reportMessage: reportMade?.reportMessage,
-      commentId: reportMade?.commentId,
+    post(
+      `${PUBLIC_ENDPOINT_ROUTE}/report`,
+      {
+        userId: reportMade?.userId,
+        reportMessage: reportMade?.reportMessage,
+        commentId: reportMade?.commentId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    ),
+  deleteVote: (userId, commentId, accessToken) =>
+    destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete-vote`, {
+      params: {
+        userId,
+        commentId,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + accessToken,
+      },
+    }),
+  listVotes: (commentId) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/list/votes`, {
+      params: {
+        commentId,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
     }),
 };

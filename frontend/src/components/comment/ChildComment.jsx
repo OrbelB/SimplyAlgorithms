@@ -27,6 +27,7 @@ export default function ChildComment({
       <div className="grid">
         <div className="row">
           <CommentBox
+            commentId={commentId}
             userId={userId}
             upVotes={upVotes}
             downVotes={downVotes}
