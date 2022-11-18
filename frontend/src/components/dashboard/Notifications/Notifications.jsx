@@ -1,13 +1,14 @@
 import "./Notifications.css";
 import NotificationsPreview from "./NotificationsPreview/NotifcationsPreview";
 
+
 export default function Notifications(){
 
     return (
     <>
     {/* <!-- Button trigger modal --> */}
 
-<div className="text-center m-2">
+    <div className="text-center p-2">
     <button type="button" className="bts" data-bs-toggle="modal" data-bs-target="#backdrop3">
         <h5>
         Notifications

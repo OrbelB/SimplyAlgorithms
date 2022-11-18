@@ -1,9 +1,17 @@
 .btr, .bts {
     background-color: #D4BAFF;
 }
+.text {
+    font-size: 16px;
+}
 
 .bts {
     border: 1px solid black;
     border-radius: 25px;
     
+}
+
+.bel, .texter {
+    vertical-align:middle;
+    display: inline-block;
 }
