@@ -8,10 +8,10 @@ a{
 a:hover{
     color: var(--color-socials-hover);
 }
+
 .box{
-    background-color: var(--color-nav-foot);
+    background-color: #f0f5f5;
     /* temp to just see whre it starts & ends */
-    background-color: var(--color-nav-foot);
     padding-top: 1rem;
     padding-bottom: 1rem;
 }

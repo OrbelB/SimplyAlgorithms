@@ -2,26 +2,28 @@
 
 .forums-section {
     width: fit-content;
+    background-color: #d1fbff;
+    background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
 }
 
 .forum-title {
-    font-size: 5em;
+    font-size: 6em;
     font-family: 'Readex Pro', sans-serif;
     padding-bottom: 0.5em;
 }
 
 .category-label {
-    font-size: 2.5em;
-    text-decoration: underline;
+    font-size: 3em;
+    font-weight: bold;
 }
 
 .search-bar {
     background-color: #eff8f8;
     border-radius: 5px 5px 5px 5px;
     color: black;
-    font-size: 1.0em;
+    font-size: 1.3em;
     padding: 0.5em 1.5em 0.5em 1em;
-    width: 100%;
+    width: 85%;
 }
 
 .btn-group {
@@ -49,8 +51,9 @@
 .filter-button {
     background-color: var(--color-bg-alg-dash);
     border-right: 0.1em solid black;
-    font-size: 2.5vh;
-    width: 9em;
+    font-size: 1.8em;
+    font-weight: bold;
+    width: 7.5em;
     height: 3em;
 }
 
