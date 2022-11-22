@@ -19,7 +19,7 @@ const types_topics = [
         topic_link: ['/underconstruction', '/underconstruction', '/wiki/bubblesort' ,'/underconstruction']
     },
     {
-        type: 'DATA STRUCTURES',
+        type: 'TREES',
         topic_name: ['BINARY SEARCH STREES', 'TWO-TREE', 'THREE-TREE', 'RED-BLACK'],
         topic_link: ['/search/binarysearchtree','/underconstruction','/underconstruction','/underconstruction']
     },

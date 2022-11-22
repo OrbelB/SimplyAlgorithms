@@ -1,8 +1,8 @@
 import axios from "axios";
 import { refreshAccessToken } from "../auth";
-const AWS_BASE_URL = "http://simplyalgosserver-env.eba-wmcrmidx.us-east-1.elasticbeanstalk.com:5000";
+const AWS_BASE_URL = "http://simplyalgosserver-env.eba-wmcrmidx.us-east-1.elasticbeanstalk.com/";
 const apiClient = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: AWS_BASE_URL,
 });
 
 export const interceptors = (store) => {
