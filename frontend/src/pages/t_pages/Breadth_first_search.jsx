@@ -1,5 +1,5 @@
-import AlgoFram from "../../components/topic_page_samples/breath_first_search/algo-frame/AlgoFrame"
-import AlgVisBtns from  "../../components/topic_page_samples/breath_first_search/alg_vis_btns/AlgVisBtns"
+import AlgoFram from "../../components/algo-frame/AlgoFrame"
+//import AlgVisBtns from  "../../components/topic_page_samples/breath_first_search/alg_vis_btns/AlgVisBtns"
 import Detail from "../../components/topic_page_samples/breath_first_search/detail/Detail"
 import CodeSnippet from "../../components/topic_page_samples/breath_first_search/code-snippet/CodeSnippet"
 import TopicQuiz from "../../components/topic_page_samples/breath_first_search/topic_quiz/TopicQuiz"
@@ -25,11 +25,13 @@ const staticComments = [
   ];
 
 
+const bfs = "https://algorithm-visualizer.org/brute-force/breadth-first-search"
+const viz_title = "BREADTH FIRST SEARCH"
+
 export default function Breadth_first_search(){
     return(
         <>
-            <AlgoFram/>
-            <AlgVisBtns/>
+            <AlgoFram vis_url={bfs} viz_title={viz_title}/>
             <Detail/>
             <CodeSnippet/>
             <TopicQuiz/>

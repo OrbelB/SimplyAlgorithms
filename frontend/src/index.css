@@ -20,7 +20,16 @@
     --color-nav-foot: #FDFCF4;
     --color-socials-hover:var(--color-bg-alg-dash);
 }
-
+li{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+a:hover{
+    color: var(--color-socials-hover);
+}
 
 .dropdown-menu li {
     position: relative;
