@@ -5,7 +5,7 @@ export default function Detail() {
         <div className="detail text-center">
             <div className="top p-5">
                 <h2>STEPS</h2> 
-                <div className="steps_ text-start">
+                <div className="size steps_ text-start">
 Pseudocode <br />
 Input: A graph G and a starting vertex root of G<br />
 Output: Goal state. The parent links trace the shortest path back to root[8]<br />
@@ -33,16 +33,16 @@ Shortest in terms of number of edges not weights. <br />
             </div>
             <div className="mid rounded-5 ">
                 <h2 className={"mb-4"}>HOW DOES THE ALGORITHM WORKS?</h2>
-                <p className={"text-start"}>
-                    <b>(TREES)</b><br />
+                <p className={"size text-start"}>
+                    <h4><b>(TREES)</b></h4>
                     BFS is an algorithm for searching a tree data structure for a node that satisfies a given property. It starts at the tree root and explores all nodes at the present depth prior to moving on to the nodes at the next depth level. Extra memory, usually a queue, is needed to keep track of the child nodes that were encountered but not yet explored. <br /><br />
                     
-                    <b>Graph traversals</b> <br /><br />
+                    <h4><b>Graph traversals</b></h4>
 
                     Graph traversal means visiting every vertex and edge exactly once in a well-defined order. While using certain graph algorithms, you must ensure that each vertex of the graph is visited exactly once. The order in which the vertices are visited are important and may depend upon the algorithm or question that you are solving. <br /><br />
                     During a traversal, it is important that you track which vertices have been visited. The most common way of tracking vertices is to mark them. <br /><br />
 
-                    <b>Breadth First Search (BFS)</b> <br /><br />
+                    <h4><b>Breadth First Search (BFS)</b></h4>
                     There are many ways to traverse graphs. BFS is the most commonly used approach. <br /> <br />
                     
                     BFS is a traversing algorithm where you should start traversing from a selected node (source or starting node) and traverse the graph layerwise thus exploring the neighbor nodes (nodes which are directly connected to source node). You must then move towards the next-level neighbor nodes.
@@ -54,8 +54,8 @@ Shortest in terms of number of edges not weights. <br />
                     <h2>RUNNING TIME AND SPACE COMPLEXITY</h2>
                 </div>
                 <div className={"row justify-content-center text-start"}>
-                    <p className={"text-start align-self-center"}>
-                        <b>(FOR GRAPHS)</b><br />
+                    <p className={"size text-start align-self-center"}>
+                        <h4><b>(FOR GRAPHS)</b></h4>
                         Implementation of BFS runs in O(m + n) time if the graph is given by its adjacency list representation.
                         <br /><br />
                         Time complexity is O(|V|), where |V| is the number of nodes. You need to traverse all nodes.
@@ -66,7 +66,7 @@ Shortest in terms of number of edges not weights. <br />
                 <div className={"row justify-content-around  mt-auto mt-sm-5   p-2"}>
                     <div className={"col-auto col-sm-auto align-self-center"}>
                     <h3 className={"m-3 mb-4"}>FURTHER REFERENCES</h3>
-                        <ul>
+                        <ul className="size">
                             <li><a href="https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/" target="_blank" rel="noreferrer">geeksforgeeks - Breadth First Search or BFS for a Graph</a></li>
                             -
                             <li><a href="https://www.hackerearth.com/practice/algorithms/graphs/breadth-first-search/tutorial/" target="_blank" rel="noreferrer">hackerearth - Breadth First Search</a></li>

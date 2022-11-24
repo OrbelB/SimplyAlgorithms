@@ -6,13 +6,13 @@ export default function Detail() {
             <div className="top p-5">
                 <h2>STEPS</h2>
                 <div className={"row justify-content-center text-center"}>
-                    <p> 
+                    <p className="size"> 
                         Take an array of numbers "5 1 4 2 8", and sort the array from lowest number to greatest number using bubble sort. 
                         In each step, elements written in <b>bold</b> are being compared. Three passes will be required;
                         <br/><br/>
                     </p>
                 </div>
-                <div className="steps_ text-start">
+                <div className="size steps_ text-start">
                     <b>First Pass: </b> <br />
                     <b>(1)</b> (<b> 5 1 </b> 4 2 8 ) → ( <b>1 5</b> 4 2 8 ), Here, algorithm compares the first two elements, and swaps since 5 > 1. <br />
                     <b>(2)</b> ( 1 <b>5 4</b> 2 8 ) → ( 1 <b>4 5 </b>2 8 ), Swap since 5 > 4 <br />
@@ -40,7 +40,7 @@ export default function Detail() {
             </div>
             <div className="mid rounded-5 ">
                 <h2 className={"mb-4"}>HOW DOES THE ALGORITHM WORKS?</h2>
-                <p className={"text-center"}>
+                <p className={"size text-center"}>
                 One of the easiest algorithms to implement as a beginner and it works by repeatedly swapping the adjacent elements if they are in the wrong order. 
                 However, this algorithm should not be used for large data due to its bad time complexity. <br/><br/>
 
@@ -58,7 +58,7 @@ export default function Detail() {
                     <h2>RUNNING TIME AND SPACE COMPLEXITY</h2>
                 </div>
                 <div className={"row justify-content-center text-center"}>
-                    <div>
+                    <div className="size">
                     Bubble sort is a brute force algorithm and should not really be used for applications that have large datasets that need to be sorted <br/>-<br/>
                             Worst Case Time Complexity [ Big-O ]: O(n^2) <br/>
                             Best Case Time Complexity [Big-omega]: O(n)<br/>
@@ -70,7 +70,7 @@ export default function Detail() {
                 <div className={"row justify-content-around  mt-auto mt-sm-5   p-2"}>
                     <div className={"col-auto col-sm-auto align-self-center"}>
                         <h3 className={"m-3 mb-4"}>FURTHER REFERENCES</h3>
-                        <ul>
+                        <ul className="size">
                             <li><a href="https://www.freecodecamp.org/news/bubble-sort-algorithm-in-java-cpp-python-with-example-code/" target="_blank" rel="noreferrer">Bubble Sort – Algorithm in Java, C++, Python with Example Code by Kolade Chrise</a></li>
                             -
                             <li><a href="https://www.geeksforgeeks.org/bubble-sort/" target="_blank" rel="noreferrer">geeksforgeeks - Bubble Sort Algorithm</a></li>

@@ -24,8 +24,9 @@
     display: block;
 }
  
-
-
+.size {
+    font-size: 20px;
+}
 
 @media only screen and (min-width: 768px) {
     .vid iframe {

@@ -2,7 +2,7 @@ import AlgoFram from "../../components/topic_page_samples/bubble_sort/algo-frame
 import AlgVisBtns from "../../components/topic_page_samples/bubble_sort/alg_vis_btns/AlgVisBtns"
 import Detail from "../../components/topic_page_samples/bubble_sort/detail/Detail"
 import CodeSnippet from "../../components/topic_page_samples/bubble_sort/code-snippet/CodeSnippet"
-import TopicQuiz from "../../components/topic_page_samples/bubble_sort/topic_quiz/TopicQuiz"
+//import TopicQuiz from "../../components/topic_page_samples/bubble_sort/topic_quiz/TopicQuiz"
 import CommentFrame from "../../components/comment/CommentFrame"
 
 const staticComments = [
@@ -30,7 +30,7 @@ export default function Bubble_sort(){
         <AlgVisBtns/>
         <Detail/>
         <CodeSnippet/>
-        <TopicQuiz/>
+        {/*<TopicQuiz/>*/}
         <CommentFrame passedComments={staticComments} pageId={1} />
     </>
     )

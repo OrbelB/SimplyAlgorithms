@@ -18,7 +18,7 @@ export default function Forum() {
             <div className="bottom"></div>
         </div>
 
-        <div className="quiz-section">
+        {/*<div className="quiz-section">
             <h1 className="head">TEST YOURSELF</h1>
             <br/><br/>
             <div className="quiz-body">
@@ -31,7 +31,8 @@ export default function Forum() {
                 <NavLink to={"/underconstruction"}>GO TO QUIZZES</NavLink>
             </button>
             <div className="bottom"></div>
-        </div>
+    </div>*/
+    }
 
         </div>
     )

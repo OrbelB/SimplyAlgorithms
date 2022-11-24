@@ -21,7 +21,7 @@ export default function CodeSnippet() {
             <h1>Implementations</h1>
             <div className={"container"}>
             <nav className={"bg-secondary rounded-top"}>
-                <div className="nav nav-pills" id="nav-tab" role="tablist">
+                <div className="nav navbar-code nav-pills" id="nav-tab" role="tablist">
                     <button className="nav-link text-white active" id="nav-java-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-java" type="button" role="tab" aria-controls="nav-java"
                             aria-selected="true">Java

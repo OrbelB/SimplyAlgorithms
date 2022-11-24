@@ -64,6 +64,9 @@ h1 {
 
 code {
     color: white;
-
+    font-size: 18px;
 }
 
+.navbar-code-size {
+    font-size: 50px;
+}

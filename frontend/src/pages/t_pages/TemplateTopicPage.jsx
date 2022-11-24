@@ -2,7 +2,7 @@ import AlgoFrame from "../../components/topic_page/algo-frame/AlgoFrame";
 import AlgVisBtns from "../../components/topic_page/alg_vis_btns/AlgVisBtns";
 import Detail from "../../components/topic_page/detail/Detail";
 import CodeSnippet from "../../components/topic_page/code-snippet/CodeSnippet";
-import TopicQuiz from "../../components/topic_page/topic_quiz/TopicQuiz";
+//import TopicQuiz from "../../components/topic_page/topic_quiz/TopicQuiz";
 import CommentFrame from "../../components/comment/CommentFrame";
 
 const staticComments = [
@@ -30,7 +30,7 @@ export default function TemplateTopicPage() {
       <AlgVisBtns />
       <Detail />
       <CodeSnippet />
-      <TopicQuiz />
+      {/*<TopicQuiz />*/}
       <CommentFrame passedComments={staticComments} pageId={1} />
     </>
   );
