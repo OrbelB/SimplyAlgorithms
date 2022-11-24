@@ -1,5 +1,5 @@
-import AlgoFram from "../../components/topic_page_samples/binary_search_tree/algo-frame/AlgoFrame"
-import AlgVisBtns from  "../../components/topic_page_samples/binary_search_tree/alg_vis_btns/AlgVisBtns"
+import AlgoFram from "../../components/algo-frame/AlgoFrame"
+// import AlgVisBtns from  "../../components/topic_page_samples/binary_search_tree/alg_vis_btns/AlgVisBtns"
 import Detail from "../../components/topic_page_samples/binary_search_tree/detail/Detail"
 import CodeSnippet from "../../components/topic_page_samples/binary_search_tree/code-snippet/CodeSnippet"
 //import TopicQuiz from "../../components/topic_page_samples/binary_search_tree/topic_quiz/TopicQuiz"
@@ -22,12 +22,12 @@ const staticComments = [
       replyCount: 0,
     },
   ];
-
+const bst = "https://algorithm-visualizer.org/branch-and-bound/binary-search-tree"
+const viz_title = "BINARY SEARCH TREE"
 export default function Binary_search_tree(){
     return(
         <>
-            <AlgoFram/>
-            <AlgVisBtns/>
+            <AlgoFram vis_url={bst} viz_title={viz_title}/>
             <Detail/>
             <CodeSnippet/>
             {/*<TopicQuiz/>*/}

@@ -21,10 +21,13 @@ import Binary_search_tree from "./pages/t_pages/Binary_search_tree";
 import Breadth_first_search from "./pages/t_pages/Breadth_first_search";
 import Arrays from "./pages/t_pages/Arrays";
 import Sorting from "./components/wiki/topics/Sorting";
+import ScrollToTop from "./components/ScrollToTop";
 function App() {
   return (
     <Layout>
+      <ScrollToTop/> 
       <Routes>
+        {/* <ScrollToTop/> */}
         <Route path="/" element={<TemplateTopicPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />

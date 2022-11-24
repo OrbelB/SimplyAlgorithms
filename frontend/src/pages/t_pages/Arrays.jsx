@@ -1,4 +1,4 @@
-import AlgoFram from "../../components/topic_page_samples/arrays/algo-frame/AlgoFrame"
+//import AlgoFram from "../../components/topic_page_samples/arrays/algo-frame/AlgoFrame"
 // import AlgVisBtns from  "../../components/topic_page_samples/arrays/alg_vis_btns/AlgVisBtns"
 import Detail from "../../components/topic_page_samples/arrays/detail/Detail"
 import CodeSnippet from "../../components/topic_page_samples/arrays/code-snippet/CodeSnippet"
@@ -26,7 +26,7 @@ const staticComments = [
 export default function Arrays(){
     return(
         <>
-            <AlgoFram/>
+            {/* <AlgoFram/> */}
             {/* <AlgVisBtns/> */}
             <Detail/>
             <CodeSnippet/>

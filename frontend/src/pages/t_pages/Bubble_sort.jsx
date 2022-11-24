@@ -1,5 +1,5 @@
-import AlgoFram from "../../components/topic_page_samples/bubble_sort/algo-frame/AlgoFrame"
-import AlgVisBtns from "../../components/topic_page_samples/bubble_sort/alg_vis_btns/AlgVisBtns"
+import AlgoFram from "../../components/algo-frame/AlgoFrame"
+// import AlgVisBtns from "../../components/topic_page_samples/bubble_sort/alg_vis_btns/AlgVisBtns"
 import Detail from "../../components/topic_page_samples/bubble_sort/detail/Detail"
 import CodeSnippet from "../../components/topic_page_samples/bubble_sort/code-snippet/CodeSnippet"
 //import TopicQuiz from "../../components/topic_page_samples/bubble_sort/topic_quiz/TopicQuiz"
@@ -23,11 +23,13 @@ const staticComments = [
     },
   ];
 
+var bubble_url = "https://algorithm-visualizer.org/brute-force/bubble-sort";
+var viz_title = "BUBBLE SORT";
+
 export default function Bubble_sort(){
     return(
         <>
-        <AlgoFram/>
-        <AlgVisBtns/>
+        <AlgoFram vis_url={bubble_url} viz_title={viz_title}/>
         <Detail/>
         <CodeSnippet/>
         {/*<TopicQuiz/>*/}
