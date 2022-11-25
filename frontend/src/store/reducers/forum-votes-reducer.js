@@ -16,7 +16,7 @@ export const forumVotesSlice = createSlice({
   initialState,
   reducers: {
     resetData: (state) => {
-      forumVotesAdapter.removeAll();
+      forumVotesAdapter.removeAll(state);
       state.status = "idle";
       state.error = "";
     },
