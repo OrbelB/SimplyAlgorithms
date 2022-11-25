@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
+
 .forum-section {
     background-color: #D3FFE2;
     height: auto;
@@ -23,22 +25,30 @@
 }
 
 .pic {
-    background-color: white;
-    width: 60em;
-    height: 10em;
+    background-blend-mode: normal;
+    width: 65em;
+    height: 15em;
+    border: solid black;
+    border-radius: 20px;
+}
+.body {
+    font-family: 'Readex Pro', sans-serif;
+    font-size: 1.5em;
+    margin-left: 15%;
+    margin-right: 15%;
 }
 
 .b {
     color: white;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: bold;
     border-radius: 10px 10px 10px 10px;
     padding: 10px;
 }
 
 .b1 {
-    background-color: #F52658;
-    border-color: #971a37;
+    background-color: #FFD5D4;
+    border-color: #B37270;
 }
 
 .b2 {

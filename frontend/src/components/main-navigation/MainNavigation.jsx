@@ -107,7 +107,7 @@ export default function MainNavigation() {
             >
               <li>
                 <NavLink className="dropdown-item" to={"userprofile"}>
-                  My profile
+                  My Profile
                 </NavLink>
               </li>
               <li>

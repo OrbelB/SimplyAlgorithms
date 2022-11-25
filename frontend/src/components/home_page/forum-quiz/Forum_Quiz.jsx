@@ -1,4 +1,5 @@
 import "./Forum_Quiz.css"
+import image from "../../../assets/forums-icon.png";
 import { NavLink } from "react-router-dom";
 export default function Forum() {
     return (
@@ -7,9 +8,9 @@ export default function Forum() {
             <h1 className="head">HAVE A QUESTION?</h1>
             <br/><br/>
             <div className="forum-body">
-                <img alt="forum pic" className="pic"/>
-                <p className="body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                                    Vitae et leo duis ut diam quam nulla porttitor. Sed turpis tincidunt id aliquet risus feugiat in ante metus.</p>
+                <img src={image}  alt="forum pic" className="pic"/>
+                <p className="body">Use our forums to have discussions with users about different topics. Find the precise topic you're looking for in the Category List, then browse the numerous posts that other users have written on it.
+                 You might wish to write a post and look into the topic at the same time. There are numerous topics to discuss, so begin a discussion now!</p>
             </div>
             <br/><br/>
             <button className="b b1">
