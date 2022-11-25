@@ -4,6 +4,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { authActions } from "../../store/reducers/auth-reducer";
 import { userActions } from "../../store/reducers/user-reducer";
 import { useState } from "react";
+import { viewForumsActions } from "../../store/reducers/viewed-forums-reducer";
+import { forumVoteActions } from "../../store/reducers/forum-votes-reducer";
+import { commentVoteActions } from "../../store/reducers/comment-vote-reducer";
 export default function Logout({ handleLogout }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [showModal, setShowModal] = useState(isLoggedIn);
@@ -17,6 +20,9 @@ export default function Logout({ handleLogout }) {
   const handleUserLogoutRequest = () => {
     dispatch(authActions.resetData({}));
     dispatch(userActions.onUserLogout({}));
+    dispatch(viewForumsActions.resetData({}))
+    dispatch(forumVoteActions.resetData());
+    dispatch(commentVoteActions.resetData());
     handleLogout(!showModal);
     navigate(location, {
       replace: true,

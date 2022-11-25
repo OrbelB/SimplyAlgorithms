@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .forums-section {
-    width: fit-content;
+    width: 100%;
     background-color: #d1fbff;
     background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
 }

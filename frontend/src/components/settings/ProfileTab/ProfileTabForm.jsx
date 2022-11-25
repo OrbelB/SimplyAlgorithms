@@ -5,6 +5,7 @@ import { updateUserData } from "../../../services/user";
 import { useState } from "react";
 import useValidateInput from "../../../hooks/use-ValidateInput";
 import { useNavigate } from "react-router-dom";
+import { imageToStringBase64 } from "../../../utilities/image-to-data-url";
 
 export default function ProfileTabForm() {
   const { biography, profilePicture } = useSelector((state) => state.user);

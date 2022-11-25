@@ -3,6 +3,14 @@ import AddEditComment from "./AddEditComment";
 import OptionMenu from "./OptionsMenu";
 import { useState } from "react";
 import { beautifyTime } from "../../utilities/beautify-time";
+import { useDispatch, useSelector } from "react-redux";
+import { listVotesByComment } from "../../services/comment";
+import {
+  selectAllCommentVotes,
+  selectByCommentVoteId,
+} from "../../store/reducers/comment-vote-reducer";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 export default function CommentBox({
   children,
   upVotes,
@@ -16,9 +24,37 @@ export default function CommentBox({
   deleteParentComment,
   editComment,
   canReply = true,
-  commentId
+  commentId,
 }) {
   const [isEditClicked, setIsEditClicked] = useState(false);
+  const dispatch = useDispatch();
+
+  const { forum } = useSelector((state) => state.forum);
+
+  const allCommentVotes = useSelector(selectAllCommentVotes);
+
+  const { userId: authUserID } = useSelector((state) => state.auth);
+
+  const currentUserVote = useSelector((state) =>
+    selectByCommentVoteId(state, {
+      commentVoteId: {
+        userId: authUserID,
+        commentId: commentId,
+      },
+    })
+  );
+
+  const { status, error } = useSelector((state) => state.commentVotes);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(
+        listVotesByComment({
+          pageId: forum?.pageId,
+        })
+      );
+    }
+  }, [commentId, status, allCommentVotes, dispatch, forum, authUserID]);
 
   const handleCancelComment = () => {
     cancelComment();
@@ -39,7 +75,12 @@ export default function CommentBox({
   return (
     <>
       <div className="col-auto col-sm-2 col-lg-2 p-2 p-lg-0 p-sm-0 p-md-0">
-        <Votes upVotes={upVotes} commentId={commentId} downVotes={downVotes} />
+        <Votes
+          upVotes={upVotes}
+          commentId={commentId}
+          downVotes={downVotes}
+          currentUserVote={currentUserVote}
+        />
       </div>
       <div className="col me-lg-5 me-auto">
         <div className="row">

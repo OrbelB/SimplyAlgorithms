@@ -23,7 +23,13 @@ const initialState = commentVotesAdapter.getInitialState({
 export const commentVotesSlice = createSlice({
   name: "commentVotes",
   initialState,
-  reducers: {},
+  reducers: {
+    resetData: (state) => {
+      commentVotesAdapter.removeAll(state);
+      state.status = "idle";
+      state.error = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(listVotesByComment.pending, (state, action) => {
@@ -39,8 +45,9 @@ export const commentVotesSlice = createSlice({
           const likeDislike = commentVote.likeDislike;
           return { commentVoteId, likeDislike };
         });
+        console.debug(objectList);
         state.status = "success";
-        commentVotesAdapter.upsertMany(state, objectList);
+        commentVotesAdapter.addMany(state, objectList);
       })
       .addCase(listVotesByComment.rejected, (state, action) => {
         state.status = "failed";
@@ -51,10 +58,8 @@ export const commentVotesSlice = createSlice({
       })
       .addCase(deleteCommentVote.fulfilled, (state, action) => {
         if (!action?.payload) {
-          console.log(action?.payload);
           return;
         }
-        console.log("comment has been successfully deleted");
         state.status = "success";
         const passedCommentVoteId = {
           userId: action.payload?.userId,
@@ -71,7 +76,6 @@ export const commentVotesSlice = createSlice({
       })
       .addCase(voteComment.fulfilled, (state, action) => {
         if (!action?.payload) return;
-        console.log("check if payload exists");
         state.status = "success";
         const passedCommentVote = {
           commentVoteId: {

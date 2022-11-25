@@ -3,58 +3,74 @@ import { useParams } from "react-router-dom";
 import cx from "classnames";
 import fp from "./ForumPost.module.css";
 import { Chip } from "@mui/material";
-import { forumsActions } from "../../../store/reducers/forums-reducer";
+import {
+  forumsActions,
+  selectAllForums,
+  selectSortedForums,
+} from "../../../store/reducers/forums-reducer";
 import CommentFrame from "../../comment/CommentFrame";
 import Related_RecentPosts from "../forum_home/Related_RecentPosts";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSingleForum } from "../../../services/forum";
+import { fetchSingleForum, addUserView } from "../../../services/forum";
 import { beautifyTime } from "../../../utilities/beautify-time";
 import Vote from "../../vote_comp/Vote";
 import ForumOptionMenu from "./ForumOptionMenu";
 import { forumActions } from "../../../store/reducers/forum-reducer";
-let forum_post = {
-  user: "Mack",
-  title: "sectetur adipisicing elit. Error, culpa tempora, obca?",
-  text: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!",
-  like: 55201,
-  dislike: 500,
-  posted: "2 months ago",
-  tags: "#temp, #temp2, #temp3",
-  photo: "add later",
-  video: "add later",
-  user_voted: false,
-  LD_ratio: function () {
-    return ((this.like - this.dislike) / (this.like + this.dislike)) * 100;
-  },
-};
+import { useState } from "react";
 
 export default function ForumPost() {
   const { pageId } = useParams();
+  
+  const {
+    jwtAccessToken,
+    isLoggedIn,
+    userId: authUserId,
+  } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { status, forum } = useSelector((state) => state.forum);
+  const { status: viewStatus } = useSelector((state) => state.viewedForums);
+
   useEffect(() => {
-    if ((status === "idle" || status === "successToIdle")) {
+    if (status === "idle" || status === "successToIdle") {
       dispatch(fetchSingleForum(pageId));
+    }
+    if (
+      viewStatus === "success" &&
+      jwtAccessToken !== "" &&
+      isLoggedIn &&
+      (status === "success" || status === "completed")
+    ) {
+      
+      dispatch(forumsActions.updateForum({ forum: forum }));
+      dispatch(
+        addUserView({
+          pageId: pageId,
+          userId: authUserId,
+          accessToken: jwtAccessToken,
+        })
+      );
+      //dispatch(viewForumsActions.updateForum({ forum: forum }));
     }
   }, [status, pageId, dispatch]);
   if (status === "success" || status === "completed") {
-    dispatch(forumsActions.updateForum({ forum: forum }));
+   
     return (
       <div key={pageId} className={cx(fp["window"], "container-fluid")}>
-        <div className={cx()}>
-          <div className={cx(fp["side2"])}>
+        <div>
+          {/* <div className={cx(fp["side2"])}>
             <h1 className={cx(fp["category-label"])}>Related Posts</h1>
-            <div className={cx(fp["related-posts"])}></div>
-          </div>
+            <div className={cx(fp["related-posts"])}>
+            </div>
+          </div> */}
           <div
             className={cx(
               fp["post"],
-              "border border-success p-2 rounded-bottom rounded-4 border-info bg-secondary text-dark bg-opacity-50 h-auto d-inline-block "
+              "border border-success p-2 rounded-bottom rounded-4 border-info bg-secondary text-dark bg-opacity-50 h-auto d-inline-block"
             )}
           >
             <div className={cx(fp["user"])}>
               <div className="row">
-                <div className="col-1 col-md-3">{forum?.userDto?.username}</div>
+                <div className="col-auto col-md-3">{forum?.userDto?.username}</div>
                 {forum?.tags.map((tag) => (
                   <Chip
                     key={tag.tagId}
@@ -83,7 +99,7 @@ export default function ForumPost() {
             <Vote
               like_={forum?.upVotes}
               dislike_={forum?.downVotes}
-              user_voted_={true}
+              user_voted_={forum?.upVotes > 0 || forum.downVotes > 0}
             />
           </div>
         </div>

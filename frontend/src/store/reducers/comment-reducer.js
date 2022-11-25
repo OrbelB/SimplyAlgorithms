@@ -67,7 +67,6 @@ export const commentSlice = createSlice({
       })
       .addCase(updateChildComment.fulfilled, (state, action) => {
         if (!action?.payload?.comment?.commentId) {
-          console.log("The update for comment could not be done");
           return;
         }
         state.status = "success";
@@ -84,7 +83,6 @@ export const commentSlice = createSlice({
       })
       .addCase(deleteChildComment.fulfilled, (state, action) => {
         if (!action.payload) {
-          console.log("delete could not be done");
           return;
         }
         commentAdapter.removeOne(state, action.payload);

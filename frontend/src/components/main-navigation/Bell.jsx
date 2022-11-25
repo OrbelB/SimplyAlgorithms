@@ -28,6 +28,7 @@ export default function Bell() {
                     src={image}
                     height="100%"
                     width="100%"
+                    alt = "under"
                     className="rounded-circle text-align-center"
                     >
                 </img>

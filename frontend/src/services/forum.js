@@ -1,5 +1,6 @@
 import { forumEndpoints } from "./Api/forum";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { create } from "@mui/material/styles/createTransitions";
 
 export const fetchForumList = createAsyncThunk(
   "forum/getList",
@@ -65,7 +66,6 @@ export const updateForum = createAsyncThunk(
           return error;
         }
       });
-      console.log(response.data);
     return response.data;
   }
 );
@@ -105,6 +105,39 @@ export const reportForum = createAsyncThunk(
       .catch((error) => {
         return error;
       });
+    return response.data;
+  }
+);
+
+export const addUserView = createAsyncThunk(
+  "forums/view",
+  async (passedParams) => {
+    const { pageId, userId, accessToken } = passedParams;
+    const response = await forumEndpoints.viewed(pageId, userId, accessToken);
+    return response.data;
+  }
+);
+
+export const fetchUserForumsViewed = createAsyncThunk(
+  "forums/list/view",
+  async (passedParams) => {
+    const response = await forumEndpoints.listForumViewed(passedParams);
+    return response.data;
+  }
+);
+
+export const fetchVotes = createAsyncThunk(
+  "forum/list-votes",
+  async (passedParams) => {
+    const response = await forumEndpoints.listVotes(passedParams);
+    return response.data;
+  }
+);
+
+export const deleteForumVote = createAsyncThunk(
+  "forum/delete-vote",
+  async (passedParams) => {
+    const response = await forumEndpoints.deleteVote(passedParams);
     return response.data;
   }
 );

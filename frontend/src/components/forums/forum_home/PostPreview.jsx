@@ -37,6 +37,7 @@ export const post_previews = [
 
 export default function PostPreview() {
   const [page, setPage] = useState(1);
+  const { totalPages } = useSelector((state) => state.forums);
   const [loadMorePages, setLoadMorePages] = useState(false);
   const [sortBy, setSortBy] = useState("createdDate");
   const { filterBy: filterForumBy, sortBy: sortForumBy } = useSelector(
@@ -57,7 +58,7 @@ export default function PostPreview() {
   }
   const clickViewMorePages = (event) => {
     event.preventDefault();
-    dispatch(fetchForumList({ page: page, size: 10, sortBy: sortBy }));
+    dispatch(fetchForumList({ page: page, size: 5, sortBy: sortBy }));
     setPage(page + 1);
     setLoadMorePages(!loadMorePages);
   };
@@ -81,6 +82,7 @@ export default function PostPreview() {
             type="button"
             className="btn btn-outline-primary"
             onClick={clickViewMorePages}
+            hidden={totalPages === page}
           >
             load more pages..
           </button>

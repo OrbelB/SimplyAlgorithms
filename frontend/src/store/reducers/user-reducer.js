@@ -47,6 +47,7 @@ export const userSlice = createSlice({
       state.role = "";
       state.createdDate = "";
       state.dob = "";
+      state.userId = "";
     },
   },
   extraReducers(builder) {
@@ -55,7 +56,7 @@ export const userSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
-        if(!action.payload) return;
+        if (!action.payload) return;
         state.status = "succeeded";
         state.userId = action?.payload?.userId;
         state.email = action?.payload?.email;
@@ -70,7 +71,6 @@ export const userSlice = createSlice({
         if (action?.payload?.phoneNumber === null) state.phoneNumber = "";
 
         state.role = action?.payload?.role;
-        console.log(action?.payload?.createdDate);
         state.createdDate = "";
         if (action.payload.createdDate !== undefined)
           state.createdDate = new Date(
@@ -99,18 +99,17 @@ export const userSlice = createSlice({
         state.role = "";
         state.createdDate = "";
         state.dob = "";
+        state.userId = "";
       })
       .addCase(updatePassword.pending, (state, action) => {
         state.status = "pending";
       })
       .addCase(updatePassword.rejected, (state, action) => {
         state.status = "failed";
-        console.log(action.error);
       })
       .addCase(updatePassword.fulfilled, (state, action) => {
         if (!action.payload) return;
         if (action.payload === state.userId) {
-          console.log("check");
           state.status = "idle";
           state.error = "";
           state.email = "";
@@ -152,7 +151,6 @@ export const userSlice = createSlice({
         }
       })
       .addCase(updateUserData.rejected, (state, action) => {
-        console.log(action.error);
         state.status = "failed";
       });
   },

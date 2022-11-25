@@ -12,6 +12,7 @@ import {
 import useValidateInput from "../../../hooks/use-ValidateInput";
 import { useEffect } from "react";
 import { createForum } from "../../../services/forum";
+import TagForm from "../tags/TagForm";
 
 export default function Post() {
   const tags = useSelector(selectAllTags);
@@ -157,7 +158,8 @@ export default function Post() {
             />
           </div>
           <div className="col-md-4 w-100">
-            <label htmlFor="inputCategory" className="form-label">
+            <TagForm currentTags={tagsSelected} setCurrentTags={setTagsSelected}/>
+            {/* <label htmlFor="inputCategory" className="form-label">
               Category
             </label>
             <select
@@ -185,8 +187,9 @@ export default function Post() {
               onChange={updateTagName}
               onKeyDown={addNewTag}
             />
-          </div>
-          <div className="row mt-2 justify-content-center">
+           */}
+           </div>
+          {/* <div className="row mt-2 justify-content-center">
             {tagsSelected?.map((tag) => (
               <Chip
                 key={tag.tagId === "" ? nanoid() : tag.tagId}
@@ -196,7 +199,7 @@ export default function Post() {
                 onDelete={() => removeTag(tag.tagId, tag.tag)}
               />
             ))}
-          </div>
+          </div> */}
 
           <div className="mb-3">
             <label htmlFor="question_text" className="col-form-label">

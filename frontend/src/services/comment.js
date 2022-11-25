@@ -109,9 +109,9 @@ export const reportComment = createAsyncThunk(
 export const listVotesByComment = createAsyncThunk(
   "commentVote/list",
   async (passedParams) => {
-    const { commentId } = passedParams;
+    const { pageId } = passedParams;
     const response = await commentEndpoints
-      .listVotes(commentId)
+      .listVotes(pageId)
       .catch((error) => {
         if (error) return error;
       });

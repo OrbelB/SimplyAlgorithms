@@ -3,20 +3,19 @@ import PostPreview from "./PostPreview";
 import Post from "../post/Post";
 import Related_RecentPosts from "./Related_RecentPosts";
 import { forumsActions } from "../../../store/reducers/forums-reducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Tags from "../tags/Tags";
 
 export default function Forums() {
-  
+  const { isLoggedIn, jwtAccessToken } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const sortByAlphabetical = () => dispatch(forumsActions.sortForums("title"));
-
   const sortByNew = () => dispatch(forumsActions.sortForums("createdDate"));
   const sortByTopRated = () => dispatch(forumsActions.sortForums("upVotes"));
-
+  const sortByOther = () => dispatch(forumsActions.sortForums("pageId"))
   return (
     <div className="forums-section">
-      <h1 className="forum-title">FORUMS</h1>
+      <h1 className="forum-title center">FORUMS</h1>
       <div className="row">
         <div className="column">
           <div className="side1">
@@ -42,7 +41,7 @@ export default function Forums() {
             <button className="filter-button" onClick={sortByAlphabetical}>
               Alphabetical
             </button>
-            <button className="filter-button last-filter">Other</button>
+            <button className="filter-button last-filter" onClick={sortByOther}>Other</button>
             <br />
             <br />
             <Post />
@@ -50,12 +49,14 @@ export default function Forums() {
             <br />
             <PostPreview />
           </div>
-          <div className="side2">
-            <div className="recent-posts">
-              <h1 className="category-label">Recently Viewed Posts</h1>
-              <Related_RecentPosts />
+          {isLoggedIn && jwtAccessToken !== "" && (
+            <div className="side2">
+              <div className="recent-posts">
+                <h1 className="category-label">Recently Viewed Posts</h1>
+                <Related_RecentPosts />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

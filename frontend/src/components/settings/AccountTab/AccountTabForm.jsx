@@ -31,7 +31,6 @@ export default function AccountTabForm({ username1 }) {
   });
 
   const submitForm = () => {
-    console.log("check");
     dispatch(
       updateUserData({
         updatedUserData: {

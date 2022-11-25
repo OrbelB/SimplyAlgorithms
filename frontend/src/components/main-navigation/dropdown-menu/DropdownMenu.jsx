@@ -5,14 +5,14 @@ export default function DropdownMenu({
                                          nestedDropdownSelections,
                                      }) {
     return (
-        <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle bg-primary text-white rounded-3" role="button"
+        <li className="nav-item dropdown me-2 p-2">
+            <span className="nav-link dropdown-toggle bg-primary text-white rounded-3" role="button"
                data-bs-toggle="dropdown"
                aria-expanded="false"
                unselectable={"off"}
             >
                 {dropdownTitle}
-            </a>
+            </span>
             <ul className="dropdown-menu">
                 {
                     nestedDropdownSelections.map((nestedDropdown, index) => (

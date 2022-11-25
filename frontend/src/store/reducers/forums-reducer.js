@@ -13,6 +13,8 @@ const initialState = forumsAdapter.getInitialState({
   error: "",
   sortBy: "createdDate",
   filterBy: "",
+  totalElements : 0,
+  totalPages : 0,
 });
 
 export const forumsSlice = createSlice({
@@ -48,6 +50,8 @@ export const forumsSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchForumList.fulfilled, (state, action) => {
+        state.totalElements = action.payload.totalElements;
+        state.totalPages = action.payload.totalPages;
         state.status = "success";
         const posts = action.payload?.content?.map((forumQuickView) => {
           forumQuickView.createdDate = new Date(

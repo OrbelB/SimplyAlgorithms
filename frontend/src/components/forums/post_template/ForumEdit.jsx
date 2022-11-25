@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { forumActions } from "../../../store/reducers/forum-reducer";
 import { updateForum } from "../../../services/forum";
 import TagForm from "../tags/TagForm";
+import { tagsActions } from "../../../store/reducers/tags-reducer";
 export default function ForumEdit() {
   const { pageId } = useParams();
   const { forum, status } = useSelector((state) => state.forum);
@@ -41,11 +42,10 @@ export default function ForumEdit() {
     if (!isLoggedIn) {
       navigate(redirectTo, { replace: true });
     }
-  }, [currentTags, status, redirectTo, isLoggedIn, navigate]);
+  }, [currentTags, status, redirectTo, isLoggedIn, navigate,dispatch]);
 
   const onSubmitForm = (event) => {
     if (!isFormValid) return;
-    console.log(forum.userDto.userId);
     dispatch(
       updateForum({
         updatedForum: {
@@ -62,6 +62,7 @@ export default function ForumEdit() {
         accessToken: jwtAccessToken,
       })
     );
+    dispatch(tagsActions.resetData());
     descriptionReset();
     titleReset();
   };
@@ -76,7 +77,7 @@ export default function ForumEdit() {
   let isFormValid = false;
   if (titleIsValid && descriptionIsValid) isFormValid = true;
   return (
-    <div className="container-fluid form-group m-5">
+    <div className="container-fluid form-group pt-5">
       <div className="row justify-content-center">
         <TextField
           className="col-auto w-75 mb-5"
@@ -96,6 +97,7 @@ export default function ForumEdit() {
           value={description}
           onChange={descriptionChangeHandler}
         />
+        <h4 className="row justify-content-center">Current Categories</h4>
         <TagForm currentTags={currentTags} setCurrentTags={setCurrentTags} />
       </div>
       <div className="row justify-content-around mt-5">
@@ -103,7 +105,7 @@ export default function ForumEdit() {
           <button
             type="button"
             className=" btn  btn-outline-secondary"
-            onClick={() => navigate(redirectTo, { replace: true })}
+            onClick={() => { dispatch(tagsActions.resetData()); navigate(redirectTo, { replace: true });  }}
           >
             BACK
           </button>

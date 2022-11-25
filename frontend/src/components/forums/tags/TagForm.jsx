@@ -7,19 +7,27 @@ import {
   FormControl,
 } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import {
   selectAllTags,
   selectAllTagsById,
 } from "../../../store/reducers/tags-reducer";
+import { fetchTags } from "../../../services/tag";
 
 export default function TagForm({ currentTags, setCurrentTags }) {
+  const dispatch = useDispatch();
   const [newTagName, setNewTagName] = useState("");
   const [hasTagBeenAdded, setHasTagBeenAdded] = useState(false);
   const [tagId, setTagId] = useState("");
   const tagSelected = useSelector((state) => selectAllTagsById(state, tagId));
   const tagsAvailable = useSelector(selectAllTags);
+  const { status, totalElements } = useSelector((state) => state.tags);
+
+  if (tagsAvailable.length !== totalElements || tagsAvailable.length === 0) {
+    dispatch(fetchTags({ page: 0, size: totalElements }));
+  }
+
   useEffect(() => {
     if (tagId !== "" && tagSelected !== undefined && hasTagBeenAdded) {
       if (!currentTags.find((tag) => tag.tagId === tagId)) {
@@ -58,7 +66,6 @@ export default function TagForm({ currentTags, setCurrentTags }) {
   };
   return (
     <>
-      <h4 className="row justify-content-center">Current Categories</h4>
       <div className="row justify-content-center mt-3 mb-5">
         {currentTags?.map((tag) => (
           <Chip
@@ -70,7 +77,7 @@ export default function TagForm({ currentTags, setCurrentTags }) {
           />
         ))}
       </div>
-      <FormControl className="col-auto w-75 mb-5">
+      <FormControl className="col-auto w-100 mb-5">
         <InputLabel id="demo-simple-select-standard-label">Category</InputLabel>
         <Select
           labelId="demo-simple-select-standard-label"
@@ -89,7 +96,7 @@ export default function TagForm({ currentTags, setCurrentTags }) {
         </Select>
       </FormControl>
       <TextField
-        className="col-auto w-75 mb-5"
+        className="col-auto w-100 mb-5"
         id="margin-dense"
         label="or create your own category"
         value={newTagName}

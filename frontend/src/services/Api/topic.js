@@ -1,8 +1,8 @@
 import { get, post, put, destroy } from "./base";
 
-export const PUBLIC_ENDPOINT_ROUTE = "/forums";
+export const PUBLIC_ENDPOINT_ROUTE = "/topics";
 
-export const forumEndpoints = {
+export const topicEndpoints = {
   singleById: (id) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/${id}`, {
       headers: {
@@ -15,17 +15,6 @@ export const forumEndpoints = {
         page,
         size,
         sortBy,
-      },
-    }),
-  listByCategory: (pageId, size, tagId) =>
-    get(`${PUBLIC_ENDPOINT_ROUTE}/list/by-category`, {
-      params: {
-        pageId,
-        size,
-        tagId,
-      },
-      headers: {
-        "Content-Type": "application/json",
       },
     }),
   create: (createdForum, jwtAccessToken) =>
@@ -114,28 +103,6 @@ export const forumEndpoints = {
         },
       }
     ),
-  viewed: (pageId, userId, accessToken) =>
-    post(`${PUBLIC_ENDPOINT_ROUTE}/view`, null, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
-      },
-      params: {
-        userId,
-        pageId,
-      },
-    }),
-  listForumViewed: (passedParams) =>
-    get(`${PUBLIC_ENDPOINT_ROUTE}/list/forums-view`, {
-      params: {
-        userId: passedParams?.userId,
-        page: passedParams?.page,
-        size: passedParams?.size,
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }),
   deleteVote: (passedParams) =>
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete-vote`, {
       params: {

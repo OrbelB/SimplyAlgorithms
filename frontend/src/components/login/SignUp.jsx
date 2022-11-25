@@ -4,6 +4,7 @@ import useValidateInput from "../../hooks/use-ValidateInput";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../services/auth";
+import { imageToStringBase64 } from "../../utilities/image-to-data-url";
 export default function SignUp({ showSignup, handleOnClose }) {
   const { status } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -68,7 +69,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
         password,
         email,
         dob,
-        profilePicture: image?.name,
+        profilePicture: imageToStringBase64(image),
       })
     );
     emailReset();

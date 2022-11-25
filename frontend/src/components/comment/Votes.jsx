@@ -8,7 +8,6 @@ import {
   deleteCommentVote,
 } from "../../services/comment";
 import {
-  selectRatio,
   selectAllCommentVotes,
   selectByCommentVoteId,
 } from "../../store/reducers/comment-vote-reducer";
@@ -17,37 +16,52 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { RiRestaurantLine } from "react-icons/ri";
 import { forumActions } from "../../store/reducers/forum-reducer";
 
-export default function Votes({ commentId, upVotes, downVotes }) {
+export default function Votes({
+  commentId,
+  upVotes,
+  downVotes,
+  currentUserVote,
+}) {
   const location = useLocation();
   const navigate = useNavigate();
-  const allCommentVotes = useSelector(selectAllCommentVotes);
-
+  const dispatch = useDispatch();
+  const [votes, setVotes] = useState(upVotes - downVotes);
+  const [updateCurrentUser, setUpdateCurrentUser] = useState(false);
   const {
     userId: authUserID,
     jwtAccessToken,
     isLoggedIn,
   } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-  const [votes, setVotes] = useState(upVotes - downVotes);
-  const { status, error } = useSelector((state) => state.commentVotes);
-  const currentUserVote = useSelector((state) =>
-    selectByCommentVoteId(state, {
-      commentVoteId: {
-        userId: authUserID,
-        commentId: commentId,
-      },
-    })
-  );
+  useEffect(() => {
 
-  useEffect(() => {}, []);
+  }, [currentUserVote]);
+  // const { forum } = useSelector((state) => state.forum);
+  // const allCommentVotes = useSelector(selectAllCommentVotes);
 
-  if (status === "idle") {
-    dispatch(
-      listVotesByComment({
-        commentId: commentId,
-      })
-    );
-  }
+  // const currentUserVote = useSelector((state) =>
+  //   selectByCommentVoteId(state, {
+  //     commentVoteId: {
+  //       userId: authUserID,
+  //       commentId: commentId,
+  //     },
+  //   })
+  // );
+  //
+  //
+  // const { status, error } = useSelector((state) => state.commentVotes);
+
+  // useEffect(() => {
+
+  //   if (status === "idle") {
+  //     dispatch(
+  //       listVotesByComment({
+  //         pageId: forum?.pageId,
+  //       })
+  //     );
+  //   }
+  //   console.log(allCommentVotes, "from useEffect");
+  // }, [commentId, status, allCommentVotes, dispatch, currentUserVote, forum]);
+
   const handleUpVotes = () => {
     if (!isLoggedIn) {
       navigate("/login", { state: { from: location } });
@@ -59,7 +73,6 @@ export default function Votes({ commentId, upVotes, downVotes }) {
       (currentUserVote.commentVoteId.commentId === null &&
         currentUserVote.commentVoteId.userId === null)
     ) {
-      console.log(currentUserVote);
       dispatch(
         voteComment({
           votedComment: { commentId, userId: authUserID, likeDislike: true },
@@ -67,11 +80,22 @@ export default function Votes({ commentId, upVotes, downVotes }) {
         })
       );
       setVotes(votes + 1);
-      return;
     } else {
-      
+      if (
+        currentUserVote?.commentVoteId.commentId !== commentId ||
+        currentUserVote?.commentVoteId.userId !== authUserID
+      ) {
+        // dispatch(
+        //   voteComment({
+        //     votedComment: { commentId, userId: authUserID, likeDislike: true },
+        //     accessToken: jwtAccessToken,
+        //   })
+        // );
+        // setVotes(votes + 1);
+        return;
+      }
+
       if (currentUserVote.likeDislike === true) {
-        console.log(currentUserVote, " inside of true");
         dispatch(
           deleteCommentVote({
             userId: authUserID,
@@ -80,7 +104,6 @@ export default function Votes({ commentId, upVotes, downVotes }) {
           })
         );
         setVotes(votes - 1);
-        return;
       }
       if (currentUserVote.likeDislike === false) {
         dispatch(
@@ -90,7 +113,6 @@ export default function Votes({ commentId, upVotes, downVotes }) {
           })
         );
         setVotes(votes + 2);
-        return;
       }
     }
   };
@@ -100,7 +122,7 @@ export default function Votes({ commentId, upVotes, downVotes }) {
       navigate("/login", { state: { from: location } });
       return;
     }
-    //create the comment if the vote does not exists
+    //create a vote if the vote does not exists
     if (
       !currentUserVote ||
       (currentUserVote.commentVoteId.commentId === null &&
@@ -113,8 +135,20 @@ export default function Votes({ commentId, upVotes, downVotes }) {
         })
       );
       setVotes(votes - 1);
-      return;
     } else {
+      if (
+        currentUserVote?.commentVoteId.commentId !== commentId ||
+        currentUserVote?.commentVoteId.userId !== authUserID
+      ) {
+        // dispatch(
+        //   voteComment({
+        //     votedComment: { commentId, userId: authUserID, likeDislike: false },
+        //     accessToken: jwtAccessToken,
+        //   })
+        // );
+        // setVotes(votes - 1);
+        return;
+      }
       //remove the vote if it exists when liked
       if (currentUserVote.likeDislike === false) {
         dispatch(
@@ -125,7 +159,6 @@ export default function Votes({ commentId, upVotes, downVotes }) {
           })
         );
         setVotes(votes + 1);
-        return;
       }
       if (currentUserVote.likeDislike === true) {
         dispatch(
@@ -135,7 +168,6 @@ export default function Votes({ commentId, upVotes, downVotes }) {
           })
         );
         setVotes(votes - 2);
-        return;
       }
     }
   };

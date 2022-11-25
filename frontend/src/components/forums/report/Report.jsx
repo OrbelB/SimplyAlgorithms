@@ -30,62 +30,62 @@ export default function Report({ pageId }) {
       {/* <!-- Button trigger modal --> */}
       <button
         type="button"
-        class="btn btn-outline-secondary btn-lg"
+        className="btn btn-outline-secondary btn-lg"
         data-bs-toggle="modal"
         data-bs-target="#staticBackdrop1"
       >
         <div>
-          Report
+          Report {" "}
           <RiQuestionnaireFill />
         </div>
       </button>
 
       {/* <!-- Modal --> */}
       <div
-        class="modal fade"
+        className="modal fade"
         id="staticBackdrop1"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h2 class="modal-title" id="staticBackdropLabel">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2 className="modal-title" id="staticBackdropLabel">
                 Report A Problem
               </h2>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               {/* <div class="mb-0">
                 <label for="quetion_categories" class="col-form-label">
                   Type of Problem:
                 </label>
                 <input type="text" class="form-control" id="forum_post_title" />
               </div> */}
-              <div class="mb-3">
-                <label for="question_text" class="col-form-label">
+              <div className="mb-3">
+                <label htmlFor="question_text" className="col-form-label">
                   Brief Description Of The Problem:
                 </label>
                 <textarea
-                  class="form-control"
+                  className="form-control"
                   id="forum_post_question"
                   value={reportMessage}
                   onChange={handleReportMessageChange}
                 ></textarea>
               </div>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-primary"
+                className="btn btn-primary"
                 data-bs-dismiss="modal"
                 onClick={submitForm}
                 aria-label="Close"

@@ -12,6 +12,8 @@ import {
   deleteParentComment,
   updateParentComment,
 } from "../../services/comment";
+
+import { fetchSingleTopic } from "../../services/topic";
 const initialState = {
   forum: {},
   pageId: "",
@@ -49,16 +51,31 @@ export const forumSlice = createSlice({
       });
     },
     removeSingleReportId: (state) => void (state.reportId = ""),
-    switchStatus: (state, action) => {state.status = action.payload;},
-
+    switchStatus: (state, action) => {
+      state.status = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
+      .addCase(fetchSingleTopic.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchSingleTopic.fulfilled, (state, action) => {
+        state.status = "completed";
+        state.forum = {
+          ...action.payload,
+          createdDate: new Date(action.payload.createdDate).toISOString(),
+        };
+        state.pageId = "";
+      })
+      .addCase(fetchSingleTopic.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action?.error?.message;
+      })
       .addCase(fetchSingleForum.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(fetchSingleForum.fulfilled, (state, action) => {
-        console.log("in here")
         state.status = "success";
         state.forum = {
           ...action.payload,

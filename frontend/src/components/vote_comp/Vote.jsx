@@ -1,43 +1,88 @@
-import React from "react";
+import React, { useEffect } from "react";
 import cx from "classnames";
 import { BiLike, BiDislike } from "react-icons/bi";
 import fp from "./vote.module.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
-
-// let forum_post = {
-//     user:   "Mack",
-//     title:  "sectetur adipisicing elit. Error, culpa tempora, obca?",
-//     text:   "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!Lorem ipsum, dolor sit amet consectetur adipisicing elit. Error, culpa tempora, obcaecati dignissimos aliquam voluptatum architecto excepturi mollitia ea quam velit, ducimus inventore repellendus vero placeat! Cumque ex nam illum!",
-//     like:   500,
-//     dislike:5000,
-//     posted: "2 months ago",
-//     tags:   "#temp, #temp2, #temp3",
-//     photo:  "add later",
-//     video:  "add later",
-//     user_voted: false,
-
-//     LD_ratio: function() {
-//         return ((this.like-this.dislike) / (this.like+this.dislike)) * 100;
-//     }
-//   };
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectAllForumVotes,
+  selectByForumVoteId,
+} from "../../store/reducers/forum-votes-reducer";
+import { fetchVotes, voteForum, deleteForumVote } from "../../services/forum";
+import { current } from "@reduxjs/toolkit";
 
 export default function Vote({ like_, dislike_, user_voted_ }) {
-  // const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { status } = useSelector((state) => state.forumVotes);
+  const {
+    isLoggedIn,
+    jwtAccessToken,
+    userId: authUserId,
+  } = useSelector((state) => state.auth);
+  const { forum } = useSelector((state) => state.forum);
+  const currentUserHasVoted = useSelector((state) =>
+    selectByForumVoteId(state, {
+      pageId: forum?.pageId,
+      userId: authUserId,
+    })
+  );
+
+  if (status === "idle" && isLoggedIn) {
+    dispatch(
+      fetchVotes({ pageId: forum?.pageId, accessToken: jwtAccessToken })
+    );
+  }
+
   const [like, setlike] = useState(like_);
   const [dislike, setdislike] = useState(dislike_);
-
-  const [likeActive, setLikeActive] = useState(user_voted_);
-  const [dislikeActive, setdisLikeActive] = useState(user_voted_);
-
+  const [likeActive, setLikeActive] = useState(
+    !currentUserHasVoted ? false : true
+  );
+  const [dislikeActive, setdisLikeActive] = useState(
+    !currentUserHasVoted ? false : true
+  );
   const like_forum = () => {
+    if (!isLoggedIn && jwtAccessToken === "") {
+      navigate("/login", { state: { from: location } });
+      return;
+    }
     if (likeActive) {
+      dispatch(
+        deleteForumVote({
+          pageId: forum.pageId,
+          userId: authUserId,
+          accessToken: jwtAccessToken,
+        })
+      );
       setLikeActive(false);
       setlike(like - 1);
     } else {
+      dispatch(
+        voteForum({
+          voteObject: {
+            pageId: forum.pageId,
+            userId: authUserId,
+            likeDislike: true,
+          },
+          accessToken: jwtAccessToken,
+        })
+      );
       setLikeActive(true);
       setlike(like + 1);
       if (dislikeActive) {
+        dispatch(
+          voteForum({
+            voteObject: {
+              pageId: forum.pageId,
+              userId: authUserId,
+              likeDislike: true,
+            },
+            accessToken: jwtAccessToken,
+          })
+        );
         setdisLikeActive(false);
         setlike(like + 1);
         setdislike(dislike - 1);
@@ -46,19 +91,52 @@ export default function Vote({ like_, dislike_, user_voted_ }) {
   };
 
   const dislike_forum = () => {
+    if (!isLoggedIn && jwtAccessToken === "") {
+      navigate("/login", { state: { from: location } });
+      return;
+    }
+    //if there is a like
     if (dislikeActive) {
+      dispatch(
+        deleteForumVote({
+          pageId: forum.pageId,
+          userId: authUserId,
+          accessToken: jwtAccessToken,
+        })
+      );
       setdisLikeActive(false);
       setdislike(dislike - 1);
     } else {
+      dispatch(
+        voteForum({
+          voteObject: {
+            pageId: forum.pageId,
+            userId: authUserId,
+            likeDislike: false,
+          },
+          accessToken: jwtAccessToken,
+        })
+      );
       setdisLikeActive(true);
       setdislike(dislike + 1);
       if (likeActive) {
+        dispatch(
+          voteForum({
+            voteObject: {
+              pageId: forum.pageId,
+              userId: authUserId,
+              likeDislike: true,
+            },
+            accessToken: jwtAccessToken,
+          })
+        );
         setLikeActive(false);
         setlike(dislike + 1);
         setlike(like - 1);
       }
     }
   };
+
   return (
     <div
       className={cx(

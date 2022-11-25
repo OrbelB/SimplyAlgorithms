@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import TemplateTopicPage from "./pages/t_pages/TemplateTopicPage";
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage";
@@ -22,13 +22,18 @@ import Breadth_first_search from "./pages/t_pages/Breadth_first_search";
 import Arrays from "./pages/t_pages/Arrays";
 import Sorting from "./components/wiki/topics/Sorting";
 import ScrollToTop from "./components/ScrollToTop";
+import { useDispatch } from "react-redux";
+import { forumActions } from "./store/reducers/forum-reducer";
+import { forumVoteActions } from "./store/reducers/forum-votes-reducer";
 function App() {
+  const location = useLocation();
+  const dispatch = useDispatch();
   return (
     <Layout>
-      <ScrollToTop/> 
+      <ScrollToTop />
       <Routes>
         {/* <ScrollToTop/> */}
-        <Route path="/" element={<TemplateTopicPage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forums">
@@ -52,15 +57,23 @@ function App() {
         </Route>
         <Route path="/underconstruction" element={<UnderConstructionPage />} />
         {/* SAMPLE TOPIC PAGES */}
-        <Route path="/wiki/bubblesort" element={<Bubble_sort />} />
+        <Route path="/wiki/bubblesort" element={<Bubble_sort />}>
+        </Route>
+        <Route path="/search/binarysearchtree" element={<Binary_search_tree />}>
+        </Route>
         <Route
-          path="/search/binarysearchtree"
-          element={<Binary_search_tree />}
-        />
-        <Route path="/search/bfs" element={<Breadth_first_search />} />
-        <Route path="/datastructures/arrays" element={<Arrays />} />
+          path="/search/bfs"
+          element={<Breadth_first_search />}
+        >
+          
+        </Route>
+        <Route path="/datastructures/arrays" element={<Arrays />}>
+        </Route>
         <Route path="/wikihome" element={<WikiPage />} />
-        <Route path="/wiki/sorting" element={<Sorting />} />
+        <Route path="/wiki/sorting" element={<Sorting />}>
+          
+        </Route>
+
         <Route path="/team" element={<MeetTeamPage />} />
         <Route
           path="*"
