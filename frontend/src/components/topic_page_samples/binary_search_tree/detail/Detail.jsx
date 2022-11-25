@@ -5,30 +5,37 @@ export default function Detail() {
         <div className="detail text-center">
             <div className="top p-5">
                 <h2>SEARCH STEPS</h2>
-                <ol className="size list-group list-group-numbered">
-                    <li className="list-group-item border-0">Start from the root.
-                    </li>
-                    <li className="list-group-item border-0">Compare the searching element with root, if less than root, then recursively call left subtree, else recursively call right subtree. 
-                    </li>
-                    <li className="list-group-item border-0">If the element to search is found anywhere, return true, else return false.
-                    </li>
-                </ol>
+                <div className="size text-center">
+                    <p className="lh-lg">
+                    1. Start from the root.
+                    <br/>
+                    2. Compare the searching element with root, if less than root, then recursively call left subtree, else recursively call right subtree.
+                    <br/>
+                    3. If the element to search is found anywhere, return true, else return false.
+                    </p>
+                </div>
                 <br />
                 <h2>INSERTION STEPS</h2>
-                <ol className="size list-group list-group-numbered">
-                    <li className="list-group-item border-0">Start from the root.
-                    </li>
-                    <li className="list-group-item border-0">Compare the inserting element with root, if less than root, then recursively call left subtree, else recursively call right subtree. </li>
-                    <li className="list-group-item border-0"> After reaching the end, just insert that node at left(if less than current) or else right.
-                    </li>
-                </ol>
+                <div className="size text-center">
+                    <p className="lh-lg">
+                    1. Start from the root.
+                    <br/>
+                    2. Compare the inserting element with root, if less than root, then recursively call left subtree, else recursively call right subtree.
+                    <br/>
+                    3. After reaching the end, just insert that node at left(if less than current) or else right.
+                    </p>
+                </div>
                 <br />
                 <h2>DELETION STEPS:</h2>
-                <ol className="size list-group list-group-numbered">
-                    <li className="list-group-item border-0">Node to be deleted is the leaf: Simply remove from the tree.</li>
-                    <li className="list-group-item border-0">Node to be deleted has only one child: Copy the child to the node and delete the child </li>
-                    <li className="list-group-item border-0"> Node to be deleted has two children: Find inorder successor of the node. Copy contents of the inorder successor to the node and delete the inorder successor. Note that inorder predecessor can also be used.</li>
-                </ol>
+                <div className="size text-center">
+                    <p className="lh-lg">
+                    1. Node to be deleted is the leaf: Simply remove from the tree.
+                    <br/>
+                    2. Node to be deleted has only one child: Copy the child to the node and delete the child 
+                    <br/>
+                    3. Node to be deleted has two children: Find inorder successor of the node. Copy contents of the inorder successor to the node and delete the inorder successor. Note that inorder predecessor can also be used.
+                    </p>
+                </div>
                 <br/>
                 <b className="size">The important thing to note is, inorder successor is needed only when the right child is not empty. In this particular case, inorder successor can be obtained by finding the minimum value in the right child of the node.</b>
             </div>

@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
  
 .detail {
-    background-color: var(--color-bg-second);
     font-family: 'Readex Pro', sans-serif;
 }
  
@@ -10,12 +9,15 @@
 }
  
 .mid {
-    background-color: var(--color-bg-main);
+    background-color: #9df7ff;
+    background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
+    height: auto;
     padding:5% 12%;
 
 }
  
 .bot {
+    background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
     padding: 5% 12%;
 }
 

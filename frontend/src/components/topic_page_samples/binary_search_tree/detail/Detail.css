@@ -8,13 +8,16 @@
 .list-group-item {
     background: var(--color-bg-second);
 }
- 
+
+.top {
+    background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
+}
 .mid {
     background-color: var(--color-bg-main);
     padding:5% 12%;
 
 }
- 
+
 .bot {
     padding: 5% 12%;
 }
