@@ -7,7 +7,7 @@ import com.simplyalgos.backend.page.security.perms.CreateForumPermission;
 import com.simplyalgos.backend.page.security.perms.CreateVotePermission;
 import com.simplyalgos.backend.page.security.perms.DeleteForumPermission;
 import com.simplyalgos.backend.page.security.perms.UpdateForumPermission;
-import com.simplyalgos.backend.user.dtos.PageReportDTO;
+import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.security.perms.CreateReportPermission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.MessageFormat;

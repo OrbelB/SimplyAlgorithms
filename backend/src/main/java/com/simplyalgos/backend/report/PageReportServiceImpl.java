@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.report;
 
 import com.simplyalgos.backend.page.PageEntity;
-import com.simplyalgos.backend.user.dtos.PageReportDTO;
+import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

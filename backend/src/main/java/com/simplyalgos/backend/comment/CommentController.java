@@ -8,7 +8,7 @@ import com.simplyalgos.backend.comment.security.DeleteCommentPermission;
 import com.simplyalgos.backend.comment.security.DeleteVotePermission;
 import com.simplyalgos.backend.comment.security.UpdateCommentPermission;
 import com.simplyalgos.backend.page.security.perms.CreateVotePermission;
-import com.simplyalgos.backend.user.dtos.CommentReportDTO;
+import com.simplyalgos.backend.report.dtos.CommentReportDTO;
 import com.simplyalgos.backend.report.security.perms.CreateReportPermission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

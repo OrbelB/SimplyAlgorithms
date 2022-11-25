@@ -3,7 +3,7 @@ package com.simplyalgos.backend.page;
 import com.simplyalgos.backend.page.dto.ForumDTO;
 import com.simplyalgos.backend.page.dto.FullForumDTO;
 import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
-import com.simplyalgos.backend.user.dtos.PageReportDTO;
+import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
 

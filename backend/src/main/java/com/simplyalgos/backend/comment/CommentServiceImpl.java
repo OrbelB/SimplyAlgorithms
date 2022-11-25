@@ -6,7 +6,7 @@ import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.comment.mappers.CommentMapper;
 import com.simplyalgos.backend.page.PageEntityService;
 import com.simplyalgos.backend.report.CommentReportService;
-import com.simplyalgos.backend.user.dtos.CommentReportDTO;
+import com.simplyalgos.backend.report.dtos.CommentReportDTO;
 import com.simplyalgos.backend.user.UserService;
 
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;

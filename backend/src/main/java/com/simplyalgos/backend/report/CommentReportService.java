@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.report;
 
 import com.simplyalgos.backend.comment.Comment;
-import com.simplyalgos.backend.user.dtos.CommentReportDTO;
+import com.simplyalgos.backend.report.dtos.CommentReportDTO;
 
 import java.util.UUID;
 

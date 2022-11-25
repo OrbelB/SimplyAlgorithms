@@ -5,7 +5,7 @@ import com.simplyalgos.backend.page.dto.FullForumDTO;
 import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
 import com.simplyalgos.backend.page.mappers.ForumMapper;
 import com.simplyalgos.backend.report.PageReportService;
-import com.simplyalgos.backend.user.dtos.PageReportDTO;
+import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.tag.TagService;
 import com.simplyalgos.backend.user.User;
 import com.simplyalgos.backend.user.UserService;

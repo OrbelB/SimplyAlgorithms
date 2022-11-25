@@ -1,5 +1,6 @@
-package com.simplyalgos.backend.user.dtos;
+package com.simplyalgos.backend.report.dtos;
 
+import com.simplyalgos.backend.report.dtos.BaseEntityDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -10,6 +11,6 @@ import java.util.UUID;
 @Setter
 @Getter
 @SuperBuilder
-public class PageReportDTO extends BaseEntityDTO{
+public class PageReportDTO extends BaseEntityDTO {
     UUID pageId;
 }
