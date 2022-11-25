@@ -1,6 +1,8 @@
 .teampage {
+    background-color: #b8f1f7;
+    background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
     height: auto;
-    margin: 0% 5% 15% 5%;
+    padding: 0% 5% 15% 5%;
 }
 
 .teampage-title {
@@ -21,6 +23,10 @@
     display: flex;
     flex-direction: row;
     gap: 5%;
+}
+
+h2 {
+    padding-right: 0;
 }
 
 .member-name {

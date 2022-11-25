@@ -2,25 +2,37 @@
 
 .wikibody {
     padding-bottom: 5%;
-    background-color: var(--color-bg-main);
+    background-color: #9df7ff;
+    background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
 }
 
 .wikititle {
     text-align: center;
     font-family: 'Readex Pro', sans-serif;
-    font-size: 60px;
+    font-size: 5em;
     padding-bottom: 2%;
 }
 
 .indent {
-    margin-left: 20px;
+    margin-left: 1.5em;
+}
+
+.fs {
+  font-size: 1.5em;
 }
 
 h3 {
+    font-size: 3em;
     text-align: center;
     font-family: 'Readex Pro', sans-serif;
 }
 
 h5 {
-    font-weight: 400;
+    font-family: 'Readex Pro', sans-serif;
+    font-size: 1.5em;
+    font-weight: 100;
+}
+
+.card-body {
+    box-shadow: 5px 10px var(--color-border-input-form);
 }

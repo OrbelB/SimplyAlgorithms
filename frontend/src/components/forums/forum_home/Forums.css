@@ -7,9 +7,13 @@
 }
 
 .forum-title {
-    font-size: 6em;
+    font-size: 7em;
     font-family: 'Readex Pro', sans-serif;
     padding-bottom: 0.5em;
+    text-shadow: -1px 1px #7e57c2,
+               -2px 2px #2196f3,
+               -3px 3px #26c6da,
+               -4px 4px #43a047;
 }
 
 .category-label {
@@ -32,25 +36,10 @@
     padding-top: 1em;
 }
 
-.category {
-    background-color: var(--color-bg-main);
-    border-radius: 10px 10px 10px 10px;
-    border: none;
-    font-size: 1.5em;
-    width: 19em;
-    margin-bottom: 0.8em;
-}
-
-.last-button {
-    background-color: var(--color-border-input-form);
-    border-radius: 10px 10px 10px 10px;
-    font-size: 3vh;
-    border: 0.1em solid black;
-}
-
 .filter-button {
-    background-color: var(--color-bg-alg-dash);
-    border-right: 0.1em solid black;
+    background-color: #c3d5f8;
+    border-color: var(--color-border-input-form);
+    font-family: 'Readex Pro', sans-serif;
     font-size: 1.8em;
     font-weight: bold;
     width: 7.5em;
@@ -92,6 +81,10 @@
 .middle {
     text-align: center;
     flex: 0.6;
+}
+
+.filters {
+    text-align: left;
 }
 
 /*For mobile */

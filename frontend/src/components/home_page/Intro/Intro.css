@@ -2,13 +2,23 @@
 
 .section {
     height: fit-content;
-    background-color: var(--color-bg-main );
+    background-color: #9df7ff;
+    background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
     text-align: center;
 }
 
 .title {
     font-size: 6em;
     padding-top: 1em;
+    text-shadow: -1px 1px #ef3550,
+               -2px 2px #f48fb1,
+               -3px 3px #7e57c2,
+               -4px 4px #2196f3,
+               -5px 5px #26c6da,
+               -6px 6px #43a047,
+               -7px 7px #eeff41,
+               -8px 8px #f9a825,
+               -9px 9px #ff5722;
 }
 
 .slogan {

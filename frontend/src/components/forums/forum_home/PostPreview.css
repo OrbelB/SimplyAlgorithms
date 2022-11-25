@@ -1,8 +1,9 @@
 .preview-section {
     height: auto;
     background-color: #EDEDED;
-    border: 1px solid black;
+    border: 1px solid var(--color-border-input-form);
     border-radius: 10px 10px 10px 10px;
+    box-shadow: 10px 5px var(--color-border-input-form);
 }
 
 .first-line {

@@ -25,9 +25,9 @@ export default function Login() {
                             <div className={"row justify-content-start"}>
                                 <p className={"m-0 mb-2 p-0"}>
 
-                                    Don't have an account, <i role={"button"} className={styles["text-style"]}
+                                    Don't have an account? <i role={"button"} className={styles["text-style"]}
                                                                  data-toggle="modal"
-                                                                 data-target="#examplemodal" onClick={handleShowSingUpModal}>Sign up</i>
+                                                                 data-target="#examplemodal" onClick={handleShowSingUpModal}>Sign Up</i>
 
                                 </p>
                             </div>

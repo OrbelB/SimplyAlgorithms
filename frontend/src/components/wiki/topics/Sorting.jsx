@@ -11,28 +11,28 @@ export default function Sorting() {
                     <div class="card-body">
                         <nav class="nav flex-column nav-pills nav-gap-y-1">
                             {/* SPECIIC TOPIC PAGES WILL BE FILLED OUT LATER*/}
-                                <NavLink to="/wikihome"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded"}>WHAT ARE ALGORITHMS?</NavLink>
+                                <NavLink to="/wikihome"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded fs"}>WHAT ARE ALGORITHMS?</NavLink>
                                 <br/>
-                                <NavLink to="/wiki/sorting"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded active"}>SORTING</NavLink>
-                                <NavLink to="/wiki/selectionsort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Selection Sort</NavLink>
-                                <NavLink to="/wiki/quicksort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Quick Sort</NavLink>
-                                <NavLink to="/wiki/bubblesort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Bubble Sort</NavLink>
-                                <NavLink to="/wiki/radixsort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Radix Sort</NavLink>
-                                <NavLink to="/wiki/trees"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded"}>TREES</NavLink>
-                                <NavLink to="/wiki/binarytrees"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Binary Search Trees</NavLink>
-                                <NavLink to="/wiki/twotree"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Two Tree</NavLink>
-                                <NavLink to="/wiki/threetree"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Three Tree</NavLink>
-                                <NavLink to="/wiki/redblacktree"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Red Black</NavLink>
-                                <NavLink to="/wiki/graphs"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded"}>GRAPHS</NavLink>
-                                <NavLink to="/wiki/breadthfirst"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Breadth-First Search</NavLink>
-                                <NavLink to="/wiki/depthfirst"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Depth-First Search</NavLink>
-                                <NavLink to="/wiki/topologicalsort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Djikstra Graph</NavLink>
-                                <NavLink to="/wiki/djikstra"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Two Tree</NavLink>
-                                <NavLink to="/wiki/datastructures"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded"}>DATA STRUCTURES</NavLink>
-                                <NavLink to="/wiki/arrays"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Arrays</NavLink>
-                                <NavLink to="/wiki/linkedlist"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Linked Lists</NavLink>
-                                <NavLink to="/wiki/stack"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Stack</NavLink>
-                                <NavLink to="/wiki/queue"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent"}>Queue</NavLink>
+                                <NavLink to="/wiki/sorting"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded active fs"}>SORTING</NavLink>
+                                <NavLink to="/wiki/selectionsort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Selection Sort</NavLink>
+                                <NavLink to="/wiki/quicksort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Quick Sort</NavLink>
+                                <NavLink to="/wiki/bubblesort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Bubble Sort</NavLink>
+                                <NavLink to="/wiki/radixsort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Radix Sort</NavLink>
+                                <NavLink to="/wiki/trees"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded fs"}>TREES</NavLink>
+                                <NavLink to="/wiki/binarytrees"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Binary Search Trees</NavLink>
+                                <NavLink to="/wiki/twotree"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Two Tree</NavLink>
+                                <NavLink to="/wiki/threetree"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Three Tree</NavLink>
+                                <NavLink to="/wiki/redblacktree"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Red Black</NavLink>
+                                <NavLink to="/wiki/graphs"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded fs"}>GRAPHS</NavLink>
+                                <NavLink to="/wiki/breadthfirst"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Breadth-First Search</NavLink>
+                                <NavLink to="/wiki/depthfirst"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Depth-First Search</NavLink>
+                                <NavLink to="/wiki/topologicalsort"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Djikstra Graph</NavLink>
+                                <NavLink to="/wiki/djikstra"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Two Tree</NavLink>
+                                <NavLink to="/wiki/datastructures"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded fs"}>DATA STRUCTURES</NavLink>
+                                <NavLink to="/wiki/arrays"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Arrays</NavLink>
+                                <NavLink to="/wiki/linkedlist"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Linked Lists</NavLink>
+                                <NavLink to="/wiki/stack"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Stack</NavLink>
+                                <NavLink to="/wiki/queue"  data-toggle="tab" className={"nav-item nav-link has-icon nav-link-faded indent fs"}>Queue</NavLink>
                             </nav>
                     </div>
                 </div>

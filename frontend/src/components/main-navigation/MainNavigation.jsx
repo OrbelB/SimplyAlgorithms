@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import Logout from "../logout/Logout";
 import Bell from "./Bell";
 import DropdownMenu from "./dropdown-menu/DropdownMenu";
+import "./MainNavigation.css";
 
 const nestedDropdownMenu = [
   {
@@ -107,7 +108,7 @@ export default function MainNavigation() {
                 <img
                   src={profilePicture}
                   className="rounded-circle"
-                  height="25"
+                  height="30"
                   alt="profile"
                   loading="lazy"
                 />
@@ -118,7 +119,7 @@ export default function MainNavigation() {
               >
                 <li>
                   <NavLink className="dropdown-item" to={"userprofile"}>
-                    My profile
+                    My Profile
                   </NavLink>
                 </li>
                 <li>
@@ -133,7 +134,7 @@ export default function MainNavigation() {
                       className="dropdown-item"
                       onClick={handleLogout}
                     >
-                      logout
+                      Logout
                     </i>
                   ) : (
                     <NavLink className="dropdown-item" to={"login"}>

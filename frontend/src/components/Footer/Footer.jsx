@@ -59,7 +59,7 @@ const Footer = () => {
         <div className={'col-2 align-self-center'}>
           <div className={cx(style['ojkj_team'], 'row')}>
             <div className={"ojkj"}>
-              <NavLink className="nav-link" aria-current="page" to={"/team"}>Meet OJKJ</NavLink>
+              <NavLink className="nav-link" aria-current="page" to={"/team"}>Meet the Team</NavLink>
             </div>
           </div>
         </div>

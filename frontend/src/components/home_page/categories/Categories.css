@@ -10,7 +10,7 @@
 }
     
 .wrap-collabsible {
-    margin: 1.2rem 0; 
+    padding: 1.2rem 0; 
 } 
 
 .space {
@@ -30,7 +30,7 @@
     color: #DDD; 
     cursor: pointer; 
     border-radius: 10px; 
-    transition: all 0.25s ease-out; 
+    transition: all 0.25s ease-out;
 } 
 
 .lbl-toggle:hover { 

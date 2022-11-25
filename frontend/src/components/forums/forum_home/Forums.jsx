@@ -29,6 +29,7 @@ export default function Forums() {
           </div>
 
           <div className="middle">
+            <div className="filters">
             <button
               className="filter-button first-filter"
               onClick={sortByTopRated}
@@ -42,6 +43,7 @@ export default function Forums() {
               Alphabetical
             </button>
             <button className="filter-button last-filter" onClick={sortByOther}>Other</button>
+            </div>
             <br />
             <br />
             <Post />
