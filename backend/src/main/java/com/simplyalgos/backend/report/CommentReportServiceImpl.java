@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.report;
 
 import com.simplyalgos.backend.comment.Comment;
-import com.simplyalgos.backend.report.dtos.CommentReportDTO;
+import com.simplyalgos.backend.user.dtos.CommentReportDTO;
 import com.simplyalgos.backend.user.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

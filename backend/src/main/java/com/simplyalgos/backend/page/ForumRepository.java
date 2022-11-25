@@ -22,11 +22,10 @@ public interface ForumRepository extends JpaRepository<Forum, UUID> {
                      @Param("video") String video,
                      @Param("user_id") String userId
     );
+
     @Modifying
     @Query(value = "DELETE FROM forum_page WHERE page_id = :page_id", nativeQuery = true)
     void deleteByPageID(@Param("page_id") String pageId);
 
     Page<Forum> findAllByPageEntityId_Tags_TagId(UUID tag_id,Pageable pageable);
-
-
 }

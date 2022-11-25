@@ -6,7 +6,7 @@ import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.comment.mappers.CommentMapper;
 import com.simplyalgos.backend.page.PageEntityService;
 import com.simplyalgos.backend.report.CommentReportService;
-import com.simplyalgos.backend.report.dtos.CommentReportDTO;
+import com.simplyalgos.backend.user.dtos.CommentReportDTO;
 import com.simplyalgos.backend.user.UserService;
 
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
@@ -83,6 +83,7 @@ public class CommentServiceImpl implements CommentService {
         //check if parent comment is present; map the child comment to its parent
         if (isCommentPresent(commentDTO.getParentCommentId()))
             parentChildCommentService.createParentChildMapping(childCommentCreated, commentDTO.getParentCommentId());
+
         return commentMapper.commentToCommentBasicDTO(childCommentCreated, commentDTO.getParentCommentId());
     }
 
@@ -122,11 +123,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
+    @Transactional
     @Override
     public UUID deleteComment(UUID commentId) {
         if (!commentRepository.existsById(commentId)) throw new NoSuchElementException(
                 MessageFormat.format("Comment with id {0} not found", commentId));
-        commentRepository.deleteById(commentId);
+        commentRepository.deleteByCommentId(commentId.toString());
         return commentId;
     }
 

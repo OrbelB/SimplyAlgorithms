@@ -72,11 +72,12 @@ public class CommentVoteServiceImpl implements CommentVoteService {
     }
 
     @Override
-    public Set<?> listVotesByComment(UUID commentId) {
+    public Set<?> listVotesByPage(UUID pageId) {
         return commentVoteRepository
-                .findAllByCommentVoteId_CommentId(commentId)
+                .findAllByCommentVoteReference_PageComment_PageId(pageId)
                 .stream()
                 .map(commentVoteMapper::comentVoteToCommentVoteDTO)
                 .collect(Collectors.toSet());
     }
+
 }

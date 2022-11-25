@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Slf4j
+@Transactional
 public class PageVoteServiceImpl implements PageVoteService {
     private final PageVoteRepository pageVoteRepository;
     private final PageVoteMapper pageVoteMapper;
@@ -61,7 +63,8 @@ public class PageVoteServiceImpl implements PageVoteService {
 
     @Override
     public void deletePageVote(UUID userId, UUID pageId) {
-        pageVoteRepository.deleteById(PageVoteId.builder().pageId(pageId).userId(userId).build());
+        pageVoteRepository.deleteVote(pageId.toString(), userId.toString());
+        //pageVoteRepository.deleteById(PageVoteId.builder().pageId(pageId).userId(userId).build());
     }
 
     @Override

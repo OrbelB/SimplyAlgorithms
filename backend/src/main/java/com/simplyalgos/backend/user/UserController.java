@@ -2,39 +2,51 @@ package com.simplyalgos.backend.user;
 
 
 import com.simplyalgos.backend.security.JpaUserDetailsService;
+import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.security.perms.UserDeletePermission;
 import com.simplyalgos.backend.user.security.perms.UserReadPermission;
 import com.simplyalgos.backend.user.security.perms.UserUpdatePasswordPermission;
 import com.simplyalgos.backend.user.security.perms.UserUpdatePermission;
 import com.simplyalgos.backend.web.dtos.UpdatePassword;
+import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.Set;
 import java.util.UUID;
 
 
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/users")
 @Slf4j
 @RestController
 public class UserController {
     private final UserService userService;
     private final JpaUserDetailsService jpaUserDetailsService;
+
+    private final StorageService storageService;
+
     @GetMapping()
     @PreAuthorize("hasAuthority('users.crud')")
     public ResponseEntity<Set<UserDTO>> getUserList() {
-        return new ResponseEntity<>(userService.parseUsers(),HttpStatus.OK);
+        return new ResponseEntity<>(userService.parseUsers(), HttpStatus.OK);
     }
+
     @UserReadPermission
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable String id) {
@@ -42,8 +54,9 @@ public class UserController {
     }
 
     @UserUpdatePermission
-    @PutMapping(path = "/update", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> update(@RequestBody UserDTO userDTO) {
+    @PutMapping(path = "/update", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> update(@RequestBody UserDataPostDTO userDTO) {
+        log.info("user id is ", userDTO.getUserId());
         return ResponseEntity.accepted().body(userService.updateUser(userDTO));
     }
 
@@ -57,10 +70,18 @@ public class UserController {
     }
 
 
-
     @UserDeletePermission
     @DeleteMapping(path = "/delete", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> delete(@RequestParam(name = "userId") UUID userId){
+    public ResponseEntity<?> delete(@RequestParam(name = "userId") UUID userId) {
         return ResponseEntity.ok().body(userService.removeUser(userId));
     }
+
+
+    @Deprecated
+    @PostMapping(path = "/upload/image")
+    public ResponseEntity<?> uploadFile(@RequestParam(value = "file") MultipartFile file) {
+        return ResponseEntity.accepted().body(storageService.uploadImageFile(file));
+    }
+
+
 }

@@ -4,6 +4,7 @@ import com.simplyalgos.backend.comment.Comment;
 import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
 import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.page.Forum;
+import com.simplyalgos.backend.page.Views;
 import com.simplyalgos.backend.page.dto.ForumDTO;
 import com.simplyalgos.backend.page.dto.FullForumDTO;
 import com.simplyalgos.backend.tag.Tag;
@@ -78,6 +79,7 @@ public class ForumDecorator implements ForumMapper {
         return forumDTO;
 
     }
+
 
     private Set<TagDTO> mapTagsToTagsDto(Forum forum) {
         Set<Tag> tags = forum.getPageEntityId().getTags();

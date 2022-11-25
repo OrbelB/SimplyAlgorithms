@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.page.mappers;
 
 import com.simplyalgos.backend.page.Forum;
+import com.simplyalgos.backend.page.Views;
 import com.simplyalgos.backend.page.dto.ForumDTO;
 import com.simplyalgos.backend.page.dto.FullForumDTO;
 
@@ -28,6 +29,7 @@ public interface ForumMapper {
     @Mapping(target = "tags", ignore = true)
     @Mapping(target = "comments", ignore = true)
     public FullForumDTO forumToFullForumDto(Forum forum);
+
     @Named("parseStringToDate")
     default Timestamp parseStringToDate(String createdDate) {
         return Timestamp.valueOf(createdDate);

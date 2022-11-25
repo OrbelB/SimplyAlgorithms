@@ -3,7 +3,7 @@ package com.simplyalgos.backend.page;
 import com.simplyalgos.backend.page.dto.*;
 import com.simplyalgos.backend.page.mappers.TopicMapper;
 import com.simplyalgos.backend.report.PageReportService;
-import com.simplyalgos.backend.report.dtos.PageReportDTO;
+import com.simplyalgos.backend.user.dtos.PageReportDTO;
 import com.simplyalgos.backend.tag.TagService;
 import com.simplyalgos.backend.user.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;

@@ -7,7 +7,7 @@ import com.simplyalgos.backend.page.security.perms.CreateForumPermission;
 import com.simplyalgos.backend.page.security.perms.CreateVotePermission;
 import com.simplyalgos.backend.page.security.perms.DeleteForumPermission;
 import com.simplyalgos.backend.page.security.perms.UpdateForumPermission;
-import com.simplyalgos.backend.report.dtos.PageReportDTO;
+import com.simplyalgos.backend.user.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.security.perms.CreateReportPermission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.MessageFormat;
@@ -73,7 +74,6 @@ public class ForumController {
     @PostMapping(path = "/vote", consumes = "application/json")
     public ResponseEntity<?> likeOrDislike(@RequestBody LikeDislikeDTO likeDislikeDTO) {
         return ResponseEntity.accepted().body(forumService.userLikedOrDisliked(likeDislikeDTO.userId(), likeDislikeDTO.pageId(), likeDislikeDTO.likeDislike()));
-
     }
 
     @CreateReportPermission
@@ -98,9 +98,22 @@ public class ForumController {
         return ResponseEntity.ok(forumService.deleteVote(userId, pageId));
     }
 
-    @GetMapping(path = "/list/votes")
-    public ResponseEntity<?> listVotesByCommentId(@RequestParam(name = "pageId") UUID pageId) {
+    @GetMapping(path = "/list/votes", produces = "application/json")
+    public ResponseEntity<?> listVotesByForumId(@RequestParam(name = "pageId") UUID pageId) {
         return ResponseEntity.ok(forumService.listVotesByPage(pageId));
     }
 
+    @GetMapping(path = "/list/forums-view")
+    public ResponseEntity<?> listForumsViewedByUser(
+            @RequestParam(name = "userId") UUID userId,
+            @RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = true, defaultValue = "5") Integer size
+    ) {
+        return ResponseEntity.ok(forumService.listForumsByUserViewForums(userId, PageRequest.of(page, size)));
+    }
+    @PostMapping(path = "/view", produces = "application/json")
+    public ResponseEntity<?> addUserView(@RequestParam(name = "userId") UUID userId,
+                                         @RequestParam(name = "pageId") UUID pageId) {
+        return ResponseEntity.accepted().body(forumService.addForumUserView(userId, pageId));
+    }
 }

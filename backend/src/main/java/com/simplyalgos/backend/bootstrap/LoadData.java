@@ -1,11 +1,14 @@
 package com.simplyalgos.backend.bootstrap;
 
+import com.simplyalgos.backend.page.Topic;
+import com.simplyalgos.backend.page.TopicRepository;
 import com.simplyalgos.backend.user.*;
 import com.simplyalgos.backend.user.security.Authority;
 import com.simplyalgos.backend.user.security.AuthorityRepository;
 import com.simplyalgos.backend.user.security.Role;
 import com.simplyalgos.backend.user.security.RoleRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,18 +16,23 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @RequiredArgsConstructor
+@Slf4j
 @Component
 public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
     private final AuthorityRepository authorityRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final TopicRepository topicRepository;
 
     @Transactional
     @Override
@@ -33,6 +41,70 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         if (userRepository.findByUsername("admin").isEmpty()) {
             loadDefaultUsers();
         }
+
+        if(topicRepository.findById(UUID.fromString("54e9d8be-f123-4360-9c76-0c4c2ccd99eb")).isEmpty()){
+            loadDefaultTopicPages();
+        }
+    }
+
+    private void loadDefaultTopicPages() {
+        topicRepository.save(
+                Topic.builder()
+                        .pageId(UUID.fromString("3ba9a5c8-a328-4c88-80e0-57872ed56bde"))
+                        .downVotes(0)
+                        .upVotes(0)
+                        .video("template")
+                        .timeComplexity("template")
+                        .runningTime("template")
+                        .explanation("explanation")
+                        .title("Bubble Sort")
+                        .downVotes(0)
+                        .build()
+        );
+
+
+        topicRepository.save(
+                Topic.builder()
+                        .pageId(UUID.fromString("7940b97e-d662-4c19-a2bc-2cd74f3fe25c"))
+                        .downVotes(0)
+                        .upVotes(0)
+                        .video("template")
+                        .timeComplexity("template")
+                        .runningTime("template")
+                        .explanation("explanation")
+                        .title("Binary Search Trees")
+                        .downVotes(0)
+                        .build()
+        );
+
+        topicRepository.save(
+                Topic.builder()
+                        .pageId(UUID.fromString("c9fc9f60-6468-45ed-ab1f-5463f4b72865"))
+                        .downVotes(0)
+                        .upVotes(0)
+                        .video("template")
+                        .timeComplexity("template")
+                        .runningTime("template")
+                        .explanation("explanation")
+                        .title("Arrays")
+                        .downVotes(0)
+                        .build()
+        );
+
+        topicRepository.save(
+                Topic.builder()
+                        .pageId(UUID.fromString("54e9d8be-f123-4360-9c76-0c4c2ccd99eb"))
+                        .downVotes(0)
+                        .upVotes(0)
+                        .video("template")
+                        .timeComplexity("template")
+                        .runningTime("template")
+                        .explanation("explanation")
+                        .title("BFS")
+                        .downVotes(0)
+                        .build()
+        );
+        log.debug(MessageFormat.format("the current loaded pages are {0}", topicRepository.findAll().size()));
     }
 
     private void loadDefaultUsers() {

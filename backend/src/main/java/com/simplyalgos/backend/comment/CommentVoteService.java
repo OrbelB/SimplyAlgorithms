@@ -14,5 +14,5 @@ public interface CommentVoteService {
 
     void deleteCommentVote(UUID userId,UUID commentId);
     boolean commentVoteExists(CommentVoteId commentVoteId);
-    Set<?> listVotesByComment(UUID commentId);
+    Set<?> listVotesByPage(UUID pageId);
 }

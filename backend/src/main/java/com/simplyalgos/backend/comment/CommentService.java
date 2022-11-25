@@ -2,7 +2,7 @@ package com.simplyalgos.backend.comment;
 
 import com.simplyalgos.backend.comment.dto.*;
 
-import com.simplyalgos.backend.report.dtos.CommentReportDTO;
+import com.simplyalgos.backend.user.dtos.CommentReportDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 
 import org.springframework.data.domain.Pageable;

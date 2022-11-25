@@ -2,7 +2,9 @@ package com.simplyalgos.backend.web.dtos;
 
 import lombok.Builder;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.sql.Date;
 
 @Builder

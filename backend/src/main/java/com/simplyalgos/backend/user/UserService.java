@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.user;
 
 import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 
 import java.util.Set;
 import java.util.UUID;
@@ -13,7 +14,7 @@ public interface UserService {
 
     User getUser(UUID user);
 
-    UserDTO updateUser(UserDTO userToUpdate);
+    UserDTO updateUser(UserDataPostDTO userToUpdate);
 
     boolean userExists(UUID userId);
 

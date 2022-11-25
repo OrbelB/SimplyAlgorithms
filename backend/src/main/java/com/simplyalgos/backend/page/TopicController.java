@@ -4,7 +4,7 @@ import com.simplyalgos.backend.comment.security.DeleteVotePermission;
 import com.simplyalgos.backend.page.dto.FullTopicDTO;
 import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
 import com.simplyalgos.backend.page.security.perms.CreateVotePermission;
-import com.simplyalgos.backend.report.dtos.PageReportDTO;
+import com.simplyalgos.backend.user.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.security.perms.CreateReportPermission;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

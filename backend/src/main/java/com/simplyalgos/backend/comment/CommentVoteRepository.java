@@ -17,7 +17,7 @@ public interface CommentVoteRepository extends JpaRepository<CommentVote, Commen
     Set<CommentVote> findAllByCommentVoteId_CommentId(UUID commentVoteId_commentId);
 
     void deleteByCommentVoteId(CommentVoteId commentVoteId);
-
+    Set<CommentVote> findAllByCommentVoteReference_PageComment_PageId(UUID commentVoteReference_pageComment_pageId);
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM comment_vote WHERE user_id = :user_id AND comment_id = :comment_id")
     void deleteCommentVote(@Param("user_id") String userId, @Param("comment_id") String commentId);

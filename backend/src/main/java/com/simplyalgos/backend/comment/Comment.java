@@ -75,4 +75,9 @@ public class Comment {
     @JoinColumn(name = "page_id", referencedColumnName = "page_id", foreignKey = @ForeignKey(name = "page_id"))
     private PageEntity pageComment;
 
+
+    public void setPageComment(PageEntity pageComment) {
+        this.pageComment = pageComment;
+        pageComment.getPageComments().add(this);
+    }
 }

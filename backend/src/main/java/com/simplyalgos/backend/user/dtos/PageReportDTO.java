@@ -1,4 +1,4 @@
-package com.simplyalgos.backend.report.dtos;
+package com.simplyalgos.backend.user.dtos;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

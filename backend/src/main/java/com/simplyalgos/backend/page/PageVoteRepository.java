@@ -28,6 +28,9 @@ public interface PageVoteRepository extends JpaRepository<PageVote, PageVoteId> 
                                              @Param("like_dislike") boolean likeDislike);
 
 
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM page_vote WHERE page_id = :page_id AND user_id = :user_id")
+    void deleteVote(@Param("page_id") String pageId, @Param("user_id") String userId);
 
     Set<PageVote> findAllByPageVoteId_PageId(UUID pageVoteId_pageId);
 }

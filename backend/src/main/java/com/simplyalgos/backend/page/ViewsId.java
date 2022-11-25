@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.page;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,9 +15,12 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Embeddable
 public class ViewsId implements Serializable {
+
+    @Type(type = "org.hibernate.type.UUIDCharType")
     @Column(name = "page_id")
     private UUID pageId;
 
+    @Type(type = "org.hibernate.type.UUIDCharType")
     @Column(name = "user_id")
     private UUID userId;
 

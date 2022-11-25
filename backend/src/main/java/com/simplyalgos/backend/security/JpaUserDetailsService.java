@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.security;
 
 import com.simplyalgos.backend.exceptions.PasswordsDontMatchException;
+import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.user.security.Role;
 import com.simplyalgos.backend.user.security.RoleRepository;
 import com.simplyalgos.backend.user.User;
@@ -40,6 +41,8 @@ public class JpaUserDetailsService implements UserDetailsService {
 
     private final RoleRepository roleRepository;
 
+    private final StorageService storageService;
+
     @Transactional
     public void createUser(SignupDTO userDto) throws Exception {
         //assign user role by default : student
@@ -47,6 +50,7 @@ public class JpaUserDetailsService implements UserDetailsService {
             throw new Exception("username exists!");
         }
         User user = userRegisteredMapper.create(userDto);
+        user.setProfilePicture(userDto.profilePicture());
         user.setRoles(Set.of(assignRoleTONewUser("STUDENT")));
         user.setPassword(passwordEncoder.encode(userDto.password()));
         userRepository.save(user);

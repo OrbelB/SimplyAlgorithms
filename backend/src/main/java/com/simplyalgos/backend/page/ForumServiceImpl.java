@@ -5,7 +5,7 @@ import com.simplyalgos.backend.page.dto.FullForumDTO;
 import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
 import com.simplyalgos.backend.page.mappers.ForumMapper;
 import com.simplyalgos.backend.report.PageReportService;
-import com.simplyalgos.backend.report.dtos.PageReportDTO;
+import com.simplyalgos.backend.user.dtos.PageReportDTO;
 import com.simplyalgos.backend.tag.TagService;
 import com.simplyalgos.backend.user.User;
 import com.simplyalgos.backend.user.UserService;
@@ -37,6 +37,8 @@ public class ForumServiceImpl implements ForumService {
     private final PageReportService pageReportService;
 
     private final UserService userService;
+
+    private final ViewsService viewsService;
 
     @Override
     public ObjectPagedList<?> listForumPages(Pageable pageable) {
@@ -80,7 +82,7 @@ public class ForumServiceImpl implements ForumService {
     @Transactional
     @Override
     public LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike) {
-        if (forumRepository.existsById(pageId)) {
+        if (!forumRepository.existsById(pageId)) {
             throw new NoSuchElementException(
                     MessageFormat.format("page with Id {0} does not exits", pageId));
         }
@@ -158,12 +160,13 @@ public class ForumServiceImpl implements ForumService {
     public PageVoteId deleteVote(UUID userId, UUID pageId) {
         PageVoteId pageVoteId = PageVoteId.builder().pageId(pageId).userId(userId).build();
         if (pageVoteService.pageVoteExists(pageVoteId)) {
+            log.debug("I am inside delete vote and page does exists");
             pageVoteService.deletePageVote(userId, pageId);
             updateSingleForumLikeDisliked(pageId);
             return pageVoteId;
         }
         throw new NoSuchElementException(MessageFormat.
-                format("Vote for comment with id {0} is not present", pageId));
+                format("Vote for pageId with id {0} is not present", pageId));
 
     }
 
@@ -186,5 +189,23 @@ public class ForumServiceImpl implements ForumService {
     public Object listVotesByPage(UUID pageId) {
         return pageVoteService.listVotesByPage(pageId);
     }
+
+    @Override
+    public FullForumDTO addForumUserView(UUID userId, UUID pageId) {
+        viewsService.addUserView(userId, pageId);
+        return getForumPage(pageId.toString());
+    }
+
+    @Override
+    public List<?> listForumsByUserViewForums(UUID userId, Pageable pageable) {
+        Iterable<UUID> pageIds = viewsService
+                .listForumsByUserView(userId)
+                .stream()
+                .map(views -> views
+                        .getPageViewed().getPageId()
+                ).collect(Collectors.toSet());
+        return forumRepository.findAllById(pageIds).stream().map(forumMapper::forumToFullForumDto).toList();
+    }
+
 
 }

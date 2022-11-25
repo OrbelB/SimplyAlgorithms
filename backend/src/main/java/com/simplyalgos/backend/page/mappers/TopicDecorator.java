@@ -64,7 +64,7 @@ public class TopicDecorator implements TopicMapper {
     }
 
     private Set<CommentBasicDTO> mapCommentsToCommentsDTO(Set<Comment> pageComments) {
-        return pageComments.stream().filter(comment -> comment.getIsParentChild().equals(CommentType.CHILD.label)).map(pageComment ->
+        return pageComments.stream().filter(comment -> comment.getIsParentChild().equals(CommentType.PARENT.label)).map(pageComment ->
                 CommentBasicDTO.builder()
                         .commentId(pageComment.getCommentId())
                         .createdBy(
