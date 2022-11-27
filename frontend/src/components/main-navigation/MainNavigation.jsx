@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import image from "../../assets/nav-logo.png";
 import Logout from "../logout/Logout";
 import Bell from "./Bell";
 import DropdownMenu from "./dropdown-menu/DropdownMenu";
@@ -34,7 +35,7 @@ export default function MainNavigation() {
     <>
       {showModal && <Logout handleLogout={handleLogout} />}
       <nav
-        className="navbar navbar-expand-lg bg-light border-bottom border-dark"
+        className="navbar navbar-expand-lg border-bottom border-dark"
         style={{ minHeight: "120px" }}
       >
         <div className="container-fluid justify-content-between">
@@ -51,7 +52,7 @@ export default function MainNavigation() {
               <span className="navbar-toggler-icon"></span>
             </button>
             <div
-              className="collapse navbar-collapse mt-4 ms-2  mt-md-0 mb-3 mb-md-0 bg-light"
+              className="collapse navbar-collapse mt-4 ms-2  mt-md-0 mb-3 mb-md-0"
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav">
@@ -77,11 +78,14 @@ export default function MainNavigation() {
               </ul>
             </div>
           </div>
-          <ul className="navbar-nav flex-row d-none d-md-flex ms-5 me-5">
-            <li className="nav-item  me-lg-1 p-3">
-              <h2>SIMPLY ALGORITHMS</h2>
-            </li>
-          </ul>
+          <div className="navbar-nav flex-row d-none d-md-flex ms-5 me-5">
+            <img className="nav-ite me-lg-1 p-4" 
+                  src={image}
+                  height="100px"
+                  width="auto"
+                  alt="nav-logo"
+                  loading="lazy"/>
+          </div>
           <div className="navbar-nav flex-row">
             <form className="nav-item me-2 d-flex" role="search">
               <input

@@ -27,13 +27,13 @@
     text-align: center;
     border: 1px solid black;
     border-radius: 30px;
+    transition-duration: 0.1s;
 }
 .ojkj_team:hover{
-    color: var(--color-socials-hover);
+    background-color: black;
+    color: white;
 }
-.nav-link:hover{
-    color: var(--color-socials-hover);
-}
+
 .web_logo{
     position: relative;
     left: 42%;
