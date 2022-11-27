@@ -69,7 +69,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
         password,
         email,
         dob,
-        profilePicture: imageToStringBase64(image),
+        profilePicture: image.name,
       })
     );
     emailReset();

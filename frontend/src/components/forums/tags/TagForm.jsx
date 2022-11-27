@@ -66,7 +66,7 @@ export default function TagForm({ currentTags, setCurrentTags }) {
   };
   return (
     <>
-      <div className="row justify-content-center mt-3 mb-5">
+      <div className="row justify-content-center mb-5">
         {currentTags?.map((tag) => (
           <Chip
             key={tag.tagId === "" ? nanoid() : tag.tagId}
