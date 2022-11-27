@@ -47,6 +47,7 @@ export default function Breadth_first_search() {
     <>
       {/* <AlgoFram/> */}
       {/* <AlgVisBtns/> */}
+      <AlgoFram vis_url={bfs} viz_title={viz_title}/>
       <Detail />
       <CodeSnippet />
       {/*<TopicQuiz/> */}
