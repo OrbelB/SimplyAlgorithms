@@ -125,7 +125,7 @@ export default function Post() {
         onClick={handleShow}
       >
         <div>
-          Ask A Question
+          Ask A Question 
           <RiQuestionnaireFill />
         </div>
       </button>
