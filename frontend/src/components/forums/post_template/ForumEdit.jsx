@@ -98,7 +98,10 @@ export default function ForumEdit() {
           onChange={descriptionChangeHandler}
         />
         <h4 className="row justify-content-center">Current Categories</h4>
+        <div className="w-75">
         <TagForm currentTags={currentTags} setCurrentTags={setCurrentTags} />
+        </div>
+        
       </div>
       <div className="row justify-content-around mt-5">
         <div className="col-auto">
