@@ -19,12 +19,6 @@ export default function Forums() {
       <div className="row">
         <div className="column">
           <div className="side1">
-            <h1 className="category-label">Categories</h1>
-            <input
-              type="text"
-              className="search-bar"
-              placeholder="Search Category..."
-            />
             <Tags />
           </div>
 

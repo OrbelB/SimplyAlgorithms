@@ -52,7 +52,7 @@ export default function MainNavigation() {
               <span className="navbar-toggler-icon"></span>
             </button>
             <div
-              className="collapse navbar-collapse mt-4 ms-2  mt-md-0 mb-3 mb-md-0"
+              className="collapse navbar-collapse mt-4  mt-md-0 mb-3 mb-md-0"
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav">
@@ -78,17 +78,16 @@ export default function MainNavigation() {
               </ul>
             </div>
           </div>
-          <div className="navbar-nav flex-row d-none d-lg-flex ms-5 me-5">
-            <img className="nav-item me-lg-1 p-4" 
+          <div className="navbar-nav flex-row d-none d-md-flex">
+            <img className="nav-item me-lg-1 p-0" 
                   src={image}
-                  height="100px"
+                  height="60px"
                   width="auto"
                   alt="nav-logo"
                   loading="lazy"/>
           </div>
           <div className="navbar-nav flex-row">
-            {/*}
-            <form className="nav-item me-2 d-flex" role="search">
+            {/* <form className="nav-item me-2 d-flex" role="search">
               <input
                 className="form-control me-2"
                 type="search"
@@ -98,11 +97,11 @@ export default function MainNavigation() {
               <button className="btn btn-outline-primary" type="button">
                 <span className="bi bi-search"></span>
               </button>
-  </form>*/}
-            <div className="nav-item  m-auto me-4">
+            </form> */}
+            <div className="nav-item m-auto  me-3 me-lg-1" >
               <Bell />
             </div>
-            <div className="nav-item dropdown me-2">
+            <div className="nav-item m-auto dropdown  me-3 me-lg-1">
               <i
                 className="nav-link dropdown-toggle"
                 role="button"
@@ -113,7 +112,7 @@ export default function MainNavigation() {
                 <img
                   src={profilePicture}
                   className="rounded-circle"
-                  height="30"
+                  height="48"
                   alt="profile"
                   loading="lazy"
                 />

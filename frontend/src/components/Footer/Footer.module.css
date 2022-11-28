@@ -1,6 +1,7 @@
 
 .box{
-    background-color: #f0f5f5;
+    min-height:50px;
+    background-color: white;
     /* temp to just see whre it starts & ends */
     padding-top: 1rem;
     padding-bottom: 1rem;

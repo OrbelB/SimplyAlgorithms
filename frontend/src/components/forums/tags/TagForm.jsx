@@ -70,7 +70,7 @@ export default function TagForm({ currentTags, setCurrentTags }) {
         {currentTags?.map((tag) => (
           <Chip
             key={tag.tagId === "" ? nanoid() : tag.tagId}
-            className="col-auto me-2"
+            className="col-auto m-auto mt-3"
             label={tag.tag}
             variant="outlined"
             onDelete={() => removeTag(tag.tagId, tag.tag)}
