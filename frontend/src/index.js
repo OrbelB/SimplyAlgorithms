@@ -15,7 +15,7 @@ interceptors(store);
 store.dispatch(
   fetchTags({
     page: 0,
-    size: 5,
+    size: 15,
   })
 );
 const root = ReactDOM.createRoot(document.getElementById("root"));

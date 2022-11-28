@@ -1,10 +1,11 @@
 import "./PostPreview.css";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSortedForums } from "../../../store/reducers/forums-reducer";
+import { forumsActions, selectSortedForums } from "../../../store/reducers/forums-reducer";
+import { forumActions } from "../../../store/reducers/forum-reducer";
 import { useState } from "react";
 import { fetchForumList } from "../../../services/forum";
 import ForumQuickView from "./ForumQuickView";
-import ReportModal from "./ReportModal";
+import AlertSnackBar from "../../alert-messages-snackbar/AlertSnackBar";
 export const post_previews = [
   {
     id: 1,
@@ -40,6 +41,7 @@ export default function PostPreview() {
   const { totalPages } = useSelector((state) => state.forums);
   const [loadMorePages, setLoadMorePages] = useState(false);
   const [sortBy, setSortBy] = useState("createdDate");
+  const { reportId } = useSelector((state) => state.forum);
   const { filterBy: filterForumBy, sortBy: sortForumBy } = useSelector(
     (state) => state.forums
   );
@@ -63,9 +65,13 @@ export default function PostPreview() {
     setLoadMorePages(!loadMorePages);
   };
 
+  const removeForumId = () =>{
+     dispatch(forumActions.removeSingleReportId());
+  }
+
   return (
     <>
-      <ReportModal />
+      {reportId && <AlertSnackBar passedMessage={`Your report has been received. The id is ${reportId}`}  typeMessage={"success"}/>}
       <div>
         {showedForums.map((forum) => (
           <ForumQuickView

@@ -62,6 +62,7 @@ export const forumSlice = createSlice({
       })
       .addCase(fetchSingleTopic.fulfilled, (state, action) => {
         state.status = "completed";
+        console.info("from extra reducer date", action.payload.createdDate);
         state.forum = {
           ...action.payload,
           createdDate: new Date(action.payload.createdDate).toISOString(),
