@@ -4,10 +4,9 @@ package com.simplyalgos.backend.page;
 import com.fasterxml.jackson.annotation.*;
 import com.simplyalgos.backend.user.User;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 @Setter
@@ -31,7 +30,7 @@ public class Forum extends BaseEntity {
     private int upVotes;
 
     @JsonIncludeProperties({"tags", "pageComments"})
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id", nullable = false)
     private PageEntity pageEntityId;
 
@@ -41,7 +40,7 @@ public class Forum extends BaseEntity {
     private User createdBy;
 
     @Builder
-    public Forum(UUID pageId, Timestamp createdDate, String title, String descriptionText, String photo, String video, int downVotes, int upVotes, PageEntity pageEntityId, User createdBy) {
+    public Forum(UUID pageId, Date createdDate, String title, String descriptionText, String photo, String video, int downVotes, int upVotes, PageEntity pageEntityId, User createdBy) {
         super(pageId, createdDate, title);
         this.descriptionText = descriptionText;
         this.photo = photo;

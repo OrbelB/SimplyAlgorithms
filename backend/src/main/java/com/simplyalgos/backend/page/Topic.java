@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.*;
 
 @Setter
@@ -31,7 +30,7 @@ public class Topic extends BaseEntity {
     private Integer downVotes;
 
     @Builder
-    public Topic(UUID pageId, Timestamp createdDate, String title, String video, String runningTime, String timeComplexity, String explanation, Integer upVotes, Integer downVotes, PageEntity pageEntityId, List<TopicSteps> topicSteps, List<TopicExternalResource> topicExternalResources, List<CodeSnippet> codeSnippets) {
+    public Topic(UUID pageId, Date createdDate, String title, String video, String runningTime, String timeComplexity, String explanation, Integer upVotes, Integer downVotes, PageEntity pageEntityId, List<TopicSteps> topicSteps, List<TopicExternalResource> topicExternalResources, List<CodeSnippet> codeSnippets) {
         super(pageId, createdDate, title);
         this.video = video;
         this.runningTime = runningTime;

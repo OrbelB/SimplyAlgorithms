@@ -15,7 +15,6 @@ import org.hibernate.annotations.Type;
 
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.*;
 
 
@@ -46,8 +45,9 @@ public class Comment {
     private String commentText;
 
     @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date")
-    private Timestamp createdDate;
+    private java.util.Date createdDate;
 
     @Column(name = "is_parent_child")
     private String isParentChild;

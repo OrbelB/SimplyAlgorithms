@@ -2,14 +2,14 @@ package com.simplyalgos.backend.page;
 
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import net.bytebuddy.implementation.bind.annotation.Super;
+
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -30,12 +30,13 @@ public class BaseEntity {
     private UUID pageId;
 
     @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date")
-    private Timestamp createdDate;
+    private java.util.Date createdDate;
 
     private String title;
 
-    public BaseEntity(UUID pageId, Timestamp createdDate, String title) {
+    public BaseEntity(UUID pageId, Date createdDate, String title) {
         this.pageId = pageId;
         this.createdDate = createdDate;
         this.title = title;
