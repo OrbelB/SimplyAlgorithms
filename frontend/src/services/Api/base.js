@@ -1,11 +1,11 @@
 import axios from "axios";
 import { refreshAccessToken } from "../auth";
 const AWS_BASE_URL = "http://simplyalgosserver-env.eba-wmcrmidx.us-east-1.elasticbeanstalk.com:5000";
-
+const main ="https://www.api.simplyalgorithms.com"
 
 const LOCALHOST_BASE_URL = "http://localhost:5000";
 const apiClient = axios.create({
-  baseURL:AWS_BASE_URL,
+  baseURL:main,
 });
 
 export const interceptors = (store) => {
