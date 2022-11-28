@@ -4,6 +4,7 @@ import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class FullTopicDTO {
 
     UUID pageId;
-    String createdDate;
+    Date createdDate;
     String title;
     String video;
     String runningTime;

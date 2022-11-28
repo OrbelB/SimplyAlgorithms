@@ -79,7 +79,9 @@ public class TopicDecorator implements TopicMapper {
                         )
                         .commentText(pageComment.getCommentText())
                         .likes(pageComment.getLikes()).dislikes(pageComment.getDislikes())
-                        .createdDate(pageComment.getCreatedDate().toString())
+                        .dislikes(pageComment.getDislikes())
+                        .replyCount(pageComment.getChildrenComments().size())
+                        .createdDate(pageComment.getCreatedDate())
                         .build()).collect(Collectors.toSet());
     }
 

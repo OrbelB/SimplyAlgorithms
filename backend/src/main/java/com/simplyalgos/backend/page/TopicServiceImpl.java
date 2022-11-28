@@ -65,7 +65,7 @@ public class TopicServiceImpl implements TopicService {
         ));
     }
 
-    //TODO needs more work to remove childrens no specify
+    //TODO needs more work to remove children no specify
     @Transactional
     @Override
     public void updateTopicPage(FullTopicDTO fullTopicDTO) {

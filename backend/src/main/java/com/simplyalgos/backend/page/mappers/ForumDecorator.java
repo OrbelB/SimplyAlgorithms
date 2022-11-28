@@ -99,7 +99,7 @@ public class ForumDecorator implements ForumMapper {
                         .builder()
                         .commentId(comment.getCommentId())
                         .commentText(comment.getCommentText())
-                        .createdDate(comment.getCreatedDate().toString())
+                        .createdDate(comment.getCreatedDate())
                         .createdBy(UserDataDTO.builder()
                                 .userId(comment.getCreatedBy().getUserId())
                                 .firstName(comment.getCreatedBy().getFirstName())

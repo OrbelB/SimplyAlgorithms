@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class FullForumDTO {
     UUID pageId;
     String descriptionText;
     String title;
-    String createdDate;
+    Date createdDate;
     String photo;
     String video;
     int upVotes;

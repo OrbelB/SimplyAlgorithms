@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -12,7 +13,7 @@ import java.util.UUID;
 public class CommentBasicDTO {
     UUID commentId;
     String commentText;
-    String createdDate;
+    Date createdDate;
     Integer likes;
     Integer dislikes;
     UserDataDTO createdBy;

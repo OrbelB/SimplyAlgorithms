@@ -31,7 +31,7 @@ public class CommentMapper {
             Comment currentComment = parentChildComment.getParentChildCommentId().getChildComment();
             commentBasicDTOBuilder
                     .comment(CommentBasicDTO.builder().createdBy(mapUserToUserDataDTO(currentComment.getCreatedBy()))
-                            .createdDate(currentComment.getCreatedDate().toString())
+                            .createdDate(currentComment.getCreatedDate())
                             .commentId(currentComment.getCommentId())
                             .commentText(currentComment.getCommentText())
                             .dislikes(currentComment.getDislikes())
@@ -48,7 +48,7 @@ public class CommentMapper {
                 .rootId(pageId)
                 .comment(CommentBasicDTO.builder().commentId(comment.getCommentId())
                         .commentText(comment.getCommentText())
-                        .createdDate(comment.getCreatedDate().toString())
+                        .createdDate(comment.getCreatedDate())
                         .createdBy(UserDataDTO.builder()
                                 .userId(comment.getCreatedBy().getUserId())
                                 .firstName(comment.getCreatedBy().getFirstName())
@@ -83,7 +83,7 @@ public class CommentMapper {
                     .commentText(comment.getCommentText())
                     .likes(comment.getLikes())
                     .dislikes(comment.getDislikes())
-                    .createdDate(comment.getCreatedDate().toString())
+                    .createdDate(comment.getCreatedDate())
                     .createdBy(mapUserToUserDataDTO(comment.getCreatedBy())).build()).collect(Collectors.toList());
 
         }
