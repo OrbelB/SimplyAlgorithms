@@ -78,8 +78,8 @@ export default function MainNavigation() {
               </ul>
             </div>
           </div>
-          <div className="navbar-nav flex-row d-none d-md-flex ms-5 me-5">
-            <img className="nav-ite me-lg-1 p-4" 
+          <div className="navbar-nav flex-row d-none d-lg-flex ms-5 me-5">
+            <img className="nav-item me-lg-1 p-4" 
                   src={image}
                   height="100px"
                   width="auto"
@@ -87,6 +87,7 @@ export default function MainNavigation() {
                   loading="lazy"/>
           </div>
           <div className="navbar-nav flex-row">
+            {/*}
             <form className="nav-item me-2 d-flex" role="search">
               <input
                 className="form-control me-2"
@@ -97,7 +98,7 @@ export default function MainNavigation() {
               <button className="btn btn-outline-primary" type="button">
                 <span className="bi bi-search"></span>
               </button>
-            </form>
+  </form>*/}
             <div className="nav-item  m-auto me-4">
               <Bell />
             </div>

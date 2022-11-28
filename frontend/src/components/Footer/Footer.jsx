@@ -1,6 +1,6 @@
 import React from 'react'
 import style from './Footer.module.css'
-import image from '../../assets/logo-placeholder-image-small.png'
+import image from '../../assets/footer-logo.png'
 import { NavLink } from 'react-router-dom';
 import cx from "classnames";
 const Footer = () => {
@@ -46,12 +46,13 @@ const Footer = () => {
 
         <div className={'col-6 align-self-center'}>
           <div className={cx(style['web_logo'], "row")}>
-            <img src={image} alt="Simply Algorithms Logo" 
+            <img src={image} 
+              alt="Simply Algorithms Logo" 
             />
           </div>
-          <div className={cx(style['web_service'], "row")}>
+          <div className={cx(style['web_service'], "row", "mt-3")}>
               <div>
-                  Contact us  Privacy Notice © 2022 OJKJ Inc. All Right Reserved
+                  Contact us Privacy Notice © 2022 OJKJ Inc. All Right Reserved
               </div>
           </div>
         </div>

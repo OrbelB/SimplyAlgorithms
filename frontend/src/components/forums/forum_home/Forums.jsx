@@ -46,7 +46,9 @@ export default function Forums() {
             </div>
             <br />
             <br />
+            <div className="middle-post">
             <Post />
+            </div>
             <br />
             <br />
             <PostPreview />
