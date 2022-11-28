@@ -3,9 +3,7 @@ import { useParams } from "react-router-dom";
 import cx from "classnames";
 import fp from "./ForumPost.module.css";
 import { Chip } from "@mui/material";
-import {
-  forumsActions,
-} from "../../../store/reducers/forums-reducer";
+import { forumsActions } from "../../../store/reducers/forums-reducer";
 import CommentFrame from "../../comment/CommentFrame";
 import Related_RecentPosts from "../forum_home/Related_RecentPosts";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,11 +48,7 @@ export default function ForumPost() {
   }, [status, pageId, dispatch]);
 
   if (status === "loading") {
-    return (
-      <>
-        <LoadingBackdrop />
-      </>
-    );
+    return <LoadingBackdrop />;
   }
   if (status === "success" || status === "completed") {
     return (

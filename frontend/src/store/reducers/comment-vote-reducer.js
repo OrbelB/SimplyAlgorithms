@@ -45,7 +45,6 @@ export const commentVotesSlice = createSlice({
           const likeDislike = commentVote.likeDislike;
           return { commentVoteId, likeDislike };
         });
-        console.debug(objectList);
         state.status = "success";
         commentVotesAdapter.addMany(state, objectList);
       })

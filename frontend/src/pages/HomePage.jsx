@@ -3,7 +3,7 @@ import Categories from "../components/home_page/categories/Categories";
 import About from "../components/home_page/about-us/About";
 import Forum from "../components/home_page/forum-quiz/Forum_Quiz";
 import { useLocation } from "react-router-dom";
-import useLoginuser from "../hooks/use-loginuser";
+import useLoginUser from "../hooks/use-loginuser";
 
 // const types_topics = [
 //     {
@@ -54,7 +54,7 @@ const types_topics = [
 // };
 export default function HomePage() {
   const loc = useLocation();
-  useLoginuser(loc)
+  useLoginUser(loc);
   return (
     <>
       

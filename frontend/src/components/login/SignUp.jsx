@@ -4,8 +4,8 @@ import useValidateInput from "../../hooks/use-ValidateInput";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../services/auth";
-import { imageToStringBase64 } from "../../utilities/image-to-data-url";
-export default function SignUp({ showSignup, handleOnClose }) {
+import { useEffect } from "react";
+export default function SignUp({ showSignUp, handleOnClose }) {
   const { status } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -15,9 +15,11 @@ export default function SignUp({ showSignup, handleOnClose }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-  if (status === "success") {
-    handleOnClose(!showSignup);
-  }
+  useEffect(() => {
+    if (status === "success") {
+      handleOnClose(!showSignUp);
+    }
+  }, [status, handleOnClose, showSignUp]);
 
   const {
     value: username,
@@ -55,7 +57,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
   } = useValidateInput((value) => value.trim() !== "");
 
   const handleClose = () => {
-    handleOnClose(!showSignup);
+    handleOnClose(!showSignUp);
   };
 
   const registerUserInfo = (e) => {
@@ -69,7 +71,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
         password,
         email,
         dob,
-        profilePicture: image?.name,
+        profilePicture: !image ? "" : image?.name,
       })
     );
     emailReset();
@@ -113,7 +115,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
   return (
     <>
       <Modal
-        show={showSignup}
+        show={showSignUp}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
@@ -121,7 +123,10 @@ export default function SignUp({ showSignup, handleOnClose }) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id={"contained-modal-title-vcenter"}>
+          <Modal.Title
+            id={"contained-modal-title-vcenter"}
+            style={{ margin: "0 auto" }}
+          >
             <h2 className="text-uppercase text-center">Create an account</h2>
           </Modal.Title>
         </Modal.Header>
@@ -324,6 +329,5 @@ export default function SignUp({ showSignup, handleOnClose }) {
         </Modal.Footer>
       </Modal>
     </>
-    
   );
 }

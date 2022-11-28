@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import templateImage from "../assets/noPictureTemplate.png";
 
-  export default function useLoginuser(location) {
+  export default function useLoginUser({location}) {
 
     const { jwtAccessToken, userId, isLoggedIn } = useSelector(
         (state) => state.auth
