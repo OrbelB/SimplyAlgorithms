@@ -19,12 +19,6 @@ export default function Forums() {
       <div className="row">
         <div className="column">
           <div className="side1">
-            <h1 className="category-label">Categories</h1>
-            <input
-              type="text"
-              className="search-bar"
-              placeholder="Search Category..."
-            />
             <Tags />
           </div>
 
@@ -46,7 +40,9 @@ export default function Forums() {
             </div>
             <br />
             <br />
+            <div className="middle-post">
             <Post />
+            </div>
             <br />
             <br />
             <PostPreview />

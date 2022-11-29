@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 .custom-bell:hover {
     cursor:pointer;
+    min-width: 200px;
+    min-height: 200px;
 }
 
 .font {

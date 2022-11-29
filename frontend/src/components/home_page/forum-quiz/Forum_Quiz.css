@@ -46,10 +46,25 @@
     border-radius: 10px 10px 10px 10px;
     padding: 10px;
 }
+.fbtext {
+    color: black;
+}
 
 .b1 {
     background-color: #FFD5D4;
     border-color: #B37270;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+}
+
+.b1:hover{
+    color: black;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.b1:active {
+    box-shadow: none;
+    transform: translateY(0);
 }
 
 .b2 {

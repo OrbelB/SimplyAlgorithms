@@ -82,7 +82,7 @@ export default function SecurityTabForm() {
     <div className="SecurityTab">
       <form>
         <div className="form-group">
-          <label className="d-block">Change Password</label>
+          <label className="d-block h5">Change Password</label>
           <input
             type="text"
             className="form-control"

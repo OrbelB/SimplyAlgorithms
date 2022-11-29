@@ -2,7 +2,8 @@ import Intro from "../components/home_page/Intro/Intro";
 import Categories from "../components/home_page/categories/Categories";
 import About from "../components/home_page/about-us/About";
 import Forum from "../components/home_page/forum-quiz/Forum_Quiz";
-
+import { useLocation } from "react-router-dom";
+import useLoginUser from "../hooks/use-LoginUser";
 
 // const types_topics = [
 //     {
@@ -52,6 +53,8 @@ const types_topics = [
 //     }
 // };
 export default function HomePage() {
+  const loc = useLocation();
+  useLoginUser(loc);
   return (
     <>
       <Intro />

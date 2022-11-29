@@ -3,39 +3,72 @@ import { selectAllTags } from "../../../store/reducers/tags-reducer";
 import classes from "./Tags.module.css";
 import { forumsActions } from "../../../store/reducers/forums-reducer";
 import { fetchTags } from "../../../services/tag";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+
 export default function Tags() {
+  const [searchedTag, setSearchedTag] = useState("");
+  const tags = useSelector(selectAllTags);
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const tags = useSelector(selectAllTags);
-  const {totalPages} =useSelector(state => state.tags);
+  const { totalPages } = useSelector((state) => state.tags);
+
   const handleClick = (tagId) => {
     dispatch(forumsActions.filterForums(`${tagId}`));
   };
+
   useEffect(() => {
-    if(tags.length === 0 ){
+    if (tags.length === 0) {
       dispatch(fetchTags({ page: page - 1, size: 10 }));
     }
-  }, [tags]);
- 
+  }, [tags, dispatch, page]);
+
+  //filtering tags by searched param, using user memo to memoizes the results
+  //and only render if the results are different from the previous ones.
+  const filteredTags = useMemo(() => {
+    return tags.filter((tag) => {
+      return new RegExp(
+        "^" + searchedTag.concat("*").toLowerCase().replace(/\*/g, ".*") + "$"
+      ).test(tag.tag.toLowerCase());
+    });
+  }, [tags, searchedTag]);
+
   const loadMoreTags = () => {
     dispatch(fetchTags({ page: page, size: 10 }));
-    setPage(page + 1);
+    setPage((state) => {
+      return state + 1;
+    });
   };
+
   return (
-    <div className="btn-group">
-      {tags?.map((tag) => (
-        <button
-          key={tag?.tagId}
-          className={classes["category"]}
-          onClick={() => handleClick(tag?.tagId)}
-        >
-          {tag?.tag}
-        </button>
-      ))}
-      <button className={classes["last-button"]} onClick={() => loadMoreTags()} hidden={totalPages === page}>
-        Explore More...
-      </button>
-    </div>
+    <>
+      <h1 className="category-label">Categories</h1>
+      <input
+        value={searchedTag}
+        onChange={(e) => setSearchedTag(e.target.value)}
+        type="text"
+        className="search-bar"
+        placeholder="Search Category..."
+      />
+      <div className="btn-group">
+        {filteredTags?.map((tag) => (
+          <button
+            key={tag?.tagId}
+            className={classes["category"]}
+            onClick={() => handleClick(tag?.tagId)}
+          >
+            {tag?.tag}
+          </button>
+        ))}
+        {searchedTag === "" && (
+          <button
+            className={classes["last-button"]}
+            onClick={() => loadMoreTags()}
+            hidden={totalPages === page}
+          >
+            Explore More...
+          </button>
+        )}
+      </div>
+    </>
   );
 }

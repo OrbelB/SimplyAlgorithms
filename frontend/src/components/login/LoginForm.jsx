@@ -61,7 +61,7 @@ export default function LoginForm() {
       {errorMsg !== "" ||
         (error !== "" && (
           <div
-            className={"col ms-0 p-0 alert alert-danger align-content-center"}
+            className={"col ms-0 p-2 alert alert-danger align-items-center align-content-center"}
           >
             <p className={"text-center small"}>credentials are wrong!</p>
           </div>
@@ -73,7 +73,7 @@ export default function LoginForm() {
               className={"form-label m-0 mb-2 p-0"}
               htmlFor={"username-form"}
             >
-              Username
+              username
             </label>
           </div>
           {usernameInputHasError && (
@@ -168,13 +168,13 @@ export default function LoginForm() {
                 onChange={handleCheckBoxChange}
               />
               <label className="form-check-label" htmlFor="flexCheckbox">
-                Remember me
+                Remember Me
               </label>
             </div>
           </div>
           <div className="col-auto align-items-end">
             <NavLink className={"m-sm-auto p-sm-auto"} to="check" role={"link"}>
-              Forgot password?
+              Forgot Password?
             </NavLink>
           </div>
         </div>

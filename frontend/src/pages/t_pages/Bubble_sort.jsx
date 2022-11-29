@@ -29,6 +29,7 @@ export default function Bubble_sort() {
     <>
       {/* <AlgoFram/> */}
       {/* <AlgVisBtns/> */}
+      <AlgoFram vis_url={bubble_url} viz_title={viz_title}/>
       <Detail />
       <CodeSnippet />
       {/*<TopicQuiz/> */}

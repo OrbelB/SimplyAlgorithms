@@ -52,7 +52,7 @@ export default function SecurityTab(){
                         </div>
                         <div class="card-body tab-content">
                             <div class="tab-pane active" id="security">
-                                <h6>SECURITY SETTINGS</h6>
+                                <h4>SECURITY SETTINGS</h4>
                                 <hr/>
                                 <SecurityTabForm/>
                             </div>

@@ -8,6 +8,12 @@
     text-decoration: none;
   } */
   
+
+#root {
+    min-height: 100vh;
+    display:flex; 
+    flex-direction:column;
+}
 :root{
     --color-bg-main:#97F9FF;
     --color-bg-second: #FDFCF4;

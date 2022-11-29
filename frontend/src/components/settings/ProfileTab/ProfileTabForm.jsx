@@ -5,7 +5,6 @@ import { updateUserData } from "../../../services/user";
 import { useState } from "react";
 import useValidateInput from "../../../hooks/use-ValidateInput";
 import { useNavigate } from "react-router-dom";
-import { imageToStringBase64 } from "../../../utilities/image-to-data-url";
 
 export default function ProfileTabForm() {
   const { biography, profilePicture } = useSelector((state) => state.user);
@@ -50,7 +49,7 @@ export default function ProfileTabForm() {
       <div>
         <form>
           <div class="card mb-4 mb-xl-0">
-            <div class="card-header">Profile Picture</div>
+            <div class="card-header h5">Profile Picture</div>
             <div class="card-body text-center">
               <img
                 src={
@@ -73,7 +72,7 @@ export default function ProfileTabForm() {
             </div>
           </div>
           <div className="form-group mt-2 mb-2">
-            <label for="bioInput" className="mb-2">
+            <label for="bioInput" className=" mt-4 mb-2 h5">
               Biography
             </label>
             <textarea

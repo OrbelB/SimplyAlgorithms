@@ -32,14 +32,14 @@ export default function CommentFrame({ passedComments, pageId }) {
   return (
     <div className="bg-white mt-5 mb-2">
       <div>
-        <p>
+        <label className="h5">
           Have a question? Check our{" "}
           {
             <NavLink className={"link-warning"} to={"/forums"}>
               forums
             </NavLink>
           }
-        </p>
+        </label>
       </div>
       <InputComment />
       {passedComments.map((comment) => (

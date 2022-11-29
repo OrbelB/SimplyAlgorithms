@@ -14,7 +14,7 @@ export default function Forum() {
             </div>
             <br/><br/>
             <button className="b b1">
-                <NavLink to={"/forums"}>GO TO FORUMS</NavLink>
+                <NavLink to={"/forums"}><label className="fbtext">GO TO FORUMS</label></NavLink>
             </button>
             <div className="bottom"></div>
         </div>

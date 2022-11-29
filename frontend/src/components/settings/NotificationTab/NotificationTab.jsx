@@ -52,7 +52,7 @@ export default function NotificationTab(){
                         </div>
                         <div class="card-body tab-content">
                             <div class="tab-pane active" id="notifications">
-                                <h6>NOTIFICATION SETTINGS</h6>
+                                <h4>NOTIFICATION SETTINGS</h4>
                                 <hr/>
                                 <EmailSMSNotificationTabForm/>
                             </div>

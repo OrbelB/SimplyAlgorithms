@@ -34,4 +34,16 @@
     color: white;
     font-family: 'Readex Pro', sans-serif;
     font-size: 2em;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
 }   
+
+.button:hover{
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.button:active {
+    box-shadow: none;
+    transform: translateY(0);
+}

@@ -3,9 +3,10 @@ import Report from "../report/Report.jsx";
 import Vote from "../../vote_comp/Vote.jsx";
 import { BiLike, BiDislike } from "react-icons/bi";
 import "./PostPreview.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { forumActions } from "../../../store/reducers/forum-reducer.js";
 import { forumVoteActions } from "../../../store/reducers/forum-votes-reducer.js";
+import { useSelect } from "@mui/base";
 
 export default function ForumQuickView({
   pageId,
@@ -14,6 +15,7 @@ export default function ForumQuickView({
   upVotes,
   downVotes,
 }) {
+  const {isLoggedIn} = useSelector(state => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
@@ -62,7 +64,7 @@ export default function ForumQuickView({
             <i className="bi bi-hand-thumbs-down ms-4"> {" " + downVotes}</i>
           </div>
           <div className="col-4 m-0 p-0 align-self-end">
-            <Report pageId={pageId} />
+            {isLoggedIn && <Report pageId={pageId} />}
           </div>
         </div>
       </article>

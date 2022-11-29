@@ -1,8 +1,7 @@
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { RiQuestionnaireFill } from "react-icons/ri";
-import Chip from "@mui/material/Chip";
-import { nanoid } from "@reduxjs/toolkit";
+import { TextField } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -110,7 +109,7 @@ export default function Post() {
   const handleShow = () => {
     setShowSignUp(!showSignUp);
   };
-  if(pageId !== "" && status === "successToIdle") {
+  if (pageId !== "" && status === "successToIdle") {
     navigate(`${pageId}`, { replace: true });
   }
 
@@ -125,7 +124,7 @@ export default function Post() {
         onClick={handleShow}
       >
         <div>
-          Ask A Question 
+          Ask A Question
           <RiQuestionnaireFill />
         </div>
       </button>
@@ -144,21 +143,20 @@ export default function Post() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="align-items-center text-center">
-          <div className="mb-0 form-group">
-            <label htmlFor="forum_post_title" className="col-form-label">
-              Title
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="forum_post_title"
-              value={title}
-              onChange={titleChangedHandler}
-              onBlur={titleBlurHandler}
-            />
-          </div>
+          <TextField
+            className="w-100 mb-5"
+            label="Title"
+            type="text"
+            id="forum_post_title"
+            value={title}
+            onChange={titleChangedHandler}
+            onBlur={titleBlurHandler}
+          />
           <div className="col-md-4 w-100">
-            <TagForm currentTags={tagsSelected} setCurrentTags={setTagsSelected}/>
+            <TagForm
+              currentTags={tagsSelected}
+              setCurrentTags={setTagsSelected}
+            />
             {/* <label htmlFor="inputCategory" className="form-label">
               Category
             </label>
@@ -188,7 +186,7 @@ export default function Post() {
               onKeyDown={addNewTag}
             />
            */}
-           </div>
+          </div>
           {/* <div className="row mt-2 justify-content-center">
             {tagsSelected?.map((tag) => (
               <Chip
@@ -200,19 +198,17 @@ export default function Post() {
               />
             ))}
           </div> */}
-
-          <div className="mb-3">
-            <label htmlFor="question_text" className="col-form-label">
-              Message
-            </label>
-            <textarea
-              className="form-control"
-              id="forum_post_question"
-              value={message}
-              onChange={messageChangedHandler}
-              onBlur={messageBlurHandler}
-            ></textarea>
-          </div>
+          <TextField
+            className="w-100 mb-5"
+            label="Message"
+            type="text"
+            id="forum_post_question"
+            multiline
+            rows={"4"}
+            value={message}
+            onChange={messageChangedHandler}
+            onBlur={messageBlurHandler}
+          />
         </Modal.Body>
         <Modal.Footer>
           <button

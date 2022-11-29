@@ -3,11 +3,7 @@ import { useParams } from "react-router-dom";
 import cx from "classnames";
 import fp from "./ForumPost.module.css";
 import { Chip } from "@mui/material";
-import {
-  forumsActions,
-  selectAllForums,
-  selectSortedForums,
-} from "../../../store/reducers/forums-reducer";
+import { forumsActions } from "../../../store/reducers/forums-reducer";
 import CommentFrame from "../../comment/CommentFrame";
 import Related_RecentPosts from "../forum_home/Related_RecentPosts";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,12 +11,11 @@ import { fetchSingleForum, addUserView } from "../../../services/forum";
 import { beautifyTime } from "../../../utilities/beautify-time";
 import Vote from "../../vote_comp/Vote";
 import ForumOptionMenu from "./ForumOptionMenu";
-import { forumActions } from "../../../store/reducers/forum-reducer";
-import { useState } from "react";
+import LoadingBackdrop from "../../loading/LoadingBackdrop";
 
 export default function ForumPost() {
   const { pageId } = useParams();
-  
+
   const {
     jwtAccessToken,
     isLoggedIn,
@@ -40,7 +35,6 @@ export default function ForumPost() {
       isLoggedIn &&
       (status === "success" || status === "completed")
     ) {
-      
       dispatch(forumsActions.updateForum({ forum: forum }));
       dispatch(
         addUserView({
@@ -52,8 +46,11 @@ export default function ForumPost() {
       //dispatch(viewForumsActions.updateForum({ forum: forum }));
     }
   }, [status, pageId, dispatch]);
+
+  if (status === "loading") {
+    return <LoadingBackdrop />;
+  }
   if (status === "success" || status === "completed") {
-   
     return (
       <div key={pageId} className={cx(fp["window"], "container-fluid")}>
         <div>
@@ -70,7 +67,9 @@ export default function ForumPost() {
           >
             <div className={cx(fp["user"])}>
               <div className="row">
-                <div className="col-auto col-md-3">{forum?.userDto?.username}</div>
+                <div className="col-auto col-md-3">
+                  {forum?.userDto?.username}
+                </div>
                 {forum?.tags.map((tag) => (
                   <Chip
                     key={tag.tagId}

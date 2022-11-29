@@ -47,6 +47,7 @@ export default function Binary_search_tree() {
     <>
       {/* <AlgoFram/> */}
       {/* <AlgVisBtns/> */}
+      <AlgoFram vis_url={bst} viz_title={viz_title}/>
       <Detail />
       <CodeSnippet />
       {/*<TopicQuiz/> */}
