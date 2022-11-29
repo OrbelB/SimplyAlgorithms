@@ -1,11 +1,10 @@
 import Modal from "react-bootstrap/Modal";
 import { Container, Row } from "react-bootstrap";
 import useValidateInput from "../../hooks/use-ValidateInput";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../services/auth";
-import { imageToStringBase64 } from "../../utilities/image-to-data-url";
-export default function SignUp({ showSignup, handleOnClose }) {
+export default function SignUp({ showSignUp, handleOnClose }) {
   const { status } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -15,9 +14,11 @@ export default function SignUp({ showSignup, handleOnClose }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-  if (status === "success") {
-    handleOnClose(!showSignup);
-  }
+  useEffect(() => {
+    if (status === "success") {
+      handleOnClose(!showSignUp);
+    }
+  }, [status, handleOnClose, showSignUp]);
 
   const {
     value: username,
@@ -55,7 +56,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
   } = useValidateInput((value) => value.trim() !== "");
 
   const handleClose = () => {
-    handleOnClose(!showSignup);
+    handleOnClose(!showSignUp);
   };
 
   const registerUserInfo = (e) => {
@@ -113,7 +114,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
   return (
     <>
       <Modal
-        show={showSignup}
+        show={showSignUp}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
@@ -324,6 +325,5 @@ export default function SignUp({ showSignup, handleOnClose }) {
         </Modal.Footer>
       </Modal>
     </>
-    
   );
 }

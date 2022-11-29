@@ -5,14 +5,14 @@ import cx from "classnames";
 import SignUp from "./SignUp";
 import React, {useState} from "react";
 export default function Login() {
-    const [showSignup, setShowSingup] = useState(false);
+    const [showSignUp, setShowSingUp] = useState(false);
 
     const handleShowSingUpModal = () => {
-        setShowSingup(!showSignup);
+        setShowSingUp(!showSignUp);
     }
     return (
         <>
-            {showSignup && <SignUp showSignup={true} handleOnClose={handleShowSingUpModal}/>}
+            {showSignUp && <SignUp showSignUp={true} handleOnClose={handleShowSingUpModal}/>}
             <div className={"container-fluid"}>
                 <div className={"grid ms-5 me-5 p-5"}>
                     <div className={"row justify-content-center"}>

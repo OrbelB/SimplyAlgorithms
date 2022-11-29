@@ -3,41 +3,34 @@ import { selectAllTags } from "../../../store/reducers/tags-reducer";
 import classes from "./Tags.module.css";
 import { forumsActions } from "../../../store/reducers/forums-reducer";
 import { fetchTags } from "../../../services/tag";
-import { useEffect, useState } from "react";
-import { useRef } from "react";
+import { useEffect, useState, useMemo } from "react";
+
 export default function Tags() {
-  const categoryToSearch = useRef("");
+  const [searchedTag, setSearchedTag] = useState("");
   const tags = useSelector(selectAllTags);
-  const [showedTags, setShowedTags] = useState(tags);
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-
   const { totalPages } = useSelector((state) => state.tags);
+
   const handleClick = (tagId) => {
     dispatch(forumsActions.filterForums(`${tagId}`));
   };
+
   useEffect(() => {
     if (tags.length === 0) {
       dispatch(fetchTags({ page: page - 1, size: 10 }));
     }
+  }, [tags, dispatch, page]);
 
-    if (showedTags.length === 0 && categoryToSearch?.current.value === "") {
-      setShowedTags(tags);
-    }
-  }, [tags, showedTags, dispatch, page]);
-
-  const filterBy = (str) => {
-    return tags.filter((tag) =>
-      new RegExp("^"  + str.toLowerCase().replace(/\*/g, ".*") + "$").test(tag.tag.toLowerCase())
-    );
-  };
-  const findTag = (e) => {
-    if (e.target.value === "") {
-      setShowedTags([]);
-      return;
-    }
-    setShowedTags(filterBy(`${categoryToSearch.current.value}*`));
-  };
+  //filtering tags by searched param, using user memo to memoizes the results
+  //and only render if the results are different from the previous ones.
+  const filteredTags = useMemo(() => {
+    return tags.filter((tag) => {
+      return new RegExp(
+        "^" + searchedTag.concat("*").toLowerCase().replace(/\*/g, ".*") + "$"
+      ).test(tag.tag.toLowerCase());
+    });
+  }, [tags, searchedTag]);
 
   const loadMoreTags = () => {
     dispatch(fetchTags({ page: page, size: 10 }));
@@ -50,14 +43,14 @@ export default function Tags() {
     <>
       <h1 className="category-label">Categories</h1>
       <input
-        ref={categoryToSearch}
-        onChange={findTag}
+        value={searchedTag}
+        onChange={(e) => setSearchedTag(e.target.value)}
         type="text"
         className="search-bar"
         placeholder="Search Category..."
       />
       <div className="btn-group">
-        {showedTags?.map((tag) => (
+        {filteredTags?.map((tag) => (
           <button
             key={tag?.tagId}
             className={classes["category"]}
@@ -66,7 +59,7 @@ export default function Tags() {
             {tag?.tag}
           </button>
         ))}
-        {categoryToSearch.current.value === "" && (
+        {searchedTag === "" && (
           <button
             className={classes["last-button"]}
             onClick={() => loadMoreTags()}

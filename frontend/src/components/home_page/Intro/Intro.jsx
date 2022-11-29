@@ -7,9 +7,9 @@ import React, { useState } from "react";
 
 export default function Intro() {
     const {isLoggedIn, jwtAccessToken } = useSelector(state => state.auth);
-    const [showSignup, setShowSingup] = useState(false);
+    const [showSignUp, setShowSingUp] = useState(false);
         function handleShowSingUpModal(){
-        setShowSingup(!showSignup);
+        setShowSingUp(!showSignUp);
     }
     return (
         
@@ -27,7 +27,7 @@ export default function Intro() {
                     {/* </NavLink> */}
                 </div>}
             </div>
-            {showSignup && <SignUp showSignup={true} handleOnClose={handleShowSingUpModal}/>}
+            {showSignUp && <SignUp showSignUp={true} handleOnClose={handleShowSingUpModal}/>}
         </div>
     )
 
