@@ -1,10 +1,18 @@
 import "./Intro.css"
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import SignUp from "../../login/SignUp";
+import React, { useState } from "react";
+
 
 export default function Intro() {
-    const isLoggedIn  = useSelector(state => state.auth);
+    const {isLoggedIn, jwtAccessToken } = useSelector(state => state.auth);
+    const [showSignup, setShowSingup] = useState(false);
+        function handleShowSingUpModal(){
+        setShowSingup(!showSignup);
+    }
     return (
+        
         <div className="section">
             <div className="container-fluid pb-5">
                 <h1 className="row justify-content-center title m-1 m-sm-auto">
@@ -13,12 +21,13 @@ export default function Intro() {
                 <p className="row justify-content-center slogan m-1 m-md-auto">
                     algorithms made easy
                 </p>
-               {isLoggedIn && <div className="row justify-content-center m-1 m-md-auto">
-                    <NavLink to={"/login"}>
-                        <button className="button w-auto">SIGN UP</button>
-                    </NavLink>
+               {!isLoggedIn && jwtAccessToken === "" && <div className="row justify-content-center m-1 m-md-auto">
+                    {/* <NavLink to={"/login"}> */}
+                    <button className="button w-auto" onClick={handleShowSingUpModal}>SIGN UP</button>
+                    {/* </NavLink> */}
                 </div>}
             </div>
+            {showSignup && <SignUp showSignup={true} handleOnClose={handleShowSingUpModal}/>}
         </div>
     )
 

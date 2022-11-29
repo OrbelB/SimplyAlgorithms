@@ -69,7 +69,7 @@ export default function SignUp({ showSignup, handleOnClose }) {
         password,
         email,
         dob,
-        profilePicture: image.name,
+        profilePicture: image?.name,
       })
     );
     emailReset();
@@ -324,5 +324,6 @@ export default function SignUp({ showSignup, handleOnClose }) {
         </Modal.Footer>
       </Modal>
     </>
+    
   );
 }
