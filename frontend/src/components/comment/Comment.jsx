@@ -141,7 +141,7 @@ export default function Comment({
               />
             )}
             {replyCount > 0 && (
-              <div className={"row "}>
+              <div className={"row"}>
                 <div className={"col-sm-auto"}>
                   <i
                     className={`btn bi bi-caret-${
