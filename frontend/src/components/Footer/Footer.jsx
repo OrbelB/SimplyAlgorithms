@@ -6,7 +6,7 @@ import cx from "classnames";
 const Footer = () => {
   return (
     //The borders are just temp -> so i can view where it is
-    <footer className={cx(style['box'], 'container-fluid w-100 footer-bg')}>
+    <footer className={cx(style['box'], 'container-fluid w-100')}>
       <div className={'row justify-content-center p-0'}>
         <div className={'col-.5'}></div>
         <div className={'col-1'}>
