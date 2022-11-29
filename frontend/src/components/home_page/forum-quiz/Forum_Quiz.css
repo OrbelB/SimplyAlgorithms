@@ -7,21 +7,9 @@
     text-align: center;
 }
 
-.quiz-section {
-    background-color: #EDEFFF;
-    height: auto;
-    text-align: center;
-}
-
 .forum-body {
     margin-left: 13%;
     margin-right: 5%;
-    display: flex;
-}
-
-.quiz-body {
-    margin-left: 5%;
-    margin-right: 15%;
     display: flex;
 }
 
@@ -68,7 +56,4 @@
     transform: translateY(0);
 }
 
-.b2 {
-    background-color: #2647F5;
-    border-color: #1e39be;
-}
+
