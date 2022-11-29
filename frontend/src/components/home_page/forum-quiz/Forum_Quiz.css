@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .forum-section {
-    background-color: #EDEFFF;
+    background-color: #a8fac1;
     background-image: url("https://www.transparenttextures.com/patterns/bright-squares.png");
     height: auto;
     text-align: center;
@@ -47,12 +47,13 @@
     padding: 10px;
 }
 .fbtext {
-    color: black;
+    font-family: 'Readex Pro', sans-serif;
+    color: white;
 }
 
 .b1 {
-    background-color: #FFD5D4;
-    border-color: #B37270;
+    background-color: rgb(6, 56, 150);
+    border-color: rgb(6, 56, 150);
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
 }
 
