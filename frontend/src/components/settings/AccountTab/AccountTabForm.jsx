@@ -111,7 +111,7 @@ export default function AccountTabForm({ username1 }) {
       <div>
         <form className="mb-2">
           <div className="row">
-            <div className="form-group col-md-5">
+            <div className="form-group col-md-6">
               <label className="mb-1 h5">First Name</label>
               <div className="row">
                 <strong className="text-secondary">
@@ -130,7 +130,7 @@ export default function AccountTabForm({ username1 }) {
               />
             </div>
 
-            <div className="form-group col-md-5">
+            <div className="form-group col-md-6">
               <label className="mb-1 h5">Last Name</label>
               <div className="row">
                 <strong className="text-secondary">
