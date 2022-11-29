@@ -50,7 +50,7 @@ export default function ProfileTabForm() {
       <div>
         <form>
           <div class="card mb-4 mb-xl-0">
-            <div class="card-header">Profile Picture</div>
+            <div class="card-header h5">Profile Picture</div>
             <div class="card-body text-center">
               <img
                 src={
@@ -73,7 +73,7 @@ export default function ProfileTabForm() {
             </div>
           </div>
           <div className="form-group mt-2 mb-2">
-            <label for="bioInput" className="mb-2">
+            <label for="bioInput" className=" mt-4 mb-2 h5">
               Biography
             </label>
             <textarea

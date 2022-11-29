@@ -52,7 +52,7 @@ export default function AccountTab(){
                         </div>
                         <div class="card-body tab-content">
                             <div class="tab-pane active" id="account">
-                                <h6>ACCOUNT SETTINGS</h6>
+                                <h4>ACCOUNT SETTINGS</h4>
                                 <hr/>
                                 <AccoutnTabForm/>
                             </div>

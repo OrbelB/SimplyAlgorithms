@@ -52,7 +52,7 @@ export default function ProfileTab(){
                         </div>
                         <div class="card-body tab-content">
                             <div class="tab-pane active" id="profile">
-                                <h6>YOUR PROFILE INFORMATION</h6>
+                                <h4>YOUR PROFILE INFORMATION</h4>
                                 <hr/>
                                 <ProfileTabForm/>
                             </div>

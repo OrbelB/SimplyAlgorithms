@@ -5,7 +5,7 @@ const AWS_BASE_URL = "http://simplyalgosserver-env.eba-wmcrmidx.us-east-1.elasti
 
 const LOCALHOST_BASE_URL = "http://localhost:5000";
 const apiClient = axios.create({
-  baseURL:AWS_BASE_URL,
+  baseURL:LOCALHOST_BASE_URL,
 });
 
 export const interceptors = (store) => {

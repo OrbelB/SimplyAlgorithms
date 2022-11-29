@@ -112,12 +112,12 @@ export default function AccountTabForm({ username1 }) {
         <form className="mb-2">
           <div className="row">
             <div className="form-group col-md-5">
-              <label className="mb-1">First Name</label>
+              <label className="mb-1 h5">First Name</label>
               <div className="row">
-                <small className="text-secondary">
+                <strong className="text-secondary">
                   {" "}
                   Current First Name: {firstName}
-                </small>
+                </strong>
               </div>
               <input
                 type="text"
@@ -131,12 +131,12 @@ export default function AccountTabForm({ username1 }) {
             </div>
 
             <div className="form-group col-md-5">
-              <label className="mb-1">Last Name</label>
+              <label className="mb-1 h5">Last Name</label>
               <div className="row">
-                <small className="text-secondary">
+                <strong className="text-secondary">
                   {" "}
                   Current Last Name: {lastName}
-                </small>
+                </strong>
               </div>
               <input
                 type="text"
@@ -149,14 +149,14 @@ export default function AccountTabForm({ username1 }) {
               />
             </div>
           </div>
-          <label className="mt-2" for="username">
+          <label className="mt-2 h5" for="username">
             Username
           </label>
           <div className="form-group">
-            <small className="text-secondary mb-1">
+            <strong className="text-secondary mb-1">
               {" "}
               Current Username: {username}
-            </small>
+            </strong>
             <input
               type="text"
               className={"form-control"}
@@ -172,12 +172,12 @@ export default function AccountTabForm({ username1 }) {
             )}
           </div>
 
-          <label className="mt-2">Birthdate</label>
+          <label className="mt-2 h5">Birthdate</label>
           <div className="form-group">
-            <small className="text-secondary mb-1">
+            <strong className="text-secondary mb-1">
               {" "}
               Current birthdate: {dob}
-            </small>
+            </strong>
             <input
               type="date"
               name="dob"
@@ -188,14 +188,14 @@ export default function AccountTabForm({ username1 }) {
               onBlur={validateInput}
             />
           </div>
-          <label className="mt-2" for="emailInput">
+          <label className="mt-2 h5" for="emailInput">
             Email
           </label>
           <div className="form-group">
-            <small className="text-secondary mb-1">
+            <strong className="text-secondary mb-1">
               {" "}
               Current Email: {email}
-            </small>
+            </strong>
             <input
               type="text"
               className={"form-control"}
@@ -208,14 +208,14 @@ export default function AccountTabForm({ username1 }) {
             ></input>
             {error.em && <span className="err text-danger">{error.em}</span>}
           </div>
-          <label className="mt-2" for="numberInput">
+          <label className="mt-2 h5" for="numberInput">
             Phone Number
           </label>
           <div className="form-group">
-            <small className="text-secondary mb-1">
+            <strong className="text-secondary mb-1">
               {" "}
               Current Number: {phoneNumber}
-            </small>
+            </strong>
             <input
               type="number"
               className={"form-control"}
@@ -233,7 +233,7 @@ export default function AccountTabForm({ username1 }) {
           <div className="form group mt-2 mb-2">
             <label
               for="usetTypeInput"
-              className="col-sm-4 col-md-4 control-label text-right"
+              className="col-sm-2 col-md-2 control-label h5"
             >
               User Type: <br />
             </label>
@@ -246,7 +246,7 @@ export default function AccountTabForm({ username1 }) {
                 value="option1"
                 checked
               />
-              <label class="form-check-label" for="inlineRadio1">
+              <label class="form-check-label h6" for="inlineRadio1">
                 Student
               </label>
             </div>
@@ -259,7 +259,7 @@ export default function AccountTabForm({ username1 }) {
                 value="option2"
                 disabled
               />
-              <label class="form-check-label" for="inlineRadio2">
+              <label class="form-check-label h6" for="inlineRadio2">
                 Teacher
               </label>
             </div>
@@ -274,8 +274,8 @@ export default function AccountTabForm({ username1 }) {
           <TeacherRequest />
           <hr />
           <div class="form-group">
-            <label class="d-block text-danger">Delete Account</label>
-            <p class="text-muted font-size-sm">
+            <label class="d-block text-danger h5">Delete Account</label>
+            <p class="text-muted font-size-sm mb-2">
               Once you delete your account, there is no going back. Please be
               certain.
             </p>
