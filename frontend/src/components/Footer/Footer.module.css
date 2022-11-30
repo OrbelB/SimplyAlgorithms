@@ -23,17 +23,92 @@
     position: relative;
     text-align: center;
 }
-.ojkj_team{
-    position: relative;
+.ojkj_team {
+    cursor: pointer;
     text-align: center;
-    border: 1px solid black;
-    border-radius: 30px;
-    transition-duration: 0.1s;
+    position: relative;
+    border: solid black 2px;
+    color: black;
+    z-index: 1;
+    transition: all 0.5s ease-in-out;
+    border-radius: 5px;
+    background: transparent;
 }
-.ojkj_team:hover{
-    background-color: black;
-    color: white;
+  
+.ojkj_team:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: black;
+    transform: scale(0);
+    transition: 0.5s ease-in-out;
+    z-index: -1;
 }
+  
+.ojkj_team:hover:before {
+    transform: scale(1);
+}
+  
+.ojkj_team:hover {
+    color: #f1f1f1;
+    border-color: black;
+}
+  
+
+
+.btn-3 {
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: Marvel;
+    font-size: 20pt;
+    width: 200px;
+    height: 45px;
+    position: relative;
+    border: solid #777 2px;
+    color: #777;
+    z-index: 1;
+    transition: all 0.5s ease-in-out;
+    border-radius: 5px;
+    background: transparent;
+  }
+  
+  .btn-3:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: red;
+    transform: scale(0);
+    transition: 0.5s ease-in-out;
+    z-index: -1;
+  }
+  
+  .btn-3:hover:before {
+    transform: scale(1);
+  }
+  
+  .btn-3:hover {
+    color: #f1f1f1;
+    border-color: red;
+  }
+  
+  .btn-3:active:before {
+    background-color: #00a7fc;
+  }
+  
+  .btn-3:active {
+    border-color: #00a7fc;
+    color: #333;
+    background-color: #00a7fc;
+  }
+  
+  .btn-3:focus {
+    outline: none
+  }
 
 .web_logo{
     position: relative;
