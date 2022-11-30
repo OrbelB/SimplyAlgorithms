@@ -65,13 +65,13 @@ export default function PostPreview() {
     setLoadMorePages(!loadMorePages);
   };
 
-  const removeForumId = () =>{
+  const removeSingleReportId = () =>{
      dispatch(forumActions.removeSingleReportId());
   }
 
   return (
     <>
-      {reportId && <AlertSnackBar passedMessage={`Your report has been received. The id is ${reportId}`}  typeMessage={"success"}/>}
+      {reportId && <AlertSnackBar passedMessage={`Your report has been received. The id is ${reportId}`}  typeMessage={"success"} removeData={removeSingleReportId}/>}
       <div>
         {showedForums.map((forum) => (
           <ForumQuickView
