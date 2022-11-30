@@ -12,7 +12,7 @@ export default function Report({ pageId }) {
   const dispatch = useDispatch();
   const handleReportMessageChange = (e) => {
     setReportMessage(e.target.value);
-  }
+  };
   const submitForm = () => {
     dispatch(
       reportForum({
@@ -24,6 +24,7 @@ export default function Report({ pageId }) {
         accessToken: jwtAccessToken,
       })
     );
+    setReportMessage("");
   };
   return (
     <>
@@ -35,8 +36,7 @@ export default function Report({ pageId }) {
         data-bs-target="#staticBackdrop1"
       >
         <div>
-          Report {" "}
-          <RiQuestionnaireFill />
+          Report <RiQuestionnaireFill />
         </div>
       </button>
 

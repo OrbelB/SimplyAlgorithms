@@ -2,7 +2,7 @@ import { Snackbar, Alert } from "@mui/material";
 import { useState } from "react";
 
 export default function AlertSnackBar({ typeMessage, passedMessage, removeData = () => {} }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -11,12 +11,11 @@ export default function AlertSnackBar({ typeMessage, passedMessage, removeData =
     removeData();
     setOpen(false);
   };
-  if (!open) setOpen(true);
 
   return (
     <Snackbar
       open={open}
-      autoHideDuration={60}
+      autoHideDuration={3000}
       onClose={handleClose}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
     >

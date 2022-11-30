@@ -2,18 +2,14 @@ import "./PostPreview.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllViewedForums } from "../../../store/reducers/viewed-forums-reducer";
 import { fetchUserForumsViewed } from "../../../services/forum";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { forumActions } from "../../../store/reducers/forum-reducer";
-import { userActions } from "../../../store/reducers/user-reducer";
 import { viewForumsActions } from "../../../store/reducers/viewed-forums-reducer";
-import {
-  selectAllForums,
-  selectSortedForums,
-} from "../../../store/reducers/forums-reducer";
-import { useState } from "react";
-import { RiContactsBookLine } from "react-icons/ri";
-export default function Related_RecentPosts({ posts = null, tagId = "" , pageId = ""}) {
+export default function Related_RecentPosts({
+  posts = null,
+  tagId = "",
+  pageId = "",
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const viewedForums = useSelector(selectAllViewedForums);
