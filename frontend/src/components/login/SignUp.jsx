@@ -4,6 +4,7 @@ import useValidateInput from "../../hooks/use-ValidateInput";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../services/auth";
+import generateRandomNumber from "../../utilities/random-index-generator";
 export default function SignUp({ showSignUp, handleOnClose }) {
   const { status } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -70,7 +71,7 @@ export default function SignUp({ showSignUp, handleOnClose }) {
         password,
         email,
         dob,
-        profilePicture: image?.name,
+        profilePicture: `https://cdn2.thecatapi.com/images/${generateRandomNumber(1,20)}.jpg`,
       })
     );
     emailReset();

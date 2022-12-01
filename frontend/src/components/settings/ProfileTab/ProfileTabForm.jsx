@@ -5,7 +5,7 @@ import { updateUserData } from "../../../services/user";
 import { useState } from "react";
 import useValidateInput from "../../../hooks/use-ValidateInput";
 import { useNavigate } from "react-router-dom";
-
+import generateRandomNumber from "../../../utilities/random-index-generator";
 export default function ProfileTabForm() {
   const { biography, profilePicture } = useSelector((state) => state.user);
   const { jwtAccessToken, userId: authUserId } = useSelector(
@@ -34,7 +34,7 @@ export default function ProfileTabForm() {
         updatedUserData: {
           userId: authUserId,
           biography: newBio,
-          profilePicture: image === undefined ? "" : image.name,
+          profilePicture: image === undefined  ? profilePicture : `https://cdn2.thecatapi.com/images/${generateRandomNumber(1,20)}.jpg`,
         },
         accessToken: jwtAccessToken,
       })
