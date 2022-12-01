@@ -5,6 +5,7 @@ import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -49,6 +51,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(UserDataPostDTO userToUpdate) {
         Optional<User> optionalUser = userRepository.findById(userToUpdate.getUserId());
+        log.debug(MessageFormat.format("this is the passed profiledPicture {0}", userToUpdate.getProfilePicture()));
         User user;
         if (optionalUser.isPresent()) {
             user = optionalUser.get();
@@ -58,10 +61,11 @@ public class UserServiceImpl implements UserService {
             if (isNotNullNorEmptyNorBlank(userToUpdate.getFirstName())) user.setFirstName(userToUpdate.getFirstName());
             if (isNotNullNorEmptyNorBlank(userToUpdate.getLastName())) user.setLastName(userToUpdate.getLastName());
             if (userToUpdate.getDob() != null) user.setDob(userToUpdate.getDob());
-            if (userToUpdate.getProfilePicture() != null) {
-                user.setProfilePicture(user.getProfilePicture());
+            if (isNotNullNorEmptyNorBlank(userToUpdate.getProfilePicture())) {
+                user.setProfilePicture(userToUpdate.getProfilePicture());
             }
-            if (isNotNullNorEmptyNorBlank(userToUpdate.getPhoneNumber())) user.setPhoneNumber(userToUpdate.getPhoneNumber());
+            if (isNotNullNorEmptyNorBlank(userToUpdate.getPhoneNumber()))
+                user.setPhoneNumber(userToUpdate.getPhoneNumber());
             return userMapper.userToUserDto(user);
         }
         throw new NoSuchElementException(
