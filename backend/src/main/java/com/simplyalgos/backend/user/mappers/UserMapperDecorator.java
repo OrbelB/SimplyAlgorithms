@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.user.mappers;
 
 
-import com.simplyalgos.backend.user.User;
+import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -12,15 +12,15 @@ import java.util.Map;
 //also allows noop password authentication in case we have password that has been stored without encryption
 public class SimplyAlgoPasswordEncoderFactories {
 
+
     public static PasswordEncoder createDelegatingPasswordEncoder() {
         String encodingId = "bcrypt12";
         Map<String, PasswordEncoder> encoders = new HashMap<>();
-
         encoders.put(encodingId, new BCryptPasswordEncoder(12));
         encoders.put("bcrypt", new BCryptPasswordEncoder());
-        encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
-        encoders.put("scrypt", new SCryptPasswordEncoder());
-        encoders.put("argon2", new Argon2PasswordEncoder());
+        encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8());
+        encoders.put("scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
+        encoders.put("argon2", Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8());
         encoders.put("noop", NoOpPasswordEncoder.getInstance());
         return new DelegatingPasswordEncoder(encodingId, encoders);
     }

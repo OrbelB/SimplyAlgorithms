@@ -17,7 +17,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
@@ -39,7 +40,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
-@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
     //injects the rsa keys
@@ -68,7 +69,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         //set cors enable and disable csrf since we are using stateless authentication
-        //TODO decide whether to add cors authentication to avoid 3-party attackers from retrieving info
+        //TODO decide whether to add csrf authentication to prevent from getting slx injections
         http.cors().and().csrf().disable();
 
         //exception handler for users not authorized to access the resource
@@ -81,22 +82,40 @@ public class SecurityConfig {
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        //set up permissions on public endpoints
-        http.authorizeRequests((authz) -> authz
-                        .antMatchers("/h2-console/**", "/console/*").permitAll()
-                        .antMatchers("/css/**", "/js/**", "/images/**",
-                                "/webjars/**", "/**/*.html", "/**/*.css", "/**/*.js",
+        http.authorizeHttpRequests((auth) -> auth.requestMatchers("/h2-console/**", "/console/*").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**",
+                                "/webjars/**", "/*/*.html", "/*/*.css", "/*/*.js",
                                 "/favicon.ico").permitAll()
-                        .antMatchers("/api/public/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/forums/list**", "/forums/*", "/forums/list/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/topics/list**", "/topics/*", "/topics/list/**").permitAll()
-                        .antMatchers("/comments/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/tags/**").permitAll())
-                .authorizeRequests()
+                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/forums/list**", "/forums/*", "/forums/list/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/topics/list**", "/topics/*", "/topics/list/**").permitAll()
+                        .requestMatchers("/comments/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/tags/**").permitAll()
+                )
+                .authorizeHttpRequests()
                 .anyRequest()
-                .authenticated().and()
+                .authenticated()
+                .and()
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+
+//        //set up permissions on public endpoints
+//        http.authorizeRequests((authz) -> authz
+//
+//                        .antMatchers("/h2-console/**", "/console/*").permitAll()
+//                        .antMatchers("/css/**", "/js/**", "/images/**",
+//                                "/webjars/**", "/**/*.html", "/**/*.css", "/**/*.js",
+//                                "/favicon.ico").permitAll()
+//                        .antMatchers("/api/public/**").permitAll()
+//                        .antMatchers(HttpMethod.GET, "/forums/list**", "/forums/*", "/forums/list/**").permitAll()
+//                        .antMatchers(HttpMethod.GET, "/topics/list**", "/topics/*", "/topics/list/**").permitAll()
+//                        .antMatchers("/comments/**").permitAll()
+//                        .antMatchers(HttpMethod.GET, "/tags/**").permitAll())
+//                .authorizeRequests()
+//                .anyRequest()
+//                .authenticated().and()
+//                .httpBasic(Customizer.withDefaults())
+//                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
 
         //h2 console config not needed but will keep it open for now

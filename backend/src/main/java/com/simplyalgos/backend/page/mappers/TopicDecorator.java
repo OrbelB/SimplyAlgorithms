@@ -1,17 +1,17 @@
 package com.simplyalgos.backend.page.mappers;
 
-import com.simplyalgos.backend.comment.Comment;
+import com.simplyalgos.backend.comment.domains.Comment;
 import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
 import com.simplyalgos.backend.comment.enums.CommentType;
-import com.simplyalgos.backend.page.CodeSnippet;
-import com.simplyalgos.backend.page.Topic;
-import com.simplyalgos.backend.page.TopicExternalResource;
-import com.simplyalgos.backend.page.TopicSteps;
+import com.simplyalgos.backend.page.domains.CodeSnippet;
+import com.simplyalgos.backend.page.domains.Topic;
+import com.simplyalgos.backend.page.domains.TopicExternalResource;
+import com.simplyalgos.backend.page.domains.TopicSteps;
 import com.simplyalgos.backend.page.dto.CodeSnippetDTO;
 import com.simplyalgos.backend.page.dto.FullTopicDTO;
 import com.simplyalgos.backend.page.dto.TopicExternalResourcesDTO;
 import com.simplyalgos.backend.page.dto.TopicStepsDTO;
-import com.simplyalgos.backend.tag.Tag;
+import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import org.springframework.beans.factory.annotation.Autowired;

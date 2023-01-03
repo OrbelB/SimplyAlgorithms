@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
+import org.hibernate.usertype.UserTypeLegacyBridge;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,7 +27,9 @@ public class Authority {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Type(value = UserTypeLegacyBridge.class,
+            parameters = @Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
+                    value = "org.hibernate.type.UUIDCharType"))
     @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false, name = "authority_id")
     private UUID authorityId;
 

@@ -1,15 +1,18 @@
 package com.simplyalgos.backend.web.dtos;
 
-import com.sun.istack.NotNull;
+import org.springframework.lang.NonNull;
 
 import java.util.UUID;
 
 public record UpdatePassword(
-        @NotNull
+
+        @NonNull
         UUID userId,
-        @NotNull
+
+        @NonNull
         String oldPassword,
-        @NotNull
+
+        @NonNull
         String newPassword
 ) {
 }

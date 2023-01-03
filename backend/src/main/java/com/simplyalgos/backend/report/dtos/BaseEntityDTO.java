@@ -3,7 +3,7 @@ package com.simplyalgos.backend.report.dtos;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.MappedSuperclass;
 import java.util.UUID;
 
 @NoArgsConstructor

@@ -1,20 +1,22 @@
 package com.simplyalgos.backend.page.mappers;
 
-import com.simplyalgos.backend.comment.Comment;
+import com.simplyalgos.backend.comment.domains.Comment;
 import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
 import com.simplyalgos.backend.comment.enums.CommentType;
-import com.simplyalgos.backend.page.Forum;
-import com.simplyalgos.backend.page.Views;
+import com.simplyalgos.backend.page.domains.Forum;
 import com.simplyalgos.backend.page.dto.ForumDTO;
 import com.simplyalgos.backend.page.dto.FullForumDTO;
-import com.simplyalgos.backend.tag.Tag;
+import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
-import com.simplyalgos.backend.user.User;
+import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDataDTO;
-import com.sun.istack.NotNull;
+
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.NonNull;
+
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,7 +63,7 @@ public class ForumDecorator implements ForumMapper {
     }
 
     @Override
-    public FullForumDTO forumToFullForumDto(@NotNull Forum forum) {
+    public FullForumDTO forumToFullForumDto(@NonNull Forum forum) {
         FullForumDTO forumDTO = forumMapper.forumToFullForumDto(forum);
         forumDTO.setPageId(forum.getPageId());
         if (forum.getCreatedBy() != null) {

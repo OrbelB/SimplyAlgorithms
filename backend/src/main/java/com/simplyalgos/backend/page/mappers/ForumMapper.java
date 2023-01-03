@@ -1,7 +1,6 @@
 package com.simplyalgos.backend.page.mappers;
 
-import com.simplyalgos.backend.page.Forum;
-import com.simplyalgos.backend.page.Views;
+import com.simplyalgos.backend.page.domains.Forum;
 import com.simplyalgos.backend.page.dto.ForumDTO;
 import com.simplyalgos.backend.page.dto.FullForumDTO;
 

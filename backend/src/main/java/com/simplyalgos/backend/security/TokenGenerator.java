@@ -1,6 +1,6 @@
 package com.simplyalgos.backend.security;
 
-import com.simplyalgos.backend.user.User;
+import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.web.dtos.TokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,6 @@ import static java.util.stream.Collectors.joining;
 public class TokenGenerator {
 
     private final JwtEncoder accessTokenEncoder;
-
 
     private  JwtEncoder refreshTokenEncoder;
 

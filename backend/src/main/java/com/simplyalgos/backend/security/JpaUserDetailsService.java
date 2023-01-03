@@ -4,8 +4,8 @@ import com.simplyalgos.backend.exceptions.PasswordsDontMatchException;
 import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.user.security.Role;
 import com.simplyalgos.backend.user.security.RoleRepository;
-import com.simplyalgos.backend.user.User;
-import com.simplyalgos.backend.user.UserRepository;
+import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.mappers.UserRegisteredMapper;
 import com.simplyalgos.backend.web.dtos.SignupDTO;
 import com.simplyalgos.backend.web.dtos.UpdatePassword;
@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.Set;
@@ -51,13 +51,13 @@ public class JpaUserDetailsService implements UserDetailsService {
         }
         User user = userRegisteredMapper.create(userDto);
         user.setProfilePicture(userDto.profilePicture());
-        user.setRoles(Set.of(assignRoleTONewUser("STUDENT")));
+        user.setRoles(Set.of(assignRoleToNewUser("STUDENT")));
         user.setPassword(passwordEncoder.encode(userDto.password()));
         userRepository.save(user);
     }
 
     @Transactional
-    protected Role assignRoleTONewUser(String roleToAssign) {
+    protected Role assignRoleToNewUser(String roleToAssign) {
         return roleRepository.getRoleByRoleName(roleToAssign).orElseThrow(() ->
                 new NullPointerException(MessageFormat.format("Role {0} not found ", roleToAssign))
         );

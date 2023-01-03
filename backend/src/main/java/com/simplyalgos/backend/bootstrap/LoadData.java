@@ -1,8 +1,9 @@
 package com.simplyalgos.backend.bootstrap;
 
-import com.simplyalgos.backend.page.Topic;
-import com.simplyalgos.backend.page.TopicRepository;
-import com.simplyalgos.backend.user.*;
+import com.simplyalgos.backend.page.domains.Topic;
+import com.simplyalgos.backend.page.repositories.TopicRepository;
+import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.security.Authority;
 import com.simplyalgos.backend.user.security.AuthorityRepository;
 import com.simplyalgos.backend.user.security.Role;
@@ -14,7 +15,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.sql.Date;
 import java.text.MessageFormat;
 import java.time.LocalDate;

@@ -1,12 +1,12 @@
 package com.simplyalgos.backend.comment.mappers;
 
-import com.simplyalgos.backend.comment.Comment;
-import com.simplyalgos.backend.comment.ParentChildComment;
+import com.simplyalgos.backend.comment.domains.Comment;
+import com.simplyalgos.backend.comment.domains.ParentChildComment;
 import com.simplyalgos.backend.comment.dto.ChildrenCommentRetrieval;
 import com.simplyalgos.backend.comment.dto.CommentBasicDTO;
 import com.simplyalgos.backend.comment.dto.CommentToSendDTO;
-import com.simplyalgos.backend.user.User;
-import com.simplyalgos.backend.user.UserRepository;
+import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

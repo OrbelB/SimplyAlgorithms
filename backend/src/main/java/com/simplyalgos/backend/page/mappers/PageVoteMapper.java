@@ -1,6 +1,6 @@
 package com.simplyalgos.backend.page.mappers;
 
-import com.simplyalgos.backend.page.PageVote;
+import com.simplyalgos.backend.page.domains.PageVote;
 import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
