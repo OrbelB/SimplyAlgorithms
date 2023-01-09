@@ -1,17 +1,16 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import cx from "classnames";
-import fp from "./ForumPost.module.css";
-import { Chip } from "@mui/material";
-import { forumsActions } from "../../../store/reducers/forums-reducer";
-import CommentFrame from "../../comment/CommentFrame";
-import Related_RecentPosts from "../forum_home/Related_RecentPosts";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchSingleForum, addUserView } from "../../../services/forum";
-import { beautifyTime } from "../../../utilities/beautify-time";
-import Vote from "../../vote_comp/Vote";
-import ForumOptionMenu from "./ForumOptionMenu";
-import LoadingBackdrop from "../../loading/LoadingBackdrop";
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import cx from 'classnames';
+import { Chip } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import fp from './ForumPost.module.css';
+import { forumsActions } from '../../../store/reducers/forums-reducer';
+import CommentFrame from '../../comment/CommentFrame';
+import { fetchSingleForum, addUserView } from '../../../services/forum';
+import beautifyTime from '../../../utilities/beautify-time';
+import Vote from '../../vote_comp/Vote';
+import ForumOptionMenu from './ForumOptionMenu';
+import LoadingBackdrop from '../../loading/LoadingBackdrop';
 
 export default function ForumPost() {
   const { pageId } = useParams();
@@ -26,33 +25,42 @@ export default function ForumPost() {
   const { status: viewStatus } = useSelector((state) => state.viewedForums);
 
   useEffect(() => {
-    if (status === "idle" || status === "successToIdle") {
+    if (status === 'idle' || status === 'successToIdle') {
       dispatch(fetchSingleForum(pageId));
     }
     if (
-      viewStatus === "success" &&
-      jwtAccessToken !== "" &&
+      viewStatus === 'success' &&
+      jwtAccessToken !== '' &&
       isLoggedIn &&
-      (status === "success" || status === "completed")
+      (status === 'success' || status === 'completed')
     ) {
-      dispatch(forumsActions.updateForum({ forum: forum }));
+      dispatch(forumsActions.updateForum({ forum }));
       dispatch(
         addUserView({
-          pageId: pageId,
+          pageId,
           userId: authUserId,
           accessToken: jwtAccessToken,
         })
       );
-      //dispatch(viewForumsActions.updateForum({ forum: forum }));
+      // dispatch(viewForumsActions.updateForum({ forum: forum }));
     }
-  }, [status, pageId, dispatch]);
+  }, [
+    status,
+    pageId,
+    dispatch,
+    authUserId,
+    isLoggedIn,
+    jwtAccessToken,
+    forum,
+    viewStatus,
+  ]);
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return <LoadingBackdrop />;
   }
-  if (status === "success" || status === "completed") {
+  if (status === 'success' || status === 'completed') {
     return (
-      <div key={pageId} className={cx(fp["window"], "container-fluid")}>
+      <div key={pageId} className={cx(fp.window, 'container-fluid')}>
         <div>
           {/* <div className={cx(fp["side2"])}>
             <h1 className={cx(fp["category-label"])}>Related Posts</h1>
@@ -61,11 +69,11 @@ export default function ForumPost() {
           </div> */}
           <div
             className={cx(
-              fp["post"],
-              "border border-success p-2 rounded-bottom rounded-4 border-info bg-secondary text-dark bg-opacity-50 h-auto d-inline-block"
+              fp.post,
+              'border border-success p-2 rounded-bottom rounded-4 border-info bg-secondary text-dark bg-opacity-50 h-auto d-inline-block'
             )}
           >
-            <div className={cx(fp["user"])}>
+            <div className={cx(fp.user)}>
               <div className="row">
                 <div className="col-auto col-md-3">
                   {forum?.userDto?.username}
@@ -89,10 +97,8 @@ export default function ForumPost() {
                 </div>
               </div>
             </div>
-            <h3 className={cx(fp["title"])}>{forum?.title}</h3>
-            <div
-              className={cx(fp["quetion"], "overflow-auto fw-normal lh-base")}
-            >
+            <h3 className={cx(fp.title)}>{forum?.title}</h3>
+            <div className={cx(fp.quetion, 'overflow-auto fw-normal lh-base')}>
               {forum?.descriptionText}
             </div>
             <Vote
@@ -110,4 +116,4 @@ export default function ForumPost() {
   }
 }
 
-//{/* bootstrap border-{thikness number 1 - 5} border-{top bottom right left or if its a box just put border}  */}
+// {/* bootstrap border-{thikness number 1 - 5} border-{top bottom right left or if its a box just put border}  */}

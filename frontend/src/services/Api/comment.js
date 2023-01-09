@@ -1,12 +1,13 @@
-import { get, post, put, destroy } from "./base";
+/* eslint-disable prefer-template */
+import { get, post, put, destroy } from './base';
 
-export const PUBLIC_ENDPOINT_ROUTE = "/comments";
+export const PUBLIC_ENDPOINT_ROUTE = '/comments';
 
 export const commentEndpoints = {
   listChildren: (page, size, parentCommentId) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/list-child-comments`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       params: {
         page,
@@ -25,8 +26,8 @@ export const commentEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + accessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
         },
       }
     ),
@@ -43,8 +44,8 @@ export const commentEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + accessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
         },
       }
     ),
@@ -59,19 +60,19 @@ export const commentEndpoints = {
       },
       {
         headers: {
-          Authorization: "Bearer " + accessToken,
+          Authorization: 'Bearer ' + accessToken,
         },
       }
     ),
   delete: (userId, commentId, accessToken) =>
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
       headers: {
-        Authorization: "Bearer " + accessToken,
-        "Content-Type": "application/json",
+        Authorization: 'Bearer ' + accessToken,
+        'Content-Type': 'application/json',
       },
       params: {
-        userId: userId,
-        commentId: commentId,
+        userId,
+        commentId,
       },
     }),
   vote: (votedComment, accessToken) =>
@@ -84,8 +85,8 @@ export const commentEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + accessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
         },
       }
     ),
@@ -99,8 +100,8 @@ export const commentEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + accessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
         },
       }
     ),
@@ -111,8 +112,8 @@ export const commentEndpoints = {
         commentId,
       },
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
       },
     }),
   listVotes: (pageId) =>
@@ -121,7 +122,7 @@ export const commentEndpoints = {
         pageId,
       },
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }),
 };

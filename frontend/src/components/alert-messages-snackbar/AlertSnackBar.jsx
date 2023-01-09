@@ -1,11 +1,15 @@
-import { Snackbar, Alert } from "@mui/material";
-import { useState } from "react";
+import { Snackbar, Alert } from '@mui/material';
+import { useState } from 'react';
 
-export default function AlertSnackBar({ typeMessage, passedMessage, removeData = () => {} }) {
+export default function AlertSnackBar({
+  typeMessage,
+  passedMessage,
+  removeData = () => {},
+}) {
   const [open, setOpen] = useState(true);
 
   const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
     removeData();
@@ -17,12 +21,12 @@ export default function AlertSnackBar({ typeMessage, passedMessage, removeData =
       open={open}
       autoHideDuration={3000}
       onClose={handleClose}
-      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
       <Alert
         onClose={handleClose}
         severity={typeMessage}
-        sx={{ width: "100%" }}
+        sx={{ width: '100%' }}
       >
         {passedMessage}
       </Alert>

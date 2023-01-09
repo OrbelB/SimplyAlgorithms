@@ -11,7 +11,6 @@ export default function AlgoFrame({vis_url, viz_title}) {
   function disableLoader(){
     console.log(" Item loaded")
   }
-
     return (
       <div className={cx(styles["container-style"])}>
         <div className={cx(styles["temp_view"])}>

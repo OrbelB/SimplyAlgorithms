@@ -1,49 +1,35 @@
-import { forumEndpoints } from "./Api/forum";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { create } from "@mui/material/styles/createTransitions";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { forumEndpoints } from './Api/forum';
 
 export const fetchForumList = createAsyncThunk(
-  "forum/getList",
+  'forum/getList',
   async (pageParams) => {
     const { page, size, sortBy } = pageParams;
-    const response = await forumEndpoints
-      .list(page, size, sortBy)
-      .catch((error) => {
-        if (error?.response) {
-          return error;
-        }
-      });
+    const response = await forumEndpoints.list(page, size, sortBy);
+
     return response.data;
   }
 );
 
 export const fetchForumsListByCategory = createAsyncThunk(
-  "forum/getForumByCategory",
+  'forum/getForumByCategory',
   async (pageParams) => {
     const { page, size, tagId } = pageParams;
-    const response = await forumEndpoints
-      .listByCategory(page, size, tagId)
-      .catch((error) => {
-        if (error?.response) {
-          return error;
-        }
-      });
+    const response = await forumEndpoints.listByCategory(page, size, tagId);
     return response.data;
   }
 );
 
 export const fetchSingleForum = createAsyncThunk(
-  "forum/singleForum",
+  'forum/singleForum',
   async (pageId) => {
-    const response = await forumEndpoints.singleById(pageId).catch((error) => {
-      return error;
-    });
+    const response = await forumEndpoints.singleById(pageId);
     return response.data;
   }
 );
 
 export const createForum = createAsyncThunk(
-  "forum/create",
+  'forum/create',
   async (passedParams) => {
     const { createdForum, accessToken } = passedParams;
     const response = await forumEndpoints
@@ -56,22 +42,20 @@ export const createForum = createAsyncThunk(
 );
 
 export const updateForum = createAsyncThunk(
-  "forum/update",
+  'forum/update',
   async (passedParams) => {
     const { updatedForum, accessToken } = passedParams;
     const response = await forumEndpoints
       .update(updatedForum, accessToken)
       .catch((error) => {
-        if (error) {
-          return error;
-        }
+        return error;
       });
     return response.data;
   }
 );
 
 export const deleteForum = createAsyncThunk(
-  "forum/delete",
+  'forum/delete',
   async (passedParams) => {
     const { pageId, userId, accessToken } = passedParams;
     const response = await forumEndpoints
@@ -84,7 +68,7 @@ export const deleteForum = createAsyncThunk(
 );
 
 export const voteForum = createAsyncThunk(
-  "forum/vote",
+  'forum/vote',
   async (passedParams) => {
     const { voteObject, accessToken } = passedParams;
     const response = await forumEndpoints
@@ -97,7 +81,7 @@ export const voteForum = createAsyncThunk(
 );
 
 export const reportForum = createAsyncThunk(
-  "forum/report",
+  'forum/report',
   async (passedParams) => {
     const { reportedPage, accessToken } = passedParams;
     const response = await forumEndpoints
@@ -110,7 +94,7 @@ export const reportForum = createAsyncThunk(
 );
 
 export const addUserView = createAsyncThunk(
-  "forums/view",
+  'forums/view',
   async (passedParams) => {
     const { pageId, userId, accessToken } = passedParams;
     const response = await forumEndpoints.viewed(pageId, userId, accessToken);
@@ -119,7 +103,7 @@ export const addUserView = createAsyncThunk(
 );
 
 export const fetchUserForumsViewed = createAsyncThunk(
-  "forums/list/view",
+  'forums/list/view',
   async (passedParams) => {
     const response = await forumEndpoints.listForumViewed(passedParams);
     return response.data;
@@ -127,7 +111,7 @@ export const fetchUserForumsViewed = createAsyncThunk(
 );
 
 export const fetchVotes = createAsyncThunk(
-  "forum/list-votes",
+  'forum/list-votes',
   async (passedParams) => {
     const response = await forumEndpoints.listVotes(passedParams);
     return response.data;
@@ -135,7 +119,7 @@ export const fetchVotes = createAsyncThunk(
 );
 
 export const deleteForumVote = createAsyncThunk(
-  "forum/delete-vote",
+  'forum/delete-vote',
   async (passedParams) => {
     const response = await forumEndpoints.deleteVote(passedParams);
     return response.data;

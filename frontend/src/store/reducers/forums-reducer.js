@@ -1,24 +1,26 @@
+/* eslint-disable no-param-reassign */
 import {
   createSlice,
   createEntityAdapter,
   createSelector,
-} from "@reduxjs/toolkit";
-import { fetchForumList } from "../../services/forum";
+} from '@reduxjs/toolkit';
+import { fetchForumList } from '../../services/forum';
+
 const forumsAdapter = createEntityAdapter({
   selectId: (a) => a.pageId,
 });
 
 const initialState = forumsAdapter.getInitialState({
-  status: "idle",
-  error: "",
-  sortBy: "createdDate",
-  filterBy: "",
-  totalElements : 0,
-  totalPages : 0,
+  status: 'idle',
+  error: '',
+  sortBy: 'createdDate',
+  filterBy: '',
+  totalElements: 0,
+  totalPages: 0,
 });
 
 export const forumsSlice = createSlice({
-  name: "forums",
+  name: 'forums',
   initialState,
   reducers: {
     setForums: (state, action) => {
@@ -26,16 +28,16 @@ export const forumsSlice = createSlice({
     },
     resetData: (state) => {
       forumsAdapter.removeAll(state);
-      state.status = "idle";
-      state.error = "";
+      state.status = 'idle';
+      state.error = '';
     },
     sortForums: (state, action) => {
-      state.filterBy = "";
+      state.filterBy = '';
       state.sortBy = action.payload;
     },
     filterForums: (state, action) => {
       state.filterBy = action.payload;
-      state.sortBy = "createdDate";
+      state.sortBy = 'createdDate';
     },
     updateForum: (state, action) => {
       forumsAdapter.upsertOne(state, action.payload?.forum);
@@ -46,24 +48,24 @@ export const forumsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchForumList.pending, (state, action) => {
-        state.status = "loading";
+      .addCase(fetchForumList.pending, (state) => {
+        state.status = 'loading';
       })
       .addCase(fetchForumList.fulfilled, (state, action) => {
         state.totalElements = action.payload.totalElements;
         state.totalPages = action.payload.totalPages;
-        state.status = "success";
+        state.status = 'success';
         const posts = action.payload?.content?.map((forumQuickView) => {
           forumQuickView.createdDate = new Date(
             forumQuickView?.createdDate
           ).toISOString();
           return forumQuickView;
         });
-        //add other forums
+        // add other forums
         forumsAdapter.upsertMany(state, posts);
       })
       .addCase(fetchForumList.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error.message;
       });
   },
@@ -80,8 +82,8 @@ export const selectSortedForums = createSelector(
   (state) => state.forums.sortBy,
   (allForums, sortBy) =>
     [...allForums].sort((a, b) => {
-      if (isNaN(a[sortBy.toString().trim()])) {
-        if (sortBy.toString().trim() === "title") {
+      if (Number.isNaN(a[sortBy.toString().trim()])) {
+        if (sortBy.toString().trim() === 'title') {
           return a[sortBy.toString().trim()].localeCompare(
             b[sortBy.toString().trim()]
           );
@@ -89,9 +91,8 @@ export const selectSortedForums = createSelector(
         return b[sortBy.toString().trim()].localeCompare(
           a[sortBy.toString().trim()]
         );
-      } else {
-        return b[sortBy.toString().trim()] - a[sortBy.toString().trim()];
       }
+      return b[sortBy.toString().trim()] - a[sortBy.toString().trim()];
     })
 );
 

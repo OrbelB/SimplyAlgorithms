@@ -1,8 +1,8 @@
-import { post } from "./base";
+import { post } from './base';
 
-const PUBLIC_ENDPOINT_ROUTE = "/api/public";
+const PUBLIC_ENDPOINT_ROUTE = '/api/public';
 
-export const authEndpoints = {
+const authEndpoints = {
   register: (userToAuthenticate) =>
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/register`,
@@ -17,7 +17,7 @@ export const authEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     ),
@@ -25,12 +25,12 @@ export const authEndpoints = {
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/login`,
       {
-        username: username,
-        password: password,
+        username,
+        password,
       },
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     ),
@@ -42,8 +42,10 @@ export const authEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     ),
 };
+
+export default authEndpoints;

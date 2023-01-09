@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updatePassword } from "../../../services/user";
-import { authActions } from "../../../store/reducers/auth-reducer";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updatePassword } from '../../../services/user';
+import { authActions } from '../../../store/reducers/auth-reducer';
+
 export default function SecurityTabForm() {
   const dispatch = useDispatch();
 
@@ -10,18 +12,18 @@ export default function SecurityTabForm() {
   );
 
   const [input, setInput] = useState({
-    password: "",
-    confirmPassword: "",
-    oldPassword: "",
+    password: '',
+    confirmPassword: '',
+    oldPassword: '',
   });
 
   const [error, setError] = useState({
-    password: "",
-    confirmPassword: "",
-    oldPassword: "",
+    password: '',
+    confirmPassword: '',
+    oldPassword: '',
   });
 
-  const submitForm = (e) => {
+  const submitForm = () => {
     dispatch(
       updatePassword({
         updatedPassword: {
@@ -35,39 +37,30 @@ export default function SecurityTabForm() {
     dispatch(authActions.resetData());
   };
 
-  const onInputChange = (e) => {
-    const { name, value } = e.target;
-    setInput((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    validateInput(e);
-  };
-
   const validateInput = (e) => {
-    let { name, value } = e.target;
+    const { name, value } = e.target;
     setError((prev) => {
-      const stateObj = { ...prev, [name]: "" };
+      const stateObj = { ...prev, [name]: '' };
 
       switch (name) {
-        case "password":
+        case 'password':
           if (!value) {
-            stateObj[name] = "Please enter Password.";
+            stateObj[name] = 'Please enter Password.';
           } else if (input.confirmPassword && value !== input.confirmPassword) {
-            stateObj["confirmPassword"] =
-              "Password and Confirm Password does not match.";
+            stateObj.confirmPassword =
+              'Password and Confirm Password does not match.';
           } else {
-            stateObj["confirmPassword"] = input.confirmPassword
-              ? ""
+            stateObj.confirmPassword = input.confirmPassword
+              ? ''
               : error.confirmPassword;
           }
           break;
 
-        case "confirmPassword":
+        case 'confirmPassword':
           if (!value) {
-            stateObj[name] = "Please enter Confirm Password.";
+            stateObj[name] = 'Please enter Confirm Password.';
           } else if (input.password && value !== input.password) {
-            stateObj[name] = "Password and Confirm Password does not match.";
+            stateObj[name] = 'Password and Confirm Password does not match.';
           }
           break;
 
@@ -78,6 +71,16 @@ export default function SecurityTabForm() {
       return stateObj;
     });
   };
+
+  const onInputChange = (e) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    validateInput(e);
+  };
+
   return (
     <div className="SecurityTab">
       <form>
@@ -100,7 +103,7 @@ export default function SecurityTabForm() {
             value={input.password}
             onChange={onInputChange}
             onBlur={validateInput}
-          ></input>
+          />
           {error.password && (
             <span className="err text-danger">{error.password}</span>
           )}
@@ -112,7 +115,7 @@ export default function SecurityTabForm() {
             value={input.confirmPassword}
             onChange={onInputChange}
             onBlur={validateInput}
-          ></input>
+          />
           {error.confirmPassword && (
             <span className="err text-danger">{error.confirmPassword}</span>
           )}

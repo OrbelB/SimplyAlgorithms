@@ -1,22 +1,24 @@
-import { get, put, destroy } from "./base";
-export const PUBLIC_ENDPOINT_ROUTE = "/users";
+/* eslint-disable prefer-template */
+import { get, put, destroy } from './base';
+
+export const PUBLIC_ENDPOINT_ROUTE = '/users';
 
 export const userEndpoints = {
   singleById: (id, jwtAccessToken) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/${id}`, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + jwtAccessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   delete: (userId, accessToken) =>
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
       },
       params: {
-        userId: userId,
+        userId,
       },
     }),
   update: (updatedUser, accessToken) =>
@@ -35,8 +37,8 @@ export const userEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + accessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
         },
       }
     ),
@@ -50,8 +52,8 @@ export const userEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + accessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
         },
       }
     ),

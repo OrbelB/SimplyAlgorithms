@@ -31,8 +31,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "cloudfront-invalidation" : "aws cloudfront create-invalidation --distribution-id E1MJQ8CO0SAJ13 --paths /* --profile simply-algo-web-dep",
-    "s3-deploy" : "aws s3 sync build/ s3://simplyalgoapp --profile simply-algo-web-dep",
+    "cloudfront-invalidation": "aws cloudfront create-invalidation --distribution-id E1MJQ8CO0SAJ13 --paths /* --profile simply-algo-web-dep",
+    "s3-deploy": "aws s3 sync build/ s3://simplyalgoapp --profile simply-algo-web-dep",
     "deploy": "npm run build && npm run s3-deploy && npm run cloudfront-invalidation",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -56,7 +56,15 @@
     ]
   },
   "devDependencies": {
-    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "^2.8.1",
     "react-dom": "^18.2.0",
     "react-test-renderer": "^18.2.0"
   },

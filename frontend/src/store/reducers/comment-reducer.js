@@ -1,35 +1,36 @@
+/* eslint-disable no-param-reassign */
 import {
   createSlice,
   createEntityAdapter,
   createSelector,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 import {
   fetchChildrenComments,
   updateChildComment,
   deleteChildComment,
   createChildComment,
-} from "../../services/comment";
+} from '../../services/comment';
 
 const commentAdapter = createEntityAdapter({
   selectId: (a) => a.comment.commentId,
 });
 
 const initialState = commentAdapter.getInitialState({
-  error: "",
-  status: "idle",
+  error: '',
+  status: 'idle',
 });
 
 export const commentSlice = createSlice({
-  name: "comment",
+  name: 'comment',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchChildrenComments.pending, (state, action) => {
-        state.status = "pending";
+      .addCase(fetchChildrenComments.pending, (state) => {
+        state.status = 'pending';
       })
       .addCase(fetchChildrenComments.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = 'success';
         const childrenComments = action.payload?.content?.map((comment) => {
           comment.parentCommentId = comment?.rootId;
           comment.comment.createdDate = new Date(
@@ -40,14 +41,14 @@ export const commentSlice = createSlice({
         commentAdapter.upsertMany(state, childrenComments);
       })
       .addCase(fetchChildrenComments.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action?.error.message;
       })
-      .addCase(createChildComment.pending, (state, action) => {
-        state.status = "pending";
+      .addCase(createChildComment.pending, (state) => {
+        state.status = 'pending';
       })
       .addCase(createChildComment.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = 'success';
         const newCreatedChildComment = {
           parentCommentId: action.payload.rootId,
           comment: {
@@ -59,17 +60,17 @@ export const commentSlice = createSlice({
         };
         commentAdapter.addOne(state, newCreatedChildComment);
       })
-      .addCase(createChildComment.rejected, (state, action) => {
-        state.status = "failed";
+      .addCase(createChildComment.rejected, (state) => {
+        state.status = 'failed';
       })
-      .addCase(updateChildComment.pending, (state, action) => {
-        state.status = "pending";
+      .addCase(updateChildComment.pending, (state) => {
+        state.status = 'pending';
       })
       .addCase(updateChildComment.fulfilled, (state, action) => {
         if (!action?.payload?.comment?.commentId) {
           return;
         }
-        state.status = "success";
+        state.status = 'success';
         const updatedComment = {
           parentCommentId: action.payload.rootId,
           comment: {

@@ -1,24 +1,20 @@
-import { stepLabelClasses } from "@mui/material";
-import {
-  createSlice,
-  createEntityAdapter,
-  createSelector,
-} from "@reduxjs/toolkit";
-import { fetchUserForumsViewed, addUserView } from "../../services/forum";
+/* eslint-disable no-param-reassign */
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import { fetchUserForumsViewed, addUserView } from '../../services/forum';
 
 const viewedForumsAdapter = createEntityAdapter({
   selectId: (a) => a.pageId,
 });
 
 const initialState = viewedForumsAdapter.getInitialState({
-  status: "idle",
-  error: "",
-  sortBy: "createdDate",
-  filterBy: "",
+  status: 'idle',
+  error: '',
+  sortBy: 'createdDate',
+  filterBy: '',
 });
 
 export const viewedForumsSlice = createSlice({
-  name: "viewedForums",
+  name: 'viewedForums',
   initialState,
   reducers: {
     setForums: (state, action) => {
@@ -26,19 +22,19 @@ export const viewedForumsSlice = createSlice({
     },
     resetData: (state) => {
       viewedForumsAdapter.removeAll(state);
-      state.status = "idle";
-      state.error = "";
+      state.status = 'idle';
+      state.error = '';
     },
     sortForums: (state, action) => {
-      state.filterBy = "";
+      state.filterBy = '';
       state.sortBy = action.payload;
     },
     filterForums: (state, action) => {
       state.filterBy = action.payload;
-      state.sortBy = "createdDate";
+      state.sortBy = 'createdDate';
     },
     updateForum: (state, action) => {
-      //state.status = "idle";
+      // state.status = "idle";
       viewedForumsAdapter.upsertOne(state, action.payload?.forum);
     },
     deleteForum: (state, action) => {
@@ -47,8 +43,8 @@ export const viewedForumsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchUserForumsViewed.pending, (state, action) => {
-        state.status = "loading";
+      .addCase(fetchUserForumsViewed.pending, (state) => {
+        state.status = 'loading';
       })
       .addCase(fetchUserForumsViewed.fulfilled, (state, action) => {
         const posts = action.payload?.map((forumQuickView) => {
@@ -58,25 +54,26 @@ export const viewedForumsSlice = createSlice({
           return forumQuickView;
         });
 
-        //add other forums
+        // add other forums
         viewedForumsAdapter.upsertMany(state, posts);
-        state.status = "success";
+        state.status = 'success';
       })
       .addCase(fetchUserForumsViewed.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.error.message;
       })
-      .addCase(addUserView.pending, (state, action) => {
-        state.status = "pending";
+      .addCase(addUserView.pending, (state) => {
+        state.status = 'pending';
       })
       .addCase(addUserView.fulfilled, (state, action) => {
-        state.status = "idle";
+        state.status = 'idle';
+        // eslint-disable-next-line no-unused-vars
         const post = {
           ...action.payload,
           createdDate: new Date(action.payload?.createdDate).toISOString(),
         };
-        //add other forums
-        //viewedForumsAdapter.upsertOne(state, post);
+        // add other forums
+        // viewedForumsAdapter.upsertOne(state, post);
       });
   },
 });

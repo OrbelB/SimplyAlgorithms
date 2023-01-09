@@ -1,12 +1,13 @@
-import { get, post, put, destroy } from "./base";
+/* eslint-disable prefer-template */
+import { get, post, put, destroy } from './base';
 
-export const PUBLIC_ENDPOINT_ROUTE = "/forums";
+export const PUBLIC_ENDPOINT_ROUTE = '/forums';
 
 export const forumEndpoints = {
   singleById: (id) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/${id}`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }),
   list: (page, size, sortBy) =>
@@ -25,7 +26,7 @@ export const forumEndpoints = {
         tagId,
       },
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }),
   create: (createdForum, jwtAccessToken) =>
@@ -43,8 +44,8 @@ export const forumEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + jwtAccessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -67,16 +68,16 @@ export const forumEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + jwtAccessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
   delete: (userId, pageId, jwtAccessToken) => {
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + jwtAccessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
       params: {
         userId,
@@ -94,8 +95,8 @@ export const forumEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + jwtAccessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -109,16 +110,16 @@ export const forumEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + jwtAccessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
   viewed: (pageId, userId, accessToken) =>
     post(`${PUBLIC_ENDPOINT_ROUTE}/view`, null, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
       },
       params: {
         userId,
@@ -133,7 +134,7 @@ export const forumEndpoints = {
         size: passedParams?.size,
       },
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }),
   deleteVote: (passedParams) =>
@@ -143,8 +144,8 @@ export const forumEndpoints = {
         userId: passedParams?.userId,
       },
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + passedParams?.accessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + passedParams.accessToken,
       },
     }),
   listVotes: (passedParams) =>
@@ -153,8 +154,8 @@ export const forumEndpoints = {
         pageId: passedParams?.pageId,
       },
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + passedParams?.accessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + passedParams.accessToken,
       },
     }),
 };

@@ -1,12 +1,13 @@
-import { get, post, put, destroy } from "./base";
+/* eslint-disable prefer-template */
+import { get, post, put, destroy } from './base';
 
-export const PUBLIC_ENDPOINT_ROUTE = "/topics";
+export const PUBLIC_ENDPOINT_ROUTE = '/topics';
 
 export const topicEndpoints = {
   singleById: (id) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/${id}`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }),
   list: (page, size, sortBy) =>
@@ -32,8 +33,8 @@ export const topicEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + jwtAccessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -56,16 +57,16 @@ export const topicEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + jwtAccessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
   delete: (userId, pageId, jwtAccessToken) => {
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + jwtAccessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
       params: {
         userId,
@@ -83,8 +84,8 @@ export const topicEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + jwtAccessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -98,8 +99,8 @@ export const topicEndpoints = {
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + jwtAccessToken,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -110,8 +111,8 @@ export const topicEndpoints = {
         userId: passedParams?.userId,
       },
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + passedParams?.accessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + passedParams.accessToken,
       },
     }),
   listVotes: (passedParams) =>
@@ -120,8 +121,8 @@ export const topicEndpoints = {
         pageId: passedParams?.pageId,
       },
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + passedParams?.accessToken,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + passedParams.accessToken,
       },
     }),
 };

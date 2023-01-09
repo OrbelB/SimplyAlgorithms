@@ -1,9 +1,9 @@
-import Intro from "../components/home_page/Intro/Intro";
-import Categories from "../components/home_page/categories/Categories";
-import About from "../components/home_page/about-us/About";
-import Forum from "../components/home_page/forum-quiz/Forum_Quiz";
-import { useLocation } from "react-router-dom";
-import useLoginUser from "../hooks/use-LoginUser";
+import { useLocation } from 'react-router-dom';
+import Intro from '../components/home_page/Intro/Intro';
+import Categories from '../components/home_page/categories/Categories';
+import About from '../components/home_page/about-us/About';
+import Forum from '../components/home_page/forum-quiz/Forum_Quiz';
+import useLoginUser from '../hooks/use-LoginUser';
 
 // const types_topics = [
 //     {
@@ -13,30 +13,55 @@ import useLoginUser from "../hooks/use-LoginUser";
 //         ]
 //     }
 // ];
-const types_topics = [
-    {
-        type: 'SORTING',
-        topic_name: ['SELECTION SORT', 'QUICK SORT', 'BUBBLE SORT', 'RADIX SORT'],
-        topic_link: ['/underconstruction', '/underconstruction', '/wiki/bubblesort' ,'/underconstruction']
-    },
-    {
-        type: 'TREES',
-        topic_name: ['BINARY SEARCH STREES', 'TWO-TREE', 'THREE-TREE', 'RED-BLACK'],
-        topic_link: ['/search/binarysearchtree','/underconstruction','/underconstruction','/underconstruction']
-    },
-    {
-        type: 'GRAPHS',
-        topic_name: ['BREADTH-FIRST SEARCH', 'DEPTH FIRST SEARCH', 'TOPOLOGICAL SORT', 'DIJKSTRA GRAPH'],
-        topic_link: ['/search/bfs','/underconstruction','/underconstruction','/underconstruction']
-    },
-    {
-        type: 'Data Structures',
-        topic_name: ['ARRAY', 'LINKED LIST', 'STACK', 'QUEUE'],
-        topic_link: ['/datastructures/arrays','/underconstruction','/underconstruction','/underconstruction', ]
-    }
+const typesTopics = [
+  {
+    type: 'SORTING',
+    topicName: ['SELECTION SORT', 'QUICK SORT', 'BUBBLE SORT', 'RADIX SORT'],
+    topicLink: [
+      '/underconstruction',
+      '/underconstruction',
+      '/wiki/bubblesort',
+      '/underconstruction',
+    ],
+  },
+  {
+    type: 'TREES',
+    topicName: ['BINARY SEARCH STREES', 'TWO-TREE', 'THREE-TREE', 'RED-BLACK'],
+    topicLink: [
+      '/search/binarysearchtree',
+      '/underconstruction',
+      '/underconstruction',
+      '/underconstruction',
+    ],
+  },
+  {
+    type: 'GRAPHS',
+    topicName: [
+      'BREADTH-FIRST SEARCH',
+      'DEPTH FIRST SEARCH',
+      'TOPOLOGICAL SORT',
+      'DIJKSTRA GRAPH',
+    ],
+    topicLink: [
+      '/search/bfs',
+      '/underconstruction',
+      '/underconstruction',
+      '/underconstruction',
+    ],
+  },
+  {
+    type: 'Data Structures',
+    topicName: ['ARRAY', 'LINKED LIST', 'STACK', 'QUEUE'],
+    topicLink: [
+      '/datastructures/arrays',
+      '/underconstruction',
+      '/underconstruction',
+      '/underconstruction',
+    ],
+  },
 ];
 
-//object
+// object
 // const forum_post = {
 //     user:   "Mack",
 //     title:  "First Post",
@@ -58,7 +83,7 @@ export default function HomePage() {
   return (
     <>
       <Intro />
-      <Categories types_topics={types_topics} />
+      <Categories typesTopics={typesTopics} />
       <About />
       <Forum />
     </>

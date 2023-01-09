@@ -1,17 +1,18 @@
-import Votes from "./Votes";
-import AddEditComment from "./AddEditComment";
-import OptionMenu from "./OptionsMenu";
-import { useState } from "react";
-import { beautifyTime } from "../../utilities/beautify-time";
-import { useDispatch, useSelector } from "react-redux";
-import { listVotesByComment } from "../../services/comment";
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Votes from './Votes';
+import AddEditComment from './AddEditComment';
+import OptionMenu from './OptionsMenu';
+import beautifyTime from '../../utilities/beautify-time';
+import { listVotesByComment } from '../../services/comment';
 import {
   selectAllCommentVotes,
   selectByCommentVoteId,
-} from "../../store/reducers/comment-vote-reducer";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import "./CommentBox.css";
+} from '../../store/reducers/comment-vote-reducer';
+
+import './CommentBox.css';
+
 export default function CommentBox({
   children,
   upVotes,
@@ -40,15 +41,15 @@ export default function CommentBox({
     selectByCommentVoteId(state, {
       commentVoteId: {
         userId: authUserID,
-        commentId: commentId,
+        commentId,
       },
     })
   );
 
-  const { status, error } = useSelector((state) => state.commentVotes);
+  const { status } = useSelector((state) => state.commentVotes);
 
   useEffect(() => {
-    if (status === "idle") {
+    if (status === 'idle') {
       dispatch(
         listVotesByComment({
           pageId: forum?.pageId,
@@ -95,16 +96,16 @@ export default function CommentBox({
             />
           </div>
           <div className="col-auto me-1">
-            <p className={"text-primary commentUsername-css"}>{username}</p>
+            <p className="text-primary commentUsername-css">{username}</p>
           </div>
           <div className="col-auto me-lg-auto me-md-auto">
-            <p className={"text-secondary createdDate-css"}>
-              {beautifyTime({ createdDate: createdDate })}
+            <p className="text-secondary createdDate-css">
+              {beautifyTime({ createdDate })}
             </p>
           </div>
         </div>
         <div className="row justify-content-between mt-2">
-          <div className={"col-8 col-sm-10 m-2 p-1 col-lg-10 comment-css"}>
+          <div className="col-8 col-sm-10 m-2 p-1 col-lg-10 comment-css">
             {isEditClicked ? (
               <AddEditComment
                 handleAddEditComment={handleEditComment}
@@ -113,12 +114,10 @@ export default function CommentBox({
                 cancelReplyElement={handleIsEditCommentOpen}
               />
             ) : (
-              <p className={"text-wrap"}>{commentText}</p>
+              <p className="text-wrap">{commentText}</p>
             )}
           </div>
-          <div
-            className={"col-2 col-sm-auto align-self-start p-3 p-lg-0 p-md-0"}
-          >
+          <div className="col-2 col-sm-auto align-self-start p-3 p-lg-0 p-md-0">
             <OptionMenu
               userId={userId}
               handleDeleteMessage={handleDeleteMessage}

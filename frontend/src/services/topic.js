@@ -1,25 +1,21 @@
-import { topicEndpoints} from "./Api/topic"
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { topicEndpoints } from './Api/topic';
 
 export const fetchTopicList = createAsyncThunk(
-  "topic/getList",
+  'topic/getList',
   async (pageParams) => {
     const { page, size, sortBy } = pageParams;
     const response = await topicEndpoints
       .list(page, size, sortBy)
       .catch((error) => {
-        if (error?.response) {
-          return error;
-        }
+        return error;
       });
     return response.data;
   }
 );
 
-
-
 export const fetchSingleTopic = createAsyncThunk(
-  "topic/singleTopic",
+  'topic/singleTopic',
   async (pageId) => {
     const response = await topicEndpoints.singleById(pageId).catch((error) => {
       return error;
@@ -29,7 +25,7 @@ export const fetchSingleTopic = createAsyncThunk(
 );
 
 export const createTopic = createAsyncThunk(
-  "topic/create",
+  'topic/create',
   async (passedParams) => {
     const { createdTopic, accessToken } = passedParams;
     const response = await topicEndpoints
@@ -42,22 +38,20 @@ export const createTopic = createAsyncThunk(
 );
 
 export const updateTopic = createAsyncThunk(
-  "topic/update",
+  'topic/update',
   async (passedParams) => {
     const { updatedTopic, accessToken } = passedParams;
     const response = await topicEndpoints
       .update(updatedTopic, accessToken)
       .catch((error) => {
-        if (error) {
-          return error;
-        }
+        return error;
       });
     return response.data;
   }
 );
 
 export const deleteTopic = createAsyncThunk(
-  "topic/delete",
+  'topic/delete',
   async (passedParams) => {
     const { pageId, userId, accessToken } = passedParams;
     const response = await topicEndpoints
@@ -70,7 +64,7 @@ export const deleteTopic = createAsyncThunk(
 );
 
 export const voteTopic = createAsyncThunk(
-  "topic/vote",
+  'topic/vote',
   async (passedParams) => {
     const { voteObject, accessToken } = passedParams;
     const response = await topicEndpoints
@@ -83,7 +77,7 @@ export const voteTopic = createAsyncThunk(
 );
 
 export const reportTopic = createAsyncThunk(
-  "topic/report",
+  'topic/report',
   async (passedParams) => {
     const { reportedPage, accessToken } = passedParams;
     const response = await topicEndpoints
@@ -95,19 +89,18 @@ export const reportTopic = createAsyncThunk(
   }
 );
 
-
 export const fetchVotes = createAsyncThunk(
-  "topic/list-votes",
-  async(passedParams) => {
-     const response = await topicEndpoints.listVotes(passedParams)
+  'topic/list-votes',
+  async (passedParams) => {
+    const response = await topicEndpoints.listVotes(passedParams);
     return response.data;
   }
 );
 
 export const deleteTopicVote = createAsyncThunk(
-  "topic/delete-vote",
-  async(passedParams) => {
-     const response = await topicEndpoints.deleteVote(passedParams)
+  'topic/delete-vote',
+  async (passedParams) => {
+    const response = await topicEndpoints.deleteVote(passedParams);
     return response.data;
   }
 );

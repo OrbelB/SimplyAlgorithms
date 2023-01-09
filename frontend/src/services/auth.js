@@ -1,15 +1,15 @@
-import { authEndpoints } from "./Api/auth";
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import authEndpoints from './Api/auth';
 
 export const register = createAsyncThunk(
-  "register",
+  'register',
   async (userToAuthenticate) => {
     const response = await authEndpoints.register(userToAuthenticate);
     return response.data;
   }
 );
 
-export const login = createAsyncThunk("login", async (userCredentials) => {
+export const login = createAsyncThunk('login', async (userCredentials) => {
   const response = await authEndpoints.login(
     userCredentials?.username,
     userCredentials?.password
@@ -18,14 +18,15 @@ export const login = createAsyncThunk("login", async (userCredentials) => {
 });
 
 export const refreshAccessToken = createAsyncThunk(
-  "refreshToken",
-  async (refreshAccessToken) => {
+  'refreshToken',
+  async (refreshToken) => {
     const response = await authEndpoints
-      .singleByRefreshToken(refreshAccessToken)
+      .singleByRefreshToken(refreshToken)
       .catch((error) => {
         if (error?.response) {
           return error;
         }
+        throw Error(error);
       });
     return response.data;
   }

@@ -1,33 +1,33 @@
-import { useState } from "react";
-export default function useValidateInput(validateValue, value = "")  {
-    const [enteredValue, setEnteredValue] = useState(value);
-    const [isTouched, setIsTouched] = useState(false);
+import { useState } from 'react';
 
-    const valueIsValid = validateValue(enteredValue);
+export default function useValidateInput(validateValue, value = '') {
+  const [enteredValue, setEnteredValue] = useState(value);
+  const [isTouched, setIsTouched] = useState(false);
 
-    const hasError = !valueIsValid && isTouched;
+  const valueIsValid = validateValue(enteredValue);
 
-    //validating when user leaves text box area
-    const inputBlurHandler = () => {
-        setIsTouched(true);
-    };
+  const hasError = !valueIsValid && isTouched;
 
-    const valueChangeHandler = (event) => {
-        setEnteredValue(event.target.value);
-    };
+  // validating when user leaves text box area
+  const inputBlurHandler = () => {
+    setIsTouched(true);
+  };
 
+  const valueChangeHandler = (event) => {
+    setEnteredValue(event.target.value);
+  };
 
-    const reset = () => {
-        setEnteredValue("");
-        setIsTouched(false);
-    }
+  const reset = () => {
+    setEnteredValue('');
+    setIsTouched(false);
+  };
 
-    return {
-        value: enteredValue,
-        valueIsValid,
-        hasError,
-        valueChangeHandler,
-        inputBlurHandler,
-        reset
-    };
+  return {
+    value: enteredValue,
+    valueIsValid,
+    hasError,
+    valueChangeHandler,
+    inputBlurHandler,
+    reset,
+  };
 }
