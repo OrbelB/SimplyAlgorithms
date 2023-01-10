@@ -2,6 +2,7 @@
 import './PostPreview.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import {
   selectAllViewedForums,
   viewForumsActions,
@@ -9,24 +10,28 @@ import {
 import { fetchUserForumsViewed } from '../../../services/forum';
 import { forumActions } from '../../../store/reducers/forum-reducer';
 
-export default function Related_RecentPosts() {
+export default function RelatedRecentPosts() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const viewedForums = useSelector(selectAllViewedForums);
   const { status } = useSelector((state) => state.viewedForums);
   const { userId: authUserId, isLoggedIn } = useSelector((state) => state.auth);
 
-  if (status === 'idle') {
-    if (isLoggedIn && authUserId !== null) {
-      dispatch(
-        fetchUserForumsViewed({
-          userId: authUserId,
-          page: 0,
-          size: 10,
-        })
-      );
+  useEffect(() => {
+    if (status === 'idle') {
+      // fetch the forums viewed
+      if (isLoggedIn && authUserId !== null) {
+        dispatch(
+          fetchUserForumsViewed({
+            userId: authUserId,
+            page: 0,
+            size: 10,
+          })
+        );
+      }
     }
-  }
+  }, [authUserId, dispatch, isLoggedIn, status]);
+
   if (status === 'success') {
     return (
       <div>

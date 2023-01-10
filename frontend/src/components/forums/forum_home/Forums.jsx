@@ -4,7 +4,7 @@ import './Forums.css';
 import { useDispatch, useSelector } from 'react-redux';
 import PostPreview from './PostPreview';
 import Post from '../post/Post';
-import Related_RecentPosts from './Related_RecentPosts';
+import Related_RecentPosts from './RelatedRecentPosts';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
 import Tags from '../tags/Tags';
 

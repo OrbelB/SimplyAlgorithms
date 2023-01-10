@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { authActions } from '../../store/reducers/auth-reducer';
 import { userActions } from '../../store/reducers/user-reducer';
 import { viewForumsActions } from '../../store/reducers/viewed-forums-reducer';
@@ -27,6 +28,8 @@ export default function Logout({ handleLogout }) {
     dispatch(viewForumsActions.resetData({}));
     dispatch(forumVoteActions.resetData());
     dispatch(commentVoteActions.resetData());
+    // remove refresh token cookie
+    Cookies.remove('refresh-token');
     handleLogout(!showModal);
     navigate(location, {
       replace: true,

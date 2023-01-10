@@ -1,16 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
+import Cookies from 'js-cookie';
 import { login, register, refreshAccessToken } from '../../services/auth';
 
 const initialState = {
   isLoggedIn: false,
   userId: '',
   jwtAccessToken: '',
-  jwtRefreshToken:
-    document.cookie.replace(
-      /(?:(?:^|.*;\s*)refresh_token\s*\s*([^;]*).*$)|^.*$/,
-      '$1'
-    ) || '',
+  jwtRefreshToken: Cookies.get('refresh-token') ?? '',
   status: 'idle',
   statusCode: 0,
   error: '',

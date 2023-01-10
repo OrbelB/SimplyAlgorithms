@@ -17,6 +17,7 @@ export default function ForumQuickView({
   const { isLoggedIn } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   return (
     <>
       <article

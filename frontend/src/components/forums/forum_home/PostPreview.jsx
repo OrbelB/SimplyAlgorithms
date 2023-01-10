@@ -50,14 +50,17 @@ export default function PostPreview() {
   const forums = useSelector(selectSortedForums);
 
   let showedForums = forums;
+
   if (filterForumBy !== '') {
     showedForums = forums.filter((forum) =>
       forum.tags.find((tag) => tag.tagId === filterForumBy)
     );
   }
+
   if (sortForumBy !== 'createdDate') {
     showedForums = forums;
   }
+
   const clickViewMorePages = (event) => {
     event.preventDefault();
     dispatch(fetchForumList({ page, size: 5, sortBy: 'createdDate' }));

@@ -62,7 +62,7 @@ export default function AddEditComment({
           </button>
         </div>
         <div className="col-auto col-sm-auto">
-          <button className="btn" type="button">
+          <button className="btn" type="submit">
             REPLY
           </button>
         </div>

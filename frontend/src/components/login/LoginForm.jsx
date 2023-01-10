@@ -1,17 +1,19 @@
-import cx from "classnames";
-import styles from "./LoginForm.module.css";
-import { NavLink } from "react-router-dom";
-import { useState } from "react";
-import useValidateInput from "../../hooks/use-ValidateInput.js";
-import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../services/auth";
-import { useEffect } from "react";
+/* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import cx from 'classnames';
+import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
+import useValidateInput from '../../hooks/use-ValidateInput';
+import { login } from '../../services/auth';
+import styles from './LoginForm.module.css';
+
 export default function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [handleCheckbox, setHandleCheckbox] = useState(false);
   const { status, error, jwtRefreshToken } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const [errorMsg, setErrorMsg] = useState("");
   const {
     value: username,
     hasError: usernameInputHasError,
@@ -19,7 +21,7 @@ export default function LoginForm() {
     valueChangeHandler: usernameChangedHandler,
     inputBlurHandler: usernameBlurHandler,
     reset: resetUsernameHandler,
-  } = useValidateInput((value) => value.trim() !== "");
+  } = useValidateInput((value) => value.trim() !== '');
 
   const {
     value: password,
@@ -28,7 +30,7 @@ export default function LoginForm() {
     valueChangeHandler: passwordChangedHandler,
     inputBlurHandler: passwordBlurHandler,
     reset: resetPasswordHandler,
-  } = useValidateInput((value) => value.trim() !== "");
+  } = useValidateInput((value) => value.trim() !== '');
 
   const handlePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -38,7 +40,9 @@ export default function LoginForm() {
     setHandleCheckbox(event.target.checked);
   };
 
-  useEffect(() => {}, [errorMsg]);
+  let isFormValid = false;
+  if (passwordIsValid && usernameIsValid) isFormValid = true;
+
   const onSubmitFormHandler = (event) => {
     event.preventDefault();
     if (!isFormValid) return;
@@ -48,117 +52,97 @@ export default function LoginForm() {
     resetUsernameHandler();
   };
 
-  if (status === "success") {
+  if (status === 'success') {
     if (handleCheckbox) {
-      document.cookie = `refresh_token=${jwtRefreshToken}`;
+      Cookies.set('refresh-token', jwtRefreshToken, { expires: 7 });
     }
   }
-
-  let isFormValid = false;
-  if (passwordIsValid && usernameIsValid) isFormValid = true;
   return (
     <>
-      {errorMsg !== "" ||
-        (error !== "" && (
-          <div
-            className={"col ms-0 p-2 alert alert-danger align-items-center align-content-center"}
-          >
-            <p className={"text-center small"}>credentials are wrong!</p>
-          </div>
-        ))}
+      {error !== '' && (
+        <div className="col ms-0 p-2 alert alert-danger align-items-center align-content-center">
+          <p className="text-center small">credentials are wrong!</p>
+        </div>
+      )}
       <form onSubmit={onSubmitFormHandler}>
-        <div className={"row mt-5 m-0"}>
-          <div className={"col m-0 p-0"}>
-            <label
-              className={"form-label m-0 mb-2 p-0"}
-              htmlFor={"username-form"}
-            >
+        <div className="row mt-5 m-0">
+          <div className="col m-0 p-0">
+            <label className="form-label m-0 mb-2 p-0" htmlFor="username-form">
               username
             </label>
           </div>
           {usernameInputHasError && (
-            <div
-              className={"col ms-0 p-0 alert alert-danger align-content-center"}
-            >
-              <p className={"text-center small"}>username cannot be empty!</p>
+            <div className="col ms-0 p-0 alert alert-danger align-content-center">
+              <p className="text-center small">username cannot be empty!</p>
             </div>
           )}
         </div>
         <div
           className={cx(
-            "row border border-2 rounded-5",
-            styles[`row-input-style${!usernameInputHasError ? "" : "-invalid"}`]
+            'row border border-2 rounded-5',
+            styles[`row-input-style${!usernameInputHasError ? '' : '-invalid'}`]
           )}
         >
           <input
-            type={"username"}
-            id={"username-form"}
-            placeholder={"username"}
-            className={cx("p-auto", styles["input-style"])}
+            type="username"
+            id="username-form"
+            placeholder="username"
+            className={cx('p-auto', styles['input-style'])}
             onChange={usernameChangedHandler}
             onBlur={usernameBlurHandler}
             value={username}
-            required={true}
+            required
           />
         </div>
-        <div className={"row mt-5 m-0"}>
-          <div className={"col m-0 p-0"}>
-            <label
-              className={"form-label m-0 mb-2 p-0"}
-              htmlFor={"password-form"}
-            >
+        <div className="row mt-5 m-0">
+          <div className="col m-0 p-0">
+            <label className="form-label m-0 mb-2 p-0" htmlFor="password-form">
               Password
             </label>
           </div>
           {passwordInputHasError && (
-            <div
-              className={"col ms-0 p-0 alert alert-danger align-content-center"}
-            >
-              <p className={"text-center small"}>password cannot be empty!</p>
+            <div className="col ms-0 p-0 alert alert-danger align-content-center">
+              <p className="text-center small">password cannot be empty!</p>
             </div>
           )}
         </div>
         <div
           className={cx(
-            "row justify-content-between border border-2 rounded-5",
-            styles[`row-input-style${!passwordInputHasError ? "" : "-invalid"}`]
+            'row justify-content-between border border-2 rounded-5',
+            styles[`row-input-style${!passwordInputHasError ? '' : '-invalid'}`]
           )}
         >
-          <div
-            className={
-              "col-auto col-sm-10 col-md-10 col-lg-10 col-sm-auto align-self-center"
-            }
-          >
+          <div className="col-auto col-sm-10 col-md-10 col-lg-10 col-sm-auto align-self-center">
             <input
-              autoComplete={"off"}
-              type={isPasswordVisible ? "text" : "password"}
-              id={"password-form"}
-              placeholder={"*******"}
+              autoComplete="off"
+              type={isPasswordVisible ? 'text' : 'password'}
+              id="password-form"
+              placeholder="*******"
               onChange={passwordChangedHandler}
               onBlur={passwordBlurHandler}
               value={password}
-              className={cx("p-auto", styles["input-style"])}
-              required={true}
+              className={cx('p-auto', styles['input-style'])}
+              required
             />
           </div>
-          <div
-            className={"col-auto col-sm-auto align-self-center me-auto me-lg-2"}
-          >
+          <div className="col-auto col-sm-auto align-self-center me-auto me-lg-2">
             <i
-              role={"button"}
+              role="button"
               className={cx(
-                `bi bi-eye${isPasswordVisible ? "" : "-slash"}`,
-                styles["password-visible-style"]
+                `bi bi-eye${isPasswordVisible ? '' : '-slash'}`,
+                styles['password-visible-style']
               )}
               onClick={handlePasswordVisibility}
-            ></i>
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'start') {
+                  handlePasswordVisibility();
+                }
+              }}
+            />
           </div>
         </div>
-        <div
-          className={
-            "row justify-content-center justify-content-sm-between mt-5"
-          }
-        >
+        <div className="row justify-content-center justify-content-sm-between mt-5">
           <div className="col-auto ">
             <div className="form-check">
               <input
@@ -173,12 +157,12 @@ export default function LoginForm() {
             </div>
           </div>
           <div className="col-auto align-items-end">
-            <NavLink className={"m-sm-auto p-sm-auto"} to="check" role={"link"}>
+            <NavLink className="m-sm-auto p-sm-auto" to="check" role="link">
               Forgot Password?
             </NavLink>
           </div>
         </div>
-        <div className={"row justify-content-center mt-5"}>
+        <div className="row justify-content-center mt-5">
           <button type="submit" className="btn btn-primary btn-block mb-4">
             Sign In
           </button>

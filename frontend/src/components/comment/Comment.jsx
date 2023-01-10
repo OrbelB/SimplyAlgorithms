@@ -88,12 +88,13 @@ export default function Comment({
   const handleDeleteChildComment = (childUserId, commentId) => {
     dispatch(
       deleteChildComment({
-        childUserId,
+        userId: childUserId,
         accessToken: jwtAccessToken,
         commentId,
       })
     );
     // updates reply count from the forum object
+    // do it only after the comment has been succesfully delete it
     dispatch(forumActions.removeSingleReply({ commentId: parentCommentId }));
   };
 
@@ -121,7 +122,7 @@ export default function Comment({
           commentId: childCommentId,
           pageId,
           commentText: newComment,
-          childUserId,
+          userId: childUserId,
         },
         accessToken: jwtAccessToken,
       })
