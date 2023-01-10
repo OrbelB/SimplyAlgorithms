@@ -5,43 +5,41 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-} from "@mui/material";
-import { nanoid } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+} from '@mui/material';
+import { nanoid } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import {
   selectAllTags,
   selectAllTagsById,
-} from "../../../store/reducers/tags-reducer";
-import { fetchTags } from "../../../services/tag";
+} from '../../../store/reducers/tags-reducer';
+import { fetchTags } from '../../../services/tag';
 
 export default function TagForm({ currentTags, setCurrentTags }) {
   const dispatch = useDispatch();
-  const [newTagName, setNewTagName] = useState("");
+  const [newTagName, setNewTagName] = useState('');
   const [hasTagBeenAdded, setHasTagBeenAdded] = useState(false);
-  const [tagId, setTagId] = useState("");
+  const [tagId, setTagId] = useState('');
   const tagSelected = useSelector((state) => selectAllTagsById(state, tagId));
   const tagsAvailable = useSelector(selectAllTags);
-  const { status, totalElements } = useSelector((state) => state.tags);
+  const { totalElements } = useSelector((state) => state.tags);
 
   if (tagsAvailable.length !== totalElements || tagsAvailable.length === 0) {
     dispatch(fetchTags({ page: 0, size: totalElements }));
   }
 
   useEffect(() => {
-    if (tagId !== "" && tagSelected !== undefined && hasTagBeenAdded) {
+    if (tagId !== '' && tagSelected !== undefined && hasTagBeenAdded) {
       if (!currentTags.find((tag) => tag.tagId === tagId)) {
-        setCurrentTags(
-          currentTags.concat({ tag: tagSelected.tag, tagId: tagId })
-        );
+        setCurrentTags(currentTags.concat({ tag: tagSelected.tag, tagId }));
       }
       setHasTagBeenAdded(!hasTagBeenAdded);
     }
   }, [currentTags, tagId, tagSelected, hasTagBeenAdded, setCurrentTags]);
 
   const removeTag = (currTagId, tagName) => {
-    let tempTags = [...currentTags];
-    if (currTagId === "") {
+    const tempTags = [...currentTags];
+    if (currTagId === '') {
       setCurrentTags(
         tempTags.filter((tag) => tag.tag.trim() !== tagName.trim())
       );
@@ -60,16 +58,16 @@ export default function TagForm({ currentTags, setCurrentTags }) {
   };
 
   const addNewTag = (e) => {
-    if (e.key !== "Enter") return;
-    setCurrentTags(currentTags.concat({ tag: newTagName, tagId: "" }));
-    setNewTagName("");
+    if (e.key !== 'Enter') return;
+    setCurrentTags(currentTags.concat({ tag: newTagName, tagId: '' }));
+    setNewTagName('');
   };
   return (
     <>
       <div className="row justify-content-center mb-5">
         {currentTags?.map((tag) => (
           <Chip
-            key={tag.tagId === "" ? nanoid() : tag.tagId}
+            key={tag.tagId === '' ? nanoid() : tag.tagId}
             className="col-auto m-auto mt-3"
             label={tag.tag}
             variant="outlined"

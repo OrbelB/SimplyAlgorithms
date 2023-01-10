@@ -1,10 +1,11 @@
-import React from "react";
-import { RiQuestionnaireFill } from "react-icons/ri";
-import { useSelector, useDispatch } from "react-redux";
-import { reportForum } from "../../../services/forum";
-import { useState } from "react";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { useState } from 'react';
+import { RiQuestionnaireFill } from 'react-icons/ri';
+import { useSelector, useDispatch } from 'react-redux';
+import { reportForum } from '../../../services/forum';
+
 export default function Report({ pageId }) {
-  const [reportMessage, setReportMessage] = useState("");
+  const [reportMessage, setReportMessage] = useState('');
   const { jwtAccessToken, userId: authUserId } = useSelector(
     (state) => state.auth
   );
@@ -17,14 +18,14 @@ export default function Report({ pageId }) {
     dispatch(
       reportForum({
         reportedPage: {
-          pageId: pageId,
+          pageId,
           userId: authUserId,
-          reportMessage: reportMessage,
+          reportMessage,
         },
         accessToken: jwtAccessToken,
       })
     );
-    setReportMessage("");
+    setReportMessage('');
   };
   return (
     <>
@@ -61,7 +62,7 @@ export default function Report({ pageId }) {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-              ></button>
+              />
             </div>
             <div className="modal-body">
               {/* <div class="mb-0">
@@ -79,7 +80,7 @@ export default function Report({ pageId }) {
                   id="forum_post_question"
                   value={reportMessage}
                   onChange={handleReportMessageChange}
-                ></textarea>
+                />
               </div>
             </div>
             <div className="modal-footer">

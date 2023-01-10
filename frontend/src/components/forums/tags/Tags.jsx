@@ -1,12 +1,12 @@
-import { useSelector, useDispatch } from "react-redux";
-import { selectAllTags } from "../../../store/reducers/tags-reducer";
-import classes from "./Tags.module.css";
-import { forumsActions } from "../../../store/reducers/forums-reducer";
-import { fetchTags } from "../../../services/tag";
-import { useEffect, useState, useMemo } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState, useMemo } from 'react';
+import { selectAllTags } from '../../../store/reducers/tags-reducer';
+import classes from './Tags.module.css';
+import { forumsActions } from '../../../store/reducers/forums-reducer';
+import { fetchTags } from '../../../services/tag';
 
 export default function Tags() {
-  const [searchedTag, setSearchedTag] = useState("");
+  const [searchedTag, setSearchedTag] = useState('');
   const tags = useSelector(selectAllTags);
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
@@ -22,18 +22,18 @@ export default function Tags() {
     }
   }, [tags, dispatch, page]);
 
-  //filtering tags by searched param, using user memo to memoizes the results
-  //and only render if the results are different from the previous ones.
+  // filtering tags by searched param, using user memo to memoizes the results
+  // and only render if the results are different from the previous ones.
   const filteredTags = useMemo(() => {
     return tags.filter((tag) => {
       return new RegExp(
-        "^" + searchedTag.concat("*").toLowerCase().replace(/\*/g, ".*") + "$"
+        `^${searchedTag.concat('*').toLowerCase().replace(/\*/g, '.*')}$`
       ).test(tag.tag.toLowerCase());
     });
   }, [tags, searchedTag]);
 
   const loadMoreTags = () => {
-    dispatch(fetchTags({ page: page, size: 10 }));
+    dispatch(fetchTags({ page, size: 10 }));
     setPage((state) => {
       return state + 1;
     });
@@ -53,17 +53,19 @@ export default function Tags() {
         {filteredTags?.map((tag) => (
           <button
             key={tag?.tagId}
-            className={classes["category"]}
+            className={classes.category}
             onClick={() => handleClick(tag?.tagId)}
+            type="button"
           >
             {tag?.tag}
           </button>
         ))}
-        {searchedTag === "" && (
+        {searchedTag === '' && (
           <button
-            className={classes["last-button"]}
+            className={classes['last-button']}
             onClick={() => loadMoreTags()}
             hidden={totalPages === page}
+            type="button"
           >
             Explore More...
           </button>

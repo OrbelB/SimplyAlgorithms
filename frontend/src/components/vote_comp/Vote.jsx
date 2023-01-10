@@ -1,18 +1,15 @@
-import React, { useEffect } from "react";
-import cx from "classnames";
-import { BiLike, BiDislike } from "react-icons/bi";
-import fp from "./vote.module.css";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  selectAllForumVotes,
-  selectByForumVoteId,
-} from "../../store/reducers/forum-votes-reducer";
-import { fetchVotes, voteForum, deleteForumVote } from "../../services/forum";
-import { current } from "@reduxjs/toolkit";
+import React, { useState } from 'react';
+import cx from 'classnames';
+import { BiLike, BiDislike } from 'react-icons/bi';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function Vote({ like_, dislike_, user_voted_ }) {
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchVotes, voteForum, deleteForumVote } from '../../services/forum';
+import fp from './vote.module.css';
+import { selectByForumVoteId } from '../../store/reducers/forum-votes-reducer';
+
+// TODO fix forum vote not working properly
+export default function Vote({ like_, dislike_ }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,7 +27,7 @@ export default function Vote({ like_, dislike_, user_voted_ }) {
     })
   );
 
-  if (status === "idle" && isLoggedIn) {
+  if (status === 'idle' && isLoggedIn) {
     dispatch(
       fetchVotes({ pageId: forum?.pageId, accessToken: jwtAccessToken })
     );
@@ -38,15 +35,11 @@ export default function Vote({ like_, dislike_, user_voted_ }) {
 
   const [like, setlike] = useState(like_);
   const [dislike, setdislike] = useState(dislike_);
-  const [likeActive, setLikeActive] = useState(
-    !currentUserHasVoted ? false : true
-  );
-  const [dislikeActive, setdisLikeActive] = useState(
-    !currentUserHasVoted ? false : true
-  );
-  const like_forum = () => {
-    if (!isLoggedIn && jwtAccessToken === "") {
-      navigate("/login", { state: { from: location } });
+  const [likeActive, setLikeActive] = useState(!!currentUserHasVoted);
+  const [dislikeActive, setdisLikeActive] = useState(!!currentUserHasVoted);
+  const likeForum = () => {
+    if (!isLoggedIn && jwtAccessToken === '') {
+      navigate('/login', { state: { from: location } });
       return;
     }
     if (likeActive) {
@@ -90,12 +83,12 @@ export default function Vote({ like_, dislike_, user_voted_ }) {
     }
   };
 
-  const dislike_forum = () => {
-    if (!isLoggedIn && jwtAccessToken === "") {
-      navigate("/login", { state: { from: location } });
+  const dislikeForum = () => {
+    if (!isLoggedIn && jwtAccessToken === '') {
+      navigate('/login', { state: { from: location } });
       return;
     }
-    //if there is a like
+    // if there is a like
     if (dislikeActive) {
       dispatch(
         deleteForumVote({
@@ -140,15 +133,23 @@ export default function Vote({ like_, dislike_, user_voted_ }) {
   return (
     <div
       className={cx(
-        fp["vote"],
-        "row m-3 p-2 justify-content-around align-items-center self-align-center border rounded-pill bg-info bg-opacity-50"
+        fp.vote,
+        'row m-3 p-2 justify-content-around align-items-center self-align-center border rounded-pill bg-info bg-opacity-50'
       )}
     >
-      <button onClick={like_forum} className={cx(fp["ld"], "col-auto")}>
-        <BiLike /> {" " + like}
+      <button
+        onClick={likeForum}
+        className={cx(fp.ld, 'col-auto')}
+        type="button"
+      >
+        <BiLike /> {` ${like}`}
       </button>
-      <button onClick={dislike_forum} className={cx(fp["ld"], "col-auto")}>
-        <BiDislike /> {" " + dislike}
+      <button
+        onClick={dislikeForum}
+        className={cx(fp.ld, 'col-auto')}
+        type="button"
+      >
+        <BiDislike /> {` ${dislike}`}
       </button>
     </div>
   );

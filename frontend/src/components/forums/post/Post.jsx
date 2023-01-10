@@ -1,25 +1,16 @@
-import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import { RiQuestionnaireFill } from "react-icons/ri";
-import { TextField } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-  selectAllTags,
-  selectAllTagsById,
-} from "../../../store/reducers/tags-reducer";
-import useValidateInput from "../../../hooks/use-ValidateInput";
-import { useEffect } from "react";
-import { createForum } from "../../../services/forum";
-import TagForm from "../tags/TagForm";
+import { useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import { RiQuestionnaireFill } from 'react-icons/ri';
+import { TextField } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import useValidateInput from '../../../hooks/use-ValidateInput';
+
+import { createForum } from '../../../services/forum';
+import TagForm from '../tags/TagForm';
 
 export default function Post() {
-  const tags = useSelector(selectAllTags);
   const [tagsSelected, setTagsSelected] = useState([]);
-  const [newTagName, setNewTagName] = useState("");
-  const [tagId, setTagId] = useState("");
-  const [hasTagBeenAdded, setHasTagBeenAdded] = useState(false);
-  const tagSelected = useSelector((state) => selectAllTagsById(state, tagId));
   const authUserId = useSelector((state) => state.auth.userId);
   const { jwtAccessToken, isLoggedIn } = useSelector((state) => state.auth);
   const { pageId, status } = useSelector((state) => state.forum);
@@ -27,72 +18,38 @@ export default function Post() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
   const {
     value: title,
-    hasError: titleInputHasError,
     valueIsValid: titleIsValid,
     valueChangeHandler: titleChangedHandler,
     inputBlurHandler: titleBlurHandler,
     reset: resetTitleHandler,
-  } = useValidateInput((value) => value.trim() !== "");
+  } = useValidateInput((value) => value.trim() !== '');
 
   const {
     value: message,
-    hasError: messageInputHasError,
     valueIsValid: messageIsValid,
     valueChangeHandler: messageChangedHandler,
     inputBlurHandler: messageBlurHandler,
     reset: resetMessageHandler,
-  } = useValidateInput((value) => value.trim() !== "");
+  } = useValidateInput((value) => value.trim() !== '');
 
-  useEffect(() => {
-    if (tagId !== "" && tagSelected !== undefined && hasTagBeenAdded) {
-      if (!tagsSelected.find((tag) => tag.tagId === tagId)) {
-        setTagsSelected(
-          tagsSelected.concat({ tag: tagSelected.tag, tagId: tagId })
-        );
-      }
-      setHasTagBeenAdded(!hasTagBeenAdded);
-    }
-  }, [tagsSelected, hasTagBeenAdded]);
-
-  const removeTag = (passedTagId, tagName) => {
-    let tempTags = [...tagsSelected];
-    if (passedTagId === "") {
-      setTagsSelected(
-        tempTags.filter((tag) => tag.tag.trim() !== tagName.trim())
-      );
-      return;
-    }
-    setTagsSelected(tempTags.filter((tag) => tag.tagId !== passedTagId));
-  };
-  const addTagToSave = (e) => {
-    setTagId(e.target.value);
-    setHasTagBeenAdded(!hasTagBeenAdded);
-  };
-
-  const updateTagName = (e) => {
-    setNewTagName(e.target.value);
-  };
-
-  const addNewTag = (e) => {
-    if (e.key !== "Enter") return;
-    setTagsSelected(tagsSelected.concat({ tag: newTagName, tagId: "" }));
-    setNewTagName("");
-  };
+  let canFormBeSubmitted = false;
+  if (titleIsValid && messageIsValid) canFormBeSubmitted = true;
 
   const saveNewForum = () => {
     if (!isLoggedIn) {
-      navigate("/login", { state: { from: location }, replace: true });
+      navigate('/login', { state: { from: location }, replace: true });
     }
     if (!canFormBeSubmitted) return;
     dispatch(
       createForum({
         createdForum: {
           descriptionText: message,
-          title: title,
-          photo: "",
-          video: "",
+          title,
+          photo: '',
+          video: '',
           userDto: {
             userId: authUserId,
           },
@@ -109,12 +66,10 @@ export default function Post() {
   const handleShow = () => {
     setShowSignUp(!showSignUp);
   };
-  if (pageId !== "" && status === "successToIdle") {
+  if (pageId !== '' && status === 'successToIdle') {
     navigate(`${pageId}`, { replace: true });
   }
 
-  let canFormBeSubmitted = false;
-  if (titleIsValid && messageIsValid) canFormBeSubmitted = true;
   return (
     <>
       {/* <!-- Button trigger modal --> */}
@@ -138,7 +93,7 @@ export default function Post() {
         aria-labelledby="contained-modal-title-vcenter"
       >
         <Modal.Header closeButton>
-          <Modal.Title id={"contained-modal-title-vcenter"}>
+          <Modal.Title id="contained-modal-title-vcenter">
             <h2 className="text-uppercase text-center">My Forum Post</h2>
           </Modal.Title>
         </Modal.Header>
@@ -204,7 +159,7 @@ export default function Post() {
             type="text"
             id="forum_post_question"
             multiline
-            rows={"4"}
+            rows="4"
             value={message}
             onChange={messageChangedHandler}
             onBlur={messageBlurHandler}

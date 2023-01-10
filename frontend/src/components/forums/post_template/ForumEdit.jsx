@@ -1,14 +1,15 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import UnderConstruction from "../../underconstruction/UnderConstruction";
-import useValidateInput from "../../../hooks/use-ValidateInput";
-import { TextField } from "@mui/material";
-import { useEffect } from "react";
-import { forumActions } from "../../../store/reducers/forum-reducer";
-import { updateForum } from "../../../services/forum";
-import TagForm from "../tags/TagForm";
-import { tagsActions } from "../../../store/reducers/tags-reducer";
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { TextField } from '@mui/material';
+import UnderConstruction from '../../underconstruction/UnderConstruction';
+import useValidateInput from '../../../hooks/use-ValidateInput';
+
+import { forumActions } from '../../../store/reducers/forum-reducer';
+import { updateForum } from '../../../services/forum';
+import TagForm from '../tags/TagForm';
+import { tagsActions } from '../../../store/reducers/tags-reducer';
+
 export default function ForumEdit() {
   const { pageId } = useParams();
   const { forum, status } = useSelector((state) => state.forum);
@@ -16,44 +17,44 @@ export default function ForumEdit() {
   const [currentTags, setCurrentTags] = useState(forum.tags);
   const {
     value: title,
-    hasError: titleHasError,
     valueIsValid: titleIsValid,
-    inputBlurHandler: titleBlurHandler,
     valueChangeHandler: titleChangeHandler,
     reset: titleReset,
-  } = useValidateInput((value) => value.trim() !== "", forum.title);
+  } = useValidateInput((value) => value.trim() !== '', forum.title);
   const {
     value: description,
-    hasError: descriptionHasError,
     valueIsValid: descriptionIsValid,
-    inputBlurHandler: descriptionBlurHandler,
     valueChangeHandler: descriptionChangeHandler,
     reset: descriptionReset,
-  } = useValidateInput((value) => value.trim() !== "", forum.descriptionText);
+  } = useValidateInput((value) => value.trim() !== '', forum.descriptionText);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const redirectTo = location?.state?.from?.pathname || "/home";
+  const redirectTo = location?.state?.from?.pathname || '/home';
+
   useEffect(() => {
-    if (status === "completed") {
-      dispatch(forumActions.switchStatus("success"));
+    // if we have updated the forum slice, then
+    if (status === 'completed') {
+      dispatch(forumActions.switchStatus('success'));
       navigate(redirectTo, { replace: true });
     }
     if (!isLoggedIn) {
       navigate(redirectTo, { replace: true });
     }
-  }, [currentTags, status, redirectTo, isLoggedIn, navigate,dispatch]);
+  }, [currentTags, status, redirectTo, isLoggedIn, navigate, dispatch]);
 
-  const onSubmitForm = (event) => {
+  let isFormValid = false;
+  if (titleIsValid && descriptionIsValid) isFormValid = true;
+  const onSubmitForm = () => {
     if (!isFormValid) return;
     dispatch(
       updateForum({
         updatedForum: {
-          pageId: pageId,
+          pageId,
           descriptionText: description,
-          title: title,
-          photo: "",
-          video: "",
+          title,
+          photo: '',
+          video: '',
           userDto: {
             userId: forum.userDto.userId,
           },
@@ -74,8 +75,6 @@ export default function ForumEdit() {
     );
   }
 
-  let isFormValid = false;
-  if (titleIsValid && descriptionIsValid) isFormValid = true;
   return (
     <div className="container-fluid form-group pt-5">
       <div className="row justify-content-center">
@@ -99,16 +98,18 @@ export default function ForumEdit() {
         />
         <h4 className="row justify-content-center">Current Categories</h4>
         <div className="w-75">
-        <TagForm currentTags={currentTags} setCurrentTags={setCurrentTags} />
+          <TagForm currentTags={currentTags} setCurrentTags={setCurrentTags} />
         </div>
-        
       </div>
       <div className="row justify-content-around mt-5">
         <div className="col-auto">
           <button
             type="button"
             className=" btn  btn-outline-secondary"
-            onClick={() => { dispatch(tagsActions.resetData()); navigate(redirectTo, { replace: true });  }}
+            onClick={() => {
+              dispatch(tagsActions.resetData());
+              navigate(redirectTo, { replace: true });
+            }}
           >
             BACK
           </button>

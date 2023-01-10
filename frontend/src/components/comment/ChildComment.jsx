@@ -1,6 +1,6 @@
-import CommentBox from "./CommentBox";
+import CommentBox from './CommentBox';
 
-//TODO make users capable to change their comments only
+// frame for the child comment
 export default function ChildComment({
   profilePicture,
   username,
@@ -10,7 +10,6 @@ export default function ChildComment({
   commentText,
   deleteChildComment,
   commentId,
-  parentCommentId,
   editChildComment,
   userId,
 }) {
@@ -23,7 +22,7 @@ export default function ChildComment({
   };
 
   return (
-    <div className={"container-fluid p-3"}>
+    <div className="container-fluid p-3">
       <div className="grid">
         <div className="row">
           <CommentBox

@@ -1,21 +1,13 @@
-import cx from "classnames";
-import styles from "./Upvotes.module.css";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  listVotesByComment,
-  voteComment,
-  deleteCommentVote,
-} from "../../services/comment";
-import {
-  selectAllCommentVotes,
-  selectByCommentVoteId,
-} from "../../store/reducers/comment-vote-reducer";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { RiRestaurantLine } from "react-icons/ri";
-import { forumActions } from "../../store/reducers/forum-reducer";
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import cx from 'classnames';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { voteComment, deleteCommentVote } from '../../services/comment';
 
+import styles from './Upvotes.module.css';
+
+// TODO fixed votes not working properly
 export default function Votes({
   commentId,
   upVotes,
@@ -26,15 +18,13 @@ export default function Votes({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [votes, setVotes] = useState(upVotes - downVotes);
-  const [updateCurrentUser, setUpdateCurrentUser] = useState(false);
+  // const [updateCurrentUser, setUpdateCurrentUser] = useState(false);
   const {
     userId: authUserID,
     jwtAccessToken,
     isLoggedIn,
   } = useSelector((state) => state.auth);
-  useEffect(() => {
-
-  }, [currentUserVote]);
+  useEffect(() => {}, [currentUserVote]);
   // const { forum } = useSelector((state) => state.forum);
   // const allCommentVotes = useSelector(selectAllCommentVotes);
 
@@ -64,10 +54,10 @@ export default function Votes({
 
   const handleUpVotes = () => {
     if (!isLoggedIn) {
-      navigate("/login", { state: { from: location } });
+      navigate('/login', { state: { from: location } });
       return;
     }
-    //create the comment if the vote does not exists
+    // create the comment if the vote does not exists
     if (
       !currentUserVote ||
       (currentUserVote.commentVoteId.commentId === null &&
@@ -119,10 +109,10 @@ export default function Votes({
 
   const handleDownVotes = () => {
     if (!isLoggedIn) {
-      navigate("/login", { state: { from: location } });
+      navigate('/login', { state: { from: location } });
       return;
     }
-    //create a vote if the vote does not exists
+    // create a vote if the vote does not exists
     if (
       !currentUserVote ||
       (currentUserVote.commentVoteId.commentId === null &&
@@ -149,7 +139,7 @@ export default function Votes({
         // setVotes(votes - 1);
         return;
       }
-      //remove the vote if it exists when liked
+      // remove the vote if it exists when liked
       if (currentUserVote.likeDislike === false) {
         dispatch(
           deleteCommentVote({
@@ -173,28 +163,42 @@ export default function Votes({
   };
 
   return (
-    <div className={cx("container-fluid square", styles["container-style"])}>
+    <div className={cx('container-fluid square', styles['container-style'])}>
       <div className="grid">
         <div
           type="button"
           className="row-cols-auto justify-content-center align-self-start text-center p-2"
         >
           <i
-            className={cx("bi bi-plus", styles["btn-sign-style"])}
+            className={cx('bi bi-plus', styles['btn-sign-style'])}
             onClick={handleUpVotes}
-          ></i>
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'enter') {
+                handleUpVotes();
+              }
+            }}
+            role="button"
+          />
         </div>
         <div className="row-cols-auto justify-content-center align-self-center text-center p-2">
-          <p className={styles["num-style"]}>{votes}</p>
+          <p className={styles['num-style']}>{votes}</p>
         </div>
         <div
           type="button"
           className="row-cols-auto justify-content-center align-self-end text-center p-2"
         >
           <i
-            className={cx("bi bi-dash", styles["btn-sign-style"])}
+            className={cx('bi bi-dash', styles['btn-sign-style'])}
             onClick={handleDownVotes}
-          ></i>
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'enter') {
+                handleDownVotes();
+              }
+            }}
+            role="button"
+          />
         </div>
       </div>
     </div>

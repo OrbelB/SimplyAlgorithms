@@ -12,7 +12,7 @@ import {
 } from '../../store/reducers/comment-vote-reducer';
 
 import './CommentBox.css';
-
+// displays the frame for any comment
 export default function CommentBox({
   children,
   upVotes,

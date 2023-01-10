@@ -1,38 +1,35 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import {
-  fetchSingleTopic,
   reportTopic,
   createTopic,
   deleteTopic,
   updateTopic,
-} from "../../services/topic";
-import {
-  createParentComment,
-  deleteParentComment,
-  updateParentComment,
-} from "../../services/comment";
+} from '../../services/topic';
+
+// initial state for slice  which defines the data for this specific domain
 const initialState = {
   topic: {},
-  pageId: "",
-  status: "idle",
-  error: "",
-  reportId: "",
+  pageId: '',
+  status: 'idle',
+  error: '',
+  reportId: '',
 };
 
+// creation of the slice, reducers or function that mutate the state
 export const topicSlice = createSlice({
-  name: "topic",
+  name: 'topic',
   initialState,
   reducers: {
     resetData: (state) => {
       state.Topic = {};
-      state.status = "idle";
-      state.error = "";
-      state.pageId = "";
+      state.status = 'idle';
+      state.error = '';
+      state.pageId = '';
     },
     addSingleReply: (state, action) => {
       state.topic.comments = state.topic.comments.map((comment) => {
         if (comment.commentId === action.payload?.commentId) {
-          comment.replyCount = comment.replyCount + 1;
+          comment.replyCount += 1;
           return comment;
         }
         return comment;
@@ -41,18 +38,20 @@ export const topicSlice = createSlice({
     removeSingleReply: (state, action) => {
       state.topic.comments = state.topic.comments.map((comment) => {
         if (comment.commentId === action.payload?.commentId) {
-          comment.replyCount = comment.replyCount - 1;
+          comment.replyCount -= 1;
           return comment;
         }
         return comment;
       });
     },
-    removeSingleReportId: (state) => void (state.reportId = ""),
+    // eslint-disable-next-line no-return-assign
+    removeSingleReportId: (state) => void (state.reportId = ''),
     switchStatus: (state, action) => {
       state.status = action.payload;
     },
   },
   extraReducers(builder) {
+    // extra reducers used to handle the api call on updates
     builder
       // .addCase(fetchSingleTopic.pending, (state, action) => {
       //   state.status = "loading";
@@ -72,10 +71,10 @@ export const topicSlice = createSlice({
       // })
       .addCase(createTopic.fulfilled, (state, action) => {
         if (!action?.payload) {
-          console.log("nothing passed");
+          console.log('nothing passed');
           return;
         }
-        state.status = "successToIdle";
+        state.status = 'successToIdle';
         state.pageId = action.payload;
       })
       .addCase(deleteTopic.fulfilled, (state, action) => {
@@ -84,30 +83,30 @@ export const topicSlice = createSlice({
         }
         if (state.topic.pageId === action?.payload) {
           state.topic = {};
-          state.status = "idle";
-          state.error = "";
-          state.pageId = "";
+          state.status = 'idle';
+          state.error = '';
+          state.pageId = '';
         }
       })
-      .addCase(updateTopic.pending, (state, action) => {
-        state.status = "pending";
+      .addCase(updateTopic.pending, (state) => {
+        state.status = 'pending';
       })
       .addCase(updateTopic.fulfilled, (state, action) => {
-        state.status = "completed";
+        state.status = 'completed';
         state.topic = {
           ...action.payload,
           createdDate: new Date(action.payload.createdDate).toISOString(),
         };
-        state.pageId = "";
+        state.pageId = '';
       })
-      .addCase(updateTopic.rejected, (state, action) => {
-        state.status = "failed";
+      .addCase(updateTopic.rejected, (state) => {
+        state.status = 'failed';
       })
-      .addCase(reportTopic.pending, (state, action) => {
-        state.status = "pending";
+      .addCase(reportTopic.pending, (state) => {
+        state.status = 'pending';
       })
       .addCase(reportTopic.fulfilled, (state, action) => {
-        state.status = "success";
+        state.status = 'success';
         state.reportId = action.payload;
       });
   },

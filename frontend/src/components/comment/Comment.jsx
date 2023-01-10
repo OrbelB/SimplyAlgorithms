@@ -1,8 +1,11 @@
-import ChildComment from "./ChildComment";
-import { useState } from "react";
-import AddEditComment from "./AddEditComment";
-import CommentBox from "./CommentBox";
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/jsx-no-comment-textnodes */
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import ChildComment from './ChildComment';
+import AddEditComment from './AddEditComment';
+import CommentBox from './CommentBox';
 import {
   fetchChildrenComments,
   deleteParentComment,
@@ -10,9 +13,11 @@ import {
   createChildComment,
   updateChildComment,
   deleteChildComment,
-} from "../../services/comment";
-import { selectChildrenCommentsByParentCommentId } from "../../store/reducers/comment-reducer";
-import { forumActions } from "../../store/reducers/forum-reducer";
+} from '../../services/comment';
+import { selectChildrenCommentsByParentCommentId } from '../../store/reducers/comment-reducer';
+import { forumActions } from '../../store/reducers/forum-reducer';
+
+// main comment section; shows all the parent comments
 export default function Comment({
   userId,
   username,
@@ -20,10 +25,10 @@ export default function Comment({
   commentText,
   createdDate,
   upVotes,
-  replies = [], //will be removed
+  replies = [], // will be removed
   replyCount,
   parentCommentId,
-  downVotes
+  downVotes,
 }) {
   const [showReplies, setShowReplies] = useState(false);
   const [inputChildComment, setInputChildComment] = useState(false);
@@ -41,7 +46,7 @@ export default function Comment({
       fetchChildrenComments({
         page: 0,
         size: 10,
-        parentCommentId: parentCommentId,
+        parentCommentId,
       })
     );
     setShowReplies(!showReplies);
@@ -51,6 +56,7 @@ export default function Comment({
     setInputChildComment(!inputChildComment);
   };
 
+  // creates the child comment
   const getChildComment = (passedChildComment) => {
     setInputChildComment(!inputChildComment);
     dispatch(
@@ -67,50 +73,55 @@ export default function Comment({
     dispatch(forumActions.addSingleReply({ commentId: parentCommentId }));
   };
 
+  // deletes parent comment
   const handleDeleteMessage = () => {
     dispatch(
       deleteParentComment({
-        userId: userId,
+        userId,
         accessToken: jwtAccessToken,
         commentId: parentCommentId,
       })
     );
   };
 
-  const handleDeleteChildComment = (userId, commentId) => {
+  // deletes child comment
+  const handleDeleteChildComment = (childUserId, commentId) => {
     dispatch(
       deleteChildComment({
-        userId: userId,
+        childUserId,
         accessToken: jwtAccessToken,
-        commentId: commentId,
+        commentId,
       })
     );
+    // updates reply count from the forum object
     dispatch(forumActions.removeSingleReply({ commentId: parentCommentId }));
   };
 
+  // edits the  parent comment
   const handleEditComment = (newComment) => {
     dispatch(
       updateParentComment({
         commentToUpdate: {
           commentId: parentCommentId,
-          pageId: pageId,
+          pageId,
           commentText: newComment,
-          userId: userId,
+          userId,
         },
         accessToken: jwtAccessToken,
       })
     );
   };
 
-  const handleEditChildComment = (newComment, childCommentId, userId) => {
+  // edits the child comment
+  const handleEditChildComment = (newComment, childCommentId, childUserId) => {
     dispatch(
-      //only users authenticated and who created the comment can update
+      // only users authenticated and who created the comment can update
       updateChildComment({
         commentToUpdate: {
           commentId: childCommentId,
-          pageId: pageId,
+          pageId,
           commentText: newComment,
-          userId: userId,
+          childUserId,
         },
         accessToken: jwtAccessToken,
       })
@@ -118,7 +129,7 @@ export default function Comment({
   };
 
   return (
-    <div className={"container-fluid p-4"}>
+    <div className="container-fluid p-4">
       <div className="grid">
         <div className="row justify-content-center">
           <CommentBox
@@ -141,23 +152,23 @@ export default function Comment({
               />
             )}
             {replyCount > 0 && (
-              <div className={"row"}>
-                <div className={"col-sm-auto"}>
+              <div className="row">
+                <div className="col-sm-auto">
                   <i
                     className={`btn bi bi-caret-${
-                      showReplies ? "up" : "down"
+                      showReplies ? 'up' : 'down'
                     } font-weight-normal`}
-                    role={"button"}
+                    role="button"
                     onClick={handleShowReplies}
                   >
-                    {" " + replyCount + " "}
-                    {replies.length === 1 ? "reply" : "replies"}
+                    {` ${replyCount} `}
+                    {replies.length === 1 ? 'reply' : 'replies'}
                   </i>
                 </div>
               </div>
             )}
             {hasReplies && (
-              <div className={"row m-0 p-0"}>
+              <div className="row m-0 p-0">
                 {childrenComments?.map(({ comment }) => (
                   <ChildComment
                     key={comment.commentId}

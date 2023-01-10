@@ -1,12 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import Report from "../report/Report.jsx";
-import Vote from "../../vote_comp/Vote.jsx";
-import { BiLike, BiDislike } from "react-icons/bi";
-import "./PostPreview.css";
-import { useDispatch, useSelector } from "react-redux";
-import { forumActions } from "../../../store/reducers/forum-reducer.js";
-import { forumVoteActions } from "../../../store/reducers/forum-votes-reducer.js";
-import { useSelect } from "@mui/base";
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Report from '../report/Report';
+import './PostPreview.css';
+import { forumActions } from '../../../store/reducers/forum-reducer';
+import { forumVoteActions } from '../../../store/reducers/forum-votes-reducer';
 
 export default function ForumQuickView({
   pageId,
@@ -15,7 +14,7 @@ export default function ForumQuickView({
   upVotes,
   downVotes,
 }) {
-  const {isLoggedIn} = useSelector(state => state.auth);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
@@ -23,7 +22,7 @@ export default function ForumQuickView({
       <article
         key={pageId}
         className="container-fluid p-4 preview-section row"
-        style={{ cursor: "pointer" }}
+        style={{ cursor: 'pointer' }}
         typeof="button"
       >
         <div className="row">
@@ -34,6 +33,15 @@ export default function ForumQuickView({
               dispatch(forumVoteActions.resetData());
               navigate(`${pageId}`);
             }}
+            onKeyDown={(e) => {
+              if (e.key === 'enter') {
+                dispatch(forumActions.resetData());
+                dispatch(forumVoteActions.resetData());
+                navigate(`${pageId}`);
+              }
+            }}
+            role="button"
+            tabIndex={0}
           >
             <img
               src={userDto.profilePicture}
@@ -55,13 +63,13 @@ export default function ForumQuickView({
           }}
         >
           {title.trim().length > 40
-            ? title.substring(0, 40).concat("...")
-            : title} 
+            ? title.substring(0, 40).concat('...')
+            : title}
         </h2>
         <div className="row justify-content-between m-4 btn-group">
           <div className="col-auto col-lg-4 m-0 p-0 align-self-end ">
-            <i className="bi bi-hand-thumbs-up ms-4"> {" " + upVotes}</i>
-            <i className="bi bi-hand-thumbs-down ms-4"> {" " + downVotes}</i>
+            <i className="bi bi-hand-thumbs-up ms-4"> {` ${upVotes}`}</i>
+            <i className="bi bi-hand-thumbs-down ms-4"> {` ${downVotes}`}</i>
           </div>
           <div className="col-4 m-0 p-0 align-self-end">
             {isLoggedIn && <Report pageId={pageId} />}

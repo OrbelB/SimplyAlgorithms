@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+// input places to add or edit a comment
 export default function AddEditComment({
   commentText,
   handleAddEditComment,
@@ -11,7 +11,7 @@ export default function AddEditComment({
   const navigate = useNavigate();
   const profilePicture = useSelector((state) => state.user.profilePicture);
   const { isLoggedIn, jwtAccessToken } = useSelector((state) => state.auth);
-  const [checkComment, setCheckComment] = useState(commentText || "");
+  const [checkComment, setCheckComment] = useState(commentText || '');
 
   const handleInputChildCommentUpdate = (e) => {
     setCheckComment(e.target.value);
@@ -22,8 +22,8 @@ export default function AddEditComment({
 
   const getChildComment = (e) => {
     e.preventDefault();
-    if (!isLoggedIn && jwtAccessToken === "") {
-      navigate("/login", { state: { from: location } });
+    if (!isLoggedIn && jwtAccessToken === '') {
+      navigate('/login', { state: { from: location } });
     }
     handleAddEditComment(checkComment);
   };
@@ -31,9 +31,9 @@ export default function AddEditComment({
   return (
     <form
       onSubmit={getChildComment}
-      className={"row justify-content-evenly mt-2"}
+      className="row justify-content-evenly mt-2"
     >
-      <div className={"col-auto col-sm-auto"}>
+      <div className="col-auto col-sm-auto">
         <img
           src={profilePicture}
           className="rounded-circle"
@@ -42,27 +42,29 @@ export default function AddEditComment({
           loading="lazy"
         />
       </div>
-      <div className={"col-auto col-md-10 m-0 p-0"}>
+      <div className="col-auto col-md-10 m-0 p-0">
         <input
-          className={"form-control"}
-          placeholder={"add a reply.."}
+          className="form-control"
+          placeholder="add a reply.."
           value={checkComment}
           onInput={handleInputChildCommentUpdate}
-          type={"text"}
+          type="text"
         />
       </div>
-      <div className={"row justify-content-end pt-1"}>
-        <div className={"col-auto col-sm-auto"}>
+      <div className="row justify-content-end pt-1">
+        <div className="col-auto col-sm-auto">
           <button
-            className={"btn"}
+            className="btn"
             onClick={handleCancelChildComment}
-            type={"button"}
+            type="button"
           >
             CANCEL
           </button>
         </div>
-        <div className={"col-auto col-sm-auto"}>
-          <button className={"btn"}>REPLY</button>
+        <div className="col-auto col-sm-auto">
+          <button className="btn" type="button">
+            REPLY
+          </button>
         </div>
       </div>
     </form>

@@ -1,7 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import TemplateTopicPage from './pages/t_pages/TemplateTopicPage';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -16,16 +14,14 @@ import UnderConstructionPage from './pages/UnderConstructionPage';
 import MeetTeamPage from './pages/MeetTeamPage';
 import DashboardPage from './pages/DashboardPage';
 import WikiPage from './pages/WikiPage';
-import Bubble_sort from './pages/t_pages/Bubble_sort';
+import BubbleSort from './pages/t_pages/BubbleSort';
 import ForumEdit from './components/forums/post_template/ForumEdit';
 import RequireAuth from './components/authentication/RequireAuth';
-import Binary_search_tree from './pages/t_pages/Binary_search_tree';
-import Breadth_first_search from './pages/t_pages/Breadth_first_search';
+import BinarySearchTree from './pages/t_pages/BinarySearchTree';
+import BreadtFirstSearch from './pages/t_pages/BreadtFirstSearch';
 import Arrays from './pages/t_pages/Arrays';
 import Sorting from './components/wiki/topics/Sorting';
 import ScrollToTop from './components/ScrollToTop';
-import { forumActions } from './store/reducers/forum-reducer';
-import { forumVoteActions } from './store/reducers/forum-votes-reducer';
 
 function App() {
   return (
@@ -57,12 +53,9 @@ function App() {
         </Route>
         <Route path="/underconstruction" element={<UnderConstructionPage />} />
         {/* SAMPLE TOPIC PAGES */}
-        <Route path="/wiki/bubblesort" element={<Bubble_sort />} />
-        <Route
-          path="/search/binarysearchtree"
-          element={<Binary_search_tree />}
-        />
-        <Route path="/search/bfs" element={<Breadth_first_search />} />
+        <Route path="/wiki/bubblesort" element={<BubbleSort />} />
+        <Route path="/search/binarysearchtree" element={<BinarySearchTree />} />
+        <Route path="/search/bfs" element={<BreadtFirstSearch />} />
         <Route path="/datastructures/arrays" element={<Arrays />} />
         <Route path="/wikihome" element={<WikiPage />} />
         <Route path="/wiki/sorting" element={<Sorting />} />

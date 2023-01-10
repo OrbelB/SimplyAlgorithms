@@ -1,9 +1,9 @@
-import UnderConstruction from "../components/underconstruction/UnderConstruction";
+import UnderConstruction from '../components/underconstruction/UnderConstruction';
 
-export default function UnderConstructionPage(){
-    return(
-        <div className="underconstruct">
-            <UnderConstruction/>
-        </div>
-    );
+export default function UnderConstructionPage() {
+  return (
+    <div className="underconstruct">
+      <UnderConstruction />
+    </div>
+  );
 }
