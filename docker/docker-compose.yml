@@ -1,0 +1,15 @@
+version: '3'
+services:
+    db_instance:
+      container_name: db-instance
+      image: mysql
+      ports:
+        - '3307:3306'
+      environment:
+        - "MYSQL_ROOT_PASSWORD=1234"
+      volumes:
+        - "./db_data:/var/lib/mysql"
+      networks:
+        - net
+networks:
+  net:
