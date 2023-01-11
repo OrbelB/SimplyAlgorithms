@@ -179,8 +179,8 @@ export default function Comment({
                     profilePicture={comment?.createdBy?.profilePicture}
                     userId={comment?.createdBy?.userId}
                     username={comment?.createdBy?.username}
-                    upVotes={comment?.likes}
-                    downVotes={comment?.dislikes}
+                    upVotes={comment.likes}
+                    downVotes={comment.dislikes}
                     deleteChildComment={handleDeleteChildComment}
                     editChildComment={handleEditChildComment}
                   />

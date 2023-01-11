@@ -23,7 +23,13 @@ const initialState = commentAdapter.getInitialState({
 export const commentSlice = createSlice({
   name: 'comment',
   initialState,
-  reducers: {},
+  reducers: {
+    resetData: (state) => {
+      commentAdapter.removeAll(state);
+      state.error = '';
+      state.status = 'idle';
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchChildrenComments.pending, (state) => {

@@ -10,6 +10,9 @@ import CodeSnippet from '../../components/topic_page_samples/bubble_sort/code-sn
 import CommentFrame from '../../components/comment/CommentFrame';
 import { fetchSingleTopic } from '../../services/topic';
 import { forumActions } from '../../store/reducers/forum-reducer';
+import { listVotesByPage } from '../../services/comment';
+import { commentActions } from '../../store/reducers/comment-reducer';
+import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
 
 const BUBBLE_SORT_URL =
   'https://algorithm-visualizer.org/brute-force/bubble-sort';
@@ -18,17 +21,46 @@ const BUBBLE_SORT_PAGE_ID = '3ba9a5c8-a328-4c88-80e0-57872ed56bde';
 
 export default function BubbleSort() {
   const dispatch = useDispatch();
+  const {
+    isLoggedIn,
+    jwtAccessToken,
+    userId: authUserId,
+  } = useSelector((state) => state.auth);
   const { status, forum } = useSelector((state) => state.forum);
-
+  const { status: commentVoteStatus } = useSelector(
+    (state) => state.commentVotes
+  );
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchSingleTopic(BUBBLE_SORT_PAGE_ID));
     }
     if (status === 'success') {
+      dispatch(commentVoteActions.resetData());
+      dispatch(commentActions.resetData());
       dispatch(forumActions.resetData());
+    }
+    if (status === 'completed') {
+      dispatch(commentActions.resetData());
+      dispatch(commentVoteActions.resetData());
     }
   }, [status, dispatch]);
 
+  useEffect(() => {
+    if (
+      commentVoteStatus === 'idle' &&
+      jwtAccessToken !== '' &&
+      isLoggedIn &&
+      authUserId !== '' &&
+      BUBBLE_SORT_PAGE_ID !== ''
+    ) {
+      dispatch(
+        listVotesByPage({
+          pageId: BUBBLE_SORT_PAGE_ID,
+          userId: authUserId,
+        })
+      );
+    }
+  }, [authUserId, dispatch, isLoggedIn, jwtAccessToken, commentVoteStatus]);
   return (
     <>
       {/* <AlgoFram/> */}

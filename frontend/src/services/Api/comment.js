@@ -116,10 +116,11 @@ export const commentEndpoints = {
         Authorization: 'Bearer ' + accessToken,
       },
     }),
-  listVotes: (pageId) =>
+  listVotes: (pageId, userId) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/list/votes`, {
       params: {
         pageId,
+        userId,
       },
       headers: {
         'Content-Type': 'application/json',

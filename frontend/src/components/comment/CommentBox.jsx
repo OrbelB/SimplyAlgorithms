@@ -1,17 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Votes from './Votes';
 import AddEditComment from './AddEditComment';
 import OptionMenu from './OptionsMenu';
 import beautifyTime from '../../utilities/beautify-time';
-import { listVotesByComment } from '../../services/comment';
-import {
-  selectAllCommentVotes,
-  selectByCommentVoteId,
-} from '../../store/reducers/comment-vote-reducer';
-
 import './CommentBox.css';
+import { selectAllCommentVotes } from '../../store/reducers/comment-vote-reducer';
+
 // displays the frame for any comment
 export default function CommentBox({
   children,
@@ -29,34 +25,8 @@ export default function CommentBox({
   commentId,
 }) {
   const [isEditClicked, setIsEditClicked] = useState(false);
-  const dispatch = useDispatch();
-
-  const { forum } = useSelector((state) => state.forum);
 
   const allCommentVotes = useSelector(selectAllCommentVotes);
-
-  const { userId: authUserID } = useSelector((state) => state.auth);
-
-  const currentUserVote = useSelector((state) =>
-    selectByCommentVoteId(state, {
-      commentVoteId: {
-        userId: authUserID,
-        commentId,
-      },
-    })
-  );
-
-  const { status } = useSelector((state) => state.commentVotes);
-
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(
-        listVotesByComment({
-          pageId: forum?.pageId,
-        })
-      );
-    }
-  }, [commentId, status, allCommentVotes, dispatch, forum, authUserID]);
 
   const handleCancelComment = () => {
     cancelComment();
@@ -81,7 +51,7 @@ export default function CommentBox({
           upVotes={upVotes}
           commentId={commentId}
           downVotes={downVotes}
-          currentUserVote={currentUserVote}
+          allCommentVotes={allCommentVotes}
         />
       </div>
       <div className="col me-lg-5 me-auto">

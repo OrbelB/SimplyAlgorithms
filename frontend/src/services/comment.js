@@ -104,11 +104,11 @@ export const reportComment = createAsyncThunk(
   }
 );
 
-export const listVotesByComment = createAsyncThunk(
+export const listVotesByPage = createAsyncThunk(
   'commentVote/list',
   async (passedParams) => {
-    const { pageId } = passedParams;
-    const response = await commentEndpoints.listVotes(pageId);
+    const { pageId, userId } = passedParams;
+    const response = await commentEndpoints.listVotes(pageId, userId);
 
     return response.data;
   }

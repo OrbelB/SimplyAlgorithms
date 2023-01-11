@@ -11,6 +11,7 @@ import beautifyTime from '../../../utilities/beautify-time';
 import Vote from '../../vote_comp/Vote';
 import ForumOptionMenu from './ForumOptionMenu';
 import LoadingBackdrop from '../../loading/LoadingBackdrop';
+import { listVotesByPage } from '../../../services/comment';
 
 export default function ForumPost() {
   const { pageId } = useParams();
@@ -23,7 +24,9 @@ export default function ForumPost() {
   const dispatch = useDispatch();
   const { status, forum } = useSelector((state) => state.forum);
   const { status: viewStatus } = useSelector((state) => state.viewedForums);
-
+  const { status: commentVoteStatus } = useSelector(
+    (state) => state.commentVotes
+  );
   useEffect(() => {
     if (status === 'idle' || status === 'successToIdle') {
       dispatch(fetchSingleForum(pageId));
@@ -53,6 +56,30 @@ export default function ForumPost() {
     jwtAccessToken,
     forum,
     viewStatus,
+  ]);
+
+  useEffect(() => {
+    if (
+      commentVoteStatus === 'idle' &&
+      jwtAccessToken !== '' &&
+      isLoggedIn &&
+      authUserId !== '' &&
+      pageId !== ''
+    ) {
+      dispatch(
+        listVotesByPage({
+          pageId,
+          userId: authUserId,
+        })
+      );
+    }
+  }, [
+    authUserId,
+    dispatch,
+    isLoggedIn,
+    jwtAccessToken,
+    pageId,
+    commentVoteStatus,
   ]);
 
   if (status === 'loading') {

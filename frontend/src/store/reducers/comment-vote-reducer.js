@@ -2,13 +2,13 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
 import {
-  listVotesByComment,
+  listVotesByPage,
   deleteCommentVote,
   voteComment,
 } from '../../services/comment';
 
 const commentVotesAdapter = createEntityAdapter({
-  selectId: (a) => a.commentVoteId,
+  selectId: (a) => a.commentId,
 });
 
 const initialState = commentVotesAdapter.getInitialState({
@@ -28,24 +28,16 @@ export const commentVotesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(listVotesByComment.pending, (state) => {
+      .addCase(listVotesByPage.pending, (state) => {
         state.status = 'pending';
       })
-      .addCase(listVotesByComment.fulfilled, (state, action) => {
+      .addCase(listVotesByPage.fulfilled, (state, action) => {
         if (!action?.payload) return;
-        const objectList = action.payload.map((commentVote) => {
-          const commentVoteId = {
-            userId: commentVote?.userId,
-            commentId: commentVote?.commentId,
-          };
-          const { likeDislike } = commentVote;
-          return { commentVoteId, likeDislike };
-        });
-        console.debug(objectList);
+        console.info(action.payload, 'object that is gotten');
         state.status = 'success';
-        commentVotesAdapter.addMany(state, objectList);
+        commentVotesAdapter.upsertMany(state, action.payload);
       })
-      .addCase(listVotesByComment.rejected, (state, action) => {
+      .addCase(listVotesByPage.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action?.error?.message;
       })
@@ -57,11 +49,7 @@ export const commentVotesSlice = createSlice({
           return;
         }
         state.status = 'success';
-        const passedCommentVoteId = {
-          userId: action.payload?.userId,
-          commentId: action.payload?.commentId,
-        };
-        commentVotesAdapter.removeOne(state, passedCommentVoteId);
+        commentVotesAdapter.removeOne(state, action.payload.commentId);
       })
       .addCase(deleteCommentVote.rejected, (state, action) => {
         state.status = 'failed';
@@ -73,14 +61,7 @@ export const commentVotesSlice = createSlice({
       .addCase(voteComment.fulfilled, (state, action) => {
         if (!action?.payload) return;
         state.status = 'success';
-        const passedCommentVote = {
-          commentVoteId: {
-            userId: action.payload?.userId,
-            commentId: action.payload?.commentId,
-          },
-          likeDislike: action.payload?.likeDislike,
-        };
-        commentVotesAdapter.upsertOne(state, passedCommentVote);
+        commentVotesAdapter.upsertOne(state, action.payload);
       });
   },
 });

@@ -1,67 +1,38 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import cx from 'classnames';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { voteComment, deleteCommentVote } from '../../services/comment';
-
 import styles from './Upvotes.module.css';
+import { selectAllCommentVotes } from '../../store/reducers/comment-vote-reducer';
 
 // TODO fixed votes not working properly
-export default function Votes({
-  commentId,
-  upVotes,
-  downVotes,
-  currentUserVote,
-}) {
+export default function Votes({ commentId, upVotes, downVotes }) {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [votes, setVotes] = useState(upVotes - downVotes);
-  // const [updateCurrentUser, setUpdateCurrentUser] = useState(false);
   const {
     userId: authUserID,
     jwtAccessToken,
     isLoggedIn,
   } = useSelector((state) => state.auth);
-  useEffect(() => {}, [currentUserVote]);
-  // const { forum } = useSelector((state) => state.forum);
-  // const allCommentVotes = useSelector(selectAllCommentVotes);
 
-  // const currentUserVote = useSelector((state) =>
-  //   selectByCommentVoteId(state, {
-  //     commentVoteId: {
-  //       userId: authUserID,
-  //       commentId: commentId,
-  //     },
-  //   })
-  // );
-  //
-  //
-  // const { status, error } = useSelector((state) => state.commentVotes);
+  const allCommentVotes = useSelector(selectAllCommentVotes);
 
-  // useEffect(() => {
-
-  //   if (status === "idle") {
-  //     dispatch(
-  //       listVotesByComment({
-  //         pageId: forum?.pageId,
-  //       })
-  //     );
-  //   }
-  //   console.log(allCommentVotes, "from useEffect");
-  // }, [commentId, status, allCommentVotes, dispatch, currentUserVote, forum]);
-
-  const handleUpVotes = () => {
+  const handleUpVotes = async () => {
+    const isThereAVote = allCommentVotes.find(
+      (vote) => vote?.commentId === commentId
+    );
     if (!isLoggedIn) {
       navigate('/login', { state: { from: location } });
       return;
     }
     // create the comment if the vote does not exists
     if (
-      !currentUserVote ||
-      (currentUserVote.commentVoteId.commentId === null &&
-        currentUserVote.commentVoteId.userId === null)
+      !isThereAVote ||
+      (isThereAVote.commentId === null && isThereAVote.userId === null)
     ) {
       dispatch(
         voteComment({
@@ -71,21 +42,14 @@ export default function Votes({
       );
       setVotes(votes + 1);
     } else {
+      // votes are not for this specific comment
       if (
-        currentUserVote?.commentVoteId.commentId !== commentId ||
-        currentUserVote?.commentVoteId.userId !== authUserID
+        isThereAVote.commentId !== commentId ||
+        isThereAVote.userId !== authUserID
       ) {
-        // dispatch(
-        //   voteComment({
-        //     votedComment: { commentId, userId: authUserID, likeDislike: true },
-        //     accessToken: jwtAccessToken,
-        //   })
-        // );
-        // setVotes(votes + 1);
         return;
       }
-
-      if (currentUserVote.likeDislike === true) {
+      if (isThereAVote.likeDislike) {
         dispatch(
           deleteCommentVote({
             userId: authUserID,
@@ -95,7 +59,7 @@ export default function Votes({
         );
         setVotes(votes - 1);
       }
-      if (currentUserVote.likeDislike === false) {
+      if (!isThereAVote.likeDislike) {
         dispatch(
           voteComment({
             votedComment: { commentId, userId: authUserID, likeDislike: true },
@@ -107,16 +71,18 @@ export default function Votes({
     }
   };
 
-  const handleDownVotes = () => {
+  const handleDownVotes = async () => {
+    const isThereAVote = allCommentVotes.find(
+      (vote) => vote?.commentId === commentId
+    );
     if (!isLoggedIn) {
       navigate('/login', { state: { from: location } });
       return;
     }
     // create a vote if the vote does not exists
     if (
-      !currentUserVote ||
-      (currentUserVote.commentVoteId.commentId === null &&
-        currentUserVote.commentVoteId.userId === null)
+      !isThereAVote ||
+      (isThereAVote.commentId === null && isThereAVote.userId === null)
     ) {
       dispatch(
         voteComment({
@@ -127,20 +93,13 @@ export default function Votes({
       setVotes(votes - 1);
     } else {
       if (
-        currentUserVote?.commentVoteId.commentId !== commentId ||
-        currentUserVote?.commentVoteId.userId !== authUserID
+        isThereAVote.commentId !== commentId ||
+        isThereAVote.userId !== authUserID
       ) {
-        // dispatch(
-        //   voteComment({
-        //     votedComment: { commentId, userId: authUserID, likeDislike: false },
-        //     accessToken: jwtAccessToken,
-        //   })
-        // );
-        // setVotes(votes - 1);
         return;
       }
       // remove the vote if it exists when liked
-      if (currentUserVote.likeDislike === false) {
+      if (!isThereAVote.likeDislike) {
         dispatch(
           deleteCommentVote({
             userId: authUserID,
@@ -150,7 +109,7 @@ export default function Votes({
         );
         setVotes(votes + 1);
       }
-      if (currentUserVote.likeDislike === true) {
+      if (isThereAVote.likeDislike) {
         dispatch(
           voteComment({
             votedComment: { commentId, userId: authUserID, likeDislike: false },
@@ -171,7 +130,9 @@ export default function Votes({
         >
           <i
             className={cx('bi bi-plus', styles['btn-sign-style'])}
-            onClick={handleUpVotes}
+            onClick={() => {
+              handleUpVotes();
+            }}
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'enter') {
@@ -190,7 +151,9 @@ export default function Votes({
         >
           <i
             className={cx('bi bi-dash', styles['btn-sign-style'])}
-            onClick={handleDownVotes}
+            onClick={() => {
+              handleDownVotes();
+            }}
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'enter') {

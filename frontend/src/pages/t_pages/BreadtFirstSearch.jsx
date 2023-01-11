@@ -8,13 +8,24 @@ import CodeSnippet from '../../components/topic_page_samples/breath_first_search
 import CommentFrame from '../../components/comment/CommentFrame';
 import { fetchSingleTopic } from '../../services/topic';
 import { forumActions } from '../../store/reducers/forum-reducer';
+import { listVotesByPage } from '../../services/comment';
+import { commentActions } from '../../store/reducers/comment-reducer';
+import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
 
 const bfs = 'https://algorithm-visualizer.org/brute-force/breadth-first-search';
 const VIZ_TITLE = 'BREADTH FIRST SEARCH';
 const BFS_PAGE_ID = '54e9d8be-f123-4360-9c76-0c4c2ccd99eb';
 export default function BreadthFirstSearch() {
   const dispatch = useDispatch();
+  const {
+    isLoggedIn,
+    jwtAccessToken,
+    userId: authUserId,
+  } = useSelector((state) => state.auth);
   const { status, forum } = useSelector((state) => state.forum);
+  const { status: commentVoteStatus } = useSelector(
+    (state) => state.commentVotes
+  );
 
   useEffect(() => {
     if (status === 'idle') {
@@ -22,8 +33,31 @@ export default function BreadthFirstSearch() {
     }
     if (status === 'success') {
       dispatch(forumActions.resetData());
+      dispatch(commentActions.resetData());
+      dispatch(commentVoteActions.resetData());
+    }
+    if (status === 'completed') {
+      dispatch(commentActions.resetData());
+      dispatch(commentVoteActions.resetData());
     }
   }, [status, dispatch]);
+
+  useEffect(() => {
+    if (
+      commentVoteStatus === 'idle' &&
+      jwtAccessToken !== '' &&
+      isLoggedIn &&
+      authUserId !== '' &&
+      BFS_PAGE_ID !== ''
+    ) {
+      dispatch(
+        listVotesByPage({
+          pageId: BFS_PAGE_ID,
+          userId: authUserId,
+        })
+      );
+    }
+  }, [authUserId, dispatch, isLoggedIn, jwtAccessToken, commentVoteStatus]);
 
   return (
     <>

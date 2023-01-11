@@ -6,6 +6,8 @@ import Report from '../report/Report';
 import './PostPreview.css';
 import { forumActions } from '../../../store/reducers/forum-reducer';
 import { forumVoteActions } from '../../../store/reducers/forum-votes-reducer';
+import { commentVoteActions } from '../../../store/reducers/comment-vote-reducer';
+import { commentActions } from '../../../store/reducers/comment-reducer';
 
 export default function ForumQuickView({
   pageId,
@@ -32,12 +34,16 @@ export default function ForumQuickView({
             onClick={() => {
               dispatch(forumActions.resetData());
               dispatch(forumVoteActions.resetData());
+              dispatch(commentVoteActions.resetData());
+              dispatch(commentActions.resetData());
               navigate(`${pageId}`);
             }}
             onKeyDown={(e) => {
               if (e.key === 'enter') {
                 dispatch(forumActions.resetData());
                 dispatch(forumVoteActions.resetData());
+                dispatch(commentVoteActions.resetData());
+                dispatch(commentActions.resetData());
                 navigate(`${pageId}`);
               }
             }}
@@ -60,6 +66,8 @@ export default function ForumQuickView({
           className="row justify-content-center"
           onClick={() => {
             dispatch(forumActions.resetData());
+            dispatch(commentVoteActions.resetData());
+            dispatch(commentActions.resetData());
             navigate(`${pageId}`);
           }}
         >
