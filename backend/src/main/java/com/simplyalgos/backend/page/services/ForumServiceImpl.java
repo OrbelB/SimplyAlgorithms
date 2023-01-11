@@ -171,7 +171,6 @@ public class ForumServiceImpl implements ForumService {
         }
         throw new NoSuchElementException(MessageFormat.
                 format("Vote for pageId with id {0} is not present", pageId));
-
     }
 
     @Override

@@ -45,3 +45,4 @@ build/
 
 ### VS Code ###
 .vscode/
+!/docker/db_data/mysql.sock

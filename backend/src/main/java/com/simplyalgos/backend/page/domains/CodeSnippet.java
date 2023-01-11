@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import jakarta.persistence.*;
+
 import java.util.UUID;
 
 @Setter
@@ -19,6 +20,7 @@ import java.util.UUID;
         @UniqueConstraint(columnNames = {"language_title", "page_id"})
 )
 public class CodeSnippet {
+
     @EmbeddedId
     private CodeSnippetId codeSnippetId;
 

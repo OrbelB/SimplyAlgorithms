@@ -13,7 +13,12 @@ public interface CommentVoteService {
     Integer countVotes(UUID commentId, boolean vote);
 
 
-    void deleteCommentVote(UUID userId,UUID commentId);
+    void deleteCommentVote(UUID userId, UUID commentId);
+
     boolean commentVoteExists(CommentVoteId commentVoteId);
+
+    @Deprecated
     Set<?> listVotesByPage(UUID pageId);
+
+    Set<?> listVotesByPageAndUserId(UUID pageId, UUID userId);
 }

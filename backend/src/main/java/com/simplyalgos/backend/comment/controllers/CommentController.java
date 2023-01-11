@@ -56,7 +56,6 @@ public class CommentController {
     @CreateCommentPermission
     @PostMapping(path = "/create-child-comment", consumes = "application/json")
     public ResponseEntity<?> createChildComment(@RequestBody ChildCommentDTO commentDTO) {
-        ;
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createChildComment(commentDTO));
     }
 
@@ -99,8 +98,8 @@ public class CommentController {
 
 
     @GetMapping(path = "/list/votes")
-    public ResponseEntity<?> listVotesByCommentId(@RequestParam(name = "pageId") UUID pageId) {
-        return ResponseEntity.ok(commentVoteService.listVotesByPage(pageId));
+    public ResponseEntity<?> listVotesByPageIdAndUserId(@RequestParam(name = "pageId") UUID pageId, @RequestParam(name = "userId") UUID userId) {
+        return ResponseEntity.ok(commentVoteService.listVotesByPageAndUserId(pageId,userId));
     }
 
 
