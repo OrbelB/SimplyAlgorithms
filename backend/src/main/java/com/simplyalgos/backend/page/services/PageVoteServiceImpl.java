@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -78,6 +79,19 @@ public class PageVoteServiceImpl implements PageVoteService {
     @Override
     public Set<?> listVotesByPage(UUID pageId) {
         return pageVoteRepository.findAllByPageVoteId_PageId(pageId)
+                .stream()
+                .map(pageVoteMapper::pageVoteToPageVoteDTO)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<?> listVoteByPageAndUserId(UUID pageId, UUID userId) {
+        return pageVoteRepository.findAllByPageVoteId(
+                PageVoteId
+                    .builder()
+                    .pageId(pageId)
+                    .userId(userId)
+                    .build())
                 .stream()
                 .map(pageVoteMapper::pageVoteToPageVoteDTO)
                 .collect(Collectors.toSet());

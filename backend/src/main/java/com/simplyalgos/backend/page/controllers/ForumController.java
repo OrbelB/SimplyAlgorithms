@@ -28,7 +28,6 @@ import java.util.UUID;
 @RestController
 public class ForumController {
     private final ForumService forumService;
-
     @GetMapping("/list")
     public ResponseEntity<?> getPageList(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
                                          @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
@@ -99,10 +98,10 @@ public class ForumController {
     }
 
     @GetMapping(path = "/list/votes", produces = "application/json")
-    public ResponseEntity<?> listVotesByForumId(@RequestParam(name = "pageId") UUID pageId) {
-        return ResponseEntity.ok(forumService.listVotesByPage(pageId));
+    public ResponseEntity<?> listVotesByForumId(@RequestParam(name = "pageId") UUID pageId,
+                                                @RequestParam(name ="userId") UUID userId) {
+        return ResponseEntity.ok(forumService.getForumVoteByPageAndUserId(pageId, userId));
     }
-
     @GetMapping(path = "/list/forums-view")
     public ResponseEntity<?> listForumsViewedByUser(
             @RequestParam(name = "userId") UUID userId,

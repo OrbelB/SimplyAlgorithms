@@ -194,6 +194,11 @@ public class ForumServiceImpl implements ForumService {
     }
 
     @Override
+    public Object getForumVoteByPageAndUserId(UUID pageId, UUID userId) {
+        return pageVoteService.listVoteByPageAndUserId(pageId, userId);
+    }
+
+    @Override
     public FullForumDTO addForumUserView(UUID userId, UUID pageId) {
         viewsService.addUserView(userId, pageId);
         return getForumPage(pageId.toString());

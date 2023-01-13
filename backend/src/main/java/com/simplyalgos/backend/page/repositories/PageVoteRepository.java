@@ -34,4 +34,6 @@ public interface PageVoteRepository extends JpaRepository<PageVote, PageVoteId> 
     void deleteVote(@Param("page_id") String pageId, @Param("user_id") String userId);
 
     Set<PageVote> findAllByPageVoteId_PageId(UUID pageVoteId_pageId);
+
+    Set<PageVote> findAllByPageVoteId(PageVoteId pageVoteId);
 }

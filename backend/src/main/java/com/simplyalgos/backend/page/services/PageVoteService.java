@@ -19,5 +19,8 @@ public interface PageVoteService {
 
     boolean pageVoteExists(PageVoteId pageVoteId);
 
+    @Deprecated
     Set<?> listVotesByPage(UUID pageId);
+
+    Set<?> listVoteByPageAndUserId(UUID pageId, UUID userId);
 }

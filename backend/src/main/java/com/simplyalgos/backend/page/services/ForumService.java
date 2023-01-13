@@ -34,6 +34,7 @@ public interface ForumService {
 
     Object listVotesByPage(UUID pageId);
 
+    Object getForumVoteByPageAndUserId(UUID pageId, UUID userId);
     FullForumDTO addForumUserView(UUID userId, UUID pageId);
 
 
