@@ -1,59 +1,70 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .forum-section {
-    background-color: #a8fac1;
-    background-image: url("https://www.transparenttextures.com/patterns/bright-squares.png");
-    height: auto;
-    text-align: center;
+  background-color: #a8fac1;
+  background-image: url('https://www.transparenttextures.com/patterns/bright-squares.png');
+  height: auto;
+  text-align: center;
 }
 
 .forum-body {
-    margin-left: 13%;
-    margin-right: 5%;
-    display: flex;
+  display: flex;
 }
 
 .pic {
-    background-blend-mode: normal;
-    width: 65em;
-    height: 15em;
-    border: solid black;
-    border-radius: 20px;
+  background-blend-mode: normal;
+  width: 65em;
+  height: 15em;
+  border: solid black;
+  border-radius: 20px;
+  margin: 25px;
+  margin-top: 0;
 }
 .body {
-    font-family: 'Readex Pro', sans-serif;
-    font-size: 1.5em;
-    margin-left: 15%;
-    margin-right: 15%;
+  font-family: 'Readex Pro', sans-serif;
+  font-size: 1.5em;
+  margin: 25px;
+  margin-top: 0;
 }
 
 .b {
-    color: white;
-    font-size: 25px;
-    font-weight: bold;
-    border-radius: 10px 10px 10px 10px;
-    padding: 10px;
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  border-radius: 10px 10px 10px 10px;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 .fbtext {
-    font-family: 'Readex Pro', sans-serif;
-    color: white;
+  font-family: 'Readex Pro', sans-serif;
+  color: white;
+  margin-bottom: 0%;
 }
 
 .b1 {
-    background-color: rgb(6, 56, 150);
-    border-color: rgb(6, 56, 150);
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  background-color: rgb(6, 56, 150);
+  border-color: rgb(6, 56, 150);
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.b1:hover{
-    color: black;
-    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-    transform: translateY(-2px);
+.b1:hover {
+  color: black;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
 }
 
 .b1:active {
-    box-shadow: none;
-    transform: translateY(0);
+  box-shadow: none;
+  transform: translateY(0);
 }
 
-
+@media only screen and (max-width: 480px) {
+  .forum-body {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .pic {
+    width: auto;
+    height: 10em;
+  }
+}

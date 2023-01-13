@@ -94,9 +94,7 @@ function Footer() {
             <img src={image} alt="Simply Algorithms Logo" />
           </div>
           <div className={cx(style.web_service, 'row', 'mt-3')}>
-            <div>
-              Contact us Privacy Notice © 2022 OJKJ Inc. All Right Reserved
-            </div>
+            <p>Contact us Privacy Notice © 2022 OJKJ Inc. All Right Reserved</p>
           </div>
         </div>
 
