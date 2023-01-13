@@ -31,14 +31,12 @@ export const forumVotesSlice = createSlice({
         if (!action?.payload) return;
         const objectList = action.payload.map((forumVote) => {
           const forumVoteId = {
-            userId: forumVote?.userId,
-            pageId: forumVote?.pageId,
+            userId: forumVote.userId,
+            pageId: forumVote.pageId,
           };
           const { likeDislike } = forumVote;
-          console.info({ forumVoteId, likeDislike }, 'check this thing out');
           return { forumVoteId, likeDislike };
         });
-        console.debug(objectList);
         state.status = 'success';
         forumVotesAdapter.upsertMany(state, objectList);
       })

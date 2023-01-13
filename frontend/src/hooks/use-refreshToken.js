@@ -6,20 +6,19 @@ import { authActions } from '../store/reducers/auth-reducer';
 import image from '../assets/noPictureTemplate.png';
 
 export default function useRefreshToken() {
-  const [isUserSetUp, setIsUserSetUp] = useState(false);
   const { jwtRefreshToken, userId, isLoggedIn, jwtAccessToken, status } =
     useSelector((state) => state.auth);
   const { profilePicture } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [once, setOnce] = useState(true);
 
-  // get attributes
-  if (jwtRefreshToken !== '' && once) {
-    setOnce(false);
-    dispatch(refreshAccessToken(jwtRefreshToken));
-  }
-
   useEffect(() => {
+    console.count();
+    if (jwtRefreshToken !== '' && once) {
+      setOnce(false);
+      dispatch(refreshAccessToken(jwtRefreshToken));
+    }
+
     if (
       status === 'success' &&
       userId !== '' &&
@@ -32,9 +31,15 @@ export default function useRefreshToken() {
 
     if (profilePicture !== image && !isLoggedIn) {
       dispatch(authActions.setIsLoggedIn());
-      setIsUserSetUp(true);
     }
-  }, [dispatch, isLoggedIn, jwtAccessToken, profilePicture, userId, status]);
-
-  return isUserSetUp;
+  }, [
+    dispatch,
+    isLoggedIn,
+    jwtAccessToken,
+    profilePicture,
+    userId,
+    status,
+    jwtRefreshToken,
+    once,
+  ]);
 }

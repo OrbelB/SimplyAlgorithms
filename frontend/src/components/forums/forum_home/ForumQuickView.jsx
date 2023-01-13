@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Report from '../report/Report';
 import './PostPreview.css';
 import { forumActions } from '../../../store/reducers/forum-reducer';
-import { forumVoteActions } from '../../../store/reducers/forum-votes-reducer';
+import { forumVoteActions } from '../../../store/reducers/forum-vote-reducer';
 import { commentVoteActions } from '../../../store/reducers/comment-vote-reducer';
 import { commentActions } from '../../../store/reducers/comment-reducer';
+import { forumsActions } from '../../../store/reducers/forums-reducer';
 
 export default function ForumQuickView({
   pageId,
@@ -19,6 +21,14 @@ export default function ForumQuickView({
   const { isLoggedIn } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const removeData = useCallback(() => {
+    dispatch(forumActions.resetData());
+    dispatch(forumVoteActions.resetData());
+    dispatch(commentVoteActions.resetData());
+    dispatch(commentActions.resetData());
+    dispatch(forumsActions.resetData());
+    navigate(`${pageId}`);
+  }, [dispatch, navigate, pageId]);
 
   return (
     <>
@@ -31,20 +41,10 @@ export default function ForumQuickView({
         <div className="row">
           <div
             className="col-auto col-md-2 mt-1"
-            onClick={() => {
-              dispatch(forumActions.resetData());
-              dispatch(forumVoteActions.resetData());
-              dispatch(commentVoteActions.resetData());
-              dispatch(commentActions.resetData());
-              navigate(`${pageId}`);
-            }}
+            onClick={() => removeData()}
             onKeyDown={(e) => {
               if (e.key === 'enter') {
-                dispatch(forumActions.resetData());
-                dispatch(forumVoteActions.resetData());
-                dispatch(commentVoteActions.resetData());
-                dispatch(commentActions.resetData());
-                navigate(`${pageId}`);
+                removeData();
               }
             }}
             role="button"
@@ -62,15 +62,7 @@ export default function ForumQuickView({
             {userDto.username}
           </h2>
         </div>
-        <h2
-          className="row justify-content-center"
-          onClick={() => {
-            dispatch(forumActions.resetData());
-            dispatch(commentVoteActions.resetData());
-            dispatch(commentActions.resetData());
-            navigate(`${pageId}`);
-          }}
-        >
+        <h2 className="row justify-content-center" onClick={() => removeData()}>
           {title.trim().length > 40
             ? title.substring(0, 40).concat('...')
             : title}

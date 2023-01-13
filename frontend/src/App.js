@@ -22,11 +22,10 @@ import BreadtFirstSearch from './pages/t_pages/BreadtFirstSearch';
 import Arrays from './pages/t_pages/Arrays';
 import Sorting from './components/wiki/topics/Sorting';
 import ScrollToTop from './components/ScrollToTop';
-import UseRefreshToken from './hooks/use-refreshToken';
+import useRefreshToken from './hooks/use-refreshToken';
 
 function App() {
-  // eslint-disable-next-line no-unused-vars
-  const loggedInWithCookies = UseRefreshToken();
+  useRefreshToken();
 
   return (
     <Layout>

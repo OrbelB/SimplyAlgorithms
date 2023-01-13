@@ -1,17 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import cx from 'classnames';
 import { Chip } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import fp from './ForumPost.module.css';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
 import CommentFrame from '../../comment/CommentFrame';
-import { fetchSingleForum, addUserView } from '../../../services/forum';
+import {
+  fetchSingleForum,
+  addUserView,
+  fetchVotes,
+} from '../../../services/forum';
 import beautifyTime from '../../../utilities/beautify-time';
 import Vote from '../../vote_comp/Vote';
 import ForumOptionMenu from './ForumOptionMenu';
 import LoadingBackdrop from '../../loading/LoadingBackdrop';
 import { listVotesByPage } from '../../../services/comment';
+import useUpdateStore from '../../../hooks/use-updateStore';
 
 export default function ForumPost() {
   const { pageId } = useParams();
@@ -21,66 +26,95 @@ export default function ForumPost() {
     isLoggedIn,
     userId: authUserId,
   } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
   const { status, forum } = useSelector((state) => state.forum);
   const { status: viewStatus } = useSelector((state) => state.viewedForums);
   const { status: commentVoteStatus } = useSelector(
     (state) => state.commentVotes
   );
-  useEffect(() => {
-    if (status === 'idle' || status === 'successToIdle') {
-      dispatch(fetchSingleForum(pageId));
-    }
-    if (
-      viewStatus === 'success' &&
-      jwtAccessToken !== '' &&
-      isLoggedIn &&
-      (status === 'success' || status === 'completed')
-    ) {
-      dispatch(forumsActions.updateForum({ forum }));
-      dispatch(
-        addUserView({
-          pageId,
-          userId: authUserId,
-          accessToken: jwtAccessToken,
-        })
-      );
-      // dispatch(viewForumsActions.updateForum({ forum: forum }));
-    }
+
+  const { status: forumVoteStatus } = useSelector((state) => state.forumVotes);
+  const forumUpdateStore = useMemo(() => {
+    return {
+      conditions: [
+        status === 'idle' || status === 'successToIdle',
+        viewStatus === 'success' &&
+          jwtAccessToken !== '' &&
+          isLoggedIn &&
+          (status === 'success' || status === 'completed'),
+      ],
+      actions: [[fetchSingleForum], [forumsActions.updateForum, addUserView]],
+      arguments: [
+        [pageId],
+        [
+          { forum },
+          { pageId, userId: authUserId, accessToken: jwtAccessToken },
+        ],
+      ],
+    };
   }, [
-    status,
-    pageId,
-    dispatch,
     authUserId,
+    forum,
     isLoggedIn,
     jwtAccessToken,
-    forum,
+    pageId,
+    status,
     viewStatus,
   ]);
 
-  useEffect(() => {
-    if (
-      commentVoteStatus === 'idle' &&
-      jwtAccessToken !== '' &&
-      isLoggedIn &&
-      authUserId !== '' &&
-      pageId !== ''
-    ) {
-      dispatch(
-        listVotesByPage({
-          pageId,
-          userId: authUserId,
-        })
-      );
-    }
-  }, [
-    authUserId,
-    dispatch,
-    isLoggedIn,
-    jwtAccessToken,
-    pageId,
-    commentVoteStatus,
-  ]);
+  useUpdateStore(
+    forumUpdateStore.conditions,
+    forumUpdateStore.actions,
+    forumUpdateStore.arguments
+  );
+
+  const commentVoteUpdateStore = useMemo(() => {
+    return {
+      conditions: [
+        commentVoteStatus === 'idle' &&
+          jwtAccessToken !== '' &&
+          isLoggedIn &&
+          authUserId !== '' &&
+          pageId !== '',
+      ],
+      actions: [[listVotesByPage]],
+      arguments: [
+        [
+          {
+            pageId,
+            userId: authUserId,
+          },
+        ],
+      ],
+    };
+  }, [authUserId, commentVoteStatus, isLoggedIn, jwtAccessToken, pageId]);
+
+  useUpdateStore(
+    commentVoteUpdateStore.conditions,
+    commentVoteUpdateStore.actions,
+    commentVoteUpdateStore.arguments
+  );
+
+  const forumVoteUpdateStore = useMemo(() => {
+    return {
+      conditions: [forumVoteStatus === 'idle' && isLoggedIn],
+      actions: [[fetchVotes]],
+      arguments: [
+        [
+          {
+            pageId,
+            accessToken: jwtAccessToken,
+            userId: authUserId,
+          },
+        ],
+      ],
+    };
+  }, [authUserId, forumVoteStatus, isLoggedIn, jwtAccessToken, pageId]);
+
+  useUpdateStore(
+    forumVoteUpdateStore.conditions,
+    forumVoteUpdateStore.actions,
+    forumVoteUpdateStore.arguments
+  );
 
   if (status === 'loading') {
     return <LoadingBackdrop />;

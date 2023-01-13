@@ -7,8 +7,9 @@ import Cookies from 'js-cookie';
 import { authActions } from '../../store/reducers/auth-reducer';
 import { userActions } from '../../store/reducers/user-reducer';
 import { viewForumsActions } from '../../store/reducers/viewed-forums-reducer';
-import { forumVoteActions } from '../../store/reducers/forum-votes-reducer';
+import { forumVoteActions } from '../../store/reducers/forum-vote-reducer';
 import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
+import { forumActions } from '../../store/reducers/forum-reducer';
 
 export default function Logout({ handleLogout }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -23,11 +24,12 @@ export default function Logout({ handleLogout }) {
     handleLogout(showModal);
   };
   const handleUserLogoutRequest = () => {
-    dispatch(authActions.resetData({}));
-    dispatch(userActions.onUserLogout({}));
-    dispatch(viewForumsActions.resetData({}));
+    dispatch(authActions.resetData());
+    dispatch(userActions.onUserLogout());
+    dispatch(viewForumsActions.resetData());
     dispatch(forumVoteActions.resetData());
     dispatch(commentVoteActions.resetData());
+    dispatch(forumActions.resetData());
     // remove refresh token cookie
     Cookies.remove('refresh-token');
     handleLogout(!showModal);

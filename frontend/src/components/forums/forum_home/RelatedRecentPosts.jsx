@@ -2,13 +2,14 @@
 import './PostPreview.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   selectAllViewedForums,
   viewForumsActions,
 } from '../../../store/reducers/viewed-forums-reducer';
 import { fetchUserForumsViewed } from '../../../services/forum';
 import { forumActions } from '../../../store/reducers/forum-reducer';
+import useUpdateStore from '../../../hooks/use-updateStore';
 
 export default function RelatedRecentPosts() {
   const dispatch = useDispatch();
@@ -17,20 +18,19 @@ export default function RelatedRecentPosts() {
   const { status } = useSelector((state) => state.viewedForums);
   const { userId: authUserId, isLoggedIn } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (status === 'idle') {
-      // fetch the forums viewed
-      if (isLoggedIn && authUserId !== null) {
-        dispatch(
-          fetchUserForumsViewed({
-            userId: authUserId,
-            page: 0,
-            size: 10,
-          })
-        );
-      }
-    }
-  }, [authUserId, dispatch, isLoggedIn, status]);
+  const forumViewsUpdateStore = useMemo(() => {
+    return {
+      conditions: [status === 'idle' && isLoggedIn && authUserId !== null],
+      actions: [[fetchUserForumsViewed]],
+      arguments: [[{ userId: authUserId, page: 0, size: 10 }]],
+    };
+  }, [authUserId, isLoggedIn, status]);
+
+  useUpdateStore(
+    forumViewsUpdateStore.conditions,
+    forumViewsUpdateStore.actions,
+    forumViewsUpdateStore.arguments
+  );
 
   if (status === 'success') {
     return (

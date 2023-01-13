@@ -151,7 +151,8 @@ export const forumEndpoints = {
   listVotes: (passedParams) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/list/votes`, {
       params: {
-        pageId: passedParams?.pageId,
+        pageId: passedParams.pageId,
+        userId: passedParams.userId,
       },
       headers: {
         'Content-Type': 'application/json',

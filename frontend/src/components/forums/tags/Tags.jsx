@@ -1,9 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { selectAllTags } from '../../../store/reducers/tags-reducer';
 import classes from './Tags.module.css';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
 import { fetchTags } from '../../../services/tag';
+import useUpdateStore from '../../../hooks/use-updateStore';
 
 export default function Tags() {
   const [searchedTag, setSearchedTag] = useState('');
@@ -16,12 +17,19 @@ export default function Tags() {
     dispatch(forumsActions.filterForums(`${tagId}`));
   };
 
-  useEffect(() => {
-    if (tags.length === 0) {
-      dispatch(fetchTags({ page: page - 1, size: 10 }));
-    }
-  }, [tags, dispatch, page]);
+  const tagsUpdateStore = useMemo(() => {
+    return {
+      conditions: [tags.length === 0],
+      actions: [[fetchTags]],
+      arguments: [[{ page: page - 1, size: 10 }]],
+    };
+  }, [page, tags.length]);
 
+  useUpdateStore(
+    tagsUpdateStore.conditions,
+    tagsUpdateStore.actions,
+    tagsUpdateStore.arguments
+  );
   // filtering tags by searched param, using user memo to memoizes the results
   // and only render if the results are different from the previous ones.
   const filteredTags = useMemo(() => {

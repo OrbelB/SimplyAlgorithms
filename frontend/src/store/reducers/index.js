@@ -1,6 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import { authSlice } from './auth-reducer';
-import { httpSlice } from './httpStatus-reducer';
 import { userSlice } from './user-reducer';
 import { forumsSlice } from './forums-reducer';
 import { forumSlice } from './forum-reducer';
@@ -10,11 +9,10 @@ import { commentVotesSlice } from './comment-vote-reducer';
 import { viewedForumsSlice } from './viewed-forums-reducer';
 import { topicSlice } from './topic-reducer';
 import { topicVotesSlice } from './topic-votes-reducer';
-import { forumVotesSlice } from './forum-votes-reducer';
+import { forumVotesSlice } from './forum-vote-reducer';
 
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
-  http: httpSlice.reducer,
   user: userSlice.reducer,
   forums: forumsSlice.reducer,
   forum: forumSlice.reducer,

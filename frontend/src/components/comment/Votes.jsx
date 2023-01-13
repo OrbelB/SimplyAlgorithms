@@ -7,7 +7,6 @@ import { voteComment, deleteCommentVote } from '../../services/comment';
 import styles from './Upvotes.module.css';
 import { selectAllCommentVotes } from '../../store/reducers/comment-vote-reducer';
 
-// TODO fixed votes not working properly
 export default function Votes({ commentId, upVotes, downVotes }) {
   const location = useLocation();
   const navigate = useNavigate();

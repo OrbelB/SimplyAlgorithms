@@ -82,12 +82,14 @@ export const selectSortedForums = createSelector(
   (state) => state.forums.sortBy,
   (allForums, sortBy) =>
     [...allForums].sort((a, b) => {
-      if (Number.isNaN(a[sortBy.toString().trim()])) {
+      if (Number.isNaN(Number.parseInt(a[sortBy.toString().trim()], 10))) {
         if (sortBy.toString().trim() === 'title') {
-          return a[sortBy.toString().trim()].localeCompare(
-            b[sortBy.toString().trim()]
-          );
+          return a[sortBy.toString().trim()]
+            .toUpperCase()
+            .trim()
+            .localeCompare(b[sortBy.toString().trim()].toUpperCase().trim());
         }
+
         return b[sortBy.toString().trim()].localeCompare(
           a[sortBy.toString().trim()]
         );

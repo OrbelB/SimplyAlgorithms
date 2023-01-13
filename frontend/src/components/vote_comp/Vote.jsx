@@ -1,42 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import cx from 'classnames';
 import { BiLike, BiDislike } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchVotes, voteForum, deleteForumVote } from '../../services/forum';
+import { voteForum, deleteForumVote } from '../../services/forum';
 import fp from './vote.module.css';
-import { selectByForumVoteId } from '../../store/reducers/forum-votes-reducer';
+import { selectByForumVoteId } from '../../store/reducers/forum-vote-reducer';
 
 // TODO fix forum vote not working properly
 export default function Vote({ like_, dislike_ }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { status } = useSelector((state) => state.forumVotes);
   const {
     isLoggedIn,
     jwtAccessToken,
     userId: authUserId,
   } = useSelector((state) => state.auth);
   const { forum } = useSelector((state) => state.forum);
-  const currentUserHasVoted = useSelector((state) =>
-    selectByForumVoteId(state, {
-      pageId: forum?.pageId,
-      userId: authUserId,
-    })
-  );
 
-  if (status === 'idle' && isLoggedIn) {
-    dispatch(
-      fetchVotes({ pageId: forum?.pageId, accessToken: jwtAccessToken })
-    );
-  }
+  const userVote = useSelector((state) =>
+    selectByForumVoteId(state, { userId: authUserId, pageId: forum.pageId })
+  );
 
   const [like, setlike] = useState(like_);
   const [dislike, setdislike] = useState(dislike_);
-  const [likeActive, setLikeActive] = useState(!!currentUserHasVoted);
-  const [dislikeActive, setdisLikeActive] = useState(!!currentUserHasVoted);
+
+  const likeActive = useMemo(() => {
+    return userVote !== undefined && userVote.likeDislike;
+  }, [userVote]);
+
+  const dislikeActive = useMemo(() => {
+    return userVote !== undefined && !userVote.likeDislike;
+  }, [userVote]);
+
   const likeForum = () => {
     if (!isLoggedIn && jwtAccessToken === '') {
       navigate('/login', { state: { from: location } });
@@ -50,7 +48,6 @@ export default function Vote({ like_, dislike_ }) {
           accessToken: jwtAccessToken,
         })
       );
-      setLikeActive(false);
       setlike(like - 1);
     } else {
       dispatch(
@@ -63,7 +60,6 @@ export default function Vote({ like_, dislike_ }) {
           accessToken: jwtAccessToken,
         })
       );
-      setLikeActive(true);
       setlike(like + 1);
       if (dislikeActive) {
         dispatch(
@@ -76,7 +72,6 @@ export default function Vote({ like_, dislike_ }) {
             accessToken: jwtAccessToken,
           })
         );
-        setdisLikeActive(false);
         setlike(like + 1);
         setdislike(dislike - 1);
       }
@@ -97,7 +92,6 @@ export default function Vote({ like_, dislike_ }) {
           accessToken: jwtAccessToken,
         })
       );
-      setdisLikeActive(false);
       setdislike(dislike - 1);
     } else {
       dispatch(
@@ -110,7 +104,6 @@ export default function Vote({ like_, dislike_ }) {
           accessToken: jwtAccessToken,
         })
       );
-      setdisLikeActive(true);
       setdislike(dislike + 1);
       if (likeActive) {
         dispatch(
@@ -123,7 +116,6 @@ export default function Vote({ like_, dislike_ }) {
             accessToken: jwtAccessToken,
           })
         );
-        setLikeActive(false);
         setlike(dislike + 1);
         setlike(like - 1);
       }

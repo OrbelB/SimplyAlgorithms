@@ -46,7 +46,6 @@ export default function LoginForm() {
   const onSubmitFormHandler = (event) => {
     event.preventDefault();
     if (!isFormValid) return;
-
     dispatch(login({ username, password }));
     resetPasswordHandler();
     resetUsernameHandler();
