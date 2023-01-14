@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useValidateInput from '../../hooks/use-ValidateInput';
 import { register } from '../../services/auth';
-import generateRandomNumber from '../../utilities/random-index-generator';
+import imageToStringBase64 from '../../utilities/image-to-data-url';
 
 export default function SignUp({ showSignUp, handleOnClose }) {
   const { status } = useSelector((state) => state.auth);
@@ -75,9 +75,11 @@ export default function SignUp({ showSignUp, handleOnClose }) {
   )
     isFormValid = true;
 
-  const registerUserInfo = (e) => {
+  const registerUserInfo = async (e) => {
     e.preventDefault();
     if (!isFormValid) return;
+    let profilePicture;
+    await imageToStringBase64(image).then((value) => (profilePicture = value));
     dispatch(
       register({
         lastName,
@@ -86,10 +88,7 @@ export default function SignUp({ showSignUp, handleOnClose }) {
         password,
         email,
         dob,
-        profilePicture: `https://cdn2.thecatapi.com/images/${generateRandomNumber(
-          1,
-          20
-        )}.jpg`,
+        profilePicture,
       })
     );
     emailReset();

@@ -143,6 +143,13 @@ export default function MainNavigation() {
                       type="button"
                       className="dropdown-item"
                       onClick={handleLogout}
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'enter') {
+                          handleLogout();
+                        }
+                      }}
+                      role="button"
                     >
                       Logout
                     </i>

@@ -17,7 +17,7 @@ export default function NestedDropdownMenu({ selection, title, links }) {
       </i>
       <ul className="dropdown-menu dropdown-submenu">
         {selection?.map((topic, index) => (
-          <li key={index}>
+          <li key={`${topic[index]}`}>
             <NavLink
               className="dropdown-item"
               to={links[index]}

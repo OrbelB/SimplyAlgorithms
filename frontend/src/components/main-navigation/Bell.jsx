@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import { useState } from 'react';
 import cx from 'classnames';
 import styles from './Bell.module.css';
@@ -16,6 +17,13 @@ export default function Bell() {
           data-bs-toggle="modal"
           data-bs-target="#featureunderconstruction"
           className={cx('bi bi-bell-fill', styles['custom-bell'])}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'enter') {
+              handleBellButtonClicked();
+            }
+          }}
+          role="button"
         />
       ) : (
         <span
@@ -23,6 +31,13 @@ export default function Bell() {
           data-bs-toggle="modal"
           data-bs-target="#featureunderconstruction"
           className={cx('bi bi-bell', styles['custom-bell'])}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'enter') {
+              handleBellButtonClicked();
+            }
+          }}
+          role="button"
         />
       )}
 

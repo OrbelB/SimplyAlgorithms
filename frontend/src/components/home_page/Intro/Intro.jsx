@@ -1,15 +1,16 @@
 import './Intro.css';
 // import { NavLink } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import SignUp from '../../login/SignUp';
 
 export default function Intro() {
   const { isLoggedIn, jwtAccessToken } = useSelector((state) => state.auth);
   const [showSignUp, setShowSingUp] = useState(false);
-  function handleShowSingUpModal() {
+  const handleShowSingUpModal = useCallback(() => {
     setShowSingUp(!showSignUp);
-  }
+  }, [showSignUp]);
+
   return (
     <div className="section">
       <div className="container-fluid pb-5">

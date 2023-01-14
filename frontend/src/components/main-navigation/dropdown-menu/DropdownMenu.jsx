@@ -16,9 +16,9 @@ export default function DropdownMenu({
         {dropdownTitle}
       </span>
       <ul className="dropdown-menu">
-        {nestedDropdownSelections.map((nestedDropdown, index) => (
+        {nestedDropdownSelections.map((nestedDropdown) => (
           <NestedDropdownMenu
-            key={index}
+            key={`${nestedDropdown.title}`}
             title={nestedDropdown.title}
             selection={nestedDropdown.selections}
             links={nestedDropdown.links}

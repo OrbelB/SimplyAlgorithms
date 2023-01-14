@@ -1,13 +1,10 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import image from '../../../assets/noPictureTemplate.png';
-import { currentUserInfo } from '../../../pages/UserProfilePage';
 import { updateUserData } from '../../../services/user';
 import useValidateInput from '../../../hooks/use-ValidateInput';
-import generateRandomNumber from '../../../utilities/random-index-generator';
+import imageToStringBase64 from '../../../utilities/image-to-data-url';
 
 export default function ProfileTabForm() {
   const { biography, profilePicture } = useSelector((state) => state.user);
@@ -19,10 +16,8 @@ export default function ProfileTabForm() {
   const navigate = useNavigate();
   const {
     value: newBio,
-    hasError: newBioInputHasError,
     valueIsValid: newBioIsValid,
     valueChangeHandler: newBioChangedHandler,
-    inputBlurHandler: newBioBlurHandler,
     reset: resetNewBioHandler,
   } = useValidateInput((value) => value.trim() !== '', biography);
 
@@ -31,20 +26,19 @@ export default function ProfileTabForm() {
     setImage(e.target.files[0]);
   };
 
-  const updateData = () => {
+  const updateData = async () => {
     if (!isFormValid) return;
+    let newProfilePicture;
+    await imageToStringBase64(images).then(
+      (value) => (newProfilePicture = value)
+    );
     dispatch(
       updateUserData({
         updatedUserData: {
           userId: authUserId,
           biography: newBio,
           profilePicture:
-            images === undefined
-              ? profilePicture
-              : `https://cdn2.thecatapi.com/images/${generateRandomNumber(
-                  1,
-                  20
-                )}.jpg`,
+            images === undefined ? profilePicture : newProfilePicture,
         },
         accessToken: jwtAccessToken,
       })

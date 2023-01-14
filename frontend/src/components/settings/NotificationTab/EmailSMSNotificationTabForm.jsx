@@ -1,12 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useSelector } from 'react-redux';
-import { currentUserInfo } from '../../../pages/UserProfilePage';
 
 export default function EmailSMSNotificationTabForm() {
   const { email, phoneNumber } = useSelector((state) => state.user);
   return (
     <div>
-      return (
       <div>
         <form>
           <label className="d-block h5">Email Notifications</label>
@@ -155,7 +153,6 @@ export default function EmailSMSNotificationTabForm() {
           </button>
         </form>
       </div>
-      );
     </div>
   );
 }
