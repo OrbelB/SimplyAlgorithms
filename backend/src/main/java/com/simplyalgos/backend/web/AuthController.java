@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 
@@ -47,7 +46,7 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody SignupDTO signupDTO) throws Exception {
         userDetailsService.createUser(signupDTO);
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signupDTO.username(), signupDTO.password()));
+                new UsernamePasswordAuthenticationToken(signupDTO.getUsername(), signupDTO.getPassword()));
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 

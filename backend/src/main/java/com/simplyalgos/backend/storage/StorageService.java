@@ -1,7 +1,5 @@
 package com.simplyalgos.backend.storage;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 
 public interface StorageService {
@@ -9,8 +7,8 @@ public interface StorageService {
 
     byte[] getFile(String fileName);
 
-    String uploadImageFile(MultipartFile file);
+    String uploadImageFile(File file);
 
-    String updateProfilePicture(MultipartFile file, String oldPath);
+    String updateProfilePicture(File file, String oldPath);
 
 }

@@ -6,13 +6,13 @@ import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.repositories.UserRepository;
-import com.simplyalgos.backend.user.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+
 import java.text.MessageFormat;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -64,8 +64,10 @@ public class UserServiceImpl implements UserService {
             if (isNotNullNorEmptyNorBlank(userToUpdate.getFirstName())) user.setFirstName(userToUpdate.getFirstName());
             if (isNotNullNorEmptyNorBlank(userToUpdate.getLastName())) user.setLastName(userToUpdate.getLastName());
             if (userToUpdate.getDob() != null) user.setDob(userToUpdate.getDob());
-            if (isNotNullNorEmptyNorBlank(userToUpdate.getProfilePicture())) {
-                user.setProfilePicture(userToUpdate.getProfilePicture());
+            if (userToUpdate.getProfilePicture() != null) {
+                user.setProfilePicture(storageService
+                        .updateProfilePicture(userToUpdate.getProfilePicture(),
+                                user.getProfilePicture()));
             }
             if (isNotNullNorEmptyNorBlank(userToUpdate.getPhoneNumber()))
                 user.setPhoneNumber(userToUpdate.getPhoneNumber());

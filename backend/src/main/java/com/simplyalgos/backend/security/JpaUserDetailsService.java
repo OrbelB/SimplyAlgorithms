@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+
 import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.Set;
@@ -46,13 +47,16 @@ public class JpaUserDetailsService implements UserDetailsService {
     @Transactional
     public void createUser(SignupDTO userDto) throws Exception {
         //assign user role by default : student
-        if (userRepository.findByUsername(userDto.username()).isPresent()) {
+        if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
             throw new Exception("username exists!");
         }
         User user = userRegisteredMapper.create(userDto);
-        user.setProfilePicture(userDto.profilePicture());
+        if (userDto.getProfilePicture() != null) {
+            log.info(userDto.getProfilePicture() +  "check if the correct method is call");
+            user.setProfilePicture(storageService.uploadImageFile(userDto.getProfilePicture()));
+        }
         user.setRoles(Set.of(assignRoleToNewUser("STUDENT")));
-        user.setPassword(passwordEncoder.encode(userDto.password()));
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userRepository.save(user);
     }
 
@@ -67,9 +71,9 @@ public class JpaUserDetailsService implements UserDetailsService {
     public UUID updatePassword(UpdatePassword updatePassword) {
         Optional<User> optionalUser = userRepository.findById(updatePassword.userId());
         User user;
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             user = optionalUser.get();
-            if(passwordEncoder.matches(updatePassword.oldPassword(), user.getPassword())){
+            if (passwordEncoder.matches(updatePassword.oldPassword(), user.getPassword())) {
                 user.setPassword(passwordEncoder.encode(updatePassword.newPassword()));
                 return updatePassword.userId();
             }
@@ -78,7 +82,7 @@ public class JpaUserDetailsService implements UserDetailsService {
                             .format("password provided does not match with our records for user with id {0}",
                                     updatePassword.userId()));
         }
-        throw new UsernameNotFoundException(MessageFormat.format("User with id {0} not found" , updatePassword.userId()));
+        throw new UsernameNotFoundException(MessageFormat.format("User with id {0} not found", updatePassword.userId()));
     }
 
     @Transactional
