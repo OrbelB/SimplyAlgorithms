@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
-import image from "../../assets/nav-logo.png";
-import Logout from "../logout/Logout";
-import Bell from "./Bell";
-import DropdownMenu from "./dropdown-menu/DropdownMenu";
-import "./MainNavigation.css";
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import image from '../../assets/nav-logo.png';
+import Logout from '../logout/Logout';
+import Bell from './Bell';
+import DropdownMenu from './dropdown-menu/DropdownMenu';
+import './MainNavigation.css';
 
 const nestedDropdownMenu = [
   {
-    title: "Sorting",
-    selections: ["Selection Sort", "Bubble Sort"],
-    links: ["selection-sort", "/wiki/bubblesort"],
+    title: 'Sorting',
+    selections: ['Selection Sort', 'Bubble Sort'],
+    links: ['selection-sort', '/wiki/bubblesort'],
   },
   {
-    title: "Trees",
-    selections: ["Binary Search Trees", "Two Trees"],
-    links: ["/search/binarysearchtree", "two-tree"],
+    title: 'Trees',
+    selections: ['Binary Search Trees', 'Two Trees'],
+    links: ['/search/binarysearchtree', 'two-tree'],
   },
   {
-    title: "Graphs",
-    selections: ["DFS", "BFS"],
-    links: ["dfs", "/search/bfs"],
+    title: 'Graphs',
+    selections: ['DFS', 'BFS'],
+    links: ['dfs', '/search/bfs'],
   },
 ];
 export default function MainNavigation() {
@@ -36,7 +36,7 @@ export default function MainNavigation() {
       {showModal && <Logout handleLogout={handleLogout} />}
       <nav
         className="navbar navbar-expand-lg border-bottom border-dark"
-        style={{ minHeight: "120px" }}
+        style={{ minHeight: '120px' }}
       >
         <div className="container-fluid justify-content-between">
           <div className="d-flex">
@@ -49,7 +49,7 @@ export default function MainNavigation() {
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-              <span className="navbar-toggler-icon"></span>
+              <span className="navbar-toggler-icon" />
             </button>
             <div
               className="collapse navbar-collapse mt-4  mt-md-0 mb-3 mb-md-0"
@@ -61,17 +61,21 @@ export default function MainNavigation() {
                   nestedDropdownSelections={nestedDropdownMenu}
                 />
                 <li className="nav-item">
-                  <NavLink className="nav-link p-3" aria-current="page" to={"home"}>
+                  <NavLink
+                    className="nav-link p-3"
+                    aria-current="page"
+                    to="home"
+                  >
                     Home
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link p-3" to={"dashboard"}>
+                  <NavLink className="nav-link p-3" to="dashboard">
                     Dashboard
                   </NavLink>
                 </li>
                 <li className="nav-item me-auto">
-                  <NavLink className="nav-link p-3" to={"forums"}>
+                  <NavLink className="nav-link p-3" to="forums">
                     Forums
                   </NavLink>
                 </li>
@@ -79,12 +83,14 @@ export default function MainNavigation() {
             </div>
           </div>
           <div className="navbar-nav flex-row d-none d-md-flex">
-            <img className="nav-item me-lg-1 p-0" 
-                  src={image}
-                  height="60px"
-                  width="auto"
-                  alt="nav-logo"
-                  loading="lazy"/>
+            <img
+              className="nav-item me-lg-1 p-0"
+              src={image}
+              height="60px"
+              width="auto"
+              alt="nav-logo"
+              loading="lazy"
+            />
           </div>
           <div className="navbar-nav flex-row">
             {/* <form className="nav-item me-2 d-flex" role="search">
@@ -98,7 +104,7 @@ export default function MainNavigation() {
                 <span className="bi bi-search"></span>
               </button>
             </form> */}
-            <div className="nav-item m-auto  me-3 me-lg-1" >
+            <div className="nav-item m-auto  me-3 me-lg-1">
               <Bell />
             </div>
             <div className="nav-item m-auto dropdown  me-3 me-lg-1">
@@ -122,12 +128,12 @@ export default function MainNavigation() {
                 aria-labelledby="navbarDropdownMenuAvatar"
               >
                 <li>
-                  <NavLink className="dropdown-item" to={"userprofile"}>
+                  <NavLink className="dropdown-item" to="userprofile">
                     My Profile
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink className="dropdown-item" to={"settings/profile"}>
+                  <NavLink className="dropdown-item" to="settings/profile">
                     Settings
                   </NavLink>
                 </li>
@@ -141,8 +147,8 @@ export default function MainNavigation() {
                       Logout
                     </i>
                   ) : (
-                    <NavLink className="dropdown-item" to={"login"}>
-                      {"login"}
+                    <NavLink className="dropdown-item" to="login">
+                      login
                     </NavLink>
                   )}
                 </li>
