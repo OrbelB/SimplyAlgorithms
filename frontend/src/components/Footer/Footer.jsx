@@ -18,9 +18,7 @@ export default function Footer() {
           />
         </div>
         <div className="col-md-2 mt-4">
-          <div className={cx(style.sub_name)}>
-            <h6 className="text-uppercase fw-old mb-4">Links</h6>
-          </div>
+          <h5 className="text-uppercase fw-old mb-4">Links</h5>
           <div className={cx(style.web_nav)}>
             <ul>
               <li>
@@ -81,7 +79,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="col-md-2 mt-4">
-          <h6 className="text-uppercase fw-old mb-4">Socials</h6>
+          <h5 className="text-uppercase fw-old mb-4">Socials</h5>
           <div className={cx(style.web_soc, 'row')}>
             <ul>
               <li>
@@ -109,23 +107,23 @@ export default function Footer() {
         </div>
         <div className="col mt-4">
           <div className="row">
-            <h6 text className="text-center">
+            <h5 text className="text-center">
               CONTACT US
-            </h6>
-            <div className={cx(style.email)}>
-              <p className="text-center">
-                <i className="bi bi-envelope-fill mr-3" /> info@gmail.com
-              </p>
-            </div>
+            </h5>
+            <p className="text-center">
+              <div className={cx(style.email)}>info@gmail.com</div>
+            </p>
           </div>
           <div className="row text-center">
-            <h6 className="text-center text-uppercase">Meet the Team</h6>
+            <h5 className="text-center text-uppercase">Meet the Team</h5>
             <form>
               <div className={cx(style.team_butt)}>
                 <button type="button" className="btn btn-outline-dark">
-                  <NavLink aria-current="page" to="/team">
-                    TEAM PAGE
-                  </NavLink>
+                  <div className={cx(style.team_butt)}>
+                    <NavLink aria-current="page" to="/team">
+                      TEAM PAGE
+                    </NavLink>
+                  </div>
                 </button>
               </div>
             </form>

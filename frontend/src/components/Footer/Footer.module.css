@@ -50,10 +50,16 @@
     height: 135px;
     margin-left: 5%;
   }
+  .email {
+    font-size: 15pt;
+  }
+  .team_butt {
+    font-size: 12pt;
+  }
 }
 @media only screen and (max-width: 1000px) {
   .web_soc {
-    margin-left: 2px;
+    margin-left: 10px;
   }
   .web-logo {
     text-align: center;
@@ -64,9 +70,12 @@
   .name {
     display: none;
   }
+  .email {
+    font-size: 15pt;
+  }
 }
 
-@media only screen and (max-width: 426px) {
+@media only screen and (max-width: 500px) {
   .web-logo {
     text-align: center;
     width: 125px;
@@ -79,6 +88,7 @@
   .web_soc {
     border: none;
     font-size: 18px;
+    margin-left: 0;
   }
   .box {
     text-align: center;
@@ -88,13 +98,17 @@
     padding-left: 30px;
   }
   .nav-footer-link {
-    font-size: 12pt;
+    font-size: 15pt;
   }
 
   .social-link {
-    font-size: 12pt;
+    font-size: 15pt;
   }
   .email {
+    font-size: 15pt;
+  }
+
+  .team_butt {
     font-size: 12pt;
   }
 }
