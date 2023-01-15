@@ -1,5 +1,11 @@
 @media screen and (min-width: 1100px) {
-    .nav-link {
-        font-size: 1.5em;
-    }
+  .nav-link {
+    font-size: 1.5em;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .ime {
+    height: 45px;
+  }
 }

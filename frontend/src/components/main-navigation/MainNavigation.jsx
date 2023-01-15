@@ -84,7 +84,7 @@ export default function MainNavigation() {
           </div>
           <div className="navbar-nav flex-row d-none d-md-flex">
             <img
-              className="nav-item me-lg-1 p-0"
+              className="ime nav-item me-lg-1 p-0"
               src={image}
               height="60px"
               width="auto"
