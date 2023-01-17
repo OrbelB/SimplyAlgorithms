@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface TagRepository extends JpaRepository<Tag, UUID> {
@@ -20,4 +21,6 @@ public interface TagRepository extends JpaRepository<Tag, UUID> {
                                           @Param("page_id") String pageId);
 
     List<Tag> findAllByTagIdIsNotIn(Collection<UUID> tagId);
+
+    Set<Tag> findAllByTagStartingWith(String tag);
 }

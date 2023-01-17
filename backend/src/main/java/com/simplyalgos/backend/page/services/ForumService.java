@@ -16,6 +16,8 @@ public interface ForumService {
 
     ObjectPagedList<?> listForumPages(Pageable pageable);
 
+    ObjectPagedList<?> filterForumsByTag(Pageable pageable, String tag);
+
     UUID createForum(ForumDTO forumDTO);
 
     LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike);

@@ -70,4 +70,9 @@ public class TagServiceImpl implements TagService {
                         tagsPage.getPageable().getPageSize()
                 ), tagsPage.getTotalElements());
     }
+
+    @Override
+    public Object filterByName(String filterBy) {
+        return tagRepository.findAllByTagStartingWith(filterBy);
+    }
 }

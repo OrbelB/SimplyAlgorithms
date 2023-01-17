@@ -99,25 +99,6 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
-//        //set up permissions on public endpoints
-//        http.authorizeRequests((authz) -> authz
-//
-//                        .antMatchers("/h2-console/**", "/console/*").permitAll()
-//                        .antMatchers("/css/**", "/js/**", "/images/**",
-//                                "/webjars/**", "/**/*.html", "/**/*.css", "/**/*.js",
-//                                "/favicon.ico").permitAll()
-//                        .antMatchers("/api/public/**").permitAll()
-//                        .antMatchers(HttpMethod.GET, "/forums/list**", "/forums/*", "/forums/list/**").permitAll()
-//                        .antMatchers(HttpMethod.GET, "/topics/list**", "/topics/*", "/topics/list/**").permitAll()
-//                        .antMatchers("/comments/**").permitAll()
-//                        .antMatchers(HttpMethod.GET, "/tags/**").permitAll())
-//                .authorizeRequests()
-//                .anyRequest()
-//                .authenticated().and()
-//                .httpBasic(Customizer.withDefaults())
-//                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
-
-
         //h2 console config not needed but will keep it open for now
         http.headers().frameOptions().sameOrigin();
 

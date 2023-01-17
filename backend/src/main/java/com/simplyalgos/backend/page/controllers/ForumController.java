@@ -28,11 +28,16 @@ import java.util.UUID;
 @RestController
 public class ForumController {
     private final ForumService forumService;
+
     @GetMapping("/list")
-    public ResponseEntity<?> getPageList(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
-                                         @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
-                                         @RequestParam(name = "sortBy", required = false) String sortBy) {
-        if (sortBy != null) {
+    public ResponseEntity<?> getPageList(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                         @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                         @RequestParam(name = "sortBy", required = false) String sortBy,
+                                         @RequestParam(name = "filterBy", required = false) String filterBy) {
+        if(filterBy != null && !filterBy.isBlank() && !filterBy.isEmpty()) {
+            return ResponseEntity.ok(forumService.filterForumsByTag(PageRequest.of(page, size), filterBy));
+        }
+        if (sortBy != null && !sortBy.isEmpty()) {
             if (sortBy.equals("upVotes") || sortBy.equals("createdDate")) {
                 return ResponseEntity.ok(forumService.listForumPages(PageRequest.of(page, size, Sort.by(sortBy).descending())));
             }
@@ -99,9 +104,10 @@ public class ForumController {
 
     @GetMapping(path = "/list/votes", produces = "application/json")
     public ResponseEntity<?> listVotesByForumId(@RequestParam(name = "pageId") UUID pageId,
-                                                @RequestParam(name ="userId") UUID userId) {
+                                                @RequestParam(name = "userId") UUID userId) {
         return ResponseEntity.ok(forumService.getForumVoteByPageAndUserId(pageId, userId));
     }
+
     @GetMapping(path = "/list/forums-view")
     public ResponseEntity<?> listForumsViewedByUser(
             @RequestParam(name = "userId") UUID userId,
@@ -110,6 +116,7 @@ public class ForumController {
     ) {
         return ResponseEntity.ok(forumService.listForumsByUserViewForums(userId, PageRequest.of(page, size)));
     }
+
     @PostMapping(path = "/view", produces = "application/json")
     public ResponseEntity<?> addUserView(@RequestParam(name = "userId") UUID userId,
                                          @RequestParam(name = "pageId") UUID pageId) {

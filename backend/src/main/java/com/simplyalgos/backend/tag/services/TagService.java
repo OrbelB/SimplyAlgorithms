@@ -15,4 +15,6 @@ public interface TagService {
     List<Tag> mapTagToPageId(PageEntity page, Set<TagDTO> tags);
 
     ObjectPagedList<?> listTags(Pageable pageable);
+
+    Object filterByName(String filterBy);
 }

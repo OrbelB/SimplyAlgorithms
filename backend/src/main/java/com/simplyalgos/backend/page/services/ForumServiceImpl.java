@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -58,6 +59,22 @@ public class ForumServiceImpl implements ForumService {
                 forumPage.getTotalElements()
         );
     }
+
+    @Override
+    public ObjectPagedList<?> filterForumsByTag(Pageable pageable, String tag) {
+        Page<Forum> forumPage = forumRepository.findAllByPageEntityId_Tags_Tag(tag, pageable);
+        return new ObjectPagedList<>(
+                forumPage.stream()
+                        .map(forumMapper::forumToFullForumDto)
+                        .collect(Collectors.toList()),
+                PageRequest.of(
+                        forumPage.getPageable().getPageNumber(),
+                        forumPage.getPageable().getPageSize(),
+                        forumPage.getSort()),
+                forumPage.getTotalElements()
+        );
+    }
+
 
     @Transactional
     @Override

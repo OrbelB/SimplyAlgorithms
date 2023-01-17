@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 
 import org.springframework.web.bind.annotation.*;
@@ -67,10 +67,10 @@ public class AuthController {
     @PostMapping("/token")
     public ResponseEntity<?> token(@RequestBody TokenDTO tokenDTO) {
         try {
-            Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
+            Authentication authentication = refreshTokenAuthProvider
+                    .authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
             //Jwt jwt = (Jwt) authentication.getCredentials();
             log.info("authentication has this data " + authentication.getPrincipal().getClass());
-            //
             return userDetailsService.IsUserAccountNonLockedAndAuthenticated(authentication.getName()) ?
                     ResponseEntity.ok(tokenGenerator.createToken(authentication)) :
                     ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

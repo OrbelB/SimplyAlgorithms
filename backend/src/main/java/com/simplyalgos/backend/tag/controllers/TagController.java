@@ -17,7 +17,12 @@ public class TagController {
 
     @GetMapping("/list")
     public ResponseEntity<?> listTags(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                      @RequestParam(name = "size", defaultValue = "5") Integer size) {
+                                      @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                      @RequestParam(name = "filterBy", required = false, defaultValue = "") String filterBy) {
+
+        if(filterBy != null && !filterBy.isEmpty() && !filterBy.isBlank()){
+            return ResponseEntity.ok(tagService.filterByName(filterBy));
+        }
         return ResponseEntity.ok(tagService.listTags(PageRequest.of(page, size)));
     }
 }
