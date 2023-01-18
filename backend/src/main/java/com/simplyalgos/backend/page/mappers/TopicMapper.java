@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.page.mappers;
 
 import com.simplyalgos.backend.page.domains.Topic;
-import com.simplyalgos.backend.page.dto.FullTopicDTO;
+import com.simplyalgos.backend.page.dtos.FullTopicDTO;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

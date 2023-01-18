@@ -3,7 +3,7 @@ package com.simplyalgos.backend.page.services;
 import com.simplyalgos.backend.page.repositories.TopicStepRepository;
 import com.simplyalgos.backend.page.domains.TopicSteps;
 import com.simplyalgos.backend.page.domains.*;
-import com.simplyalgos.backend.page.dto.*;
+import com.simplyalgos.backend.page.dtos.*;
 import com.simplyalgos.backend.page.mappers.TopicMapper;
 import com.simplyalgos.backend.page.repositories.CodeSnippetRepository;
 import com.simplyalgos.backend.page.repositories.TopicExternalResourceRepository;

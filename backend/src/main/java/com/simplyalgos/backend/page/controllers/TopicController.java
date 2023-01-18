@@ -2,8 +2,8 @@ package com.simplyalgos.backend.page.controllers;
 
 import com.simplyalgos.backend.comment.security.DeleteVotePermission;
 import com.simplyalgos.backend.page.services.TopicService;
-import com.simplyalgos.backend.page.dto.FullTopicDTO;
-import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
+import com.simplyalgos.backend.page.dtos.FullTopicDTO;
+import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;
 import com.simplyalgos.backend.page.security.perms.CreateVotePermission;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.security.perms.CreateReportPermission;

@@ -1,9 +1,9 @@
 package com.simplyalgos.backend.page.services;
 
 import com.simplyalgos.backend.page.domains.PageVoteId;
-import com.simplyalgos.backend.page.dto.ForumDTO;
-import com.simplyalgos.backend.page.dto.FullForumDTO;
-import com.simplyalgos.backend.page.dto.LikeDislikeDTO;
+import com.simplyalgos.backend.page.dtos.ForumDTO;
+import com.simplyalgos.backend.page.dtos.FullForumDTO;
+import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;

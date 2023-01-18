@@ -1,8 +1,8 @@
 package com.simplyalgos.backend.page.mappers;
 
 import com.simplyalgos.backend.page.domains.Forum;
-import com.simplyalgos.backend.page.dto.ForumDTO;
-import com.simplyalgos.backend.page.dto.FullForumDTO;
+import com.simplyalgos.backend.page.dtos.ForumDTO;
+import com.simplyalgos.backend.page.dtos.FullForumDTO;
 
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
