@@ -13,8 +13,8 @@ const forumsAdapter = createEntityAdapter({
 const initialState = forumsAdapter.getInitialState({
   status: 'idle',
   error: '',
-  sortBy: 'createdDate',
   filterBy: '',
+  sortBy: '',
   totalElements: 0,
   totalPages: 0,
 });
@@ -24,12 +24,13 @@ export const forumsSlice = createSlice({
   initialState,
   reducers: {
     setForums: (state, action) => {
-      forumsAdapter.upsertMany(state, action.payload?.forums);
+      forumsAdapter.upsertMany(state, action.payload.forums);
     },
     resetData: (state) => {
       forumsAdapter.removeAll(state);
       state.status = 'idle';
       state.error = '';
+      state.sortBy = '';
     },
     sortForums: (state, action) => {
       state.filterBy = '';
@@ -37,7 +38,6 @@ export const forumsSlice = createSlice({
     },
     filterForums: (state, action) => {
       state.filterBy = action.payload;
-      state.sortBy = 'createdDate';
     },
     updateForum: (state, action) => {
       forumsAdapter.upsertOne(state, action.payload?.forum);
@@ -82,6 +82,7 @@ export const selectSortedForums = createSelector(
   (state) => state.forums.sortBy,
   (allForums, sortBy) =>
     [...allForums].sort((a, b) => {
+      if (sortBy === '') return allForums;
       if (Number.isNaN(Number.parseInt(a[sortBy.toString().trim()], 10))) {
         if (sortBy.toString().trim() === 'title') {
           return a[sortBy.toString().trim()]
@@ -89,11 +90,11 @@ export const selectSortedForums = createSelector(
             .trim()
             .localeCompare(b[sortBy.toString().trim()].toUpperCase().trim());
         }
-
         return b[sortBy.toString().trim()].localeCompare(
           a[sortBy.toString().trim()]
         );
       }
+
       return b[sortBy.toString().trim()] - a[sortBy.toString().trim()];
     })
 );
