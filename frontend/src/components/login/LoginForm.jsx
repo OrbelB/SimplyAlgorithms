@@ -9,6 +9,7 @@ import useValidateInput from '../../hooks/use-ValidateInput';
 import { login } from '../../services/auth';
 import styles from './LoginForm.module.css';
 import PasswordReset from './PasswordReset';
+import ConfirmPopup from '../confirmation/ConfirmPopup';
 
 export default function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -57,8 +58,27 @@ export default function LoginForm() {
       Cookies.set('refresh-token', jwtRefreshToken, { expires: 7 });
     }
   }
+  const headermes = 'header';
+  const bodymes = 'body';
+  const footermes = 'footer';
+  const [showNotification, setShowNotification] = useState(false);
+  const routePage = false;
+  const goToPage = '';
+  const reloadPage = true;
+
   return (
     <>
+      {showNotification && (
+        <ConfirmPopup
+          messageHeader={headermes}
+          messageBody={bodymes}
+          messageFooter={footermes}
+          setShowNotification={setShowNotification}
+          routePage={routePage}
+          goToPage={goToPage}
+          reloadPage={reloadPage}
+        />
+      )}
       {error !== '' && (
         <div className="col ms-0 p-2 alert alert-danger align-items-center align-content-center">
           <p className="text-center small">credentials are wrong!</p>
@@ -157,7 +177,8 @@ export default function LoginForm() {
             </div>
           </div>
           <div className="col-auto align-items-end">
-            <PasswordReset />
+            <PasswordReset setShowNotification={setShowNotification} />
+            {console.log(showNotification, ' LOGIN FORM')}
           </div>
         </div>
         <div className="row justify-content-center mt-5">

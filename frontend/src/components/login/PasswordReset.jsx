@@ -5,9 +5,8 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import useValidateInput from '../../hooks/use-ValidateInput';
-import ConfirmPopup from '../confirmation/ConfirmPopup';
 
-export default function PasswordReset() {
+export default function PasswordReset({ setShowNotification }) {
   const validEmailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -20,15 +19,13 @@ export default function PasswordReset() {
     valueChangeHandler: emailChangeHandler,
   } = useValidateInput((value) => value.trim().match(validEmailRegex));
 
-  const resetPass = async () => {
-    handleClose();
+  const resetPass = (e) => {
+    e.preventDefault();
+    setShow(false);
+    setShowNotification(true);
     console.log('reseting password for this email: ', email);
   };
 
-  const headermes = 'header';
-  const bodymes = 'body';
-  const footermes = 'footer';
-  const showMessageTrue = true;
   return (
     <>
       <Button variant="btn btn-light" onClick={handleShow}>
@@ -72,12 +69,6 @@ export default function PasswordReset() {
           </Button>
           <Button variant="primary" onClick={resetPass}>
             Reset Password
-            <ConfirmPopup
-              messageHeader={headermes}
-              messageBody={bodymes}
-              messageFooter={footermes}
-              showMessage={showMessageTrue}
-            />
           </Button>
         </Modal.Footer>
       </Modal>

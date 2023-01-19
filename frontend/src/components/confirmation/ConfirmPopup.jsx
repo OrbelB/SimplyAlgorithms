@@ -1,54 +1,45 @@
 import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { useNavigate } from 'react-router-dom';
 
 export default function ConfirmPopup({
   messageHeader,
   messageBody,
   messageFooter,
-  showMessage,
+  setShowNotification,
+  routePage,
+  goToPage,
+  reloadPage,
 }) {
-  const [setShow] = useState(showMessage);
-  const handleClose = () => setShow(false);
+  const navigation = useNavigate();
+
+  const [show, setShow] = useState(true);
+  const handleClose = () => {
+    setShowNotification(true);
+    setShow(false);
+    if (routePage) {
+      navigation(goToPage);
+    }
+    if (reloadPage) {
+      window.location.reload();
+    }
+  };
   // const handleShow = () => setShow(true);
   // eslint-disable-next-line prettier/prettier
-  console.log("ASDASD");
+  console.log(show, ' COMFIRM POPUP');
   return (
-    <div
-      className="modal fade"
-      id="exampleModalCenter"
-      tabIndex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalCenterTitle"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog modal-dialog-centered" role="document">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLongTitle">
-              {messageHeader}
-            </h5>
-            <button
-              type="button"
-              className="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">{messageBody}</div>
-          <div className="modal-footer">
-            <p>{messageFooter}</p>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-dismiss="modal"
-              onClick={handleClose}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Modal show={show} backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
+        <Modal.Title>{messageHeader}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>{messageBody}</Modal.Body>
+      <Modal.Footer>
+        {messageFooter}
+        <Button variant="secondary" onClick={() => handleClose()}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
