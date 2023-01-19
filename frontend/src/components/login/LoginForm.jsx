@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import cx from 'classnames';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 import useValidateInput from '../../hooks/use-ValidateInput';
 import { login } from '../../services/auth';
 import styles from './LoginForm.module.css';
+import PasswordReset from './PasswordReset';
 
 export default function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -156,9 +157,7 @@ export default function LoginForm() {
             </div>
           </div>
           <div className="col-auto align-items-end">
-            <NavLink className="m-sm-auto p-sm-auto" to="check" role="link">
-              Forgot Password?
-            </NavLink>
+            <PasswordReset />
           </div>
         </div>
         <div className="row justify-content-center mt-5">
