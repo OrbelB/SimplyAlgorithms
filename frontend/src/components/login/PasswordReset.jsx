@@ -28,6 +28,7 @@ export default function PasswordReset() {
   const headermes = 'header';
   const bodymes = 'body';
   const footermes = 'footer';
+  const showMessageTrue = true;
   return (
     <>
       <Button variant="btn btn-light" onClick={handleShow}>
@@ -75,7 +76,7 @@ export default function PasswordReset() {
               messageHeader={headermes}
               messageBody={bodymes}
               messageFooter={footermes}
-              showMessage='true'
+              showMessage={showMessageTrue}
             />
           </Button>
         </Modal.Footer>

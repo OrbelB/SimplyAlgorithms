@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 
-export default function ConfirmPopup(
-  {messageHeader,
+export default function ConfirmPopup({
+  messageHeader,
   messageBody,
   messageFooter,
-  showMessage}
-) {
-  const [{showMessage},setShow] = useState(false);
+  showMessage,
+}) {
+  const [setShow] = useState(showMessage);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  handleShow();
+  // const handleShow = () => setShow(true);
   // eslint-disable-next-line prettier/prettier
   console.log("ASDASD");
   return (
