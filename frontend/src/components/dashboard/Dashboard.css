@@ -1,50 +1,33 @@
-.side-left{
-    height: auto;
-    background-color: var(--color-bg-main);
-    border: 1px solid black;
-    border-radius: 25px;
-    padding: 10px 0px 10px 0px;
+.rvp {
+  height: auto;
+  background-color: var(--color-bg-main);
+  border: 2px solid black;
+  border-radius: 25px;
 }
 
-.middle-left{
-    height: auto;
-    background-color: #D9D9D9;
-    border: 1px solid black;
-    border-radius: 25px;
+.topics {
+  height: auto;
+  background-color: #d9d9d9;
+  border: 2px solid black;
+  border-radius: 25px;
 }
-.middle-right-1{
-    height: auto;
-    background-color: var(--color-bg-main);
-    border: 1px solid black;
-    border-radius: 25px;
-    padding: 10px;
+.quizzes {
+  height: auto;
+  background-color: #c7ffd2;
+  border: 2px solid black;
+  border-radius: 25px;
 }
-.middle-right-2{
-    height: auto;
-    background-color: var(--color-bg-main);
-    border: 1px solid black;
-    border-radius: 25px;
-    padding: 10px;
-}
-.bottomdb {
-    height: auto;
-    background-color: #D3FFE2;
-    border: 1px solid black;
-    border-radius: 25px;
-    padding: 10px;
-}
+
 .side-right-1 {
-    height: auto;
-    background-color: #E8ADAD;
-    border: 1px solid black;
-    border-radius: 25px;
-    padding: 10px;
+  height: auto;
+  background-color: #e8adad;
+  border: 2px solid black;
+  border-radius: 25px;
 }
 
 .side-right-2 {
-    height: auto;
-    background-color: #E8ADAD;
-    border: 1px solid black;
-    border-radius: 25px;
-    padding: 10px;
+  height: auto;
+  background-color: #e8adad;
+  border: 2px solid black;
+  border-radius: 25px;
 }

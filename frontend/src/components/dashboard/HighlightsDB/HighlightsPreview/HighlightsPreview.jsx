@@ -27,7 +27,7 @@ export default function HighlightsPreview() {
       {HIGHLIGHTS_PREVIEWS.map(({ id, category, comment }) => {
         return (
           <>
-            <div key={id} className="preview-sect">
+            <div key={id} className="preview-sect m-2">
               <div className="first-line">
                 <h4 className="preview-category">{category}</h4>
               </div>

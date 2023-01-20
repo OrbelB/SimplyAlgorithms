@@ -1,21 +1,21 @@
 .preview-sect {
-    height: auto;
-    background-color: #EDEDED;
-    border: 1px solid black;
-    border-radius: 25px;
+  height: auto;
+  background-color: #ededed;
+  border: 1px solid black;
+  border-radius: 25px;
 }
 
 .line-one {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .preview-category {
-    text-align: left;
-    padding: 10px;
+  text-align: left;
+  padding: 10px 0 0px 10px;
 }
 
-.preview-comment{
-    text-align: left;
-    padding: 10px;
-} 
+.preview-comment {
+  text-align: left;
+  padding: 10px;
+}

@@ -1,3 +1,5 @@
+import './DayStreak.css';
+
 const DAY_STREAK = [
   {
     days: '5',
@@ -10,11 +12,11 @@ export default function DayStreak() {
       {DAY_STREAK.map(({ index, days }) => {
         return (
           <div key={index}>
-            <div className="daystreak">
-              <div className="firstl">
-                <h4 className="text-center">Login Day Streak</h4>
+            <div className="card daystreak">
+              <div className="card-header">
+                <h5 className="text-center">Login Day Streak</h5>
               </div>
-              <div className="second">
+              <div className="daystreak-body">
                 <h2 className="text-center">
                   {days}
                   <svg

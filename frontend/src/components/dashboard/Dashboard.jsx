@@ -2,7 +2,6 @@ import { currentUserInfo } from '../../pages/UserProfilePage';
 import RecentlyViewedPosts from './RecentlyViewPosts/RecentlyViewedPosts';
 import TopicsDB from './TopicsDB/TopicsDB';
 import './Dashboard.css';
-import TopicsProgress from './TopicsProgress/TopicsProgress';
 import DayStreak from './DayStreak/DayStreak';
 import QuizProgress from './QuizProgress/QuizProgress';
 import CommentsDB from './CommentsDB/CommentsDB';
@@ -16,50 +15,49 @@ export default function Dashboard() {
     <div>
       {currentUserInfo.map(({ index, username }) => {
         return (
-          <div key={index} className="container">
-            <div className="row mt-5">
-              <div className="col-sm-10 justify-content-start">
-                <h2 className="">{username}&apos;s Dashboard</h2>
+          <div key={index} className="container-fluid w-100">
+            <div className="row mt-4">
+              <div className="col-lg-10 justify-content-start">
+                <h2>{username}&apos;s Dashboard</h2>
               </div>
-              <div className="col-2 justify-content-end">
+              <div className="col-md">
                 <Notifications />
               </div>
             </div>
+            <div className="row mt-3">
+              <div className="card border-dark quizzes">
+                <h4 className="card-header text-center">Quizzes</h4>
+                <QuizProgress />
+              </div>
+            </div>
             <div className="row mt-3 mb-3">
-              <div className="col mt-2">
-                <div className="side-left">
-                  <h4 className="text-center">Recently Viewed Posts</h4>
+              <div className="col-lg-3 mt-2">
+                <div className="mt-2 mb-4">
+                  <DayStreak />
+                </div>
+                <div className="card rvp">
+                  <div className="card-header text-center">
+                    <h5>Recently Viewed Posts</h5>
+                  </div>
                   <RecentlyViewedPosts />
                 </div>
               </div>
-              <div className="col-md-4 mt-2">
-                <div className="middle-left">
-                  <h4 className="mt-2 text-center">Topics</h4>
-                  <div className="foreground">
-                    <TopicsDB />
-                  </div>
-                </div>
-                <div className="bottomdb mt-2">
-                  <h4 className="mt-2 text-center">Quizzes</h4>
-                  <QuizProgress />
+              <div className="col-lg-4 mt-2">
+                <div className="card border-dark topics">
+                  <h4 className="card-header text-center">Topics</h4>
+                  <TopicsDB />
                 </div>
               </div>
-              <div className="col-md-2 mt-2">
-                <div className="middle-right-1 text-center">
-                  <TopicsProgress />
-                </div>
-                <div className="middle-right-2 mt-2">
-                  <DayStreak />
-                </div>
-              </div>
-              <div className="col-xl-3 mt-2">
-                <div className="side-right-1">
-                  <h4 className="mt-2 text-center">Comments</h4>
+              <div className="col-lg mt-2">
+                <div className="card side-right-1">
+                  <h4 className="card-header text-center">Comments</h4>
                   <CommentsDB />
                   <ShowMoreComments />
                 </div>
-                <div className="side-right-2 mt-2">
-                  <h4 className="mt-2 text-center">Highlights</h4>
+              </div>
+              <div className="col-lg mt-2">
+                <div className="card side-right-2">
+                  <h4 className="card-header text-center">Highlights</h4>
                   <HighlightsDB />
                   <ShowMoreHighlights />
                 </div>
