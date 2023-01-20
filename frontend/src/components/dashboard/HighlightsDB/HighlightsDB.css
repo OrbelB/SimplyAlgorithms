@@ -1,0 +1,5 @@
+@media only screen and (max-width: 1024) {
+  .secondline-comments {
+    display: none;
+  }
+}

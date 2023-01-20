@@ -1,17 +1,18 @@
-.btr, .bts {
-    background-color: #D4BAFF;
+.btr,
+.bts {
+  padding-top: 15px;
+  background-color: #d4baff;
 }
 .text {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .bts {
-    border: 1px solid black;
-    border-radius: 25px;
-    
+  border: 1px solid black;
+  border-radius: 25px;
 }
 
-.bel, .texter {
-    vertical-align:middle;
-    display: inline-block;
+.badge {
+  background-color: gray;
+  margin-left: 3px;
 }

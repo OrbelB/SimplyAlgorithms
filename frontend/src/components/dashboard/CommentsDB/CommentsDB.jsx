@@ -1,4 +1,5 @@
 import CommentsPreview from './CommentsPreview/CommentsPreview';
+import './CommentsDB.css';
 
 const SELECTED_TOPICS = [
   {
@@ -12,7 +13,7 @@ export default function CommentsDB() {
       {SELECTED_TOPICS.map(({ index, topic }) => {
         return (
           <div key={`${topic} ${index}`}>
-            <div className="firstline">
+            <div className="firstline p-2">
               <div className="topic-selected">
                 <h5>Topic: {topic}</h5>
               </div>
@@ -20,7 +21,7 @@ export default function CommentsDB() {
           </div>
         );
       })}
-      <div className="secondline row">
+      <div className="secondline-comments row p-2">
         <div className="col-8">
           <div className="input-group">
             <input
