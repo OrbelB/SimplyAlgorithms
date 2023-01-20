@@ -31,3 +31,11 @@ export const refreshAccessToken = createAsyncThunk(
     return response.data;
   }
 );
+
+// export const resetPassword = createAsyncThunk(
+//   'resetPassword',
+//   async (email) => {
+//     const response = await authEndpoints.resetPassword(email);
+//     return response;
+//   }
+// );

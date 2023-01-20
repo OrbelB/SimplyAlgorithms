@@ -23,7 +23,7 @@ export default function PasswordReset({ setShowNotification }) {
     e.preventDefault();
     setShow(false);
     setShowNotification(true);
-    console.log('reseting password for this email: ', email);
+    // console.log('reseting password for this email: ', email);
   };
 
   return (
