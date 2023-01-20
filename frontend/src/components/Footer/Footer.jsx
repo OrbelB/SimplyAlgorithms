@@ -107,11 +107,9 @@ export default function Footer() {
         </div>
         <div className="col mt-4">
           <div className="row">
-            <h5 text className="text-center">
-              CONTACT US
-            </h5>
+            <h5 className="text-center">CONTACT US</h5>
             <p className="text-center">
-              <div className={cx(style.email)}>info@gmail.com</div>
+              <span className={cx(style.email)}>info@gmail.com</span>
             </p>
           </div>
           <div className="row text-center">

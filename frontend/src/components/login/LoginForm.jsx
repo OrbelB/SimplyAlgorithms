@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import cx from 'classnames';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 import useValidateInput from '../../hooks/use-ValidateInput';
 import { login } from '../../services/auth';
 import styles from './LoginForm.module.css';
+import PasswordReset from './PasswordReset';
+import ConfirmPopup from '../confirmation/ConfirmPopup';
 
 export default function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -56,8 +58,28 @@ export default function LoginForm() {
       Cookies.set('refresh-token', jwtRefreshToken, { expires: 7 });
     }
   }
+  const headermes = 'PASSWORD RESET';
+  const bodymes =
+    'If the email matches a user we will send the user a reset password email, remeber to check the spam folder.';
+  const footermes = '';
+  const [showNotification, setShowNotification] = useState(false);
+  const routePage = false;
+  const goToPage = '';
+  const reloadPage = true;
+
   return (
     <>
+      {showNotification && (
+        <ConfirmPopup
+          messageHeader={headermes}
+          messageBody={bodymes}
+          messageFooter={footermes}
+          setShowNotification={setShowNotification}
+          routePage={routePage}
+          goToPage={goToPage}
+          reloadPage={reloadPage}
+        />
+      )}
       {error !== '' && (
         <div className="col ms-0 p-2 alert alert-danger align-items-center align-content-center">
           <p className="text-center small">credentials are wrong!</p>
@@ -67,7 +89,7 @@ export default function LoginForm() {
         <div className="row mt-5 m-0">
           <div className="col m-0 p-0">
             <label className="form-label m-0 mb-2 p-0" htmlFor="username-form">
-              username
+              Username
             </label>
           </div>
           {usernameInputHasError && (
@@ -156,9 +178,8 @@ export default function LoginForm() {
             </div>
           </div>
           <div className="col-auto align-items-end">
-            <NavLink className="m-sm-auto p-sm-auto" to="check" role="link">
-              Forgot Password?
-            </NavLink>
+            <PasswordReset setShowNotification={setShowNotification} />
+            {/* {console.log(showNotification, ' LOGIN FORM')} */}
           </div>
         </div>
         <div className="row justify-content-center mt-5">

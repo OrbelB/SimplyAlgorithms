@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Container, Row } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import useValidateInput from '../../hooks/use-ValidateInput';
 import { register } from '../../services/auth';
 import imageToStringBase64 from '../../utilities/image-to-data-url';
@@ -335,7 +336,9 @@ export default function SignUp({ showSignUp, handleOnClose }) {
                 }
               }}
             >
-              Login here
+              <NavLink to="/login" role="link">
+                Login Here
+              </NavLink>
             </i>
           </p>
         </Row>

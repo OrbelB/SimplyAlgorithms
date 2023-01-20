@@ -1,37 +1,23 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useMemo } from 'react';
+import debounce from 'lodash.debounce';
 import { selectAllTags } from '../../../store/reducers/tags-reducer';
 import classes from './Tags.module.css';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
 import { fetchTags } from '../../../services/tag';
-import useUpdateStore from '../../../hooks/use-updateStore';
 
 export default function Tags() {
-  const [searchedTag, setSearchedTag] = useState('');
   const tags = useSelector(selectAllTags);
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const { totalPages } = useSelector((state) => state.tags);
-
+  const [searchedTag, setSearchedTag] = useState('');
   const handleClick = (tagId) => {
     dispatch(forumsActions.filterForums(`${tagId}`));
   };
 
-  const tagsUpdateStore = useMemo(() => {
-    return {
-      conditions: [tags.length === 0],
-      actions: [[fetchTags]],
-      arguments: [[{ page: page - 1, size: 10 }]],
-    };
-  }, [page, tags.length]);
-
-  useUpdateStore(
-    tagsUpdateStore.conditions,
-    tagsUpdateStore.actions,
-    tagsUpdateStore.arguments
-  );
-  // filtering tags by searched param, using user memo to memoizes the results
-  // and only render if the results are different from the previous ones.
+  // filtering tags by searched param, using use memo to memoize the results
+  // and only render if the dependency attrs are different from the previous ones.
   const filteredTags = useMemo(() => {
     return tags.filter((tag) => {
       return new RegExp(
@@ -39,6 +25,11 @@ export default function Tags() {
       ).test(tag.tag.toLowerCase());
     });
   }, [tags, searchedTag]);
+
+  const filterTagsContaining = debounce((e) => {
+    dispatch(fetchTags({ page: 0, size: 10, filterBy: e.target.value }));
+    setSearchedTag(e.target.value);
+  }, 350);
 
   const loadMoreTags = () => {
     dispatch(fetchTags({ page, size: 10 }));
@@ -51,8 +42,7 @@ export default function Tags() {
     <>
       <h1 className="category-label">Categories</h1>
       <input
-        value={searchedTag}
-        onChange={(e) => setSearchedTag(e.target.value)}
+        onChange={(e) => filterTagsContaining(e)}
         type="text"
         className="search-bar"
         placeholder="Search Category..."
@@ -68,7 +58,7 @@ export default function Tags() {
             {tag?.tag}
           </button>
         ))}
-        {searchedTag === '' && (
+        {totalPages > 0 && (
           <button
             className={classes['last-button']}
             onClick={() => loadMoreTags()}

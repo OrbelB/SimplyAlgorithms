@@ -8,7 +8,6 @@ export default function Forum() {
       <div className="forum-section">
         <h1 className="head">HAVE A QUESTION?</h1>
         <br />
-        <br />
         <div className="forum-body">
           <img src={image} alt="forum pic" className="pic" />
           <p className="body">
@@ -20,8 +19,6 @@ export default function Forum() {
             discussion now!
           </p>
         </div>
-        <br />
-        <br />
         <form>
           <button type="button" className="b b1">
             <NavLink to="/forums">

@@ -2,19 +2,39 @@
 /* eslint-disable camelcase */
 import './Forums.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import PostPreview from './PostPreview';
 import Post from '../post/Post';
 import Related_RecentPosts from './RelatedRecentPosts';
-import { forumsActions } from '../../../store/reducers/forums-reducer';
 import Tags from '../tags/Tags';
+import { fetchForumList } from '../../../services/forum';
+import { forumsActions } from '../../../store/reducers/forums-reducer';
 
 export default function Forums() {
   const { isLoggedIn, jwtAccessToken } = useSelector((state) => state.auth);
+  const [sortBy, setSortBy] = useSearchParams();
   const dispatch = useDispatch();
-  const sortByAlphabetical = () => dispatch(forumsActions.sortForums('title'));
-  const sortByNew = () => dispatch(forumsActions.sortForums('createdDate'));
-  const sortByTopRated = () => dispatch(forumsActions.sortForums('upVotes'));
-  const sortByOther = () => dispatch(forumsActions.sortForums('pageId'));
+  const sortForums = (e) => {
+    dispatch(forumsActions.sortForums(e.target.id));
+    if (
+      (e.target.id === '' && sortBy.get('sortBy') === '') ||
+      (sortBy.get('sortBy') && sortBy.get('sortBy').toString() === e.target.id)
+    ) {
+      return;
+    }
+
+    sortBy.set('sortBy', e.target.id);
+    setSortBy(sortBy, {
+      replace: true,
+    });
+    dispatch(
+      fetchForumList({
+        page: 0,
+        size: 10,
+        sortBy: sortBy.get('sortBy').toString(),
+      })
+    );
+  };
   return (
     <div className="forums-section">
       <h1 className="forum-title center">FORUMS</h1>
@@ -27,29 +47,33 @@ export default function Forums() {
           <div className="middle">
             <div className="filters">
               <button
+                id="upVotes"
                 className="filter-button first-filter"
-                onClick={sortByTopRated}
+                onClick={(e) => sortForums(e)}
                 type="button"
               >
                 Top Rated
               </button>
               <button
+                id="createdDate"
                 className="filter-button"
-                onClick={sortByNew}
+                onClick={(e) => sortForums(e)}
                 type="button"
               >
                 New
               </button>
               <button
+                id="title"
                 className="filter-button"
-                onClick={sortByAlphabetical}
+                onClick={(e) => sortForums(e)}
                 type="button"
               >
                 Alphabetical
               </button>
               <button
+                id=""
                 className="filter-button last-filter"
-                onClick={sortByOther}
+                onClick={(e) => sortForums(e)}
                 type="button"
               >
                 Other
