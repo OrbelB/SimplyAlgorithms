@@ -43,8 +43,9 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/userprofile" element={<UserProfile />} />
         </Route>
-
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Route>
 
         <Route element={<RequireAuth />}>
           <Route path="/settings">
