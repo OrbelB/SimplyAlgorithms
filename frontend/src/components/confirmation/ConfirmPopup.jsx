@@ -27,7 +27,7 @@ export default function ConfirmPopup({
   };
   // const handleShow = () => setShow(true);
   // eslint-disable-next-line prettier/prettier
-  console.log(show, ' COMFIRM POPUP');
+  // console.log(show, ' COMFIRM POPUP');
   return (
     <Modal show={show} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>

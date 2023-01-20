@@ -58,9 +58,10 @@ export default function LoginForm() {
       Cookies.set('refresh-token', jwtRefreshToken, { expires: 7 });
     }
   }
-  const headermes = 'header';
-  const bodymes = 'body';
-  const footermes = 'footer';
+  const headermes = 'PASSWORD RESET';
+  const bodymes =
+    'If the email matches a user we will send the user a reset password email, remeber to check the spam folder.';
+  const footermes = '';
   const [showNotification, setShowNotification] = useState(false);
   const routePage = false;
   const goToPage = '';
@@ -178,7 +179,7 @@ export default function LoginForm() {
           </div>
           <div className="col-auto align-items-end">
             <PasswordReset setShowNotification={setShowNotification} />
-            {console.log(showNotification, ' LOGIN FORM')}
+            {/* {console.log(showNotification, ' LOGIN FORM')} */}
           </div>
         </div>
         <div className="row justify-content-center mt-5">
