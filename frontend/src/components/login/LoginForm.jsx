@@ -88,7 +88,7 @@ export default function LoginForm() {
         <div className="row mt-5 m-0">
           <div className="col m-0 p-0">
             <label className="form-label m-0 mb-2 p-0" htmlFor="username-form">
-              username
+              Username
             </label>
           </div>
           {usernameInputHasError && (

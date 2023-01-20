@@ -155,7 +155,7 @@ export default function MainNavigation() {
                     </i>
                   ) : (
                     <NavLink className="dropdown-item" to="login">
-                      login
+                      Login
                     </NavLink>
                   )}
                 </li>

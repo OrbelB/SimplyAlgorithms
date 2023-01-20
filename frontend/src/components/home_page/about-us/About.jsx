@@ -2,9 +2,8 @@ import './About.css';
 
 export default function About() {
   return (
-    <div className="aboutus">
+    <div className="about-us">
       <h1 className="head">ABOUT US</h1>
-      <br />
       <br />
       <p className="about-body">
         Our mission is to support newcomers as they start their careers in
