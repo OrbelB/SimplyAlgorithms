@@ -1,4 +1,5 @@
 # SimplyAlgorithms
 
-This branch is the SQL documentation to be used by spring boot
+This is the main back end of our aplication. 
 
+We use springboot to build our API 
