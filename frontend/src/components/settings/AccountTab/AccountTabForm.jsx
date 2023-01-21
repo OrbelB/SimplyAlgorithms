@@ -1,12 +1,12 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { currentUserInfo } from '../../../pages/UserProfilePage';
 import TeacherRequest from './TeacherRequestForm';
 
 import { updateUserData } from '../../../services/user';
 
-export default function AccountTabForm({ username1 }) {
+export default function AccountTabForm() {
   const { username, firstName, lastName, email, phoneNumber, dob } =
     useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -274,7 +274,7 @@ export default function AccountTabForm({ username1 }) {
           >
             Confirm
           </button>
-          <button type="reset" className="btn btn-light">
+          <button type="button" className="btn btn-light">
             Reset Changes
           </button>
           <hr />

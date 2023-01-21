@@ -18,6 +18,7 @@
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.6",
+    "env-cmd": "^10.1.0",
     "js-cookie": "^3.0.1",
     "jwt-decode": "^3.1.2",
     "lodash.debounce": "^4.0.8",
@@ -34,7 +35,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start:dev": "env-cmd -f .env.dev react-scripts start",
+    "start:prod": "env-cmd -f .env.prod react-scripts start",
     "build": "react-scripts build",
     "cloudfront-invalidation": "aws cloudfront create-invalidation --distribution-id E1MJQ8CO0SAJ13 --paths /* --profile simply-algo-web-dep",
     "s3-deploy": "aws s3 sync build/ s3://simplyalgoapp --profile simply-algo-web-dep",
