@@ -23,6 +23,7 @@ import Arrays from './pages/t_pages/Arrays';
 import Sorting from './components/wiki/topics/Sorting';
 import ScrollToTop from './components/ScrollToTop';
 import useRefreshToken from './hooks/use-refreshToken';
+import PasswordResetPage from './components/login/PasswordResetPage';
 
 function App() {
   useRefreshToken();
@@ -35,6 +36,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="passwordReset/:passwordResetToken"
+          element={<PasswordResetPage />}
+        />
         <Route path="/forums">
           <Route index element={<ForumPage />} />
           <Route path=":pageId" element={<ForumPost />} />

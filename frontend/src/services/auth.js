@@ -32,10 +32,9 @@ export const refreshAccessToken = createAsyncThunk(
   }
 );
 
-// export const resetPassword = createAsyncThunk(
-//   'resetPassword',
-//   async (email) => {
-//     const response = await authEndpoints.resetPassword(email);
-//     return response;
-//   }
-// );
+export const resetPassword = createAsyncThunk(
+  'resetPassword',
+  async (email) => {
+    await authEndpoints.resetPassword(email);
+  }
+);

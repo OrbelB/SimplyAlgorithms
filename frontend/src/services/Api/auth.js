@@ -46,6 +46,18 @@ const authEndpoints = {
         },
       }
     ),
+  resetPassword: (email) =>
+    post(
+      `${PUBLIC_ENDPOINT_ROUTE}/resetPassword`,
+      {
+        email,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    ),
 };
 
 export default authEndpoints;
