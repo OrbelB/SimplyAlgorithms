@@ -9,15 +9,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 public interface ViewsRepository extends JpaRepository<Views, ViewsId> {
 
-    Set<Views> findAllByUserReferenceView_UserIdOrderByVisitedDateAsc(UUID viewsId_userId);
+    Set<Views> findAllByUserReferenceView_UserIdOrderByVisitedDateDesc(UUID viewsId_userId);
 
-
+    Optional<Views> findFirstByUserReferenceView_UserIdOrderByVisitedDateAsc(UUID userId);
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO views (page_id, user_id) values(:page_id, :user_id)")
     void addUserView(@Param("page_id") String pageId, @Param("user_id") String userId);
+
+    Integer countAllByUserReferenceView_UserId(UUID userId);
 }

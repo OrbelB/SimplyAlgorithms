@@ -11,4 +11,7 @@ public interface ViewsService {
 
     void addUserView(UUID userId, UUID pageId);
     Set<Views> listForumsByUserView(UUID userId);
+
+    void removeView(UUID userId);
+    Integer countViewedForumsPerUser(UUID userId);
 }

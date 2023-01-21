@@ -4,6 +4,7 @@ import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.Forum;
 import com.simplyalgos.backend.page.domains.PageEntity;
 import com.simplyalgos.backend.page.domains.PageVoteId;
+import com.simplyalgos.backend.page.domains.Views;
 import com.simplyalgos.backend.page.dtos.ForumDTO;
 import com.simplyalgos.backend.page.dtos.FullForumDTO;
 import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class ForumServiceImpl implements ForumService {
 
     private final PageVoteService pageVoteService;
@@ -77,7 +79,6 @@ public class ForumServiceImpl implements ForumService {
     }
 
 
-    @Transactional
     @Override
     public UUID createForum(ForumDTO forumDTO) {
         // check if a user has been created
@@ -101,7 +102,6 @@ public class ForumServiceImpl implements ForumService {
         return forum.getPageId();
     }
 
-    @Transactional
     @Override
     public LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike) {
         if (!forumRepository.existsById(pageId)) {
@@ -130,7 +130,6 @@ public class ForumServiceImpl implements ForumService {
         log.debug(MessageFormat.format("object with page id {0}, could not be found ", pageId));
     }
 
-    @Transactional
     @Override
     public UUID deleteForum(String pageId, String userId) {
         forumRepository.deleteByPageID(pageId);
@@ -170,14 +169,12 @@ public class ForumServiceImpl implements ForumService {
         return !xAttribute.isEmpty() || !xAttribute.isBlank();
     }
 
-    @Transactional
     @Override
     public UUID reportForum(PageReportDTO forumReport) {
         return pageReportService.createReport(forumReport, pageEntityService.getPageEntity(forumReport.getPageId()));
 
     }
 
-    @Transactional
     @Override
     public PageVoteId deleteVote(UUID userId, UUID pageId) {
         PageVoteId pageVoteId = PageVoteId.builder().pageId(pageId).userId(userId).build();
@@ -219,18 +216,34 @@ public class ForumServiceImpl implements ForumService {
     @Override
     public FullForumDTO addForumUserView(UUID userId, UUID pageId) {
         viewsService.addUserView(userId, pageId);
+        removedViewedForumsPerUser(userId);
         return getForumPage(pageId.toString());
     }
 
     @Override
     public List<?> listForumsByUserViewForums(UUID userId, Pageable pageable) {
-        Iterable<UUID> pageIds = viewsService
+        List<UUID> pageIds = viewsService
                 .listForumsByUserView(userId)
                 .stream()
-                .map(views -> views
-                        .getPageViewed().getPageId()
-                ).collect(Collectors.toSet());
-        return forumRepository.findAllById(pageIds).stream().map(forumMapper::forumToFullForumDto).toList();
+                .map(views -> views.getPageViewed().getPageId())
+                .collect(Collectors.toCollection(LinkedList::new));
+        return pageIds.stream()
+                .flatMap(id -> forumRepository
+                        .findById(id)
+                        .map(forumMapper::forumToFullForumDto)
+                        .stream()
+                )
+                .collect(Collectors.toList());
+    }
+
+    private void removedViewedForumsPerUser(UUID userId) {
+        Integer count = viewsService.countViewedForumsPerUser(userId);
+        log.debug(MessageFormat.format("The amount of viewed forums for this user is {0}", count.toString()));
+        if (count >= 10) {
+            viewsService.removeView(userId);
+            return;
+        }
+        log.debug(MessageFormat.format("Not enough views to remove from user with id {0}", userId.toString()));
     }
 
 

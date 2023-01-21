@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.page.services;
 
+import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.Views;
 import com.simplyalgos.backend.page.domains.ViewsId;
 import com.simplyalgos.backend.page.repositories.ViewsRepository;
@@ -9,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -47,17 +50,31 @@ public class ViewsServiceImpl implements ViewsService {
                                         .build()
                         )
                 );
-
-
         // viewsRepository.addUserView(pageId.toString(), userId.toString());
     }
 
-
     @Override
     public Set<Views> listForumsByUserView(UUID userId) {
-        Set<Views> views = viewsRepository.findAllByUserReferenceView_UserIdOrderByVisitedDateAsc(userId);
-        log.info("the current views are " + views.size());
+        Set<Views> views = viewsRepository.findAllByUserReferenceView_UserIdOrderByVisitedDateDesc(userId);
+        log.info("the current views are " + views.stream().findFirst().get().getViewsId().getPageId());
         return views;
+    }
+
+    @Override
+    public Integer countViewedForumsPerUser(UUID userId) {
+        return viewsRepository.countAllByUserReferenceView_UserId(userId);
+    }
+
+    @Override
+    public void removeView(UUID userId) {
+        Views optionalView = viewsRepository.findFirstByUserReferenceView_UserIdOrderByVisitedDateAsc(userId)
+                .orElseThrow(() ->
+                        new ElementNotFoundException(MessageFormat.format("user with id {0} has no views",
+                                userId.toString())));
+        viewsRepository.deleteById(optionalView.getViewsId());
+        log.debug(MessageFormat.format("viewed page from user {0} has been removed", userId.toString()));
+
+
     }
 
 }
