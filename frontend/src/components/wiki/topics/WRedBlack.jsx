@@ -1,18 +1,17 @@
 import { NavLink } from 'react-router-dom';
 
-export default function Sorting() {
+export default function WRedBlack() {
   return (
     <div className="wikibody">
-      <div className="wikititle">SIMPLY ALGORITHMS WIKI</div>
+      <div className="wikititle">TREE ALGORITHMS</div>
       <div className="wiki-section">
         <div className="row gutters-sm">
           <div className="col-md-4 d-none d-md-block">
             <div className="card">
               <div className="card-body">
                 <nav className="nav flex-column nav-pills nav-gap-y-1">
-                  {/* SPECIIC TOPIC PAGES WILL BE FILLED OUT LATER */}
                   <NavLink
-                    to="/wikihome"
+                    to="/wiki"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded fs"
                   >
@@ -20,140 +19,140 @@ export default function Sorting() {
                   </NavLink>
                   <br />
                   <NavLink
-                    to="/wiki/sorting"
+                    to="/sorting"
                     data-toggle="tab"
-                    className="nav-item nav-link has-icon nav-link-faded active fs"
+                    className="nav-item nav-link has-icon nav-link-faded fs"
                   >
                     SORTING
                   </NavLink>
                   <NavLink
-                    to="/wiki/selectionsort"
+                    to="/sorting/selectionsort"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Selection Sort
                   </NavLink>
                   <NavLink
-                    to="/wiki/quicksort"
+                    to="/sorting/quicksort"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Quick Sort
                   </NavLink>
                   <NavLink
-                    to="/wiki/bubblesort"
+                    to="/sorting/bubblesort"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Bubble Sort
                   </NavLink>
                   <NavLink
-                    to="/wiki/radixsort"
+                    to="/sorting/radixsort"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Radix Sort
                   </NavLink>
                   <NavLink
-                    to="/wiki/trees"
+                    to="/trees"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded fs"
                   >
                     TREES
                   </NavLink>
                   <NavLink
-                    to="/wiki/binarytrees"
+                    to="/trees/binarysearch"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Binary Search Trees
                   </NavLink>
                   <NavLink
-                    to="/wiki/twotree"
+                    to="/trees/twotree"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Two Tree
                   </NavLink>
                   <NavLink
-                    to="/wiki/threetree"
+                    to="/trees/threetree"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Three Tree
                   </NavLink>
                   <NavLink
-                    to="/wiki/redblacktree"
+                    to="/trees/redblacktree"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Red Black
                   </NavLink>
                   <NavLink
-                    to="/wiki/graphs"
+                    to="/graphs"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded fs"
                   >
                     GRAPHS
                   </NavLink>
                   <NavLink
-                    to="/wiki/breadthfirst"
+                    to="/graphs/breadthfirst"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Breadth-First Search
                   </NavLink>
                   <NavLink
-                    to="/wiki/depthfirst"
+                    to="/graphs/depthfirst"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Depth-First Search
                   </NavLink>
                   <NavLink
-                    to="/wiki/topologicalsort"
+                    to="/graphs/topological"
+                    data-toggle="tab"
+                    className="nav-item nav-link has-icon nav-link-faded indent fs"
+                  >
+                    Topological Sort
+                  </NavLink>
+                  <NavLink
+                    to="/graphs/djikstra"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Djikstra Graph
                   </NavLink>
                   <NavLink
-                    to="/wiki/djikstra"
-                    data-toggle="tab"
-                    className="nav-item nav-link has-icon nav-link-faded indent fs"
-                  >
-                    Two Tree
-                  </NavLink>
-                  <NavLink
-                    to="/wiki/datastructures"
+                    to="/datastructures"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded fs"
                   >
                     DATA STRUCTURES
                   </NavLink>
                   <NavLink
-                    to="/wiki/arrays"
+                    to="/datastructures/arrays"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Arrays
                   </NavLink>
                   <NavLink
-                    to="/wiki/linkedlist"
+                    to="/datastructures/linkedlist"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Linked Lists
                   </NavLink>
                   <NavLink
-                    to="/wiki/stack"
+                    to="/datastructures/stack"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
                     Stack
                   </NavLink>
                   <NavLink
-                    to="/wiki/queue"
+                    to="/datastructures/queue"
                     data-toggle="tab"
                     className="nav-item nav-link has-icon nav-link-faded indent fs"
                   >
@@ -168,10 +167,7 @@ export default function Sorting() {
               <div className="card-header border-bottom mb-3 d-flex d-md-none" />
               <div className="card-body tab-content">
                 <div className="tab-pane active" id="profile">
-                  <h3>
-                    This is an example of how the wiki topic pages will be
-                    organized.
-                  </h3>
+                  <h3>What are Red Black Trees?</h3>
                   <h5>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                     do eiusmod tempor incididunt ut labore et dolore magna
@@ -222,4 +218,3 @@ export default function Sorting() {
     </div>
   );
 }
-
