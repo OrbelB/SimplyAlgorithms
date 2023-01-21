@@ -1,17 +1,15 @@
 import { NavLink } from 'react-router-dom';
-import './WikiHome.css';
 
-export default function WikiHome() {
+export default function WTwoTree() {
   return (
     <div className="wikibody">
-      <div className="wikititle">SIMPLY ALGORITHMS WIKI</div>
+      <div className="wikititle">TREE ALGORITHMS</div>
       <div className="wiki-section">
         <div className="row gutters-sm">
           <div className="col-md-4 d-none d-md-block">
             <div className="card">
               <div className="card-body">
-                <nav className="nav flex-column nav-pills nav-gap-y-1 nav-size">
-                  {/* Specific wiki topic pages will be implemented later, to be added in topics folder */}
+                <nav className="nav flex-column nav-pills nav-gap-y-1">
                   <NavLink
                     to="/wiki"
                     data-toggle="tab"
@@ -169,7 +167,7 @@ export default function WikiHome() {
               <div className="card-header border-bottom mb-3 d-flex d-md-none" />
               <div className="card-body tab-content">
                 <div className="tab-pane active" id="profile">
-                  <h3>What Are Algorithms?</h3>
+                  <h3>What are Two Trees?</h3>
                   <h5>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                     do eiusmod tempor incididunt ut labore et dolore magna
