@@ -1,0 +1,4 @@
+FROM openjdk:17-jdk-slim
+ARG JAR_FILE=*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["bash", "-c", "java -Dproperty1=$AWS3_BUCKET_ACCESS_KEY -Dproperty2=$AWS3_BUCKET_NAME -Dproperty3=$AWS3_BUCKET_REGION -Dproperty4=$AWS3_BUCKET_SECRET_KEY -Dproperty5=$LOCALHOST_DATABASE_NAME -Dproperty6=$LOCALHOST_PASSWORD -Dproperty7=$LOCALHOST_USERNAME -Dproperty8=$MYSQL_DATABASE_NAME -Dproperty9=$MYSQL_ENDPOINT -Dproperty10=$MYSQL_PASSWORD -Dproperty11=$MYSQL_USERNAME -Dproperty12=$PROFILE_TYPE -jar /app.jar"]

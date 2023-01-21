@@ -1,15 +1,40 @@
 version: '3'
 services:
-    db_instance:
-      container_name: db-instance
-      image: mysql
-      ports:
-        - '3307:3306'
-      environment:
-        - "MYSQL_ROOT_PASSWORD=1234"
-      volumes:
-        - "./db_data:/var/lib/mysql"
-      networks:
-        - net
+  db_instance:
+    container_name: db-instance
+    image: mysql
+    ports:
+      - '3307:3306'
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${LOCALHOST_PASSWORD}"
+    volumes:
+      - "./db_data:/var/lib/mysql"
+    networks:
+      - net
+  be_instance:
+    container_name: be-instance
+    image: openjdk:17-jdk-slim
+    build:
+      context: java-instance
+    environment:
+      PROFILE_TYPE : ${PROFILE_TYPE}
+      AWS3_BUCKET_ACCESS_KEY: ${AWS3_BUCKET_ACCESS_KEY}
+      AWS3_BUCKET_NAME: ${AWS3_BUCKET_NAME}
+      AWS3_BUCKET_REGION: ${AWS3_BUCKET_REGION}
+      AWS3_BUCKET_SECRET_KEY: ${AWS3_BUCKET_SECRET_KEY}
+      LOCALHOST_DATABASE_NAME: ${LOCALHOST_DATABASE_NAME}
+      LOCALHOST_PASSWORD: ${LOCALHOST_PASSWORD}
+      LOCALHOST_USERNAME: ${LOCALHOST_USERNAME}
+      MYSQL_DATABASE_NAME: ${MYSQL_DATABASE_NAME}
+      MYSQL_ENDPOINT: ${MYSQL_ENDPOINT}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_DEV_PORT: ${MYSQL_DEV_PORT}
+      MYSQL_PROD_MODE: ${MYSQL_PROD_MODE}
+      LOCALHOST_MYSQL_ENDPOINT: ${LOCALHOST_MYSQL_ENDPOINT}
+    ports:
+      - '5000:5000'
+    networks:
+      - net
 networks:
   net:

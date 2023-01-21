@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.page.services;
 
+import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.Forum;
 import com.simplyalgos.backend.page.domains.PageEntity;
 import com.simplyalgos.backend.page.domains.PageVoteId;
@@ -104,7 +105,7 @@ public class ForumServiceImpl implements ForumService {
     @Override
     public LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike) {
         if (!forumRepository.existsById(pageId)) {
-            throw new NoSuchElementException(
+            throw new ElementNotFoundException(
                     MessageFormat.format("page with Id {0} does not exits", pageId));
         }
         if (!userService.userExists(userId)) {
@@ -139,7 +140,7 @@ public class ForumServiceImpl implements ForumService {
     @Override
     public FullForumDTO getForumPage(String pageId) {
         return forumMapper.forumToFullForumDto(forumRepository.findById(UUID.fromString(pageId)).orElseThrow(() ->
-                new NoSuchElementException(MessageFormat.format("Element {0} not found", UUID.fromString(pageId)))
+                new ElementNotFoundException(MessageFormat.format("Element {0} not found", UUID.fromString(pageId)))
         ));
     }
 
@@ -160,7 +161,7 @@ public class ForumServiceImpl implements ForumService {
             }
             return forumMapper.forumToFullForumDto(forumRepository.save(forum));
         }
-        throw new NoSuchElementException(MessageFormat.format("no such an object", forumDTO.getPageId()));
+        throw new ElementNotFoundException(MessageFormat.format("no such an object", forumDTO.getPageId()));
     }
 
 
@@ -186,7 +187,7 @@ public class ForumServiceImpl implements ForumService {
             updateSingleForumLikeDisliked(pageId);
             return pageVoteId;
         }
-        throw new NoSuchElementException(MessageFormat.
+        throw new ElementNotFoundException(MessageFormat.
                 format("Vote for pageId with id {0} is not present", pageId));
     }
 

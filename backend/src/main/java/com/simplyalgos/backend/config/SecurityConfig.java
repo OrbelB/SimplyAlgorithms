@@ -92,6 +92,7 @@ public class SecurityConfig {
                         .requestMatchers("/comments/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/tags/**").permitAll()
                         .requestMatchers("/email/*").permitAll()
+                        .requestMatchers("/error*").permitAll()
                 )
                 .authorizeHttpRequests()
                 .anyRequest()
