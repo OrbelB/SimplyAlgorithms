@@ -11,6 +11,13 @@
   font-family: 'Readex Pro', sans-serif;
   font-size: 5em;
   padding-bottom: 2%;
+  text-shadow: -1px 1px #7e57c2,
+               -2px 2px #2196f3,
+               -3px 3px #26c6da,
+               -4px 4px #43a047,
+               -5px 5px #eeff41,
+               -6px 6px #f9a825,
+               -7px 7px #ff5722;
 }
 
 .indent {
