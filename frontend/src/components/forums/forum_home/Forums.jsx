@@ -36,16 +36,16 @@ export default function Forums() {
     );
   };
   return (
-    <div className="forums-section">
+    <div className="forums-section container-fluid">
       <h1 className="forum-title center">FORUMS</h1>
-      <div className="row">
+      <div className="row justify-content-around">
         <div className="column">
           <div className="side1">
             <Tags />
           </div>
 
           <div className="middle">
-            <div className="filters">
+            <div className="filters pb-5 pt-2">
               <button
                 id="upVotes"
                 className="filter-button first-filter"
@@ -79,11 +79,7 @@ export default function Forums() {
                 Other
               </button>
             </div>
-            <br />
-            <br />
-            <div className="middle-post">
-              <Post />
-            </div>
+            <Post />
             <br />
             <br />
             <PostPreview />

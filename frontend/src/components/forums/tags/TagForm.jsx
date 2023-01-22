@@ -81,10 +81,11 @@ export default function TagForm({ currentTags, setCurrentTags }) {
           labelId="demo-simple-select-standard-label"
           id="demo-simple-select-standard"
           label="Category"
+          value={tagId}
           onChange={addTagToSave}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>none</em>
           </MenuItem>
           {tagsAvailable.map((tag) => (
             <MenuItem value={tag.tagId} key={tag.tagId}>

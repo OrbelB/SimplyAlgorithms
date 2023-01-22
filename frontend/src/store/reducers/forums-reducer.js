@@ -38,6 +38,7 @@ export const forumsSlice = createSlice({
     },
     filterForums: (state, action) => {
       state.filterBy = action.payload;
+      state.sortBy = '';
     },
     updateForum: (state, action) => {
       forumsAdapter.upsertOne(state, action.payload?.forum);
@@ -90,13 +91,14 @@ export const selectSortedForums = createSelector(
             .trim()
             .localeCompare(b[sortBy.toString().trim()].toUpperCase().trim());
         }
+        return allForums;
+      }
+      if (sortBy.toString().trim() === 'createdDate') {
         return b[sortBy.toString().trim()].localeCompare(
           a[sortBy.toString().trim()]
         );
       }
-
       return b[sortBy.toString().trim()] - a[sortBy.toString().trim()];
     })
 );
-
 export const forumsActions = forumsSlice.actions;

@@ -118,7 +118,7 @@ export default function MainNavigation() {
                 <img
                   src={profilePicture}
                   className="rounded-circle"
-                  height="48"
+                  height="50"
                   alt="profile"
                   loading="lazy"
                 />

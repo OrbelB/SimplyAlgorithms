@@ -40,7 +40,7 @@ export default function AccountTabForm() {
           username: input?.usrname,
           firstName: input?.firstName,
           lastName: input?.lastName,
-          email: input?.email,
+          email: input?.em,
           phoneNumber: input?.phone,
           dob: input?.dob,
         },

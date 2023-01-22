@@ -53,9 +53,8 @@ export const viewedForumsSlice = createSlice({
           ).toISOString();
           return forumQuickView;
         });
-
         // add other forums
-        viewedForumsAdapter.upsertMany(state, posts);
+        viewedForumsAdapter.addMany(state, posts);
         state.status = 'success';
       })
       .addCase(fetchUserForumsViewed.rejected, (state, action) => {
@@ -83,25 +82,5 @@ export const {
   selectById: selectAllViewedForumsByPageId,
   selectIds: selectViewedForumsIds,
 } = viewedForumsAdapter.getSelectors((state) => state.viewedForums);
-
-// export const selectSortedForums = createSelector(
-//   selectAllViewedForums,
-//   (state) => state.forums.sortBy,
-//   (allForums, sortBy) =>
-//     [...allForums].sort((a, b) => {
-//       if (isNaN(a[sortBy.toString().trim()])) {
-//         if (sortBy.toString().trim() === "title") {
-//           return a[sortBy.toString().trim()].localeCompare(
-//             b[sortBy.toString().trim()]
-//           );
-//         }
-//         return b[sortBy.toString().trim()].localeCompare(
-//           a[sortBy.toString().trim()]
-//         );
-//       } else {
-//         return b[sortBy.toString().trim()] - a[sortBy.toString().trim()];
-//       }
-//     })
-// );
 
 export const viewForumsActions = viewedForumsSlice.actions;

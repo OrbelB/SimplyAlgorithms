@@ -17,6 +17,7 @@ import ForumOptionMenu from './ForumOptionMenu';
 import LoadingBackdrop from '../../loading/LoadingBackdrop';
 import { listVotesByPage } from '../../../services/comment';
 import useUpdateStore from '../../../hooks/use-updateStore';
+import { viewForumsActions } from '../../../store/reducers/viewed-forums-reducer';
 
 export default function ForumPost() {
   const { pageId } = useParams();
@@ -42,7 +43,10 @@ export default function ForumPost() {
           isLoggedIn &&
           (status === 'success' || status === 'completed'),
       ],
-      actions: [[fetchSingleForum], [forumsActions.updateForum, addUserView]],
+      actions: [
+        [fetchSingleForum],
+        [forumsActions.updateForum, addUserView, viewForumsActions.resetData],
+      ],
       arguments: [
         [pageId],
         [

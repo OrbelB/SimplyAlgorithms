@@ -30,7 +30,6 @@ export const updateUserData = createAsyncThunk(
   'user/update',
   async (passedParams) => {
     const { updatedUserData, accessToken } = passedParams;
-
     const response = await userEndpoints.update(updatedUserData, accessToken);
     return response.data;
   }

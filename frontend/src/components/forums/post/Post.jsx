@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { RiQuestionnaireFill } from 'react-icons/ri';
-import { TextField } from '@mui/material';
+import { Fab, TextField, Tooltip } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useValidateInput from '../../../hooks/use-ValidateInput';
@@ -73,7 +73,17 @@ export default function Post() {
   return (
     <>
       {/* <!-- Button trigger modal --> */}
-      <button
+      <Tooltip
+        title="Ask A Question"
+        aria-label="Ask"
+        onClick={() => handleShow()}
+      >
+        <Fab color="info">
+          <RiQuestionnaireFill />
+        </Fab>
+      </Tooltip>
+
+      {/* <button
         type="button"
         className="btn btn-outline-secondary btn-lg"
         onClick={handleShow}
@@ -82,7 +92,7 @@ export default function Post() {
           Ask A Question
           <RiQuestionnaireFill />
         </div>
-      </button>
+      </button> */}
 
       {/* <!-- Modal --> */}
       <Modal
