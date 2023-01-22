@@ -1,7 +1,12 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-import { login, register, refreshAccessToken } from '../../services/auth';
+import {
+  login,
+  register,
+  refreshAccessToken,
+  // resetPasswordRequest,
+} from '../../services/auth';
 
 const initialState = {
   isLoggedIn: false,
@@ -72,6 +77,9 @@ export const authSlice = createSlice({
         state.jwtRefreshToken = action.payload?.refreshToken;
         state.status = 'success';
       });
+    // .addCase(resetPasswordRequest.fulfilled, () => {
+    //   // should not really say if it was sucessful or not.
+    // })
   },
 });
 

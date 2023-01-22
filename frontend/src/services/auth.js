@@ -32,8 +32,8 @@ export const refreshAccessToken = createAsyncThunk(
   }
 );
 
-export const resetPassword = createAsyncThunk(
-  'resetPassword',
+export const resetPasswordRequest = createAsyncThunk(
+  'resetPasswordRequest',
   async (email) => {
     await authEndpoints.resetPassword(email);
   }

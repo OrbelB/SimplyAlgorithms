@@ -46,9 +46,9 @@ const authEndpoints = {
         },
       }
     ),
-  resetPassword: (email) =>
+  resetPasswordRequest: (email) =>
     post(
-      `${PUBLIC_ENDPOINT_ROUTE}/resetPassword`,
+      `${PUBLIC_ENDPOINT_ROUTE}/resetPasswordRequest`,
       {
         email,
       },
