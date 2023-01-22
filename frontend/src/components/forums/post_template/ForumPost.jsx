@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import fp from './ForumPost.module.css';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
 import CommentFrame from '../../comment/CommentFrame';
+
 import {
   fetchSingleForum,
   addUserView,
@@ -32,13 +33,13 @@ export default function ForumPost() {
   const { status: commentVoteStatus } = useSelector(
     (state) => state.commentVotes
   );
-
   const { status: forumVoteStatus } = useSelector((state) => state.forumVotes);
+
   const forumUpdateStore = useMemo(() => {
     return {
       conditions: [
         status === 'idle' || status === 'successToIdle',
-        viewStatus === 'success' &&
+        (viewStatus === 'success' || viewStatus === 'failed') &&
           jwtAccessToken !== '' &&
           isLoggedIn &&
           (status === 'success' || status === 'completed'),
