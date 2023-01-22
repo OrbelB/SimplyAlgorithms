@@ -1,10 +1,10 @@
 package com.simplyalgos.backend.emailing.dtos;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
 @Builder
 public class EmailResponse {
     @NonNull

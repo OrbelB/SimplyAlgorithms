@@ -10,7 +10,8 @@ import java.sql.Date;
 
 
 @Slf4j
-@Data
+@Setter
+@Getter
 public class SignupDTO {
     String username;
     String password;

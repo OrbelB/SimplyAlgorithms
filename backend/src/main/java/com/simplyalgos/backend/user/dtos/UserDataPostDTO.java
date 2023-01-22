@@ -2,19 +2,18 @@ package com.simplyalgos.backend.user.dtos;
 
 
 import jakarta.xml.bind.DatatypeConverter;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.util.UUID;
 
 @Slf4j
-@Data
+@Setter
+@Getter
 public class UserDataPostDTO {
 
     UUID userId;
@@ -46,11 +45,12 @@ public class UserDataPostDTO {
     }
 
     public static File convertProfilePicture(String profilePicture) {
+        if (profilePicture == null || profilePicture.isBlank() || profilePicture.isEmpty()) return null;
         String[] image = profilePicture.split(",");
         log.debug(image[0] + " check the image extension");
         // setting up the fileType
         String fileType = switch (image[0]) { //check image's fileType
-            case "data:image/jpeg;base64" -> "jpeg";
+            case "data:image/peg;base64" -> "jpeg";
             case "data:image/png;base64" -> "png";
             default ->//should write cases for more images types
                     "jpg";

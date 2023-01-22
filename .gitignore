@@ -45,5 +45,6 @@ build/
 
 ### VS Code ###
 .vscode/
-!/docker/db_data/mysql.sock
+/docker/db_data/mysql.sock
 /docker/.env
+/docker/db_data_custom/*

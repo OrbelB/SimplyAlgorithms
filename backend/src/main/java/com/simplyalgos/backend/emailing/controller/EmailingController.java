@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.font.TextMeasurer;
+import java.text.MessageFormat;
+
 @CrossOrigin()
 @Slf4j
 @RequiredArgsConstructor
@@ -16,8 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class EmailingController {
     private final EmailService emailService;
 
-    @PostMapping("/send")
+    @PostMapping(value = "/send", consumes = "application/json")
     public ResponseEntity<?> sendEmail(@RequestBody EmailResponse emailResponse) {
+        log.debug(MessageFormat.format("object gotten from email reponse {0}", emailResponse.getBody()));
         SimpleMailMessage sMailMessage = new SimpleMailMessage();
         sMailMessage.setFrom(emailResponse.getFrom());
         sMailMessage.setTo(emailResponse.getTo());
