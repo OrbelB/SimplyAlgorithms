@@ -5,7 +5,7 @@ import {
   login,
   register,
   refreshAccessToken,
-  // resetPasswordRequest,
+  resetPasswordRequest,
 } from '../../services/auth';
 
 const initialState = {
@@ -76,10 +76,16 @@ export const authSlice = createSlice({
         state.jwtAccessToken = action.payload?.accessToken;
         state.jwtRefreshToken = action.payload?.refreshToken;
         state.status = 'success';
+      })
+      // initial state
+      // action response from endpoint rout
+      .addCase(resetPasswordRequest.rejected, (state) => {
+        // state.error = action.payload;
+        state.error = 'failed';
+      })
+      .addCase(resetPasswordRequest.fulfilled, () => {
+        console.log('got the email');
       });
-    // .addCase(resetPasswordRequest.fulfilled, () => {
-    //   // should not really say if it was sucessful or not.
-    // })
   },
 });
 

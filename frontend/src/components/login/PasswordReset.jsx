@@ -1,26 +1,28 @@
-// will be a pop up that will ask for user's email.
-// will send use the email to send a reset code to the user's provided email
+// will be a pop up that will ask for user's username.
+// will send the email to send a reset token to the user's provided email
 
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { useDispatch } from 'react-redux';
 import useValidateInput from '../../hooks/use-ValidateInput';
+import { resetPasswordRequest } from '../../services/auth';
 
 export default function PasswordReset({ setShowNotification }) {
+  const dispatch = useDispatch();
   const validEmailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const {
-    value: email,
-    hasError: emailHasError,
-    // valueIsValid: emailIsValid,
-    inputBlurHandler: emailBlurHandler,
-    valueChangeHandler: emailChangeHandler,
+    value: username,
+    valueChangeHandler: usernameChangedHandler,
+    inputBlurHandler: usernameBlurHandler,
   } = useValidateInput((value) => value.trim().match(validEmailRegex));
 
   const resetPass = (e) => {
     e.preventDefault();
+    dispatch(resetPasswordRequest(username));
     setShow(false);
     setShowNotification(true);
     // console.log('reseting password for this email: ', email);
@@ -34,36 +36,28 @@ export default function PasswordReset({ setShowNotification }) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Enter email to reset password</Modal.Title>
+          <Modal.Title>Enter username to reset password</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <p>
+            If the username exists you will receive an email to reset the
+            password, the email used will be the one tied to the user name
+          </p>
           <form onSubmit={resetPass}>
             <div className="col form-outline mb-4">
               <input
-                type="email"
-                id="form3Example3cg"
+                type="username"
+                id="username-form"
                 className="form-control form-control-lg"
-                autoComplete="email"
-                value={email}
-                onBlur={emailBlurHandler}
-                onChange={emailChangeHandler}
+                onChange={usernameChangedHandler}
+                onBlur={usernameBlurHandler}
+                value={username}
                 required
               />
             </div>
-            {emailHasError && (
-              <div className="col col-sm-auto small m-2 p-0">
-                <span className="alert alert-danger small p-2">
-                  Email must be valid
-                </span>
-              </div>
-            )}
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <p>
-            If the email adress given exsists it will recieve a reset email from
-            no-reply@simplyalgorithms.com
-          </p>
           <Button variant="secondary" onClick={handleClose}>
             Cancel
           </Button>

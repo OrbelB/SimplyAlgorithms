@@ -60,7 +60,7 @@ export default function LoginForm() {
   }
   const headermes = 'PASSWORD RESET';
   const bodymes =
-    'If the email matches a user we will send the user a reset password email, remeber to check the spam folder.';
+    'If the username matches a username we will send the user a reset password email, remeber to check the spam folder :)';
   const footermes = '';
   const [showNotification, setShowNotification] = useState(false);
   const routePage = false;

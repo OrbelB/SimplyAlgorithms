@@ -4,6 +4,7 @@ import { Container, Row } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import validator from 'validator';
 import useValidateInput from '../../hooks/use-ValidateInput';
 import { register } from '../../services/auth';
 import imageToStringBase64 from '../../utilities/image-to-data-url';
@@ -66,13 +67,32 @@ export default function SignUp({ showSignUp, handleOnClose }) {
   const passwordMatches =
     password === rePassword && passwordIsValid && rePasswordIsValid;
 
+  const validate = (value) => {
+    if (
+      validator.isStrongPassword(value, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+    ) {
+      return true;
+    }
+    return false;
+  };
+  const strongPass = validate(password);
   let isFormValid = false;
+  if (passwordIsValid && rePasswordIsValid && passwordMatches && strongPass)
+    isFormValid = true;
+
   if (
     usernameIsValid &&
     passwordIsValid &&
     rePasswordIsValid &&
     emailIsValid &&
-    passwordMatches
+    passwordMatches &&
+    strongPass
   )
     isFormValid = true;
 
@@ -241,6 +261,13 @@ export default function SignUp({ showSignUp, handleOnClose }) {
                 <div className="col col-sm-auto small m-2 p-0">
                   <span className="alert alert-danger small p-2">
                     Passwords do not match
+                  </span>
+                </div>
+              )}
+              {!strongPass && passwordIsValid && (
+                <div className="col col-sm-auto small m-2 p-0">
+                  <span className="alert alert-danger small p-2">
+                    Password not strong
                   </span>
                 </div>
               )}
