@@ -1,7 +1,10 @@
 package com.simplyalgos.backend.web;
 
+import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.security.JpaUserDetailsService;
 import com.simplyalgos.backend.security.TokenGenerator;
+import com.simplyalgos.backend.user.dtos.PasswordResetRequest;
+import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.dtos.LoginDTO;
 import com.simplyalgos.backend.web.dtos.SignupDTO;
 import com.simplyalgos.backend.web.dtos.TokenDTO;
@@ -34,6 +37,10 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenGenerator tokenGenerator;
     private JwtAuthenticationProvider refreshTokenAuthProvider;
+
+    private final UserService userService;
+
+
 
     @Autowired
     @Qualifier("jwtRefreshTokenAuthProvider")
@@ -80,4 +87,11 @@ public class AuthController {
         }
 
     }
+    @PostMapping("/resetPasswordRequest")
+
+    public  ResponseEntity<?> resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest){
+        userService.userUserNameExists(passwordResetRequest.getUsername());
+        return ResponseEntity.noContent().build();
+    }
+
 }

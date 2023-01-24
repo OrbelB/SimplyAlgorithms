@@ -1,13 +1,17 @@
 package com.simplyalgos.backend.user.services;
 
+import com.simplyalgos.backend.emailing.dtos.EmailResponse;
+import com.simplyalgos.backend.emailing.services.EmailService;
+import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +28,24 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Getter
+    @NoArgsConstructor
+    private class ResetPasswordRequestEmailValues{
+        @NonNull
+        final String from = "noreply@simplyalgorithms.com";
+        @NonNull
+        String subject = "Simply Algorithms password reset";
+
+        String body = "A password reset request was made, please click on the link to reset your password, If you hanvt made such request please ignore this email";
+    }
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
     private final StorageService storageService;
+
+    private final EmailService emailService;
 
     public Set<UserDTO> parseUsers() {
         return userRepository
@@ -88,6 +106,45 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean userExists(UUID userId) {
         return userRepository.existsById(userId);
+    }
+
+//    @Override
+//    public boolean userEmailExists(String email) {
+//        User user = userRepository.findByEmail(email).orElseThrow(() -> {
+//            log.info("EMAIL " + email + " NOT FOUND");
+//            return new ElementNotFoundException();
+//        });
+//        log.info(user.getEmail() + " -- " + email);
+//        if(user.getEmail() == email){
+//            return true;
+//        }
+//        return false;
+//    }
+
+    @Override
+    public boolean userUserNameExists(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> {
+            log.info("USERNAME: " + username + " NOT FOUND");
+            return new ElementNotFoundException();
+        });
+        log.info("USER FOUND FROM FRONT END: " + username + " ----- FROM DATABASE" + user.getUsername());
+        //a better way is required but this will do for now
+
+        String tempEmail = "bobsb5038@gmail.com";
+        ResetPasswordRequestEmailValues emailvalues = new ResetPasswordRequestEmailValues();
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
+        simpleMailMessage.setFrom(emailvalues.getFrom());
+        simpleMailMessage.setSubject(emailvalues.getSubject());
+        simpleMailMessage.setText(emailvalues.getBody() + " " + user.getEmail());
+
+        simpleMailMessage.setTo(tempEmail);
+//        simpleMailMessage.setTo(user.getEmail());
+
+        log.info(user.getEmail() + " USER EMAIL");
+
+        emailService.sendEmail(simpleMailMessage);
+        return true;
     }
 
     @Override

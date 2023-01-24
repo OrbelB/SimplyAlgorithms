@@ -20,4 +20,8 @@ public interface UserService {
     boolean userExists(UUID userId);
 
     UUID removeUser(UUID userId);
+
+//    boolean userEmailExists(String email);
+
+    boolean userUserNameExists(String username);
 }
