@@ -1,9 +1,9 @@
 package com.simplyalgos.backend.user.services;
 
-import com.simplyalgos.backend.emailing.dtos.EmailResponse;
 import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.storage.StorageService;
+import com.simplyalgos.backend.user.domains.ResetPasswordRequestEmailValues;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
@@ -29,16 +29,17 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Getter
-    @NoArgsConstructor
-    private class ResetPasswordRequestEmailValues{
-        @NonNull
-        final String from = "noreply@simplyalgorithms.com";
-        @NonNull
-        String subject = "Simply Algorithms password reset";
 
-        String body = "A password reset request was made, please click on the link to reset your password, If you hanvt made such request please ignore this email";
-    }
+//    @Getter
+//    @NoArgsConstructor
+//    private class ResetPasswordRequestEmailValues{
+//        @NonNull
+//        final String from = "noreply@simplyalgorithms.com";
+//        @NonNull
+//        String subject = "Simply Algorithms password reset";
+//
+//        String body = "A password reset request was made, please click on the link to reset your password, If you hanvt made such request please ignore this email";
+//    }
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -131,12 +132,10 @@ public class UserServiceImpl implements UserService {
         //a better way is required but this will do for now
 
         String tempEmail = "bobsb5038@gmail.com";
-        ResetPasswordRequestEmailValues emailvalues = new ResetPasswordRequestEmailValues();
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-
-        simpleMailMessage.setFrom(emailvalues.getFrom());
-        simpleMailMessage.setSubject(emailvalues.getSubject());
-        simpleMailMessage.setText(emailvalues.getBody() + " " + user.getEmail());
+        simpleMailMessage.setFrom(ResetPasswordRequestEmailValues.FROM.label);
+        simpleMailMessage.setSubject(ResetPasswordRequestEmailValues.SUBJECT.label);
+        simpleMailMessage.setText(ResetPasswordRequestEmailValues.BODY.label + " " + user.getEmail());
 
         simpleMailMessage.setTo(tempEmail);
 //        simpleMailMessage.setTo(user.getEmail());
