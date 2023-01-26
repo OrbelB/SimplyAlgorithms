@@ -1,17 +1,14 @@
 package com.simplyalgos.backend.user.dtos;
 
 
-import jakarta.xml.bind.DatatypeConverter;
+import com.simplyalgos.backend.utils.ImageUtils;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.MessageFormat;
 import java.util.UUID;
 
-@Slf4j
 @Setter
 @Getter
 public class UserDataPostDTO {
@@ -36,7 +33,7 @@ public class UserDataPostDTO {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.profilePicture = convertProfilePicture(profilePicture);
+        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture);
         this.biography = biography;
         this.phoneNumber = phoneNumber;
         this.createdDate = createdDate;
@@ -44,26 +41,5 @@ public class UserDataPostDTO {
         this.role = role;
     }
 
-    public static File convertProfilePicture(String profilePicture) {
-        if (profilePicture == null || profilePicture.isBlank() || profilePicture.isEmpty()) return null;
-        String[] image = profilePicture.split(",");
-        log.debug(image[0] + " check the image extension");
-        // setting up the fileType
-        String fileType = switch (image[0]) { //check image's fileType
-            case "data:image/peg;base64" -> "jpeg";
-            case "data:image/png;base64" -> "png";
-            default ->//should write cases for more images types
-                    "jpg";
-        };
-        File picture = new File("profilePicture." + fileType);
 
-        // getting the bytes from the base 64 string
-        byte[] data = DatatypeConverter.parseBase64Binary(image[1]);
-        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(picture))) {
-            outputStream.write(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return picture;
-    }
 }

@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "forum_page")
+@Cacheable
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "pageId")
 public class Forum extends BaseEntity {
     @Column(name = "description_text")
@@ -35,7 +36,7 @@ public class Forum extends BaseEntity {
     private PageEntity pageEntityId;
 
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "user_id"))
     private User createdBy;
 

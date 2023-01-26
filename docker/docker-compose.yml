@@ -9,6 +9,7 @@ services:
       - "MYSQL_ROOT_PASSWORD=${LOCALHOST_PASSWORD}"
     volumes:
       - "${DB_DIRECTORY}:/var/lib/mysql"
+    restart: unless-stopped
     networks:
       - net
   be_instance:
@@ -16,8 +17,10 @@ services:
     image: openjdk:17-jdk-slim
     build:
       context: java-instance
+    depends_on:
+      - db_instance
     environment:
-      PROFILE_TYPE : ${PROFILE_TYPE}
+      PROFILE_TYPE: ${PROFILE_TYPE}
       AWS3_BUCKET_ACCESS_KEY: ${AWS3_BUCKET_ACCESS_KEY}
       AWS3_BUCKET_NAME: ${AWS3_BUCKET_NAME}
       AWS3_BUCKET_REGION: ${AWS3_BUCKET_REGION}

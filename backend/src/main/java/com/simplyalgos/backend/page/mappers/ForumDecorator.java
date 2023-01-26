@@ -46,6 +46,12 @@ public class ForumDecorator implements ForumMapper {
         return forumDTO;
     }
 
+    @Override
+    public Forum forumDTOToForum(ForumDTO forumDTO) {
+        return null;
+    }
+
+
     private UserDataDTO mapUserToUserDto(Forum forum) {
         User user = forum.getCreatedBy();
         UserDataDTO.UserDataDTOBuilder userDTOBuilder = UserDataDTO.builder();
@@ -57,9 +63,10 @@ public class ForumDecorator implements ForumMapper {
         return userDTOBuilder.build();
     }
 
+
     @Override
-    public Forum forumDTOToForum(ForumDTO forumDTO) {
-        return forumMapper.forumDTOToForum(forumDTO);
+    public void updateForumFromForumDto(ForumDTO forumDTO, Forum forum) {
+        forumMapper.updateForumFromForumDto(forumDTO, forum);
     }
 
     @Override

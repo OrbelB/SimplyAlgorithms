@@ -4,7 +4,6 @@ import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.Forum;
 import com.simplyalgos.backend.page.domains.PageEntity;
 import com.simplyalgos.backend.page.domains.PageVoteId;
-import com.simplyalgos.backend.page.domains.Views;
 import com.simplyalgos.backend.page.dtos.ForumDTO;
 import com.simplyalgos.backend.page.dtos.FullForumDTO;
 import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;
@@ -146,27 +145,18 @@ public class ForumServiceImpl implements ForumService {
 
     @Override
     public FullForumDTO updateForum(ForumDTO forumDTO) {
-        Optional<Forum> optionalForumToUpdate = forumRepository.findById(forumDTO.getPageId());
-        Forum forum;
-        if (optionalForumToUpdate.isPresent()) {
-            forum = optionalForumToUpdate.get();
-            if (forum.getCreatedBy().getUserId().equals(forumDTO.getUserDto().getUserId())) {
-                if (isNotNullAndEmpty(forumDTO.getTitle())) forum.setTitle(forumDTO.getTitle());
-                if (isNotNullAndEmpty(forumDTO.getPhoto())) forum.setPhoto(forumDTO.getPhoto());
-                if (isNotNullAndEmpty(forumDTO.getVideo())) forum.setVideo(forumDTO.getVideo());
-                if (isNotNullAndEmpty(forumDTO.getDescriptionText()))
-                    forum.setDescriptionText(forumDTO.getDescriptionText());
-                forum.getPageEntityId().setTags(new HashSet<>(tagService.mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags())));
-            }
-            return forumMapper.forumToFullForumDto(forumRepository.save(forum));
+        Forum forum = forumRepository.findById(forumDTO.getPageId()).orElseThrow(() ->
+                new ElementNotFoundException(
+                        MessageFormat.
+                                format("Forum with page Id {0} is not present ", forumDTO.getPageId())
+                )
+        );
+        //forumMapper.forumDTOToForum(forumDTO, forum);
+        if (forum.getCreatedBy().getUserId().equals(forumDTO.getUserDto().getUserId())) {
+            forumMapper.updateForumFromForumDto(forumDTO, forum);
+            forum.getPageEntityId().setTags(new HashSet<>(tagService.mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags())));
         }
-        throw new ElementNotFoundException(MessageFormat.format("no such an object", forumDTO.getPageId()));
-    }
-
-
-    private boolean isNotNullAndEmpty(String xAttribute) {
-        if (xAttribute == null) return false;
-        return !xAttribute.isEmpty() || !xAttribute.isBlank();
+        return forumMapper.forumToFullForumDto(forumRepository.save(forum));
     }
 
     @Override

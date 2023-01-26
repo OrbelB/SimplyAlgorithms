@@ -22,8 +22,8 @@ public class ForumDTO {
     Date createdDate;
     String photo;
     String video;
-    int upVotes;
-    int downVotes;
+    Integer upVotes;
+    Integer downVotes;
     UserDataDTO userDto;
     Set<TagDTO> tags;
 }

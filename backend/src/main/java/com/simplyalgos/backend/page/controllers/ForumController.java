@@ -30,10 +30,10 @@ public class ForumController {
     private final ForumService forumService;
 
     @GetMapping("/list")
-    public ResponseEntity<?> getPageList(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                         @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                         @RequestParam(name = "sortBy", required = false) String sortBy,
-                                         @RequestParam(name = "filterBy", required = false) String filterBy) {
+    public ResponseEntity<?>getPageList(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                                     @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                     @RequestParam(name = "filterBy", required = false) String filterBy) {
         if(filterBy != null && !filterBy.isBlank() && !filterBy.isEmpty()) {
             return ResponseEntity.ok(forumService.filterForumsByTag(PageRequest.of(page, size), filterBy));
         }
