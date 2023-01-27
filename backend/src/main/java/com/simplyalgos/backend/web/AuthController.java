@@ -1,8 +1,11 @@
 package com.simplyalgos.backend.web;
 
+import com.simplyalgos.backend.emailing.controller.EmailingController;
 import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.security.JpaUserDetailsService;
 import com.simplyalgos.backend.security.TokenGenerator;
+import com.simplyalgos.backend.user.domains.ResetPasswordRequestEmailValues;
+import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.PasswordResetRequest;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.dtos.LoginDTO;
@@ -17,6 +20,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,6 +43,8 @@ public class AuthController {
     private JwtAuthenticationProvider refreshTokenAuthProvider;
 
     private final UserService userService;
+
+    private final EmailService emailService;
 
 
 
@@ -90,7 +96,21 @@ public class AuthController {
     @PostMapping("/resetPasswordRequest")
 
     public  ResponseEntity<?> resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest){
-        userService.userUserNameExists(passwordResetRequest.getUsername());
+        User user = userService.userUserNameExists(passwordResetRequest.getUsername());
+        String tempEmail = "bobsb5038@gmail.com";
+
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(ResetPasswordRequestEmailValues.FROM.label);
+        simpleMailMessage.setSubject(ResetPasswordRequestEmailValues.SUBJECT.label);
+        simpleMailMessage.setText(ResetPasswordRequestEmailValues.BODY.label + " " + user.getEmail());
+
+        simpleMailMessage.setTo(tempEmail);
+
+
+
+        log.info(user.getEmail() + " USER EMAIL");
+
+        emailService.sendEmail(simpleMailMessage);
         return ResponseEntity.noContent().build();
     }
 
