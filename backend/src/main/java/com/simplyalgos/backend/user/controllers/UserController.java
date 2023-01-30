@@ -65,6 +65,4 @@ public class UserController {
     public ResponseEntity<?> delete(@RequestParam(name = "userId") UUID userId) {
         return ResponseEntity.ok().body(userService.removeUser(userId));
     }
-
-
 }

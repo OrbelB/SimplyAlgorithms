@@ -85,7 +85,7 @@ public class CustomResponseEntityException extends ResponseEntityExceptionHandle
         return new ResponseEntity<>(errorHandlerDetails.build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({ElementNotFoundException.class, PasswordsDontMatchException.class})
+    @ExceptionHandler({ElementNotFoundException.class, PasswordsDontMatchException.class, TokenExpireException.class})
     public final ResponseEntity<?> handleCustomExceptions(WebRequest request, Exception ex) throws Exception{
         ErrorHandlerDetails.ErrorHandlerDetailsBuilder errorHandlerDetails = ErrorHandlerDetails
                 .builder()
@@ -98,7 +98,12 @@ public class CustomResponseEntityException extends ResponseEntityExceptionHandle
         } else if (ex instanceof PasswordsDontMatchException theEx) {
             errorHandlerDetails.status(HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorHandlerDetails.build(), HttpStatus.FORBIDDEN);
-        } else {
+        }
+        else if (ex instanceof TokenExpireException theEx ){
+            errorHandlerDetails.status(HttpStatus.UNAUTHORIZED.value());
+            return new ResponseEntity<>(errorHandlerDetails.build(), HttpStatus.UNAUTHORIZED);
+        }
+        else {
             throw ex;
         }
     }

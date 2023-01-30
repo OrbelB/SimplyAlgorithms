@@ -52,7 +52,7 @@ public class JpaUserDetailsService implements UserDetailsService {
         }
         User user = userRegisteredMapper.create(userDto);
         if (userDto.getProfilePicture() != null) {
-            log.info(userDto.getProfilePicture() +  "check if the correct method is call");
+            log.info(userDto.getProfilePicture() + "check if the correct method is call");
             user.setProfilePicture(storageService.uploadImageFile(userDto.getProfilePicture()));
         }
         user.setRoles(Set.of(assignRoleToNewUser("STUDENT")));
@@ -95,4 +95,16 @@ public class JpaUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found"));
     }
+
+    @Transactional
+    public UUID resetUserPassword(UUID userId, String newPassword) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(MessageFormat.format("User with id {0} not found", userId)));
+
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return user.getUserId();
+
+//        send email to the user notifying his password was reset
+    }
 }
+

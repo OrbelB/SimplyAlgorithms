@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,23 +22,39 @@ import java.util.UUID;
 public class PasswordResetToken {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+//    @GeneratedValue(generator = "UUID")
+//    @GenericGenerator(
+//            name = "UUID",
+//            strategy = "org.hibernate.id.UUIDGenerator"
+//    )
     @Type(value = UserTypeLegacyBridge.class,
             parameters = @org.hibernate.annotations.Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
                     value = "org.hibernate.type.UUIDCharType"))
     @Column(length = 36, updatable = false, nullable = false , name = "password_reset_token_id", columnDefinition = "varchar" )
-    private UUID password_reset_tokenID;
+    private UUID passwordResetTokenID;
 
+    @Column(name = "expire_date")
     private Date expireDate;
 
-    private String token;
-
     @JsonIncludeProperties({"userId", "username", "email"})
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
+
+    public PasswordResetToken(User userID, UUID resetPasswordToken){
+        this.passwordResetTokenID = resetPasswordToken;
+        this.userId = userID;
+        this.expireDate = calculateExpiryDate( 60 * 24);
+    }
+
+    private Date calculateExpiryDate(final int expiryTimeInMinutes) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(new Date().getTime());
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Date(cal.getTime().getTime());
+    }
+
+
+
+
 }
