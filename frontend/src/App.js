@@ -54,10 +54,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="passwordReset/:passwordResetToken"
-          element={<PasswordResetPage />}
-        />
+        <Route path="passwordReset" element={<PasswordResetPage />} />
         <Route path="/forums">
           <Route index element={<ForumPage />} />
           <Route path=":pageId" element={<ForumPost />} />

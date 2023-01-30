@@ -1,8 +1,13 @@
 import React from 'react';
 import validator from 'validator';
+import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import useValidateInput from '../../hooks/use-ValidateInput';
+import { changePassword } from '../../services/auth';
 
 export default function PasswordResetPage() {
+  const [token] = useSearchParams();
+  const dispatch = useDispatch();
   const {
     value: password,
     hasError: passwordHasError,
@@ -37,8 +42,13 @@ export default function PasswordResetPage() {
   };
   const resetPassword = () => {
     validate(password);
-    console.log('Password reset forum');
-    console.log('The New password is: ', password);
+    console.log(token.get('token'));
+    dispatch(
+      changePassword({
+        newPassword: password,
+        passwordToken: token.get('token'),
+      })
+    );
     rePasswordReset();
     passwordReset();
   };
