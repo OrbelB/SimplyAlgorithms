@@ -58,6 +58,19 @@ const authEndpoints = {
         },
       }
     ),
+  changePassword: (passwordRestObj) =>
+    post(
+      `${PUBLIC_ENDPOINT_ROUTE}/changePassword`,
+      {
+        passwordToken: passwordRestObj?.passwordToken,
+        newPassword: passwordRestObj?.newPassword,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    ),
 };
 
 export default authEndpoints;

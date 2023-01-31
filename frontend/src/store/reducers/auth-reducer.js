@@ -6,9 +6,11 @@ import {
   register,
   refreshAccessToken,
   resetPasswordRequest,
+  changePassword,
 } from '../../services/auth';
 
 const initialState = {
+  passwordResetState: 'idle',
   isLoggedIn: false,
   userId: '',
   jwtAccessToken: '',
@@ -85,6 +87,12 @@ export const authSlice = createSlice({
       })
       .addCase(resetPasswordRequest.fulfilled, () => {
         console.log('got the email');
+      })
+      .addCase(changePassword.fulfilled, (state) => {
+        state.passwordResetState = 'accepted';
+      })
+      .addCase(changePassword.rejected, (state) => {
+        state.passwordResetState = 'rejected';
       });
   },
 });

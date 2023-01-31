@@ -38,3 +38,10 @@ export const resetPasswordRequest = createAsyncThunk(
     await authEndpoints.resetPasswordRequest(username);
   }
 );
+
+export const changePassword = createAsyncThunk(
+  'changePassword',
+  async (passwordRestObj) => {
+    await authEndpoints.changePassword(passwordRestObj);
+  }
+);
