@@ -19,26 +19,10 @@ import BinarySearchTree from './pages/t_pages/BinarySearchTree';
 import BreadtFirstSearch from './pages/t_pages/BreadtFirstSearch';
 import Arrays from './pages/t_pages/Arrays';
 import WikiPage from './pages/WikiPage';
-import WSorting from './components/wiki/topics/WSorting';
-import WSelectionSort from './components/wiki/topics/WSelectionSort';
-import WQuickSort from './components/wiki/topics/WQuickSort';
-import WBubbleSort from './components/wiki/topics/WBubbleSort';
-import WRadixSort from './components/wiki/topics/WRadixSort';
-import WTrees from './components/wiki/topics/WTrees';
-import WBinarySearch from './components/wiki/topics/WBinarySearch';
-import WTwoTree from './components/wiki/topics/WTwoTree';
-import WThreeTree from './components/wiki/topics/WThreeTree';
-import WRedBlack from './components/wiki/topics/WRedBlack';
-import WGraphs from './components/wiki/topics/WGraphs';
-import WBreadthFirst from './components/wiki/topics/WBreadthFirst';
-import WDepthFirst from './components/wiki/topics/WDepthFirst';
-import WTopologicalSort from './components/wiki/topics/WTopologicalSort';
-import WDjikstra from './components/wiki/topics/WDjikstra';
-import WDataStructures from './components/wiki/topics/WDataStructures';
-import WArray from './components/wiki/topics/WArray';
-import WLinkedList from './components/wiki/topics/WLinkedList';
-import WStack from './components/wiki/topics/WStack';
-import WQueue from './components/wiki/topics/WQueue';
+import WSorting from './components/wiki/WSorting';
+import WTrees from './components/wiki/WTrees';
+import WGraphs from './components/wiki/WGraphs';
+import WDataStructures from './components/wiki/WDataStructures';
 import ScrollToTop from './components/ScrollToTop';
 import useRefreshToken from './hooks/use-refreshToken';
 import PasswordResetPage from './components/login/PasswordResetPage';
@@ -83,25 +67,9 @@ function App() {
         {/* WIKI PAGES */}
         <Route path="/wiki" element={<WikiPage />} />
         <Route path="/sorting" element={<WSorting />} />
-        <Route path="/sorting/selectionsort" element={<WSelectionSort />} />
-        <Route path="/sorting/quicksort" element={<WQuickSort />} />
-        <Route path="/sorting/bubblesort" element={<WBubbleSort />} />
-        <Route path="/sorting/radixsort" element={<WRadixSort />} />
         <Route path="/trees" element={<WTrees />} />
-        <Route path="/trees/binarysearch" element={<WBinarySearch />} />
-        <Route path="/trees/twotree" element={<WTwoTree />} />
-        <Route path="/trees/threetree" element={<WThreeTree />} />
-        <Route path="/trees/redblacktree" element={<WRedBlack />} />
         <Route path="/graphs" element={<WGraphs />} />
-        <Route path="/graphs/breadthfirst" element={<WBreadthFirst />} />
-        <Route path="/graphs/depthfirst" element={<WDepthFirst />} />
-        <Route path="/graphs/topological" element={<WTopologicalSort />} />
-        <Route path="/graphs/djikstra" element={<WDjikstra />} />
         <Route path="/datastructures" element={<WDataStructures />} />
-        <Route path="/datastructures/arrays" element={<WArray />} />
-        <Route path="/datastructures/linkedlist" element={<WLinkedList />} />
-        <Route path="/datastructures/stack" element={<WStack />} />
-        <Route path="/datastructures/queue" element={<WQueue />} />
 
         <Route path="/team" element={<MeetTeamPage />} />
         <Route
