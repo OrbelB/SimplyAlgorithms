@@ -3,6 +3,7 @@ import './PostPreview.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
+import { Avatar } from '@mui/material';
 import {
   selectAllViewedForums,
   viewForumsActions,
@@ -55,9 +56,9 @@ export default function RelatedRecentPosts() {
             tabIndex={0}
           >
             <div className="line-one">
-              <img
-                className="rounded-circle m-2"
-                height="38"
+              <Avatar
+                className="m-2"
+                height="60"
                 alt="current profile user"
                 loading="lazy"
                 src={viewedForum?.userDto?.profilePicture}

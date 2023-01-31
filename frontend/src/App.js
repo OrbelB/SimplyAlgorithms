@@ -63,8 +63,12 @@ function App() {
         </Route>
         <Route path="/underconstruction" element={<UnderConstructionPage />} />
         {/* SAMPLE TOPIC PAGES */}
-        <Route path="/search/binarysearchtree" element={<BinarySearchTree />} />
-        <Route path="/search/bfs" element={<BreadtFirstSearch />} />
+
+        <Route path="/search">
+          <Route path="binarysearchtree" element={<BinarySearchTree />} />
+          <Route path="bfs" element={<BreadtFirstSearch />} />
+        </Route>
+
         <Route path="/arrays" element={<Arrays />} />
         {/* WIKI PAGES */}
         <Route path="/wiki" element={<WikiPage />} />

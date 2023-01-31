@@ -1,4 +1,5 @@
-import { useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import { useState, useCallback } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
 import { NavLink } from 'react-router-dom';
 import Chart from 'react-apexcharts';
@@ -47,23 +48,45 @@ export default function QuizScreen({ retry }) {
       ],
     },
   ];
-
+  const [userSelectAnswer, setUserSelectAnswer] = useState({
+    position: -1,
+    isCorrect: false,
+  });
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
-
-  const handleAnswerOptionClick = (isCorrect) => {
+  const handleAnswerOptionClick = (isCorrect, index) => {
     if (isCorrect) {
       setScore(score + 1);
     }
+    setUserSelectAnswer(() => {
+      return { position: index, isCorrect };
+    });
+    console.info(JSON.stringify(userSelectAnswer));
+  };
 
+  const nextQuestionChoice = () => {
     const nextQuestion = currentQuestion + 1;
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion);
     } else {
       setShowScore(true);
     }
+    setUserSelectAnswer({
+      position: -1,
+      isCorrect: false,
+    });
   };
+  const buttonStyle = useCallback(
+    (answerOption, index) => {
+      return answerOption.isCorrect && userSelectAnswer.position !== -1
+        ? 'answerbutton-right'
+        : userSelectAnswer.position === index
+        ? 'answerbutton-wrong'
+        : 'answerbutton';
+    },
+    [userSelectAnswer]
+  );
 
   return (
     <div className="quiz-screen p-5">
@@ -140,16 +163,30 @@ export default function QuizScreen({ retry }) {
             </div>
           </div>
           <div className="answer-section h5">
-            {questions[currentQuestion].answerOptions.map((answerOption) => (
-              <button
-                key={nanoid()}
-                type="button"
-                className="answerbutton"
-                onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}
-              >
-                {answerOption.answerText}
-              </button>
-            ))}
+            {questions[currentQuestion].answerOptions.map(
+              (answerOption, index) => (
+                <button
+                  id={index}
+                  key={nanoid()}
+                  type="button"
+                  disabled={userSelectAnswer.position !== -1}
+                  className={buttonStyle(answerOption, index)}
+                  onClick={() =>
+                    handleAnswerOptionClick(answerOption.isCorrect, index)
+                  }
+                >
+                  {answerOption.answerText}
+                </button>
+              )
+            )}
+            <button
+              hidden={userSelectAnswer.position === -1}
+              type="button"
+              onClick={() => nextQuestionChoice()}
+              className="answerbutton"
+            >
+              next
+            </button>
           </div>
         </>
       )}
