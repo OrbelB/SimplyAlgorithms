@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
+
+.top-quizhome {
+  background-color: var(--color-bg-alg-dash);
+  background-image: url('https://www.transparenttextures.com/patterns/bright-squares.png');
+}
+.quiz-logo {
+  font-family: 'Readex Pro', sans-serif;
+  text-shadow: -1.3px 1.3px #2196f3, -2.6px 2.6px #43a047, -3.9px 3.9px #ff5722;
+}
+.bottom-quizhome {
+  background-color: var(--color-bg-second);
+}

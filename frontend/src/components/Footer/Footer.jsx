@@ -43,7 +43,7 @@ export default function Footer() {
                 <NavLink
                   className={cx(style['nav-footer-link'])}
                   aria-current="page"
-                  to="quizzes"
+                  to="quiz"
                 >
                   Quizzes
                 </NavLink>

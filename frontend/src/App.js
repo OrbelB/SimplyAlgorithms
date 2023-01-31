@@ -42,6 +42,8 @@ import WQueue from './components/wiki/topics/WQueue';
 import ScrollToTop from './components/ScrollToTop';
 import useRefreshToken from './hooks/use-refreshToken';
 import PasswordResetPage from './components/login/PasswordResetPage';
+import QuizPage from './pages/QuizHomePage';
+import QuizSample from './pages/q_pages/QuizSample';
 
 function App() {
   useRefreshToken();
@@ -105,6 +107,10 @@ function App() {
         <Route path="/datastructures/linkedlist" element={<WLinkedList />} />
         <Route path="/datastructures/stack" element={<WStack />} />
         <Route path="/datastructures/queue" element={<WQueue />} />
+
+        <Route path="/quiz" element={<QuizPage />} />
+
+        <Route path="/quiz/sample" element={<QuizSample />} />
 
         <Route path="/team" element={<MeetTeamPage />} />
         <Route
