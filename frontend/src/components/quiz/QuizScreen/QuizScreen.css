@@ -9,6 +9,10 @@
   font-family: 'Readex Pro', sans-serif;
 }
 
+.countbar {
+  margin-left: 20px;
+}
+
 .answerbutton-wrong {
   background-color: #ff0505;
   border: 1px solid transparent;
@@ -64,7 +68,6 @@
   width: auto;
   margin-right: 10px;
 }
-
 
 .answerbutton {
   background-color: #111827;

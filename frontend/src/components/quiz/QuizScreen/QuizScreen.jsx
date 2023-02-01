@@ -128,65 +128,68 @@ export default function QuizScreen({ retry }) {
         </div>
       ) : (
         <>
-          <div className="question-section">
-            <div className="row">
-              <div className="col question-count p-3 h2">
+          <div className="question-section container">
+            <div className="row justify-content-center">
+              <CountdownCircleTimer
+                isPlaying
+                size={150}
+                duration={300}
+                colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+                colorsTime={[7, 5, 2, 0]}
+                onComplete={() => {
+                  setShowScore(true);
+                }}
+              >
+                {({ remainingTime }) => {
+                  const hours = Math.floor(remainingTime / 3600);
+                  const minutes = Math.floor((remainingTime % 3600) / 60);
+                  const seconds = remainingTime % 60;
+
+                  return (
+                    <span className="h3 countbar text-center">
+                      {hours}:{minutes}:{seconds}
+                    </span>
+                  );
+                }}
+              </CountdownCircleTimer>
+              <div className="question-count text-center p-3 h1">
                 <span>Question {currentQuestion + 1}</span>/{questions.length}
-                <div className="question-text h4 pt-3">
+                <div className="question-text h3 pt-3">
                   {questions[currentQuestion].questionText}
                 </div>
               </div>
-              <div className="col-auto float-right text-right">
-                <h4 className="text-center">Timer</h4>
-                <CountdownCircleTimer
-                  isPlaying
-                  duration={300}
-                  colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-                  colorsTime={[7, 5, 2, 0]}
-                  onComplete={() => {
-                    setShowScore(true);
-                  }}
-                >
-                  {({ remainingTime }) => {
-                    const hours = Math.floor(remainingTime / 3600);
-                    const minutes = Math.floor((remainingTime % 3600) / 60);
-                    const seconds = remainingTime % 60;
-
-                    return (
-                      <span className="h3">
-                        {hours}:{minutes}:{seconds}
-                      </span>
-                    );
-                  }}
-                </CountdownCircleTimer>
-              </div>
             </div>
           </div>
-          <div className="answer-section h5">
-            {questions[currentQuestion].answerOptions.map(
-              (answerOption, index) => (
-                <button
-                  id={index}
-                  key={nanoid()}
-                  type="button"
-                  disabled={userSelectAnswer.position !== -1}
-                  className={buttonStyle(answerOption, index)}
-                  onClick={() =>
-                    handleAnswerOptionClick(answerOption.isCorrect, index)
-                  }
-                >
-                  {answerOption.answerText}
-                </button>
-              )
-            )}
-            <button
-              hidden={userSelectAnswer.position === -1}
-              type="button"
-              onClick={() => nextQuestionChoice()}
-              className="answerbutton"
-            >
-              next
-            </button>
+          <div className="row">
+            <div className="answer-section text-center">
+              {questions[currentQuestion].answerOptions.map(
+                (answerOption, index) => (
+                  <button
+                    id={index}
+                    key={nanoid()}
+                    type="button"
+                    disabled={userSelectAnswer.position !== -1}
+                    className={buttonStyle(answerOption, index)}
+                    onClick={() =>
+                      handleAnswerOptionClick(answerOption.isCorrect, index)
+                    }
+                  >
+                    <h4>{answerOption.answerText}</h4>
+                  </button>
+                )
+              )}
+            </div>
+            <br />
+            <div className="text-center">
+              <button
+                hidden={userSelectAnswer.position === -1}
+                type="button"
+                onClick={() => nextQuestionChoice()}
+                className="answerbutton mt-3"
+              >
+                <h4>Next</h4>
+              </button>
+            </div>
           </div>
         </>
       )}
