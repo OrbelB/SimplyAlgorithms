@@ -122,28 +122,15 @@ public class UserServiceImpl implements UserService {
 //        return false;
 //    }
 
+    //will generate the token here and send it to the user
     @Override
-    public boolean userUserNameExists(String username) {
+    public User userUserNameExists(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> {
             log.info("USERNAME: " + username + " NOT FOUND");
             return new ElementNotFoundException();
         });
         log.info("USER FOUND FROM FRONT END: " + username + " ----- FROM DATABASE" + user.getUsername());
-        //a better way is required but this will do for now
-
-        String tempEmail = "bobsb5038@gmail.com";
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(ResetPasswordRequestEmailValues.FROM.label);
-        simpleMailMessage.setSubject(ResetPasswordRequestEmailValues.SUBJECT.label);
-        simpleMailMessage.setText(ResetPasswordRequestEmailValues.BODY.label + " " + user.getEmail());
-
-        simpleMailMessage.setTo(tempEmail);
-//        simpleMailMessage.setTo(user.getEmail());
-
-        log.info(user.getEmail() + " USER EMAIL");
-
-        emailService.sendEmail(simpleMailMessage);
-        return true;
+        return user;
     }
 
     @Override
@@ -156,4 +143,11 @@ public class UserServiceImpl implements UserService {
                 userId.toString()));
     }
 
+    @Override
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username).orElseThrow(() -> {
+            log.info("USERNAME: " + username + " NOT FOUND");
+            return new ElementNotFoundException();
+        });
+    }
 }

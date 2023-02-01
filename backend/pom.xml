@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.simplyalgos</groupId>
     <artifactId>backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.2-SNAPSHOT</version>
     <name>backend</name>
     <description>backend</description>
     <properties>
@@ -248,3 +248,4 @@
         </plugins>
     </build>
 </project>
+

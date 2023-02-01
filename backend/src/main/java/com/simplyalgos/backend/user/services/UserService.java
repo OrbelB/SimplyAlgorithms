@@ -22,6 +22,10 @@ public interface UserService {
     UUID removeUser(UUID userId);
 
 //    boolean userEmailExists(String email);
+    User getUserByUsername(String username);
 
-    boolean userUserNameExists(String username);
+//    if it exsists the return a user
+    User userUserNameExists(String username);
+
+
 }
