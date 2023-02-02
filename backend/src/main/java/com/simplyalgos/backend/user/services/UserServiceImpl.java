@@ -1,9 +1,7 @@
 package com.simplyalgos.backend.user.services;
 
-import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.storage.StorageService;
-import com.simplyalgos.backend.user.domains.ResetPasswordRequestEmailValues;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
@@ -11,7 +9,6 @@ import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +43,6 @@ public class UserServiceImpl implements UserService {
 
     private final StorageService storageService;
 
-    private final EmailService emailService;
 
     public Set<UserDTO> parseUsers() {
         return userRepository

@@ -22,6 +22,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.*;
@@ -94,8 +95,6 @@ public class User implements UserDetails, CredentialsContainer {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "days_logged_in")
-    private int daysLoggedIn;
 
     @Override
     public boolean isAccountNonExpired() {
@@ -162,10 +161,9 @@ public class User implements UserDetails, CredentialsContainer {
     @OneToMany(mappedBy = "pageReportedBy", fetch = FetchType.LAZY)
     private List<PageReport> pageReports = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Set<UserHistory> userHistories = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     private Set<Forum> forumsCreated = new HashSet<>();
+
+    @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserNotification> userNotifications = new HashSet<>();
 }
