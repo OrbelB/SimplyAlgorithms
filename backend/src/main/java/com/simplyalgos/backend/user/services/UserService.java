@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.user.services;
 
 import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
 import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 
@@ -26,6 +27,9 @@ public interface UserService {
 
 //    if it exsists the return a user
     User userUserNameExists(String username);
+
+    boolean getUsername(GetUsernameDTO getUsernameDTO);
+
 
 
 }

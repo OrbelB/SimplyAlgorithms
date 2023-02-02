@@ -3,8 +3,9 @@ package com.simplyalgos.backend.user.services;
 import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.storage.StorageService;
-import com.simplyalgos.backend.user.domains.ResetPasswordRequestEmailValues;
+import com.simplyalgos.backend.user.domains.GetUsernameRequestEmailValues;;
 import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
 import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.mappers.UserMapper;
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService {
     private final StorageService storageService;
 
     private final EmailService emailService;
+
 
     public Set<UserDTO> parseUsers() {
         return userRepository
@@ -149,5 +151,25 @@ public class UserServiceImpl implements UserService {
             log.info("USERNAME: " + username + " NOT FOUND");
             return new ElementNotFoundException();
         });
+    }
+
+    @Override
+    public boolean getUsername(GetUsernameDTO getUsernameDTO) {
+        if(userRepository.existsByEmail(getUsernameDTO.getEmail())){
+            //if user exists then send email
+            User user = userRepository.findByEmail(getUsernameDTO.getEmail()).orElseThrow(() -> {
+//                log.info("USERNAME: " + getUsernameDTO.getEmail() + " NOT FOUND ~~~");
+                return new ElementNotFoundException();
+            });
+//            log.info("EMAILING USER");
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(GetUsernameRequestEmailValues.FROM.label);
+            simpleMailMessage.setSubject(GetUsernameRequestEmailValues.SUBJECT.label);
+            simpleMailMessage.setText(GetUsernameRequestEmailValues.BODY.label + user.getUsername());
+            simpleMailMessage.setTo("verified email");
+            emailService.sendEmail(simpleMailMessage);
+            return true;
+        }
+        return false;
     }
 }

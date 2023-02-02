@@ -7,6 +7,7 @@ import com.simplyalgos.backend.user.domains.PasswordResetToken;
 import com.simplyalgos.backend.user.domains.ResetPasswordRequestEmailValues;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.ChangePasswordDTO;
+import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
 import com.simplyalgos.backend.user.dtos.PasswordResetRequestDTO;
 import com.simplyalgos.backend.user.services.PasswordResetTokenService;
 import com.simplyalgos.backend.user.services.UserService;
@@ -124,15 +125,18 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-//    token expiered
-//    token not found
-//    internal error
-
     @PostMapping("/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO){
         passwordResetTokenService.validatePasswordResetTokenAndResetPassword(changePasswordDTO);
 
         return ResponseEntity.ok("~");
 
+    }
+
+    @PostMapping("/getUsername")
+    public  ResponseEntity<?> getUsername(@RequestBody GetUsernameDTO getUsernameDTO){
+        boolean found = userService.getUsername(getUsernameDTO);
+        log.info("GOT EMAIL: " + getUsernameDTO.getEmail());
+        return ResponseEntity.ok(found);
     }
 }
