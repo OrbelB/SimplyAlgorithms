@@ -136,34 +136,40 @@ export default function ForumPost() {
           <div
             className={cx(
               fp.post,
-              'border border-success p-2 rounded-bottom rounded-4 border-info bg-secondary text-dark bg-opacity-50 h-auto d-inline-block'
+              'border border-success p-2 rounded-bottom rounded-4 border-info bg-light text-dark bg-opacity-50 h-auto d-inline-block'
             )}
           >
+            <div className="row">
+              <div className="col pt-2 d-flex justify-content-end">
+                <ForumOptionMenu
+                  userId={forum?.userDto?.userId}
+                  pageId={forum?.pageId}
+                />
+              </div>
+            </div>
             <div className={cx(fp.user)}>
               <div className="row">
-                <div className="col-auto col-md-3">
-                  {forum?.userDto?.username}
+                <div className={cx(fp.postedBorderupper, 'col-auto col-md-2')}>
+                  Posted By: {forum?.userDto?.username}
                 </div>
-                {forum?.tags.map((tag) => (
-                  <Chip
-                    key={tag.tagId}
-                    className="col-auto me-2 ms-2"
-                    label={tag.tag}
-                    color="primary"
-                  />
-                ))}
-                <div className="col-auto ms-md-5">
-                  {beautifyTime({ createdDate: forum?.createdDate })}
-                </div>
-                <div className="col d-flex justify-content-end">
-                  <ForumOptionMenu
-                    userId={forum?.userDto?.userId}
-                    pageId={forum?.pageId}
-                  />
+              </div>
+              <div className="row">
+                <div className={cx(fp.postBorderBottom, 'col-auto col-md-2')}>
+                  Posted: {beautifyTime({ createdDate: forum?.createdDate })}
                 </div>
               </div>
             </div>
             <h3 className={cx(fp.title)}>{forum?.title}</h3>
+            <div className="row d-flex justify-content-center">
+              {forum?.tags.map((tag) => (
+                <Chip
+                  key={tag.tagId}
+                  className="col-auto me-2 ms-2"
+                  label={tag.tag}
+                  color="primary"
+                />
+              ))}
+            </div>
             <div className={cx(fp.quetion, 'overflow-auto fw-normal lh-base')}>
               {forum?.descriptionText}
             </div>

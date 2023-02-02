@@ -71,6 +71,18 @@ const authEndpoints = {
         },
       }
     ),
+  getUsername: (email) =>
+    post(
+      `${PUBLIC_ENDPOINT_ROUTE}/getUsername`,
+      {
+        email,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    ),
 };
 
 export default authEndpoints;

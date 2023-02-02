@@ -7,14 +7,20 @@
     left:10%;
     width: 80%;
     margin-top: 2%;
+    box-shadow: 8px 8px var(--color-border-input-form) !important;;
 }
 .user{
-    margin-top: 2%;
+    margin-top: 1%;
     margin-left: 2%;
+    text-align: center;
+    
+    
+    
 }
 .title{
     margin-top: 1%;
     text-align: center;
+    text-decoration: underline;
 }
 .quetion{
     padding: 2% 5% 5% 5%;
@@ -50,6 +56,20 @@
 .related-posts {
     margin-left: 6vh;
     height: 250px;
+}
+.postBorderBottom {
+    position: inherit;
+    background-color: rgb(169, 235, 235);
+    border-radius: 0px 0px 25px 25px;
+    box-shadow: 4px 6px var(--color-border-input-form) !important;
+}
+
+.postedBorderupper{
+    position: inherit;
+    background-color: rgb(169, 235, 235);
+    border-radius: 25px 25px 0px 0px ;
+    box-shadow: 4px 6px var(--color-border-input-form) !important;
+    
 }
 @media only screen and (min-width: 0px) and (max-width: 1400px) {
     .side2{

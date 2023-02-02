@@ -10,6 +10,7 @@ import { login } from '../../services/auth';
 import styles from './LoginForm.module.css';
 import PasswordReset from './PasswordReset';
 import ConfirmPopup from '../confirmation/ConfirmPopup';
+import ForgotUsername from './ForgotUsername';
 
 export default function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -180,6 +181,11 @@ export default function LoginForm() {
           <div className="col-auto align-items-end">
             <PasswordReset setShowNotification={setShowNotification} />
             {/* {console.log(showNotification, ' LOGIN FORM')} */}
+          </div>
+        </div>
+        <div className="row justify-content-end pt-1">
+          <div className="col-auto align-items-end">
+            <ForgotUsername />
           </div>
         </div>
         <div className="row justify-content-center mt-5">

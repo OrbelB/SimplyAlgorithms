@@ -5,6 +5,7 @@ import { Fab, TextField, Tooltip } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useValidateInput from '../../../hooks/use-ValidateInput';
+import './post.css';
 
 import { createForum } from '../../../services/forum';
 import TagForm from '../tags/TagForm';

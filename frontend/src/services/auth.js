@@ -45,3 +45,7 @@ export const changePassword = createAsyncThunk(
     await authEndpoints.changePassword(passwordRestObj);
   }
 );
+
+export const getUsername = createAsyncThunk('getUsername', async (email) => {
+  await authEndpoints.getUsername(email);
+});

@@ -10,6 +10,16 @@ import { updateForum } from '../../../services/forum';
 import TagForm from '../tags/TagForm';
 import { tagsActions } from '../../../store/reducers/tags-reducer';
 
+// // experiment
+// // eslint-disable-next-line import/order
+// import { EditorState, convertToRaw } from 'draft-js';
+// // eslint-disable-next-line import/order
+// import { Editor } from 'react-draft-wysiwyg';
+// // eslint-disable-next-line import/order
+// import draftToHtml from 'draftjs-to-html';
+// // eslint-disable-next-line import/order
+// import htmlToDraft from 'html-to-draftjs';
+
 export default function ForumEdit() {
   const { pageId } = useParams();
   const { forum, status } = useSelector((state) => state.forum);
@@ -87,10 +97,10 @@ export default function ForumEdit() {
           onChange={titleChangeHandler}
         />
         <TextField
-          className="col-auto w-75 mb-5"
+          className="col-auto w-50 mb-5"
           id="filled-multiline-flexible"
           label="Description"
-          rows={4}
+          rows={15}
           multiline
           required
           value={description}
