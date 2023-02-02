@@ -31,9 +31,9 @@ public class ForumController {
 
     @GetMapping("/list")
     public ResponseEntity<?> getPageList(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                         @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                         @RequestParam(name = "sortBy", required = false) String sortBy,
-                                         @RequestParam(name = "filterBy", required = false) String filterBy) {
+                                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                                     @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                     @RequestParam(name = "filterBy", required = false) String filterBy) {
         if(filterBy != null && !filterBy.isBlank() && !filterBy.isEmpty()) {
             return ResponseEntity.ok(forumService.filterForumsByTag(PageRequest.of(page, size), filterBy));
         }
@@ -68,8 +68,8 @@ public class ForumController {
 
     @DeleteForumPermission
     @DeleteMapping(path = "/delete", produces = "application/json")
-    public ResponseEntity<?> deleteForum(@RequestParam(name = "userId", required = true) String userId,
-                                         @RequestParam(name = "pageId", required = true) String pageId) {
+    public ResponseEntity<?> deleteForum(@RequestParam(name = "userId") String userId,
+                                         @RequestParam(name = "pageId") String pageId) {
         log.info(MessageFormat.format("this is userId {0}, and this is pageId {1} ", userId, pageId));
         return ResponseEntity.accepted().body(forumService.deleteForum(pageId, userId));
     }

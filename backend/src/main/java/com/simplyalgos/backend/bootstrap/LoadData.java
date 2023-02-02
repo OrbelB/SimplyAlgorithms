@@ -46,6 +46,7 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         if(topicRepository.findById(UUID.fromString("54e9d8be-f123-4360-9c76-0c4c2ccd99eb")).isEmpty()){
             loadDefaultTopicPages();
         }
+
     }
 
     private void loadDefaultTopicPages() {

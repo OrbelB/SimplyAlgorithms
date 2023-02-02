@@ -16,7 +16,6 @@ public class Views {
     @EmbeddedId
     private ViewsId viewsId;
 
-
     @CreationTimestamp
     @Column(name = "visited_date")
     private Timestamp visitedDate;

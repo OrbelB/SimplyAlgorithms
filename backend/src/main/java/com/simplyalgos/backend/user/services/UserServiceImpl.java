@@ -3,7 +3,7 @@ package com.simplyalgos.backend.user.services;
 import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.storage.StorageService;
-import com.simplyalgos.backend.user.domains.GetUsernameRequestEmailValues;;
+import com.simplyalgos.backend.user.domains.GetUsernameRequestEmailValues;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
 import com.simplyalgos.backend.user.dtos.UserDTO;
@@ -29,18 +29,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
-
-
-//    @Getter
-//    @NoArgsConstructor
-//    private class ResetPasswordRequestEmailValues{
-//        @NonNull
-//        final String from = "noreply@simplyalgorithms.com";
-//        @NonNull
-//        String subject = "Simply Algorithms password reset";
-//
-//        String body = "A password reset request was made, please click on the link to reset your password, If you hanvt made such request please ignore this email";
-//    }
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -111,18 +99,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsById(userId);
     }
 
-//    @Override
-//    public boolean userEmailExists(String email) {
-//        User user = userRepository.findByEmail(email).orElseThrow(() -> {
-//            log.info("EMAIL " + email + " NOT FOUND");
-//            return new ElementNotFoundException();
-//        });
-//        log.info(user.getEmail() + " -- " + email);
-//        if(user.getEmail() == email){
-//            return true;
-//        }
-//        return false;
-//    }
 
     //will generate the token here and send it to the user
     @Override
@@ -159,7 +135,7 @@ public class UserServiceImpl implements UserService {
             //if user exists then send email
             User user = userRepository.findByEmail(getUsernameDTO.getEmail()).orElseThrow(() -> {
 //                log.info("USERNAME: " + getUsernameDTO.getEmail() + " NOT FOUND ~~~");
-                return new ElementNotFoundException();
+                return new ElementNotFoundException("Username cannot be found");
             });
 //            log.info("EMAILING USER");
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();

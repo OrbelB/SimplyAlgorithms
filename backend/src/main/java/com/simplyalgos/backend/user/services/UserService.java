@@ -25,7 +25,7 @@ public interface UserService {
 //    boolean userEmailExists(String email);
     User getUserByUsername(String username);
 
-//    if it exsists the return a user
+//    if it exists the return a user
     User userUserNameExists(String username);
 
     boolean getUsername(GetUsernameDTO getUsernameDTO);

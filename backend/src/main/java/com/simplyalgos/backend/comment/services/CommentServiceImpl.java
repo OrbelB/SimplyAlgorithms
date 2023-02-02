@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+
 import java.text.MessageFormat;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Service
+@Transactional
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final PageEntityService pageEntityService;
@@ -56,7 +58,6 @@ public class CommentServiceImpl implements CommentService {
         );
     }
 
-    @Transactional
     @Override
     public CommentToSendDTO createParentComment(CommentDTO commentDTO) {
         log.debug(MessageFormat.format("The user id {0}", commentDTO.userId()));
@@ -71,7 +72,6 @@ public class CommentServiceImpl implements CommentService {
                         .build()), commentDTO.pageId());
     }
 
-    @Transactional
     @Override
     public CommentToSendDTO createChildComment(ChildCommentDTO commentDTO) {
         Comment childCommentCreated = commentRepository
@@ -92,7 +92,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
-    @Transactional
     @Override
     public CommentToSendDTO updateComment(CommentDTO commentDTO) {
         Optional<Comment> optionalCommentToUpdate = commentRepository.findById(commentDTO.commentId());
@@ -127,7 +126,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
-    @Transactional
     @Override
     public UUID deleteComment(UUID commentId) {
         if (!commentRepository.existsById(commentId)) throw new NoSuchElementException(
@@ -150,7 +148,6 @@ public class CommentServiceImpl implements CommentService {
                 ), childComments.getTotalElements());
     }
 
-    @Transactional
     @Override
     public CommentVoteId deleteVote(UUID userId, UUID commentId) {
         CommentVoteId commentVoteId = CommentVoteId.builder().userId(userId).commentId(commentId).build();
@@ -164,7 +161,6 @@ public class CommentServiceImpl implements CommentService {
                 format("Vote for comment with id {0} is not present", commentId));
     }
 
-    @Transactional
     @Override
     public CommentLikeDislikeDTO commentLikeOrDisliked(CommentLikeDislikeDTO likeDislikeDTO) {
         if (!commentRepository.existsById(likeDislikeDTO.commentId()))
@@ -178,7 +174,6 @@ public class CommentServiceImpl implements CommentService {
         updateCommentVotes(commentLikeDislikeDTO.commentId());
         return commentLikeDislikeDTO;
     }
-
 
     public void updateCommentVotes(UUID commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
