@@ -1,20 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
-.cat1 { background: rgb(31, 211, 31);}
-.cat2 {background: rgb(230, 43, 43);}
-.cat3 {background: rgb(12, 12, 250);}
-.cat4 {background: rgb(233, 152, 3);}
-
 .input-space input[type='checkbox'] {
     display: none;
 }
-    
+   
+.categories {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.topic {
+    background-color: gray;
+    color: white;
+    font-size: 3em;
+    font-family: 'Readex Pro', sans-serif;
+    margin-bottom: 1em;
+    margin-inline: 1em;
+    border-radius: 5px;
+    border: none;
+    padding: 0.7em 0 0.7em 0;
+    width: 10em;
+}
+
+.topic:hover{
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.stuff {
+    color: white;
+    margin-bottom: 0;
+}
+
+
+.t0 {font-size: 2em; width: 13em;}
+.t1 { background-color: rgb(31, 211, 31);}
+.t2 {background-color: rgb(230, 43, 43);}
+.t3 {background-color: rgb(12, 12, 250);}
+.t4 {background-color: rgb(233, 152, 3);}
+
 .wrap-collabsible {
     background-image: url("https://www.transparenttextures.com/patterns/bright-squares.png");
     padding: 1.2rem 0; 
 } 
 
-.space {
+/* .space {
     height: 1em;
 }
 
@@ -93,3 +125,4 @@
     padding-left: 40px;
     padding-right: 40px; 
 }
+ */
