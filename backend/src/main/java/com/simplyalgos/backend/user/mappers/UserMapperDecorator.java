@@ -3,6 +3,9 @@ package com.simplyalgos.backend.user.mappers;
 
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
+import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
+import com.simplyalgos.backend.user.security.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -19,8 +22,23 @@ public class UserMapperDecorator implements UserMapper {
     @Override
     public UserDTO userToUserDto(User user) {
         UserDTO userDTO = userMapper.userToUserDto(user);
-        if(user.getRoles() != null){
+        if (user.getRoles() != null) {
             userDTO.setRole(user.getRoles().stream().findFirst().get().getRoleName());
+        }
+        return userDTO;
+    }
+
+    @Override
+    public UserDTO userToUserDto(User user, UserPreferencesDTO userPreferencesDTO) {
+        UserDTO userDTO = userMapper.userToUserDto(user, userPreferencesDTO);
+        if (user.getRoles() != null) {
+            userDTO.setRole(user
+                    .getRoles()
+                    .stream()
+                    .findFirst()
+                    .orElseGet(() -> Role.builder().roleName("user has no role")
+                            .build())
+                    .getRoleName());
         }
         return userDTO;
     }
@@ -31,7 +49,7 @@ public class UserMapperDecorator implements UserMapper {
     }
 
     @Override
-    public void updateUser(UserDTO userDTO, User user) {
-
+    public void updateUser(UserDataPostDTO userDTO, User user) {
+        userMapper.updateUser(userDTO, user);
     }
 }

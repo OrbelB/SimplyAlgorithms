@@ -41,11 +41,11 @@ public class CommentVoteServiceImpl implements CommentVoteService {
         if (optionalCommentVote.isPresent()) {
             commentVote = optionalCommentVote.get();
             commentVote.setVote(commentLikeDislikeDTO.likeDislike());
-            CommentLikeDislikeDTO commentLikeDislikeDTO1 = commentVoteMapper.comentVoteToCommentVoteDTO(commentVoteRepository.save(commentVote));
+            CommentLikeDislikeDTO commentLikeDislikeDTO1 = commentVoteMapper.commentVoteToCommentVoteDTO(commentVoteRepository.save(commentVote));
             log.info(MessageFormat.format("This is the freshly added comment created {0} {1}", commentLikeDislikeDTO1.commentId(), commentLikeDislikeDTO1.userId()));
             return commentLikeDislikeDTO1;
         }
-        return commentVoteMapper.comentVoteToCommentVoteDTO(commentVoteRepository.save(
+        return commentVoteMapper.commentVoteToCommentVoteDTO(commentVoteRepository.save(
                 CommentVote.builder().commentVoteId(CommentVoteId
                                 .builder()
                                 .commentId(commentLikeDislikeDTO.commentId())
@@ -80,14 +80,14 @@ public class CommentVoteServiceImpl implements CommentVoteService {
         return commentVoteRepository
                 .findAllByCommentVoteReference_PageComment_PageId(pageId)
                 .stream()
-                .map(commentVoteMapper::comentVoteToCommentVoteDTO)
+                .map(commentVoteMapper::commentVoteToCommentVoteDTO)
                 .collect(Collectors.toSet());
     }
     @Override
     public Set<?> listVotesByPageAndUserId(UUID pageId, UUID userId) {
         return commentVoteRepository
                 .findAllByCommentVoteReference_PageComment_PageIdAndCommentVoteId_UserId(pageId, userId)
-                .stream().map(commentVoteMapper::comentVoteToCommentVoteDTO)
+                .stream().map(commentVoteMapper::commentVoteToCommentVoteDTO)
                 .collect(Collectors.toSet());
     }
 

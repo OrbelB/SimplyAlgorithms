@@ -8,7 +8,9 @@ import org.mapstruct.*;
 
 import java.sql.Timestamp;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 @DecoratedWith(ForumDecorator.class)
 public interface ForumMapper {
 
@@ -19,7 +21,7 @@ public interface ForumMapper {
     @Mapping(target = "pageEntityId", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(source = "createdDate", target = "createdDate", qualifiedByName = "parseStringToDate")
-    public Forum forumDTOToForum(ForumDTO forumDTO);
+    Forum forumDTOToForum(ForumDTO forumDTO);
 
 
     @Mapping(target = "pageId", ignore = true)

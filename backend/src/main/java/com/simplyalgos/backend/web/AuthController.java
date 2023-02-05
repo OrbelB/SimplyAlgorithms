@@ -4,7 +4,7 @@ import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.security.JpaUserDetailsService;
 import com.simplyalgos.backend.security.TokenGenerator;
 import com.simplyalgos.backend.user.domains.PasswordResetToken;
-import com.simplyalgos.backend.user.domains.ResetPasswordRequestEmailValues;
+import com.simplyalgos.backend.user.enums.ResetPasswordRequestEmailValues;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.ChangePasswordDTO;
 import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
@@ -102,7 +102,7 @@ public class AuthController {
     public  ResponseEntity<?> resetPasswordRequest(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO){
 
 
-        User user = userService.userUserNameExists(passwordResetRequestDTO.getUsername().toString());
+        User user = userService.userUserNameExists(passwordResetRequestDTO.getUsername());
         String tempEmail = "o.baghdasian@gmail.com";
 
         PasswordResetToken passwordResetToken = passwordResetTokenService.createPasswordResetToken(user);

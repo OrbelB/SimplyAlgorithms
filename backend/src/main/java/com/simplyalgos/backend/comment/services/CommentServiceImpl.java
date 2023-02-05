@@ -8,9 +8,17 @@ import com.simplyalgos.backend.comment.dto.*;
 import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.comment.mappers.CommentMapper;
 import com.simplyalgos.backend.comment.repositories.CommentRepository;
+import com.simplyalgos.backend.exceptions.ElementNotFoundException;
+import com.simplyalgos.backend.page.domains.PageEntity;
+import com.simplyalgos.backend.page.dtos.FullForumDTO;
+import com.simplyalgos.backend.page.dtos.FullTopicDTO;
+import com.simplyalgos.backend.page.services.ForumService;
 import com.simplyalgos.backend.page.services.PageEntityService;
+import com.simplyalgos.backend.page.services.TopicService;
 import com.simplyalgos.backend.report.services.CommentReportService;
 import com.simplyalgos.backend.report.dtos.CommentReportDTO;
+import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.services.DashboardService;
 import com.simplyalgos.backend.user.services.UserService;
 
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
@@ -44,6 +52,11 @@ public class CommentServiceImpl implements CommentService {
     private final CommentVoteService commentVoteService;
     private final CommentReportService commentReportService;
 
+    private final ForumService forumService;
+
+    private final TopicService topicService;
+    private final DashboardService dashboardService;
+
     @Override
     public ObjectPagedList<?> listComments(Pageable pageable) {
         Page<Comment> commentPage = commentRepository.findAll(pageable);
@@ -61,29 +74,81 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentToSendDTO createParentComment(CommentDTO commentDTO) {
         log.debug(MessageFormat.format("The user id {0}", commentDTO.userId()));
+        PageEntity page = pageEntityService.getPageEntity(commentDTO.pageId());
+
+        try {
+            FullForumDTO forumDTO = forumService.getForumPage(String.valueOf(page.getPageId()));
+            dashboardService.addForumNotification(forumDTO, userService.getUser(forumDTO.getUserDto().getUserId()));
+        }catch (ElementNotFoundException e) {
+            log.info("Forum page not found, skipping notification");
+        }
+
+//        try {
+//            FullForumDTO forumDTO = forumservice.getForumPage(String.valueOf(commentDTO.pageId()));
+//            User userToNotified = userService.getUser(forumDTO.getUserDto().getUserId());
+//            if (userPreferenceService
+//                    .isNotificationEnableForType(NotificationType.POST_REPLIES, userToNotified.getUserId())) {
+//                userNotificationService
+//                        .addNotification(commentDTO.pageId(),
+//                                forumDTO.getTitle(),
+//                                userToNotified,
+//                                NotificationMessage.FORUM);
+//            }
+//        } catch (ElementNotFoundException e) {
+//            log.info("Forum page not found, skipping notification");
+//        }
+
         return commentMapper.commentToCommentBasicDTO(commentRepository
                 .saveAndFlush(Comment.builder()
                         .commentText(commentDTO.commentText())
                         .createdBy(userService.getUser(commentDTO.userId()))
                         .isParentChild(CommentType.PARENT.label)
-                        .pageComment(pageEntityService.getPageEntity(commentDTO.pageId()))
+                        .pageComment(page)
                         .likes(0)
                         .dislikes(0)
                         .build()), commentDTO.pageId());
     }
 
+    protected Comment getCommentById(UUID commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() ->
+                        new ElementNotFoundException("Comment has been deleted or never created"));
+    }
+
+
     @Override
     public CommentToSendDTO createChildComment(ChildCommentDTO commentDTO) {
+
+        User userToNotified = userService.getUser(getCommentById(commentDTO.getParentCommentId()).getCreatedBy().getUserId());
+        PageEntity page = pageEntityService.getPageEntity(commentDTO.getChildComment().pageId());
+        try {
+            FullTopicDTO fullTopicDTO = topicService.getTopicPage(page.getPageId());
+            dashboardService.addTopicNotification(fullTopicDTO, userToNotified);
+        } catch (ElementNotFoundException e) {
+            log.info("Topic page not found, skipping notification");
+        }
+
+//        // handle notification
+//        if (userPreferenceService.isNotificationEnableForType(NotificationType.REPLIES_NOTIFICATION, userToNotified.getUserId())) {
+//            try {
+//                FullTopicDTO fullTopicDTO = topicService.getTopicPage(page.getPageId());
+//                userNotificationService.addNotification(page.getPageId(), fullTopicDTO.getTitle(), userToNotified, NotificationMessage.REPLY);
+//            } catch (ElementNotFoundException e) {
+//                log.info("Element was not found");
+//            }
+//        }
+
         Comment childCommentCreated = commentRepository
                 .saveAndFlush(Comment
                         .builder()
                         .commentText(commentDTO.getChildComment().commentText())
                         .createdBy(userService.getUser(commentDTO.getChildComment().userId()))
                         .isParentChild(CommentType.CHILD.label)
-                        .pageComment(pageEntityService.getPageEntity(commentDTO.getChildComment().pageId()))
+                        .pageComment(page)
                         .likes(0)
                         .dislikes(0)
                         .build());
+
         //check if parent comment is present; map the child comment to its parent
         if (isCommentPresent(commentDTO.getParentCommentId()))
             parentChildCommentService.createParentChildMapping(childCommentCreated, commentDTO.getParentCommentId());

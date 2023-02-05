@@ -2,17 +2,28 @@ package com.simplyalgos.backend.user.mappers;
 
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDTO;
-import org.mapstruct.DecoratedWith;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
+import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
+import com.simplyalgos.backend.utils.StringUtils;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 @DecoratedWith(UserMapperDecorator.class)
 public interface UserMapper {
+
+    @Mapping(target = "userId", source = "userId")
     @Mapping(target = "role", ignore = true)
     UserDTO userToUserDto(User user);
 
+    @Mapping(target = "UserPreferencesDTO.userId", ignore = true)
+    @Mapping(target = "userId", source = "user.userId")
+    @Mapping(target = "role", ignore = true)
+    UserDTO userToUserDto(User user, UserPreferencesDTO userPreferencesDTO);
+
+
+    @Mapping(target = "userId", source = "userId")
     @Mapping(target = "forumsCreated", ignore = true)
     @Mapping(target = "enabled", ignore = true)
     @Mapping(target = "credentialsNonExpired", ignore = true)
@@ -49,5 +60,16 @@ public interface UserMapper {
     @Mapping(target = "commentReports", ignore = true)
     @Mapping(target = "accountNonLocked", ignore = true)
     @Mapping(target = "accountNonExpired", ignore = true)
-    void updateUser(UserDTO userDTO, @MappingTarget User user);
+    @Mapping(target = "profilePicture", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    void updateUser(UserDataPostDTO userDTO, @MappingTarget User user);
+
+    @Condition
+    default boolean isNotNullNorEmptyNorBlank(Object attribute){
+        if(attribute instanceof String xString) {
+            return StringUtils.isNotNullAndEmptyOrBlank(xString);
+        }
+        return attribute != null;
+    }
+
 }
