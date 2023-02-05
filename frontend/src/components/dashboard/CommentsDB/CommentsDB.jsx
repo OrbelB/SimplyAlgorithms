@@ -10,7 +10,7 @@ export { SELECTED_TOPICS };
 export default function CommentsDB() {
   return (
     <div>
-      {SELECTED_TOPICS.map(({ index, topic }) => {
+      {/* {SELECTED_TOPICS.map(({ index, topic }) => {
         return (
           <div key={`${topic} ${index}`}>
             <div className="firstline p-2">
@@ -20,7 +20,7 @@ export default function CommentsDB() {
             </div>
           </div>
         );
-      })}
+      })} */}
       <div className="secondline-comments row p-2">
         <div className="col-8">
           <div className="input-group">

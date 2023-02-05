@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUser } from '../services/user';
+import { fetchUser, fetchUserDashboardInfo } from '../services/user';
 import { refreshAccessToken } from '../services/auth';
 import { authActions } from '../store/reducers/auth-reducer';
 import image from '../assets/noPictureTemplate.png';
@@ -26,6 +26,7 @@ export default function useRefreshToken() {
       jwtAccessToken &&
       profilePicture === image
     ) {
+      dispatch(fetchUserDashboardInfo({ userId, jwtAccessToken }));
       dispatch(fetchUser({ userId, jwtAccessToken }));
     }
 

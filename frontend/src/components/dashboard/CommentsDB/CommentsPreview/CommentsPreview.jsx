@@ -1,42 +1,29 @@
 import './CommentsPreview.css';
-
-const commentPreviews = [
-  {
-    id: 1,
-    category: 'Splay Tree',
-    comment:
-      'Nulla mauris elit, iaculis sit amet imperdiet dapibus, interdum sit amet mauris.',
-  },
-  {
-    id: 2,
-    category: 'Splay Tree',
-    comment:
-      'Phasellus ut varius nisl. Phasellus vulputate neque sed neque consectetur, non aliquam risus condimentum.',
-  },
-  {
-    id: 3,
-    category: 'Splay Tree',
-    comment:
-      ' Etiam eros lorem, commodo pulvinar tincidunt a, ullamcorper sit amet neque.',
-  },
-];
+import { useSelector } from 'react-redux';
 
 export default function CommentsPreview() {
-  return (
-    <div>
-      {commentPreviews.map(({ id, category, comment }) => {
-        return (
-          <>
-            <div key={id} className="preview-sect m-2">
-              <div className="first-line">
-                <h4 className="preview-category">{category}</h4>
-              </div>
-              <p className="preview-comment">{comment}</p>
+  const { dashboardInfo } = useSelector((state) => state.user);
+
+  const displayNotifications =
+    dashboardInfo.notifications.length !== 0 ? (
+      dashboardInfo?.notifications?.map(
+        ({ title, message, notificationId }) => (
+          <div key={notificationId} className="preview-sect m-2 mb-5">
+            <div className="first-line">
+              <h4 className="preview-category">{title}</h4>
             </div>
-            <br />
-          </>
-        );
-      })}
-    </div>
-  );
+            <p className="preview-comment">{message}</p>
+          </div>
+        )
+      )
+    ) : (
+      <div className="preview-sect p-2 m-2 mt-5 mb-5">
+        <div className="first-line">
+          <h4 className="preview-category">You are up to date</h4>
+        </div>
+        <p className="preview-comment">No new notifications</p>
+      </div>
+    );
+
+  return displayNotifications;
 }

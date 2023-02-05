@@ -1,16 +1,12 @@
 import './Notifications.css';
+import { useSelector } from 'react-redux';
 import NotificationsPreview from './NotificationsPreview/NotifcationsPreview';
 
-const notif = [
-  {
-    num: '4',
-  },
-];
 export default function Notifications() {
+  const { dashboardInfo } = useSelector((state) => state.user);
   return (
     <>
       {/* <!-- Button trigger modal --> */}
-
       <div className="">
         <button
           type="button"
@@ -18,12 +14,12 @@ export default function Notifications() {
           data-bs-toggle="modal"
           data-bs-target="#notificationdb"
         >
-          {notif.map(({ index, num }) => (
-            <h5 key={index}>
-              Notificaitons
-              <span className="badge">{num}</span>
-            </h5>
-          ))}
+          <h5>
+            Notifications
+            <span className="badge">
+              {dashboardInfo?.notifications?.length}
+            </span>
+          </h5>
         </button>
       </div>
 
@@ -46,6 +42,8 @@ export default function Notifications() {
               <button
                 type="button"
                 className="btn-close"
+                name="modal-notification-close"
+                id="modal-notification-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               />

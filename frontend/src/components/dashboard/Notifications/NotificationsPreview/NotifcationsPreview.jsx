@@ -1,4 +1,8 @@
 import './NotificationsPreview.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { removeSingleNotification } from '../../../../services/user';
+import { forumActions } from '../../../../store/reducers/forum-reducer';
 
 const NOTIFICATION_PREVIEWS = [
   {
@@ -24,23 +28,77 @@ const NOTIFICATION_PREVIEWS = [
 export { NOTIFICATION_PREVIEWS };
 
 export default function NotificationsPreview() {
-  return (
-    <div>
-      {NOTIFICATION_PREVIEWS.map(({ id, department, message }) => {
-        return (
-          <>
-            <div key={id} className="preview-sect">
-              <div className="first-line">
-                <img alt="Profile Pic" className="profile-pic" />
-                <h4 className="preview-department">{department}</h4>
-              </div>
-              <p className="preview-message">{message}</p>
-            </div>
-            <br />
-            <br />
-          </>
-        );
-      })}
-    </div>
+  const { dashboardInfo } = useSelector((state) => state.user);
+  const { userId: authUserId, jwtAccessToken } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  function handleNavigation(notificationId, referenceId, message, title) {
+    if (message.includes('post.')) {
+      document.getElementById('modal-notification-close').click();
+      dispatch(forumActions.resetData());
+      navigate(`/forums/${referenceId}`, {
+        preventScrollReset: true,
+        replace: true,
+      });
+    }
+    if (message.includes('replies')) {
+      if (title.includes('Binary Search Trees')) {
+        document.getElementById('modal-notification-close').click();
+        navigate(`/search/binarysearchtree`, {
+          preventScrollReset: true,
+          replace: true,
+        });
+      }
+      if (title.includes('BFS')) {
+        document.getElementById('modal-notification-close').click();
+        navigate(`/search/bfs`, {
+          preventScrollReset: true,
+        });
+      }
+      if (title.includes('Bubble Sort')) {
+        document.getElementById('modal-notification-close').click();
+        navigate(`/search/bfs`, {
+          preventScrollReset: true,
+        });
+      }
+      if (title.includes('Bubble Sort')) {
+        document.getElementById('modal-notification-close').click();
+        navigate(`/search/bfs`, {
+          preventScrollReset: true,
+        });
+      }
+    }
+    dispatch(
+      removeSingleNotification({
+        userId: authUserId,
+        notificationId,
+        jwtAccessToken,
+      })
+    );
+  }
+
+  return dashboardInfo?.notifications?.map(
+    ({ notificationId, referenceId, title, message }) => (
+      <div
+        key={notificationId}
+        onClick={() =>
+          handleNavigation(notificationId, referenceId, message, title)
+        }
+        role="button"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleNavigation(notificationId, referenceId, message, title);
+          }
+        }}
+        tabIndex={0}
+        className="preview-sect d-flex flex-column justify-content-center p-4 mt-3 mb-5"
+      >
+        <h4>{title}</h4>
+
+        <p>{message}</p>
+      </div>
+    )
   );
 }
