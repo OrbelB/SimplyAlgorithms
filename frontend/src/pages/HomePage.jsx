@@ -78,8 +78,9 @@ const typesTopics = [
 //     }
 // };
 export default function HomePage() {
-  const loc = useLocation();
-  useLoginUser(loc);
+  const location = useLocation();
+  const redirectTo = location?.state?.from?.pathname ?? '/home';
+  useLoginUser(redirectTo);
   return (
     <>
       <Intro />

@@ -48,3 +48,41 @@ export const updatePassword = createAsyncThunk(
     return response.data;
   }
 );
+
+export const updatePreferences = createAsyncThunk(
+  'user/update-preferences',
+  async (passedParams) => {
+    const { updatedPreferences, accessToken } = passedParams;
+    const response = await userEndpoints.updatePreferences(
+      updatedPreferences,
+      accessToken
+    );
+    return response.data;
+  }
+);
+
+export const fetchUserDashboardInfo = createAsyncThunk(
+  'user/dashboard',
+  async (passedParams) => {
+    const { userId, jwtAccessToken } = passedParams;
+    const response = await userEndpoints.fetchUserDashboardInfo(
+      userId,
+      jwtAccessToken
+    );
+    return response.data;
+  }
+);
+
+export const removeSingleNotification = createAsyncThunk(
+  'user/delete-notification',
+  async (passedParams) => {
+    const { notificationId, userId, jwtAccessToken } = passedParams;
+
+    const response = await userEndpoints.deleteNotification(
+      notificationId,
+      userId,
+      jwtAccessToken
+    );
+    return response.data;
+  }
+);

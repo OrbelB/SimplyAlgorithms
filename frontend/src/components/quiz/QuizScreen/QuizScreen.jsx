@@ -144,7 +144,6 @@ export default function QuizScreen({ retry }) {
                   const hours = Math.floor(remainingTime / 3600);
                   const minutes = Math.floor((remainingTime % 3600) / 60);
                   const seconds = remainingTime % 60;
-
                   return (
                     <span className="h3 countbar text-center">
                       {hours}:{minutes}:{seconds}

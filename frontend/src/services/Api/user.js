@@ -4,8 +4,8 @@ import { get, put, destroy } from './base';
 export const PUBLIC_ENDPOINT_ROUTE = '/users';
 
 export const userEndpoints = {
-  singleById: (id, jwtAccessToken) =>
-    get(`${PUBLIC_ENDPOINT_ROUTE}/${id}`, {
+  singleById: (userId, jwtAccessToken) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/${userId}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + jwtAccessToken,
@@ -57,4 +57,40 @@ export const userEndpoints = {
         },
       }
     ),
+  updatePreferences: (updatedPreferences, accessToken) =>
+    put(
+      `${PUBLIC_ENDPOINT_ROUTE}/update-preferences`,
+      {
+        userId: updatedPreferences.userId,
+        accountChanges: updatedPreferences.accountChanges,
+        repliesNotification: updatedPreferences.repliesNotification,
+        postLikes: updatedPreferences.postLikes,
+        postReplies: updatedPreferences.postReplies,
+        specialUpdates: updatedPreferences.specialUpdates,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
+        },
+      }
+    ),
+  deleteNotification: (notificationId, userId, accessToken) =>
+    destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete-notification`, {
+      data: {
+        userId,
+        notificationId,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
+      },
+    }),
+  fetchUserDashboardInfo: (userId, accessToken) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/dashboard/${userId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
+      },
+    }),
 };

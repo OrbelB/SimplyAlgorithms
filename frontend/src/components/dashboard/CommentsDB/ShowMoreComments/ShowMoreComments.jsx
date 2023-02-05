@@ -32,7 +32,7 @@ export default function ShowMoreComments() {
           <div className="modal-content bg">
             <div className="modal-header">
               <h2 className="modal-title" id="staticBackdropLabel">
-                Comments
+                Notifications
               </h2>
               <button
                 type="button"

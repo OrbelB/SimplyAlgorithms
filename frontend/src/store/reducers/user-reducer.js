@@ -6,6 +6,9 @@ import {
   updatePassword,
   updateUserData,
   deleteUser,
+  updatePreferences,
+  fetchUserDashboardInfo,
+  removeSingleNotification,
 } from '../../services/user';
 
 const initialState = {
@@ -22,6 +25,8 @@ const initialState = {
   createdDate: '',
   status: 'idle',
   error: '',
+  userPreferences: {},
+  dashboardInfo: {},
 };
 
 export const userSlice = createSlice({
@@ -49,6 +54,9 @@ export const userSlice = createSlice({
       state.createdDate = '';
       state.dob = '';
       state.userId = '';
+      state.userPreferences = '';
+      state.dashboardInfo = {};
+      state.userPreferences = {};
     },
   },
   extraReducers(builder) {
@@ -79,10 +87,13 @@ export const userSlice = createSlice({
           ).toISOString();
         state.dob = action?.payload?.dob;
         if (action?.payload?.dob === null) state.dob = '';
+        state.userPreferences = action?.payload?.userPreferencesDTO;
+        if (action?.payload?.userPreferencesDTO === null)
+          state.userPreferences = '';
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error?.message;
+        state.error = action.error.message;
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         if (!action.payload) return;
@@ -152,6 +163,42 @@ export const userSlice = createSlice({
         }
       })
       .addCase(updateUserData.rejected, (state) => {
+        state.status = 'failed';
+      })
+      .addCase(updatePreferences.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(updatePreferences.fulfilled, (state, action) => {
+        state.status = 'success';
+        console.info(action.payload);
+        state.userPreferences = action.payload;
+      })
+      .addCase(updatePreferences.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload.message;
+      })
+      .addCase(removeSingleNotification.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(removeSingleNotification.fulfilled, (state, action) => {
+        const { notifications } = state.dashboardInfo;
+        state.dashboardInfo.notifications = notifications.filter(
+          (notification) => notification.notificationId !== action.payload
+        );
+        state.status = 'success';
+      })
+      .addCase(removeSingleNotification.rejected, (state, action) => {
+        state.error = action.payload.message;
+        state.status = 'failed';
+      })
+      .addCase(fetchUserDashboardInfo.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(fetchUserDashboardInfo.fulfilled, (state, action) => {
+        state.dashboardInfo = action.payload;
+      })
+      .addCase(fetchUserDashboardInfo.rejected, (state, action) => {
+        state.error = action.payload.message;
         state.status = 'failed';
       });
   },
