@@ -3,7 +3,8 @@ package com.simplyalgos.backend.user.services;
 import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.storage.StorageService;
-import com.simplyalgos.backend.user.domains.GetUsernameRequestEmailValues;
+import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
+import com.simplyalgos.backend.user.enums.GetUsernameRequestEmailValues;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
 import com.simplyalgos.backend.user.dtos.UserDTO;
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     private final EmailService emailService;
 
+    private final UserPreferenceService userPreferenceService;
+
+    private final DashboardService dashboardService;
 
     public Set<UserDTO> parseUsers() {
         return userRepository
@@ -47,10 +51,16 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDTO getUser(String userId) {
-        return userMapper.userToUserDto(userRepository
-                .findById(UUID.fromString(userId))
-                .orElseThrow(() -> new UsernameNotFoundException("Username: " + userId + " not found"))
-        );
+
+        // get user
+        User user = userRepository.findById(UUID.fromString(userId))
+                .orElseThrow(() -> new UsernameNotFoundException("Username: " + userId + " not found"));
+
+
+        UserPreferencesDTO userPreferencesDTO = userPreferenceService.getUserPreferences(UUID.fromString(userId));
+
+        return userMapper.userToUserDto(user, userPreferencesDTO);
+
     }
 
     public User getUser(UUID userId) {
@@ -63,35 +73,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(UserDataPostDTO userToUpdate) {
         Optional<User> optionalUser = userRepository.findById(userToUpdate.getUserId());
-        log.debug(MessageFormat.format("this is the passed profiledPicture {0}", userToUpdate.getProfilePicture()));
-        User user;
-        if (optionalUser.isPresent()) {
-            user = optionalUser.get();
-            if (isNotNullNorEmptyNorBlank(userToUpdate.getBiography())) user.setBiography(userToUpdate.getBiography());
-            if (isNotNullNorEmptyNorBlank(userToUpdate.getEmail())) user.setEmail(userToUpdate.getEmail());
-            if (isNotNullNorEmptyNorBlank(userToUpdate.getUsername())) user.setUsername(userToUpdate.getUsername());
-            if (isNotNullNorEmptyNorBlank(userToUpdate.getFirstName())) user.setFirstName(userToUpdate.getFirstName());
-            if (isNotNullNorEmptyNorBlank(userToUpdate.getLastName())) user.setLastName(userToUpdate.getLastName());
-            if (userToUpdate.getDob() != null) user.setDob(userToUpdate.getDob());
-            if (userToUpdate.getProfilePicture() != null) {
-                user.setProfilePicture(storageService
-                        .updateProfilePicture(userToUpdate.getProfilePicture(),
-                                user.getProfilePicture()));
-            }
-            if (isNotNullNorEmptyNorBlank(userToUpdate.getPhoneNumber()))
-                user.setPhoneNumber(userToUpdate.getPhoneNumber());
-            return userMapper.userToUserDto(user);
+        log.info(MessageFormat.format("this is the passed profiledPicture {0}", userToUpdate.getProfilePicture()));
+        if (optionalUser.isEmpty()) {
+            throw new ElementNotFoundException(
+                    MessageFormat
+                            .format("user with id {0} not found", userToUpdate.getUserId())
+            );
+        }
+        User user = optionalUser.get();
+        userMapper.updateUser(userToUpdate, user);
+        if (userToUpdate.getProfilePicture() != null) {
+            user.setProfilePicture(storageService
+                    .updateProfilePicture(userToUpdate.getProfilePicture(),
+                            user.getProfilePicture()));
         }
 
-        throw new NoSuchElementException(
-                MessageFormat
-                        .format("user with id {0} not found", userToUpdate.getUserId())
-        );
-    }
+        // notified user
+        dashboardService.addAccountChangesNotification(user);
 
-    private boolean isNotNullNorEmptyNorBlank(String attribute) {
-        if (attribute == null) return false;
-        return !(attribute.isEmpty() && attribute.isBlank());
+        return userMapper.userToUserDto(user);
+
     }
 
     @Override
@@ -122,7 +123,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUsername(String username){
+    public User getUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> {
             log.info("USERNAME: " + username + " NOT FOUND");
             return new ElementNotFoundException();
@@ -131,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean getUsername(GetUsernameDTO getUsernameDTO) {
-        if(userRepository.existsByEmail(getUsernameDTO.getEmail())){
+        if (userRepository.existsByEmail(getUsernameDTO.getEmail())) {
             //if user exists then send email
             User user = userRepository.findByEmail(getUsernameDTO.getEmail()).orElseThrow(() -> {
 //                log.info("USERNAME: " + getUsernameDTO.getEmail() + " NOT FOUND ~~~");

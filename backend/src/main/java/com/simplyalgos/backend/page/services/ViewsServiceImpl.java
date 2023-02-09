@@ -56,7 +56,7 @@ public class ViewsServiceImpl implements ViewsService {
     @Override
     public Set<Views> listForumsByUserView(UUID userId) {
         Set<Views> views = viewsRepository.findAllByUserReferenceView_UserIdOrderByVisitedDateDesc(userId);
-        log.info("the current views are " + views.stream().findFirst().get().getViewsId().getPageId());
+        log.info("the current views are " + views.stream().findFirst().get().getPageViewed().getPageId());
         return views;
     }
 
@@ -72,7 +72,7 @@ public class ViewsServiceImpl implements ViewsService {
                         new ElementNotFoundException(MessageFormat.format("user with id {0} has no views",
                                 userId.toString())));
         viewsRepository.deleteById(optionalView.getViewsId());
-        log.debug(MessageFormat.format("viewed page from user {0} has been removed", userId.toString()));
+        log.debug(MessageFormat.format("viewed page {1} from user {0} has been removed", userId.toString(), optionalView.getViewsId()));
 
 
     }

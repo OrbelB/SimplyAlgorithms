@@ -12,5 +12,5 @@ public interface CommentVoteMapper {
     @Mapping(target = "userId", source = "userVoteReference.userId")
     @Mapping(target = "commentId", source = "commentVoteReference.commentId")
     @Mapping(target = "likeDislike",  source = "vote")
-    CommentLikeDislikeDTO comentVoteToCommentVoteDTO(CommentVote commentVote);
+    CommentLikeDislikeDTO commentVoteToCommentVoteDTO(CommentVote commentVote);
 }

@@ -215,7 +215,7 @@ public class ForumServiceImpl implements ForumService {
         List<UUID> pageIds = viewsService
                 .listForumsByUserView(userId)
                 .stream()
-                .map(views -> views.getPageViewed().getPageId())
+                .map(views -> views.getViewsId().getPageId())
                 .collect(Collectors.toCollection(LinkedList::new));
         return pageIds.stream()
                 .flatMap(id -> forumRepository

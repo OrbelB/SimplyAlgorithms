@@ -22,10 +22,6 @@ public class UserPreferences {
     @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false, name = "user_id")
     private UUID userId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @MapsId("userId")
-    private User user;
     @Column(name = "account_changes")
     private boolean accountChanges;
 

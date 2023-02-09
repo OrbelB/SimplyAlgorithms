@@ -7,7 +7,9 @@ import com.simplyalgos.backend.user.security.RoleRepository;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.mappers.UserRegisteredMapper;
+import com.simplyalgos.backend.user.services.DashboardService;
 import com.simplyalgos.backend.user.services.UserHistoryService;
+import com.simplyalgos.backend.user.services.UserPreferenceService;
 import com.simplyalgos.backend.web.dtos.SignupDTO;
 import com.simplyalgos.backend.web.dtos.UpdatePassword;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +49,9 @@ public class JpaUserDetailsServiceImpl implements JpaUserDetailsService {
 
     private final UserHistoryService userHistoryService;
 
+    private final UserPreferenceService userPreferenceService;
 
+    private final DashboardService dashboardService;
     @Override
     public void createUser(SignupDTO userDto) throws Exception {
         //assign user role by default : student
@@ -61,6 +65,9 @@ public class JpaUserDetailsServiceImpl implements JpaUserDetailsService {
         }
         user.setRoles(Set.of(assignRoleToNewUser("STUDENT")));
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+        // initialize user preferences
+        userPreferenceService.defaultUserPreferences(user.getUserId());
         userRepository.save(user);
     }
 
@@ -77,6 +84,7 @@ public class JpaUserDetailsServiceImpl implements JpaUserDetailsService {
                 new UsernameNotFoundException(MessageFormat.format("User with id {0} not found", updatePassword.userId())));
         if (passwordEncoder.matches(updatePassword.oldPassword(), user.getPassword())) {
             user.setPassword(passwordEncoder.encode(updatePassword.newPassword()));
+            dashboardService.addPasswordResetNotification(user);
             return updatePassword.userId();
         }
         throw new PasswordsDontMatchException(
@@ -111,9 +119,9 @@ public class JpaUserDetailsServiceImpl implements JpaUserDetailsService {
     public UUID resetUserPassword(UUID userId, String newPassword) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(MessageFormat.format("User with id {0} not found", userId)));
         user.setPassword(passwordEncoder.encode(newPassword));
+        dashboardService.addPasswordResetNotification(user);
         return user.getUserId();
-
-//        send email to the user notifying his password was reset
+//       send email to the user notifying his password was reset
     }
 }
 

@@ -9,7 +9,11 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+
+
+
 @Setter
+@NoArgsConstructor
 @Getter
 public class UserDataPostDTO {
 
@@ -18,7 +22,7 @@ public class UserDataPostDTO {
     String firstName;
     String lastName;
     String email;
-    @Setter(AccessLevel.NONE)
+
     File profilePicture;
     String biography;
     String phoneNumber;
@@ -27,7 +31,9 @@ public class UserDataPostDTO {
     String role;
 
     @Builder
-    public UserDataPostDTO(UUID userId, String username, String firstName, String lastName, String email, String profilePicture, String biography, String phoneNumber, Timestamp createdDate, Date dob, String role) {
+    public UserDataPostDTO(UUID userId, String username, String firstName, String lastName, String email,
+                           String profilePicture, String biography, String phoneNumber,
+                           Timestamp createdDate, Date dob, String role) {
         this.userId = userId;
         this.username = username;
         this.firstName = firstName;
@@ -40,6 +46,4 @@ public class UserDataPostDTO {
         this.dob = dob;
         this.role = role;
     }
-
-
 }
