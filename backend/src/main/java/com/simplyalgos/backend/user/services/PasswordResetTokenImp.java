@@ -7,21 +7,24 @@ import com.simplyalgos.backend.user.domains.PasswordResetToken;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.ChangePasswordDTO;
 import com.simplyalgos.backend.user.repositories.PasswordResetTokenRepository;
-import com.simplyalgos.backend.user.repositories.UserRepository;
+import jakarta.persistence.TemporalType;
 import jakarta.transaction.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Temporal;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Optional;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class PasswordResetTokenImp implements PasswordResetTokenService {
+
 
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final JpaUserDetailsService jpaUserDetailsService;
@@ -55,8 +58,20 @@ public class PasswordResetTokenImp implements PasswordResetTokenService {
             jpaUserDetailsService.resetUserPassword(passToken.getUserId().getUserId(),changePasswordDTO.getNewPassword());
             passwordResetTokenRepository.deleteById(UUID.fromString(changePasswordDTO.getPasswordToken()));
         }
+        passwordResetTokenRepository.deleteById(passToken.getPasswordResetTokenID());
         throw new TokenExpireException("RESET PASSWORD TOKEN HAS EXPIRED");
     }
+
+    public void deleteExpiredPasswordResetTokens() {
+        final Calendar cal = Calendar.getInstance();
+//        expireDate
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//        String date = formatter.format(new Date());
+        String date = "2023-02-02";
+        passwordResetTokenRepository.deleteAllExpiredTokens(date);
+    }
+
 
     private boolean isTokenExpired(PasswordResetToken passToken) {
         final Calendar cal = Calendar.getInstance();

@@ -103,7 +103,7 @@ public class AuthController {
 
 
         User user = userService.userUserNameExists(passwordResetRequestDTO.getUsername().toString());
-        String tempEmail = "o.baghdasian@gmail.com";
+        String tempEmail = "bobsb5038@gmail.com";
 
         PasswordResetToken passwordResetToken = passwordResetTokenService.createPasswordResetToken(user);
 

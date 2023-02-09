@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.user.dtos;
 
+import com.simplyalgos.backend.user.services.PasswordResetTokenService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

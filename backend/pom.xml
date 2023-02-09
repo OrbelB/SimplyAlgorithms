@@ -145,6 +145,12 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>3.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.2.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
