@@ -36,9 +36,10 @@ public class ScheduleTask {
 
     private final PasswordResetTokenService passwordResetTokenService;
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(cron  = "0 0 10 * * *")
     public void reportCurrentTime() {
-        log.info("The time is now {~~~~}", dateFormat.format(new Date()));
+        log.info("CHECKING FOR ALL EXPIRED PASSWORD RESET TOKENS");
+//        passwordResetTokenService.printAllTokens();
         passwordResetTokenService.deleteExpiredPasswordResetTokens();
     }
 

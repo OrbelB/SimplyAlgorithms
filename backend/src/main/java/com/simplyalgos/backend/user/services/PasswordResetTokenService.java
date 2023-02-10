@@ -15,4 +15,6 @@ public interface PasswordResetTokenService {
 
     void deleteExpiredPasswordResetTokens();
 
+    void printAllTokens();
+
 }

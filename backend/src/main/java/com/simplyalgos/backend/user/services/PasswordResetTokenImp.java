@@ -47,6 +47,13 @@ public class PasswordResetTokenImp implements PasswordResetTokenService {
         return passwordResetToken;
     }
 
+    @Override
+    public void printAllTokens() {
+        List<PasswordResetToken> passlist = passwordResetTokenRepository.findAll();
+        for(int i = 0; i < passlist.size(); i++){
+            log.info(i + " ~ ");
+        }
+    }
 
     public void validatePasswordResetTokenAndResetPassword(ChangePasswordDTO changePasswordDTO) {
         PasswordResetToken passToken = passwordResetTokenRepository.findById(UUID.fromString(changePasswordDTO.getPasswordToken())).orElseThrow(
@@ -63,13 +70,18 @@ public class PasswordResetTokenImp implements PasswordResetTokenService {
     }
 
     public void deleteExpiredPasswordResetTokens() {
-        final Calendar cal = Calendar.getInstance();
-//        expireDate
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-//        String date = formatter.format(new Date());
-        String date = "2023-02-02";
-        passwordResetTokenRepository.deleteAllExpiredTokens(date);
+        List<PasswordResetToken> passwordResetTokenList = passwordResetTokenRepository.findAll();
+        for(int i = 0; i < passwordResetTokenList.size(); i++){
+            if(isTokenExpired(passwordResetTokenList.get(i))){
+//                log.info("Deleting token: " + passwordResetTokenList.get(i).getPasswordResetTokenID());
+//                log.info("with the date of: " + passwordResetTokenList.get(i).getExpireDate());
+                passwordResetTokenRepository.deleteById(passwordResetTokenList.get(i).getPasswordResetTokenID());
+            }
+            else{
+                log.info("Token not deleted: " + passwordResetTokenList.get(i).getPasswordResetTokenID());
+            }
+        }
+        log.info("~~~END OF PASSWORD RESET TOKEN EXPIRE DELETION~~~");
     }
 
 
