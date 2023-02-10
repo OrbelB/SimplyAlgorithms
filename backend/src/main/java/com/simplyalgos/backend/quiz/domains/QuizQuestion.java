@@ -1,8 +1,6 @@
 package com.simplyalgos.backend.quiz.domains;
 
 
-import com.simplyalgos.backend.quiz.domains.QuestionAnswer;
-import com.simplyalgos.backend.quiz.domains.Quiz;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
