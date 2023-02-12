@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import image from '../../assets/nav-logo.png';
 import Logout from '../logout/Logout';
+import Notebook from '../notebook/Notebook';
 import Bell from './Bell';
 import DropdownMenu from './dropdown-menu/DropdownMenu';
 import './MainNavigation.css';
@@ -158,6 +159,10 @@ export default function MainNavigation() {
                       Login
                     </NavLink>
                   )}
+                </li>
+                <div className="dropdown-divider"> </div>
+                <li>
+                  <Notebook />
                 </li>
               </ul>
             </div>
