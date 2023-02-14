@@ -145,9 +145,6 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         Authority deleteQuiz = authorityRepository.save(Authority.builder().permission("quiz.delete").build());
         Authority takeQuiz = authorityRepository.save(Authority.builder().permission("quiz.take").build());
 
-
-
-
         Role studentRole = roleRepository.save(Role.builder().roleName("STUDENT").build());
 
         Role adminRole = roleRepository.save(Role.builder().roleName("ADMIN").build());

@@ -67,6 +67,7 @@ public class AuthController {
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 
+
     @PostMapping(path = "/login", consumes = "application/json")
     public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
         log.debug("this is the username: " + loginDTO.username());
@@ -128,7 +129,6 @@ public class AuthController {
     @PostMapping("/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO){
         passwordResetTokenService.validatePasswordResetTokenAndResetPassword(changePasswordDTO);
-
         return ResponseEntity.ok("~");
 
     }

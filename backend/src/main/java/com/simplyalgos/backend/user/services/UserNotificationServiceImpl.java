@@ -44,8 +44,11 @@ public class UserNotificationServiceImpl implements UserNotificationService {
             short updatedNotificationQuantity = (short) (userNotification.getNotificationQuantity() + 1);
             userNotification.setMessage(notificationMessage.message(updatedNotificationQuantity));
             userNotification.setNotificationQuantity(updatedNotificationQuantity);
+            log.debug("updating new notification for user " + referenceId.toString());
             return;
         }
+
+        log.debug("adding new notification for user " + referenceId.toString());
         userNotificationRepository.save(
                 userNotificationMapper
                         .createUserNotification(title, notificationMessage.message((short) 1), (short) 1, referenceId, user));

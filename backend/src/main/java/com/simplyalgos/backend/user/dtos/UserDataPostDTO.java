@@ -13,7 +13,6 @@ import java.util.UUID;
 
 
 @Setter
-@NoArgsConstructor
 @Getter
 public class UserDataPostDTO {
 

@@ -4,7 +4,6 @@ import com.simplyalgos.backend.quiz.security.CreateQuizPermission;
 import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
 import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
 import com.simplyalgos.backend.quiz.security.UpdateQuizPermission;
-import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +35,7 @@ public class QuizController {
     public ResponseEntity<?> getUserQuizHistory(@PathVariable String userId){
         return null;
     }
+
     @GetMapping("/avgQuizScore")
     public ResponseEntity<?> calculateAverageQuizScore(String userId){
         return null;
@@ -58,7 +58,6 @@ public class QuizController {
     public ResponseEntity<?> updateQuiz(){
         return null;
     }
-
 
     @TakeQuizPermission
     @PostMapping("/submitQuiz")

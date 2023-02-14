@@ -94,7 +94,7 @@ public class SecurityConfig {
                         .requestMatchers("/email/*").permitAll()
                         .requestMatchers("/error*").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-ui.html**").permitAll()
                         .requestMatchers("/v3/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/quiz/list").permitAll()
                 )

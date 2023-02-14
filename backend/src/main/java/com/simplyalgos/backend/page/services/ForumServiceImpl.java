@@ -138,7 +138,7 @@ public class ForumServiceImpl implements ForumService {
     @Override
     public FullForumDTO getForumPage(String pageId) {
         return forumMapper.forumToFullForumDto(forumRepository.findById(UUID.fromString(pageId)).orElseThrow(() ->
-                new ElementNotFoundException(MessageFormat.format("Element {0} not found", UUID.fromString(pageId)))
+                new NoSuchElementException(MessageFormat.format("Element {0} not found", UUID.fromString(pageId)))
         ));
     }
 

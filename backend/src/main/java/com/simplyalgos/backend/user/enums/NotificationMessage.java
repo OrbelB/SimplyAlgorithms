@@ -7,7 +7,7 @@ public enum NotificationMessage {
         }
     }, REPLY {
         public String message(short quantity) {
-            if(quantity == 1) {
+            if (quantity == 1) {
                 return "You have 1 new reply";
             }
             return "You have " + quantity + " new replies";
@@ -25,5 +25,6 @@ public enum NotificationMessage {
             return "TODO";
         }
     };
+
     public abstract String message(short quantity);
 }

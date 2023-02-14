@@ -29,7 +29,7 @@ public class Quiz {
     @Type(value = UserTypeLegacyBridge.class,
             parameters = @Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
                     value = "org.hibernate.type.UUIDCharType"))
-    @Column(length = 16, name = "quiz_id")
+    @Column(length = 36, name = "quiz_id")
     private UUID quizId;
 
     @Column(name = "created_date")

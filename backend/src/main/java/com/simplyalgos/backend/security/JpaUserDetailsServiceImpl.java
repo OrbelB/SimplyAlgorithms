@@ -63,12 +63,16 @@ public class JpaUserDetailsServiceImpl implements JpaUserDetailsService {
             log.info(userDto.getProfilePicture() + "check if the correct method is call");
             user.setProfilePicture(storageService.uploadImageFile(userDto.getProfilePicture()));
         }
+
         user.setRoles(Set.of(assignRoleToNewUser("STUDENT")));
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
+
+        User createdUser = userRepository.saveAndFlush(user);
+
         // initialize user preferences
-        userPreferenceService.defaultUserPreferences(user.getUserId());
-        userRepository.save(user);
+        userPreferenceService.defaultUserPreferences(createdUser.getUserId());
+
     }
 
     @Override

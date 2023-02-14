@@ -76,27 +76,10 @@ public class CommentServiceImpl implements CommentService {
         log.debug(MessageFormat.format("The user id {0}", commentDTO.userId()));
         PageEntity page = pageEntityService.getPageEntity(commentDTO.pageId());
 
-        try {
+        if(page.getIsForumTopicPage().equals("forum")) {
             FullForumDTO forumDTO = forumService.getForumPage(String.valueOf(page.getPageId()));
             dashboardService.addForumNotification(forumDTO, userService.getUser(forumDTO.getUserDto().getUserId()));
-        }catch (ElementNotFoundException e) {
-            log.info("Forum page not found, skipping notification");
         }
-
-//        try {
-//            FullForumDTO forumDTO = forumservice.getForumPage(String.valueOf(commentDTO.pageId()));
-//            User userToNotified = userService.getUser(forumDTO.getUserDto().getUserId());
-//            if (userPreferenceService
-//                    .isNotificationEnableForType(NotificationType.POST_REPLIES, userToNotified.getUserId())) {
-//                userNotificationService
-//                        .addNotification(commentDTO.pageId(),
-//                                forumDTO.getTitle(),
-//                                userToNotified,
-//                                NotificationMessage.FORUM);
-//            }
-//        } catch (ElementNotFoundException e) {
-//            log.info("Forum page not found, skipping notification");
-//        }
 
         return commentMapper.commentToCommentBasicDTO(commentRepository
                 .saveAndFlush(Comment.builder()
@@ -121,22 +104,14 @@ public class CommentServiceImpl implements CommentService {
 
         User userToNotified = userService.getUser(getCommentById(commentDTO.getParentCommentId()).getCreatedBy().getUserId());
         PageEntity page = pageEntityService.getPageEntity(commentDTO.getChildComment().pageId());
-        try {
+
+        if(page.getIsForumTopicPage().equals("topic")){
             FullTopicDTO fullTopicDTO = topicService.getTopicPage(page.getPageId());
             dashboardService.addTopicNotification(fullTopicDTO, userToNotified);
-        } catch (ElementNotFoundException e) {
-            log.info("Topic page not found, skipping notification");
+        }else if(page.getIsForumTopicPage().equals("forum")){
+            FullForumDTO forumDTO = forumService.getForumPage(String.valueOf(page.getPageId()));
+            dashboardService.addForumNotification(forumDTO, userToNotified);
         }
-
-//        // handle notification
-//        if (userPreferenceService.isNotificationEnableForType(NotificationType.REPLIES_NOTIFICATION, userToNotified.getUserId())) {
-//            try {
-//                FullTopicDTO fullTopicDTO = topicService.getTopicPage(page.getPageId());
-//                userNotificationService.addNotification(page.getPageId(), fullTopicDTO.getTitle(), userToNotified, NotificationMessage.REPLY);
-//            } catch (ElementNotFoundException e) {
-//                log.info("Element was not found");
-//            }
-//        }
 
         Comment childCommentCreated = commentRepository
                 .saveAndFlush(Comment

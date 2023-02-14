@@ -25,6 +25,7 @@ public class DashboardServiceImpl implements DashboardService {
     private final UserHistoryService userHistoryService;
 
 
+
     @Override
     public DashboardDTO displayNotifications(UUID userId) {
         DashboardDTO.DashboardDTOBuilder dashboard = DashboardDTO.builder();

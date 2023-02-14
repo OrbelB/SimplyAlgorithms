@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Set;
 import java.util.UUID;
 
+
 public interface UserNotificationService {
 
     void addNotification(UUID referenceId, String title, User user, NotificationMessage notificationMessage);

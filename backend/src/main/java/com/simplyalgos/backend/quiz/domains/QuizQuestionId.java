@@ -34,6 +34,7 @@ public class QuizQuestionId implements Serializable {
     @Column(length = 36, name = "question_id", columnDefinition = "varchar")
     private UUID questionId;
 
+
     @Column(name = "quiz_id")
     private UUID quizId;
 

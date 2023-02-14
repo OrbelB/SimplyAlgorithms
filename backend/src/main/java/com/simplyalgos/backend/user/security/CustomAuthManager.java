@@ -11,7 +11,6 @@ import java.util.UUID;
 @Slf4j
 @Component
 public class CustomAuthManager<Type>{
-
     public boolean userIdMatches(Authentication authentication, Type userId) {
         if(userId instanceof  UUID userUUID){
             log.debug(MessageFormat.format("this is the owner of XThing of type uuid {0}", userUUID));

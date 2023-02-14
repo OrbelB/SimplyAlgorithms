@@ -166,4 +166,5 @@ public class User implements UserDetails, CredentialsContainer {
 
     @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserNotification> userNotifications = new HashSet<>();
+
 }

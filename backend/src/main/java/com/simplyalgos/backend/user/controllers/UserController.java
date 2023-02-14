@@ -84,7 +84,6 @@ public class UserController {
         return ResponseEntity.ok(dashboardService.displayNotifications(userId));
     }
 
-
     @UserRemoveNotification
     @DeleteMapping(path = "/delete-notification", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> deleteNotification(@RequestBody NotificationRemoval  notificationRemoval) {

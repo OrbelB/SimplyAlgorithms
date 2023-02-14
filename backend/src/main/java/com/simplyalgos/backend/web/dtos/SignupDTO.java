@@ -21,7 +21,7 @@ public class SignupDTO {
     File profilePicture;
 
     @Builder
-    SignupDTO(String username, String password, String email, String firstName, String lastName, Date dob, String profilePicture) {
+    public SignupDTO(String username, String password, String email, String firstName, String lastName, Date dob, String profilePicture) {
         this.username = username;
         this.password = password;
         this.email = email;

@@ -22,6 +22,8 @@ public class ImageUtils {
         };
         File picture = new File("profilePicture." + fileType);
 
+        log.debug("Image created is " + picture.getName());
+
         // getting the bytes from the base 64 string
         byte[] data = DatatypeConverter.parseBase64Binary(image[1]);
         try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(picture))) {
