@@ -28,6 +28,7 @@ import useRefreshToken from './hooks/use-refreshToken';
 import PasswordResetPage from './components/login/PasswordResetPage';
 import QuizPage from './pages/QuizHomePage';
 import QuizSample from './pages/q_pages/QuizSample';
+import CreateTopicPage from './pages/CreateTopicPage';
 
 function App() {
   useRefreshToken();
@@ -82,6 +83,7 @@ function App() {
         <Route path="/quiz/sample" element={<QuizSample />} />
 
         <Route path="/team" element={<MeetTeamPage />} />
+        <Route path="/createtopic" element={<CreateTopicPage />} />
         <Route
           path="*"
           element={<Navigate replace to="/underconstruction" />}

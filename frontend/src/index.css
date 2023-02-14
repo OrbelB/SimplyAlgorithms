@@ -7,6 +7,8 @@
     list-style: none;
     text-decoration: none;
   } */
+
+@import '~react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
   
 
 #root {
