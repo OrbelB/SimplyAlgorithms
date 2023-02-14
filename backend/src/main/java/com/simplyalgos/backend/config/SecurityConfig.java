@@ -96,6 +96,7 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/quiz/list").permitAll()
                 )
                 .authorizeHttpRequests()
                 .anyRequest()

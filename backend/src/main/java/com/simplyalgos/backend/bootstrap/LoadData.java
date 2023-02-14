@@ -139,21 +139,41 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         Authority removeComment = authorityRepository.save(Authority.builder().permission("comment.remove").build());
         Authority updateComment = authorityRepository.save(Authority.builder().permission("comment.update").build());
 
+        //quiz auth
+        Authority createQuiz = authorityRepository.save(Authority.builder().permission("quiz.create").build());
+        Authority updateQuiz = authorityRepository.save(Authority.builder().permission("quiz.update").build());
+        Authority deleteQuiz = authorityRepository.save(Authority.builder().permission("quiz.delete").build());
+        Authority takeQuiz = authorityRepository.save(Authority.builder().permission("quiz.take").build());
+
+
+
+
         Role studentRole = roleRepository.save(Role.builder().roleName("STUDENT").build());
 
         Role adminRole = roleRepository.save(Role.builder().roleName("ADMIN").build());
+
+        //can create / update topic pages & quizes but cannot delete them
+        Role teacherRole = roleRepository.save(Role.builder().roleName("TEACHER").build());
 
         adminRole.setAuthorities(new HashSet<>(Set.of(createForum,
                 updateForum, readForum, deleteForum,
                 updateUser, readUser, deleteUser,
                 usersCRUD, createVote, removeVote,
                 createReport, removeReport, updateReport, readReport, createTopic,
-                removeTopic, updateTopic, createComment, removeComment, updateComment, updateUserPassword)));
+                removeTopic, updateTopic, createComment, removeComment, updateComment, updateUserPassword,
+                createQuiz, updateQuiz, deleteQuiz, takeQuiz)));
+
         studentRole.setAuthorities(new HashSet<>(Set.of(createForum, updateForum, readForum, deleteForum,
                 updateUser, readUser, deleteUser, createVote, removeVote, createReport, removeReport,
-                createComment, removeComment, updateComment, updateUserPassword)));
+                createComment, removeComment, updateComment, updateUserPassword,
+                takeQuiz)));
 
-        roleRepository.saveAll(Arrays.asList(studentRole, adminRole));
+        teacherRole.setAuthorities(new HashSet<>(Set.of(createForum, updateForum, readForum, deleteForum,
+                updateUser, readUser, deleteUser, createVote, removeVote, createReport, removeReport,
+                createComment, removeComment, updateComment, updateUserPassword, createTopic,
+                updateTopic, createQuiz, updateQuiz, takeQuiz, deleteQuiz)));
+
+        roleRepository.saveAll(Arrays.asList(studentRole, adminRole, teacherRole));
 
         //add default user
         userRepository.save(
