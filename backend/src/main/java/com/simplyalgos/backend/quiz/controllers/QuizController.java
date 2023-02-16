@@ -20,11 +20,14 @@ import org.springframework.web.bind.annotation.*;
 // not finsihed
 public class QuizController {
 
+
+    //need to pass in the tags
     @GetMapping("/list")
     public ResponseEntity<?> getQuizList(TagDTO tag){
         return null;
     }
 
+    //will retrieve the whole quiz
     @TakeQuizPermission
     @GetMapping("/{quizId}")
     public ResponseEntity<?> getQuiz(@PathVariable String quizId){

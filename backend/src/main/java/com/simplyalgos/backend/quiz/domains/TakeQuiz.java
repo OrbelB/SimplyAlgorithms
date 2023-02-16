@@ -21,6 +21,7 @@ public class TakeQuiz {
 
     private int score;
 
+    //hard to use can change to dates
     @CreationTimestamp @Column(name = "started_at")
     private Timestamp startedAt;
 

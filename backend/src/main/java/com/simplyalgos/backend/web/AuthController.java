@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.web;
 
 import com.simplyalgos.backend.emailing.services.EmailService;
+import com.simplyalgos.backend.page.services.ForumService;
 import com.simplyalgos.backend.security.JpaUserDetailsService;
 import com.simplyalgos.backend.security.TokenGenerator;
 import com.simplyalgos.backend.user.domains.PasswordResetToken;
@@ -50,6 +51,7 @@ public class AuthController {
     private final EmailService emailService;
 
     private final PasswordResetTokenService passwordResetTokenService;
+
 
 
     @Autowired
