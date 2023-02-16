@@ -75,7 +75,7 @@ public class Comment {
     @OneToMany(mappedBy = "reportedComment")
     private Set<CommentReport> commentReports;
     @JsonIncludeProperties({"pageId"})
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "page_id", referencedColumnName = "page_id")
     private PageEntity pageComment;
 

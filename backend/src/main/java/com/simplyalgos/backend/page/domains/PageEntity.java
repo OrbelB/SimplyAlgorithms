@@ -53,27 +53,22 @@ public class PageEntity {
     }
 
 
-    @OneToMany(mappedBy = "pageEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pageEntity", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<PageVote> pageVotes = new HashSet<>();
 
-
-    @OneToMany(mappedBy = "parentPageId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parentPageId", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<ParentChildPages> parentTopicIds = new HashSet<>();
 
-
-    @OneToMany(mappedBy = "childPageId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "childPageId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ParentChildPages> childrenTopicIds = new HashSet<>();
 
-
-    @OneToMany(mappedBy = "pageViewed",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pageViewed",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Views> views = new HashSet<>();
 
-
-    @OneToMany(mappedBy = "reportedPage", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "reportedPage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PageReport> pageReports = new ArrayList<>();
 
-
-    @OneToMany(mappedBy = "pageComment",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pageComment",fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
     private Set<Comment> pageComments = new HashSet<>();
 
 }
