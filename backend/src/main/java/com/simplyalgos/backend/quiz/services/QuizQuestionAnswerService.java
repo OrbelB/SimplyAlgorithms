@@ -4,15 +4,16 @@ import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface QuizQuestionAnswerService {
-    ResponseEntity<?> createQuizQuestionAnswer(QuizQuestionAnswerDTO quizQuestionAnswerDTO);
-    ResponseEntity<?> updateQuizQuestionAnswer(QuizQuestionAnswerDTO quizQuestionAnswerDTO);
-    ResponseEntity<?> deleteQuizQuestionAnswer(UUID quizQuestionAnsId);
+    QuizQuestionAnswerDTO createQuizQuestionAnswer(QuizQuestionAnswerDTO quizQuestionAnswerDTO);
+    QuizQuestionAnswerDTO updateQuizQuestionAnswer(QuizQuestionAnswerDTO quizQuestionAnswerDTO);
+    boolean deleteQuizQuestionAnswer(UUID quizQuestionAnsId);
 
     //will return a list<QuizQuestionAnswerDTO>
-    ResponseEntity<?> getAllQuizQuestionAnswer(UUID questionId);
-    ResponseEntity<?> getQuizQuestionAnswer(UUID answerId, UUID questionId);
+    List<QuizQuestionAnswerDTO> getAllQuizQuestionAnswer(UUID questionId);
+    QuizQuestionAnswerDTO getQuizQuestionAnswer(UUID answerId, UUID questionId);
 
 }

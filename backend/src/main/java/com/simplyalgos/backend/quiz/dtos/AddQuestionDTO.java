@@ -5,20 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
-import java.util.UUID;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class TakeQuizDTO {
-    UUID userId;
-    UUID quizId;
-    int score;
-    Timestamp startedAt;
-    Timestamp finishedAt;
-
-
-
+public class AddQuestionDTO {
+    String quizId;
+    String question;
+    String questionPicture;
+    Set<QuizQuestionAnswerDTO> answerList;
 }
