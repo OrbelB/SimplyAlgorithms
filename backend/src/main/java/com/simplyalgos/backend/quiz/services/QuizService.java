@@ -13,26 +13,15 @@ import java.util.UUID;
 
 public interface QuizService {
 
-    ObjectPagedList<?> listQuizPages(Pageable pageable);
+    ObjectPagedList<?> listQuizPages(org.springframework.data.domain.Pageable pageable);
 
-    ObjectPagedList filterQuiByTag(Pageable pageable, String tag);
+    ObjectPagedList listQuizPageWithTag(Pageable pageable, String tag);
 
     UUID createQuiz(QuizDTO quizDTO);
 
-    UUID deleteQuiz(UUID quizId, UUID userId);
+    UUID deleteQuiz(UUID quizId);
 
     QuizDTO updateQuiz(QuizDTO quizDTO);
 
     QuizDTO getQuiz(UUID quizId);
-
-    void addToQuizTaken(UUID quizId, UUID userId);
-
-    LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike);
-
-    ResponseEntity<?> getAverageUserQuizScore(UUID userId);
-
-    PageVoteId deleteVote(UUID userId, UUID quizId);
-
-
-
 }

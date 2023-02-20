@@ -1,4 +1,4 @@
-package com.simplyalgos.backend.quiz.domains;
+package com.simplyalgos.backend.quiz.domains.quizId;
 
 
 import lombok.*;

@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.quiz.domains;
 
+import com.simplyalgos.backend.quiz.domains.quizId.TakeQuizId;
 import com.simplyalgos.backend.user.domains.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

@@ -1,22 +1,25 @@
 package com.simplyalgos.backend.quiz.services;
 
-import com.simplyalgos.backend.quiz.dtos.QuizScoreDTO;
+import com.simplyalgos.backend.quiz.domains.TakeQuiz;
+import com.simplyalgos.backend.quiz.domains.quizId.TakeQuizId;
 import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
-import org.springframework.http.ResponseEntity;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
 public interface TakeQuizService {
 
     //will return a list containing the start and finish time
-    List<Timestamp> getTimeStamp(UUID userId, UUID quizId);
-    int getUserQuizScore(UUID userId, UUID quizId);
-    List<QuizScoreDTO> getAllUserQuizScore(UUID userId);
+    TakeQuizDTO getTimeStamp(TakeQuizId takeQuizId) throws NoSuchMethodException;
+    int getUserQuizScore(TakeQuizId takeQuizId) throws NoSuchMethodException;
+    List<TakeQuizDTO> getAllUserQuizScore(UUID userId);
+
+    double getAverageUserQuizScore(UUID userId);
+
+    double getAllAverageQuizScore(UUID quizId);
 
 
     TakeQuizDTO createTakenQuiz(TakeQuizDTO takeQuizDTO);
-    boolean deleteTakenQuiz(UUID userId, UUID quizId);
+    boolean deleteTakenQuiz(TakeQuizId takeQuizId) throws NoSuchMethodException;
     TakeQuizDTO updateTakenQuiz(TakeQuizDTO takeQuizDTO);
 }

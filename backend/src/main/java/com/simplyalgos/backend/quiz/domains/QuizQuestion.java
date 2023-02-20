@@ -1,10 +1,7 @@
 package com.simplyalgos.backend.quiz.domains;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
@@ -20,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder
 @Entity(name = "quiz_question")
 public class QuizQuestion {
 
@@ -45,6 +43,7 @@ public class QuizQuestion {
     @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")
     private Quiz belongsToThisQuiz;
 
+//    possible change this to UUIDs
     @OneToMany(mappedBy = "answerBelongsToQuestion")
     private Set<QuestionAnswer> answerChoices =  new HashSet<>();
 

@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class QuizQuestionAnswerDTO {
-    UUID answerId;
+    String answerId;
     String questionId;
     boolean isCorrect;
     String answer;

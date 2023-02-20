@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.quiz.domains;
 
+import com.simplyalgos.backend.quiz.domains.quizId.QuestionAnswerId;
 import lombok.*;
 
 import jakarta.persistence.*;

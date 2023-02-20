@@ -1,4 +1,4 @@
-package com.simplyalgos.backend.quiz.domains;
+package com.simplyalgos.backend.quiz.domains.quizId;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -13,7 +13,6 @@ import java.util.UUID;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
 @Builder
 @Embeddable
@@ -32,5 +31,11 @@ public class QuestionAnswerId implements Serializable {
 
     @Column(name = "question_id")
     private UUID questionId;
+
+    @Builder
+    public QuestionAnswerId(UUID answerID, UUID questionId){
+        this.answerID = answerID;
+        this.questionId = questionId;
+    }
 
 }

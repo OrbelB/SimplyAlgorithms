@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.quiz.services;
 
+import com.simplyalgos.backend.quiz.domains.quizId.QuizQuestionId;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import org.springframework.http.ResponseEntity;
 
@@ -12,7 +13,10 @@ public interface QuizQuestionService {
     QuizQuestionDTO updateQuizQuestion(QuizQuestionDTO quizQuestionDTO);
     boolean deleteQuizQuestion(UUID questionId);
 
-    List<QuizQuestionDTO> getAllQuizQuestion(UUID QuizId);
+    boolean deleteAllQuizQuestions(UUID quizId);
+
+
+    List<QuizQuestionDTO> getAllQuizQuestion(UUID quizId);
     QuizQuestionDTO getQuizQuestion(UUID quizId, UUID questionId);
 
 }
