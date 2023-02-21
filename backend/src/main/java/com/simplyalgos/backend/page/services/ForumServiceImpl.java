@@ -151,8 +151,8 @@ public class ForumServiceImpl implements ForumService {
                                 format("Forum with page Id {0} is not present ", forumDTO.getPageId())
                 )
         );
-        //forumMapper.forumDTOToForum(forumDTO, forum);
-        if (forum.getCreatedBy().getUserId().equals(forumDTO.getUserDto().getUserId())) {
+
+        if (Objects.equals(forum.getCreatedBy().getUserId(),forumDTO.getUserDto().getUserId())) {
             forumMapper.updateForumFromForumDto(forumDTO, forum);
             forum.getPageEntityId().setTags(new HashSet<>(tagService.mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags())));
         }

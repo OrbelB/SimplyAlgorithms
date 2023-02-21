@@ -77,7 +77,6 @@ public class UserController {
 
     }
 
-
     @UserReadPermission
     @GetMapping(path = "/dashboard/{userId}", produces = "application/json")
     public ResponseEntity<?> fetchDashboardInformation(@PathVariable UUID userId) {

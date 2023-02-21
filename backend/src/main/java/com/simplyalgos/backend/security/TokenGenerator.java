@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.security;
 
 import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.security.Role;
 import com.simplyalgos.backend.web.dtos.TokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
 
@@ -29,29 +31,40 @@ public class TokenGenerator {
 
     private final JwtEncoder accessTokenEncoder;
 
-    private  JwtEncoder refreshTokenEncoder;
+    private JwtEncoder refreshTokenEncoder;
 
     @Autowired
     @Qualifier("jwtRefreshTokenEncoder")
-    protected  void setRefreshTokenEncoder(JwtEncoder refreshTokenEncoder) {
+    protected void setRefreshTokenEncoder(JwtEncoder refreshTokenEncoder) {
         this.refreshTokenEncoder = refreshTokenEncoder;
+    }
+
+    private JwtClaimsSet createJwtClaimSet(String subject, String scope, ChronoUnit chronoUnit, long duration) {
+        Instant now = Instant.now();
+        return JwtClaimsSet.builder()
+                .issuer("SimplyAlgos.com")
+                .issuedAt(now)
+                .expiresAt(now.plus(duration, chronoUnit))
+                .subject(subject)
+                .claim("roles", scope)
+                .build();
+
     }
 
     private String createAccessToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Instant now = Instant.now();
 
+        String roleScope = user.getRoles().stream().map(Role::getRoleName).map(role -> "ROLE_" + role).collect(joining(" "));
+
         String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(joining(" "));
 
-        JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-                .issuer("SimplyAlgos.com")
-                .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.DAYS))
-                .subject(user.getUserId().toString())
-                .claim("roles", scope)
-                .build();
+        scope = scope + " " + roleScope;
+
+        JwtClaimsSet claimsSet = createJwtClaimSet(user.getUserId().toString(), scope, ChronoUnit.DAYS, 1);
+
         return accessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
 
@@ -61,13 +74,8 @@ public class TokenGenerator {
                 .map(GrantedAuthority::getAuthority)
                 .collect(joining(" "));
 
-        JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-                .issuer("SimplyAlgos.com")
-                .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.DAYS))
-                .subject(authentication.getName())
-                .claim("roles", scope)
-                .build();
+        JwtClaimsSet claimsSet = createJwtClaimSet(authentication.getName(), scope, ChronoUnit.DAYS, 1);
+
         return accessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
 
@@ -75,17 +83,20 @@ public class TokenGenerator {
         User user = (User) authentication.getPrincipal();
         Instant now = Instant.now();
 
-        String scope = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
+        Set<Role> roles = user.getRoles();
+
+        String roleScope = roles.stream().map(Role::getRoleName).map(role -> "ROLE_" + role)
                 .collect(joining(" "));
 
-        JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-                .issuer("SimplyAlgos.com")
-                .issuedAt(now)
-                .expiresAt(now.plus(30, ChronoUnit.DAYS))
-                .subject(user.getUserId().toString())
-                .claim("roles", scope)
-                .build();
+
+        String scope = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+
+                .collect(joining(" "));
+
+        scope = scope + " " + roleScope;
+
+        JwtClaimsSet claimsSet = createJwtClaimSet(user.getUserId().toString(), scope, ChronoUnit.DAYS, 30);
 
         return refreshTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }

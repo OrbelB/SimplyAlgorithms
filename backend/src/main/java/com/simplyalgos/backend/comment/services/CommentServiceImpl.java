@@ -21,6 +21,7 @@ import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.services.DashboardService;
 import com.simplyalgos.backend.user.services.UserService;
 
+import com.simplyalgos.backend.utils.StringUtils;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,9 +52,7 @@ public class CommentServiceImpl implements CommentService {
     private final ParentChildCommentService parentChildCommentService;
     private final CommentVoteService commentVoteService;
     private final CommentReportService commentReportService;
-
     private final ForumService forumService;
-
     private final TopicService topicService;
     private final DashboardService dashboardService;
 
@@ -76,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
         log.debug(MessageFormat.format("The user id {0}", commentDTO.userId()));
         PageEntity page = pageEntityService.getPageEntity(commentDTO.pageId());
 
-        if(page.getIsForumTopicPage().equals("forum")) {
+        if (page.getIsForumTopicPage().equals("forum")) {
             FullForumDTO forumDTO = forumService.getForumPage(String.valueOf(page.getPageId()));
             dashboardService.addForumNotification(forumDTO, userService.getUser(forumDTO.getUserDto().getUserId()));
         }
@@ -92,23 +91,16 @@ public class CommentServiceImpl implements CommentService {
                         .build()), commentDTO.pageId());
     }
 
-    protected Comment getCommentById(UUID commentId) {
-        return commentRepository.findById(commentId)
-                .orElseThrow(() ->
-                        new ElementNotFoundException("Comment has been deleted or never created"));
-    }
-
-
     @Override
     public CommentToSendDTO createChildComment(ChildCommentDTO commentDTO) {
 
         User userToNotified = userService.getUser(getCommentById(commentDTO.getParentCommentId()).getCreatedBy().getUserId());
         PageEntity page = pageEntityService.getPageEntity(commentDTO.getChildComment().pageId());
 
-        if(page.getIsForumTopicPage().equals("topic")){
+        if (page.getIsForumTopicPage().equals("topic")) {
             FullTopicDTO fullTopicDTO = topicService.getTopicPage(page.getPageId());
             dashboardService.addTopicNotification(fullTopicDTO, userToNotified);
-        }else if(page.getIsForumTopicPage().equals("forum")){
+        } else if (page.getIsForumTopicPage().equals("forum")) {
             FullForumDTO forumDTO = forumService.getForumPage(String.valueOf(page.getPageId()));
             dashboardService.addForumNotification(forumDTO, userToNotified);
         }
@@ -131,40 +123,39 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.commentToCommentBasicDTO(childCommentCreated, commentDTO.getParentCommentId());
     }
 
+    protected Comment getCommentById(UUID commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() ->
+                        new ElementNotFoundException("Comment has been deleted or never created"));
+    }
+
+
 
     @Override
     public CommentToSendDTO updateComment(CommentDTO commentDTO) {
-        Optional<Comment> optionalCommentToUpdate = commentRepository.findById(commentDTO.commentId());
+        Comment commentToUpdate = commentRepository
+                .findById(commentDTO.commentId())
+                .orElseThrow(() -> new NoSuchElementException(
+                        MessageFormat.format("Comment with id {0} not found",
+                                commentDTO.commentId())));
 
-        log.info("do I ever get here?");
-        Comment commentToUpdate;
-        if (optionalCommentToUpdate.isPresent()) {
-            commentToUpdate = optionalCommentToUpdate.get();
-            if (isNotNullEmptyAndBlank(commentDTO.commentText())) {
-                commentToUpdate.setCommentText(commentDTO.commentText());
-            }
-            if (commentToUpdate.getIsParentChild().equals(CommentType.PARENT.label)) {
-                return commentMapper.commentToCommentBasicDTO(commentRepository.save(commentToUpdate), commentDTO.pageId());
-            } else if (commentToUpdate.getIsParentChild().equals(CommentType.CHILD.label)) {
-                return commentMapper.commentToCommentBasicDTO(commentRepository.save(commentToUpdate), findCommentIdParent(commentToUpdate));
-            } else {
-                throw new NoSuchElementException("Not a valid type of comment");
-            }
 
+        if (StringUtils.isNotNullAndEmptyOrBlank(commentDTO.commentText())) {
+            commentToUpdate.setCommentText(commentDTO.commentText());
         }
-        throw new NoSuchElementException(MessageFormat.format("Comment with id {0} not found", commentDTO.commentId()));
 
+        if (commentToUpdate.getIsParentChild().equals(CommentType.PARENT.label)) {
+            return commentMapper.commentToCommentBasicDTO(commentRepository.save(commentToUpdate), commentDTO.pageId());
+        } else if (commentToUpdate.getIsParentChild().equals(CommentType.CHILD.label)) {
+            return commentMapper.commentToCommentBasicDTO(commentRepository.save(commentToUpdate), findCommentIdParent(commentToUpdate));
+        } else {
+            throw new NoSuchElementException("Not a valid type of comment");
+        }
     }
 
     private UUID findCommentIdParent(Comment commentToUpdate) {
         return commentToUpdate.getParentComments().get(0).getParentChildCommentId().getParentComment().getCommentId();
     }
-
-    private boolean isNotNullEmptyAndBlank(String xAttribute) {
-        if (xAttribute == null) return false;
-        return !(xAttribute.isBlank()) || !(xAttribute.isEmpty());
-    }
-
 
     @Override
     public UUID deleteComment(UUID commentId) {
@@ -234,8 +225,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public UUID reportComment(CommentReportDTO commentReportDTO) {
-        return commentReportService.reportComment(commentReportDTO, commentRepository.findById(commentReportDTO.getCommentId()).orElseThrow(() ->
-                new NoSuchElementException(MessageFormat.format("comment with id {0} not found", commentReportDTO.getCommentId()))
+        return commentReportService.reportComment(commentReportDTO,
+                commentRepository.findById(commentReportDTO.getCommentId())
+                        .orElseThrow(() ->
+                new NoSuchElementException(
+                        MessageFormat.format("comment with id {0} not found", commentReportDTO.getCommentId())
+                )
         ));
     }
 }

@@ -28,13 +28,12 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public String uploadImageFile(File file) {
-        log.debug("we are in here trying to upload this image ", file.getName());
+        log.debug("we are in here trying to upload this image", file.getName());
         String fileName = UUID.randomUUID().toString() + "_" + file.getName();
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
         file.delete();
         return BUCKET_URL_ENDPOINT + fileName;
     }
-
 
 
     @Override

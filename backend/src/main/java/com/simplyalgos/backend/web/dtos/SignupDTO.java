@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.web.dtos;
 
 import com.simplyalgos.backend.utils.ImageUtils;
+
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,7 +19,16 @@ public class SignupDTO {
     String lastName;
     @DateTimeFormat(pattern = "MM-DD-YYYY")
     Date dob;
+
+    // let other classes set this using setProfilePicture
     File profilePicture;
+
+    public void setProfilePicture(File profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture);
+    }
 
     @Builder
     public SignupDTO(String username, String password, String email, String firstName, String lastName, Date dob, String profilePicture) {
@@ -30,5 +40,6 @@ public class SignupDTO {
         this.dob = dob;
         this.profilePicture = ImageUtils.convertProfilePicture(profilePicture);
     }
+
 
 }

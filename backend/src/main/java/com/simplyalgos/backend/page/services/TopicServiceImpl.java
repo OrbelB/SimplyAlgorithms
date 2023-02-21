@@ -12,6 +12,7 @@ import com.simplyalgos.backend.report.services.PageReportService;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.tag.services.TagService;
 import com.simplyalgos.backend.user.services.UserService;
+import com.simplyalgos.backend.utils.StringUtils;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,13 +79,13 @@ public class TopicServiceImpl implements TopicService {
         Optional<Topic> topicToUpdate = topicRepository.findById(fullTopicDTO.getPageId());
         topicToUpdate.ifPresentOrElse(
                 topic -> {
-                    if (isNotNullAndEmpty(fullTopicDTO.getTitle())) topic.setTitle(fullTopicDTO.getTitle());
-                    if (isNotNullAndEmpty(fullTopicDTO.getExplanation()))
+                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getTitle())) topic.setTitle(fullTopicDTO.getTitle());
+                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getExplanation()))
                         topic.setExplanation(fullTopicDTO.getExplanation());
-                    if (isNotNullAndEmpty(fullTopicDTO.getVideo())) topic.setVideo(fullTopicDTO.getVideo());
-                    if (isNotNullAndEmpty(fullTopicDTO.getTimeComplexity()))
+                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getVideo())) topic.setVideo(fullTopicDTO.getVideo());
+                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getTimeComplexity()))
                         topic.setTimeComplexity(fullTopicDTO.getTimeComplexity());
-                    if (isNotNullAndEmpty(fullTopicDTO.getRunningTime()))
+                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getRunningTime()))
                         topic.setRunningTime(fullTopicDTO.getRunningTime());
                     if (fullTopicDTO.getSteps() != null)
                         mapStepsToTopic(topic, fullTopicDTO.getSteps());
@@ -99,10 +100,6 @@ public class TopicServiceImpl implements TopicService {
                 , () ->
                         log.error(MessageFormat.format("Topic with {0} could not be found", fullTopicDTO.getPageId())));
 
-    }
-
-    private boolean isNotNullAndEmpty(String xAttribute) {
-        return !xAttribute.isEmpty() || !xAttribute.isBlank();
     }
 
     @Override
@@ -127,7 +124,6 @@ public class TopicServiceImpl implements TopicService {
 
         //get page entity to map the other attributes
         PageEntity topicPageType = pageEntityService.getPageEntity(createdTopic.getPageId());
-
 
         log.debug(MessageFormat.format("Page {0} exists", topicPageType.getPageId()));
         tagService.mapTagToPageId(topicPageType, fullTopicDTO.getTags());
@@ -184,7 +180,7 @@ public class TopicServiceImpl implements TopicService {
     private List<TopicExternalResource> mapExternalResourcesToTopic(Topic topic, Set<TopicExternalResourcesDTO> externalResources) {
         //needs some work redone
         //removeResourceTopicFromPage(topic, externalResources);
-        //if external resource exists retrieve, don't update created ones, you can only delete them, but if the object exits updated
+        //if external resource exists retrieve, don't update created ones, you can only delete them, but if the object exits update it
         return externalResources
                 .stream()
                 .map(

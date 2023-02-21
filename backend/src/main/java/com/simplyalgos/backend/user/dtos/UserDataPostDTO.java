@@ -23,6 +23,14 @@ public class UserDataPostDTO {
     String email;
 
     File profilePicture;
+
+    public void setProfilePicture(File profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture);
+    }
     String biography;
     String phoneNumber;
     Timestamp createdDate;

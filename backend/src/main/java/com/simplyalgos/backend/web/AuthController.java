@@ -28,6 +28,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 
@@ -89,7 +90,8 @@ public class AuthController {
         try {
             Authentication authentication = refreshTokenAuthProvider
                     .authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
-            //Jwt jwt = (Jwt) authentication.getCredentials();
+
+
             log.info("authentication has this data " + authentication.getPrincipal().getClass());
             return userDetailsService.IsUserAccountNonLockedAndAuthenticated(authentication.getName()) ?
                     ResponseEntity.ok(tokenGenerator.createToken(authentication)) :
@@ -98,7 +100,6 @@ public class AuthController {
             log.error("the error is the following " + ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
     }
 
     @PostMapping("/resetPasswordRequest")

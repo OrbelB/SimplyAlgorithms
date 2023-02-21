@@ -8,6 +8,7 @@ import com.simplyalgos.backend.comment.dto.CommentToSendDTO;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.dtos.UserDataDTO;
+import com.simplyalgos.backend.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -96,11 +97,11 @@ public class CommentMapper {
         if (createdBy != null) {
             if (createdBy.getUserId() != null) {
                 userToBuild.userId(createdBy.getUserId());
-                if (isNotNullNorBlankNorEmpty(createdBy.getUsername())) userToBuild.username(createdBy.getUsername());
-                if (isNotNullNorBlankNorEmpty(createdBy.getFirstName()))
+                if (StringUtils.isNotNullAndEmptyOrBlank(createdBy.getUsername())) userToBuild.username(createdBy.getUsername());
+                if (StringUtils.isNotNullAndEmptyOrBlank(createdBy.getFirstName()))
                     userToBuild.firstName(createdBy.getFirstName());
-                if (isNotNullNorBlankNorEmpty(createdBy.getLastName())) userToBuild.lastName(createdBy.getLastName());
-                if (isNotNullNorBlankNorEmpty((createdBy.getProfilePicture())))
+                if (StringUtils.isNotNullAndEmptyOrBlank(createdBy.getLastName())) userToBuild.lastName(createdBy.getLastName());
+                if (StringUtils.isNotNullAndEmptyOrBlank((createdBy.getProfilePicture())))
                     userToBuild.profilePicture(createdBy.getProfilePicture());
             } else {
                 Optional<User> user = userRepository.findById(UUID.fromString(createdBy.toString()));
@@ -113,9 +114,5 @@ public class CommentMapper {
             }
         }
         return userToBuild.build();
-    }
-
-    private boolean isNotNullNorBlankNorEmpty(String xAttribute) {
-        return !(xAttribute != null && xAttribute.isEmpty() && xAttribute.isBlank());
     }
 }

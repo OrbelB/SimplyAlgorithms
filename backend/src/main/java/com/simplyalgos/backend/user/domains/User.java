@@ -146,22 +146,22 @@ public class User implements UserDetails, CredentialsContainer {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PageVote> pageVotes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userReferenceView", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userReferenceView", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Views> views = new HashSet<>();
 
-    @OneToMany(mappedBy = "userVoteReference", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userVoteReference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<CommentVote> commentVotes = new HashSet<>();
 
-    @OneToMany(mappedBy = "userQuizReference", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userQuizReference",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TakeQuiz> quizzes = new HashSet<>();
 
-    @OneToMany(mappedBy = "commentReportedBy", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "commentReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentReport> commentReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "pageReportedBy", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pageReportedBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PageReport> pageReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Forum> forumsCreated = new HashSet<>();
 
     @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
