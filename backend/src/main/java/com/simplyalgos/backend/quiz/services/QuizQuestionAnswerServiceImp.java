@@ -27,7 +27,9 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService{
                 QuestionAnswer.builder()
                         .answer(quizQuestionAnswerDTO.getAnswer())
                         .isCorrect(quizQuestionAnswerDTO.isCorrect())
-                        .questionAnswerId(new QuestionAnswerId(UUID.randomUUID(), UUID.fromString(quizQuestionAnswerDTO.getQuestionId())))
+                        .questionAnswerId(QuestionAnswerId.builder()
+                                .questionId(UUID.fromString(quizQuestionAnswerDTO.getQuestionId()))
+                                .build())
                         .build()
         );
         return new QuizQuestionAnswerDTO(questionAnswer.getQuestionAnswerId().getAnswerID().toString(),
@@ -57,8 +59,11 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService{
 
     @Override
     public QuizQuestionAnswerDTO updateQuizQuestionAnswer(QuizQuestionAnswerDTO quizQuestionAnswerDTO) {
-        QuestionAnswerId questionAnswerId = new QuestionAnswerId(UUID.fromString(quizQuestionAnswerDTO.getAnswerId()),
-                UUID.fromString(quizQuestionAnswerDTO.getQuestionId()));
+        QuestionAnswerId questionAnswerId = QuestionAnswerId.builder()
+                .answerID(UUID.fromString(quizQuestionAnswerDTO.getAnswerId()))
+                .questionId(UUID.fromString(quizQuestionAnswerDTO.getQuestionId()))
+                .build();
+
         Optional<QuestionAnswer> optionalQuestionAnswer = answerRepository.findById(questionAnswerId);
         if (optionalQuestionAnswer.isPresent()){
             log.debug("Updating the answer");
@@ -74,7 +79,8 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService{
 
     @Override
     public boolean deleteQuizQuestionAnswer(QuestionAnswerId questionAnswerId) throws NoSuchElementException {
-        if (answerRepository.existsById(questionAnswerId)) throw new NoSuchElementException(
+        if (answerRepository.existsById(questionAnswerId))
+            throw new NoSuchElementException(
                 MessageFormat.format("Question Answer with Id {0} not found", questionAnswerId.getQuestionId()));{
                     answerRepository.deleteById(questionAnswerId);
                     log.debug("Answer quiz has been deleted");

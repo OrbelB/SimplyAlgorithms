@@ -106,6 +106,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService{
         }
     }
 
+
     @Override
     public QuizQuestionDTO getQuizQuestion(UUID quizId, UUID questionId) {
         if(quizRepository.existsById(quizId)) throw new NoSuchElementException(

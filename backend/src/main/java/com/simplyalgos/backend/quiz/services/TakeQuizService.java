@@ -14,12 +14,12 @@ public interface TakeQuizService {
     int getUserQuizScore(TakeQuizId takeQuizId) throws NoSuchMethodException;
     List<TakeQuizDTO> getAllUserQuizScore(UUID userId);
 
-    double getAverageUserQuizScore(UUID userId);
+//    double getAverageUserQuizScore(UUID userId);
 
     double getAllAverageQuizScore(UUID quizId);
 
 
-    TakeQuizDTO createTakenQuiz(TakeQuizDTO takeQuizDTO);
+    TakeQuizDTO takenQuizSubmit(TakeQuizDTO takeQuizDTO);
     boolean deleteTakenQuiz(TakeQuizId takeQuizId) throws NoSuchMethodException;
     TakeQuizDTO updateTakenQuiz(TakeQuizDTO takeQuizDTO);
 }

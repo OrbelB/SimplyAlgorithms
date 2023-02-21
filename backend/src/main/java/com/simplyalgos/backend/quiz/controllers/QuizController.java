@@ -1,12 +1,15 @@
 package com.simplyalgos.backend.quiz.controllers;
 
+import com.simplyalgos.backend.quiz.dtos.QuizDTO;
 import com.simplyalgos.backend.quiz.security.CreateQuizPermission;
 import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
 import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
 import com.simplyalgos.backend.quiz.security.UpdateQuizPermission;
+import com.simplyalgos.backend.quiz.services.*;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +24,13 @@ import org.springframework.web.bind.annotation.*;
 public class QuizController {
 
 
+    private final QuizService quizService;
+    private final TakeQuizService takeQuizService;
+    private final QuizQuestionAnswerService questionAnswerService;
+    private final QuizQuestionService quizQuestionService;
+
     //need to pass in the tags
+    //will retrieve the quiz pages
     @GetMapping("/list")
     public ResponseEntity<?> getQuizList(TagDTO tag){
         return null;
@@ -44,11 +53,22 @@ public class QuizController {
         return null;
     }
 
+
+//    will be getting a quizDTO
     @CreateQuizPermission
     @PostMapping(path="/create", consumes = "application/json")
+    public ResponseEntity<?> createQuiz(@RequestBody QuizDTO quizDTO){
+        log.info("Creating a new Quiz: " + quizDTO.getTitle());
+        return ResponseEntity.status(HttpStatus.CREATED).body(quizService.createQuiz(quizDTO));
+    }
+
+//    Will be getting a quizQuestionDTO
+    @CreateQuizPermission
+    @PostMapping(path="/addQuestion", consumes = "application/json")
     public ResponseEntity<?> createQuiz(){
         return null;
     }
+
 
     @DeleteQuizPermission
     @PostMapping(path = "/delete")

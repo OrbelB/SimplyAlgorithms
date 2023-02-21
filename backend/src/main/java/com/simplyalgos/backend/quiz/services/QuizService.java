@@ -8,12 +8,12 @@ import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.http.ResponseEntity;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface QuizService {
 
-    ObjectPagedList<?> listQuizPages(org.springframework.data.domain.Pageable pageable);
+    ObjectPagedList<?> listQuizPages(Pageable pageable);
 
     ObjectPagedList listQuizPageWithTag(Pageable pageable, String tag);
 

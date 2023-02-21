@@ -2,7 +2,9 @@ package com.simplyalgos.backend.quiz.domains;
 
 
 import com.simplyalgos.backend.tag.domains.Tag;
+import com.simplyalgos.backend.utils.StringUtils;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
@@ -32,6 +34,8 @@ public class Quiz {
     @Column(length = 36, name = "quiz_id")
     private UUID quizId;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     @Column(name = "created_date")
     private Timestamp createdDate;
 
@@ -50,4 +54,11 @@ public class Quiz {
 
     @OneToMany(mappedBy = "quizReference")
     private Set<TakeQuiz> quizzesTaken = new HashSet<>();
+
+    public void setTag(Tag tag){
+        if(StringUtils.isNotNullAndEmptyOrBlank(tag)){
+            this.tagId = tag;
+        }
+
+    }
 }

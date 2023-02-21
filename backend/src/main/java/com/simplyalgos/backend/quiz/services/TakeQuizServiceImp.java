@@ -3,6 +3,7 @@ package com.simplyalgos.backend.quiz.services;
 import com.simplyalgos.backend.quiz.domains.TakeQuiz;
 import com.simplyalgos.backend.quiz.domains.quizId.TakeQuizId;
 import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
+import com.simplyalgos.backend.quiz.repositories.QuizRepository;
 import com.simplyalgos.backend.quiz.repositories.TakeQuizRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class TakeQuizServiceImp implements TakeQuizService{
 
     private final TakeQuizRepository takeQuizRepository;
+    private final QuizRepository quizRepository;
     @Override
     public TakeQuizDTO getTimeStamp(TakeQuizId takeQuizId) throws NoSuchElementException {
         if(takeQuizRepository.existsById(takeQuizId)) throw new NoSuchElementException(
@@ -60,48 +62,56 @@ public class TakeQuizServiceImp implements TakeQuizService{
         return takeQuizDTOList;
     }
 
-    @Override
-    public double getAverageUserQuizScore(UUID userId) {
-        List<TakeQuizDTO> takeQuizDTOList = getAllUserQuizScore(userId);
-        double avgScore = 0;
-        for(int i = 0; i < takeQuizDTOList.size(); i++){
-            avgScore += takeQuizDTOList.get(i).getScore();
-        }
-        return avgScore / takeQuizDTOList.size();
-    }
+//    @Override
+//    public double getAverageUserQuizScore(UUID userId) {
+//        List<TakeQuizDTO> takeQuizDTOList = getAllUserQuizScore(userId);
+//        double avgScore = 0;
+//        for(int i = 0; i < takeQuizDTOList.size(); i++){
+//            avgScore += takeQuizDTOList.get(i).getScore();
+//        }
+//        return avgScore / takeQuizDTOList.size();
+//    }
 
     @Override
     public double getAllAverageQuizScore(UUID quizId) {
         List<TakeQuiz> takeQuizList = takeQuizRepository.findAllByQuizId(quizId.toString());
+        double maxScore = quizRepository.findById(quizId).get().getScore() * takeQuizList.size();
+
         double aveQuizScore = 0;
         for(int i = 0; i < takeQuizList.size(); i++){
             aveQuizScore += takeQuizList.get(i).getScore();
         }
-        return aveQuizScore / takeQuizList.size();
+        return aveQuizScore * 100;
     }
 
     //    IF A USER HAS TAKEN THE QUIZ PREVIOUSLY MUST USE QUIZ UPDATE ELSE IF THE USER HAS
 //    NOT TAKEN THE QUIZ BEFORE THEN USE createTakenQuiz
     @Override
-    public TakeQuizDTO createTakenQuiz(TakeQuizDTO takeQuizDTO) {
-        log.debug("Starting the creation of a new Take Quiz");
-        TakeQuiz takeQuiz = takeQuizRepository.saveAndFlush(
-                TakeQuiz.builder()
-                        .takeQuizId(new TakeQuizId(takeQuizDTO.getUserId(),takeQuizDTO.getQuizId()))
-                        .score(takeQuizDTO.getScore())
-                        .startedAt(takeQuizDTO.getStartedAt())
-                        .finishedAt(takeQuizDTO.getFinishedAt())
-                        .build()
-        );
-        TakeQuizDTO takeQuizDTOReturn = new TakeQuizDTO();
-        takeQuizDTOReturn.setScore(takeQuiz.getScore());
-        takeQuizDTOReturn.setFinishedAt(takeQuiz.getFinishedAt());
-        takeQuizDTOReturn.setStartedAt(takeQuiz.getStartedAt());
-        takeQuizDTOReturn.setQuizId(takeQuiz.getTakeQuizId().getQuizId());
-        takeQuizDTOReturn.setUserId(takeQuiz.getTakeQuizId().getUserId());
+    public TakeQuizDTO takenQuizSubmit(TakeQuizDTO takeQuizDTO) {
+        TakeQuizId inTakeQuizId = new TakeQuizId(takeQuizDTO.getUserId(), takeQuizDTO.getQuizId());
+        if(takeQuizRepository.existsById(inTakeQuizId)){
+            return updateTakenQuiz(takeQuizDTO);
+        }
+        else{
+            log.debug("Starting the creation of a new Take Quiz");
+            TakeQuiz takeQuiz = takeQuizRepository.saveAndFlush(
+                    TakeQuiz.builder()
+                            .takeQuizId(new TakeQuizId(takeQuizDTO.getUserId(),takeQuizDTO.getQuizId()))
+                            .score(takeQuizDTO.getScore())
+                            .startedAt(takeQuizDTO.getStartedAt())
+                            .finishedAt(takeQuizDTO.getFinishedAt())
+                            .build()
+            );
+            TakeQuizDTO takeQuizDTOReturn = new TakeQuizDTO();
+            takeQuizDTOReturn.setScore(takeQuiz.getScore());
+            takeQuizDTOReturn.setFinishedAt(takeQuiz.getFinishedAt());
+            takeQuizDTOReturn.setStartedAt(takeQuiz.getStartedAt());
+            takeQuizDTOReturn.setQuizId(takeQuiz.getTakeQuizId().getQuizId());
+            takeQuizDTOReturn.setUserId(takeQuiz.getTakeQuizId().getUserId());
 
-        log.debug("Finishing the creation of a new take quiz");
-        return takeQuizDTOReturn;
+            log.debug("Finishing the creation of a new take quiz");
+            return takeQuizDTOReturn;
+        }
     }
 
     @Override

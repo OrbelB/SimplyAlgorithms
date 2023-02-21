@@ -2,26 +2,29 @@ package com.simplyalgos.backend.quiz.services;
 
 import com.simplyalgos.backend.quiz.domains.Quiz;
 import com.simplyalgos.backend.quiz.dtos.QuizDTO;
+import com.simplyalgos.backend.quiz.mappers.QuizMapper;
 import com.simplyalgos.backend.quiz.repositories.QuizRepository;
 import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import com.simplyalgos.backend.tag.repositories.TagRepository;
-import com.simplyalgos.backend.tag.services.TagService;
-import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import com.simplyalgos.backend.utils.StringUtils;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,43 +33,69 @@ import java.util.UUID;
 public class QuizServiceImp implements QuizService {
 
     private final QuizRepository quizRepository;
-    private final UserService userService;
-    private final TagService tagService;
 
     private final TagRepository tagRepository;
+
+    private final QuizMapper quizMapper;
+
     @Override
-    public ObjectPagedList<?> listQuizPages(org.springframework.data.domain.Pageable pageable) { //why must i do this? why?
+    public ObjectPagedList<?> listQuizPages(Pageable pageable) { //why must i do this? why?
         Page<Quiz> quizPage = quizRepository.findAll(pageable);
-        return null;
+        return new ObjectPagedList<>(
+                quizPage.stream()
+                        .map(quizMapper::quizToQuizDTO)
+                        .collect(Collectors.toList()),
+                PageRequest.of(
+                        quizPage.getPageable().getPageNumber(),
+                        quizPage.getPageable().getPageSize(),
+                        quizPage.getSort()),
+                quizPage.getTotalElements()
+                );
     }
 
     @Override
     public ObjectPagedList listQuizPageWithTag(Pageable pageable, String tag) {
-        return null;
+        Page<Quiz> quizPage = quizRepository.findAllByTagId_Tag(tag, pageable);
+        return new ObjectPagedList<>(
+                quizPage.stream()
+                        .map(quizMapper::quizToQuizDTO)
+                        .collect(Collectors.toList()),
+                PageRequest.of(
+                        quizPage.getPageable().getPageNumber(),
+                        quizPage.getPageable().getPageSize(),
+                        quizPage.getSort()),
+                quizPage.getTotalElements()
+        );
     }
 
     @Override
     public UUID createQuiz(QuizDTO quizDTO) {
         log.debug("Creating a new Quiz");
+        log.debug("Here is the tag information " + quizDTO.getTag().getTag() + " this tag Id: " + quizDTO.getTag().getTagId());
+
         Tag quizTag = null;
         Date createdDate = new Date();
-        if(quizDTO.getTag().getTagId() == null){
+        if(StringUtils.isNotNullAndEmptyOrBlank(quizDTO.getTag())){
+            log.debug("inside the tag if else");
+            if(!StringUtils.isNotNullAndEmptyOrBlank(quizDTO.getTag().getTagId().toString())){
 //            will create the tag if it's new
-            quizTag = Tag.builder()
-                    .tag(quizDTO.getTag().getTag())
-                    .tagId(UUID.randomUUID())
-                    .build();
-            tagRepository.saveAndFlush(quizTag);
-            log.debug("Creating a new Tag tagId: ", quizTag.getTagId());
+                log.debug("Here is the tag: " + quizDTO.getTag().getTag());
+                quizTag = Tag.builder()
+                        .tag(quizDTO.getTag().getTag())
+                        .build();
+                tagRepository.saveAndFlush(quizTag);
+                log.debug("Creating a new Tag tagId: " + quizTag.getTagId());
 
-        }
-        else{
-            quizTag = tagRepository.findById(quizDTO.getTag().getTagId()).get();
-            log.debug("Tag already exists tagId: ", quizTag.getTagId());
+
+            }
+            else {
+                log.debug("the tag id passed in is: " + quizDTO.getTag().getTagId());
+                quizTag = tagRepository.findById(quizDTO.getTag().getTagId()).get();
+                log.debug("Tag already exists tagId: " +  quizTag.getTagId());
+            }
         }
         Quiz newQuiz = Quiz.builder()
-                .quizId(UUID.randomUUID())
-                .createdDate(new Timestamp(createdDate.getTime()))
+//                .createdDate(new Timestamp(createdDate.getTime()))
                 .title(quizDTO.getTitle())
                 .score(quizDTO.getScore())
                 .tagId(quizTag)

@@ -29,7 +29,10 @@ public class QuestionAnswerId implements Serializable {
     @Column(length = 36, name = "answer_id", columnDefinition = "varchar")
     private UUID answerID;
 
-    @Column(name = "question_id")
+    @Type(value = UserTypeLegacyBridge.class,
+            parameters = @Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
+                    value = "org.hibernate.type.UUIDCharType"))
+    @Column(length = 36, name = "question_id", columnDefinition = "varchar")
     private UUID questionId;
 
     @Builder
