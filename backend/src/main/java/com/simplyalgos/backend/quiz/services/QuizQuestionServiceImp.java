@@ -25,19 +25,20 @@ public class QuizQuestionServiceImp implements QuizQuestionService{
     private final QuizQuestionAnswerServiceImp quizQuestionAnswerService;
     @Override
 //    this is assuming quiz id is already created
-//    Answers and quetion will come in the QuizQuestionDTO, will separate and save each in Controller layer
+//    Answers and question will come in the QuizQuestionDTO, will separate and save each in Controller layer
     public QuizQuestionDTO createQuizQuestion(QuizQuestionDTO quizQuestionDTO) {
-        log.debug("Creating a new quiz question");
+        log.debug("Creating a new quiz question in createQuizQuestion with quiz id: " + quizQuestionDTO.getQuizId());
         if(quizRepository.existsById(quizQuestionDTO.getQuizId())) throw new NoSuchElementException(
                 MessageFormat.format("Quiz with id {0} not found", quizQuestionDTO.getQuizId()));{
             QuizQuestion quizQuestion = questionRepository.saveAndFlush(
                     QuizQuestion.builder()
-                            .questionId(UUID.randomUUID())
                             .belongsToThisQuiz(quizRepository.findById(quizQuestionDTO.getQuizId()).get())
                             .question(quizQuestionDTO.getQuestion())
                             .picture(quizQuestionDTO.getPicture())
                             .build()
         );
+            quizQuestionDTO.setQuestionId(quizQuestion.getQuestionId());
+            log.debug("Quiz question new create, Moving onto creating the Question answers");
             quizQuestionAnswerService.saveAllQuizQuestionAnswers(quizQuestionDTO);
             return quizQuestionDTO;
         }
