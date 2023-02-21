@@ -1,6 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useMemo } from 'react';
 import debounce from 'lodash.debounce';
+import { Input, Button } from '@mui/material';
+
 import { selectAllTags } from '../../../store/reducers/tags-reducer';
 import classes from './Tags.module.css';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
@@ -41,32 +43,37 @@ export default function Tags() {
   return (
     <>
       <h1 className="category-label">Categories</h1>
-      <input
+      <Input
+        placeholder="Search Category..."
+        onChange={(e) => filterTagsContaining(e)}
+        fullWidth
+      />
+      {/* <input
         onChange={(e) => filterTagsContaining(e)}
         type="text"
         className="search-bar"
         placeholder="Search Category..."
-      />
-      <div className="btn-group">
+      /> */}
+      <div className="mt-4 mb-4">
         {filteredTags?.map((tag) => (
-          <button
+          <Button
             key={tag?.tagId}
             className={classes.category}
             onClick={() => handleClick(tag?.tagId)}
             type="button"
           >
             {tag?.tag}
-          </button>
+          </Button>
         ))}
         {totalPages > 0 && (
-          <button
+          <Button
             className={classes['last-button']}
-            onClick={() => loadMoreTags()}
+            onClick={loadMoreTags}
             hidden={totalPages === page}
             type="button"
           >
             Explore More...
-          </button>
+          </Button>
         )}
       </div>
     </>

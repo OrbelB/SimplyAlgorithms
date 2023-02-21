@@ -50,10 +50,8 @@ export const commentSlice = createSlice({
         state.status = 'failed';
         state.error = action?.error.message;
       })
-      .addCase(createChildComment.pending, (state) => {
-        state.status = 'pending';
-      })
       .addCase(createChildComment.fulfilled, (state, action) => {
+        if (!action?.payload?.comment?.commentId) return;
         state.status = 'success';
         const newCreatedChildComment = {
           parentCommentId: action.payload.rootId,
@@ -69,8 +67,8 @@ export const commentSlice = createSlice({
       .addCase(createChildComment.rejected, (state) => {
         state.status = 'failed';
       })
-      .addCase(updateChildComment.pending, (state) => {
-        state.status = 'pending';
+      .addCase(updateChildComment.rejected, (state) => {
+        state.status = 'failed';
       })
       .addCase(updateChildComment.fulfilled, (state, action) => {
         if (!action?.payload?.comment?.commentId) {
@@ -92,7 +90,11 @@ export const commentSlice = createSlice({
         if (!action.payload) {
           return;
         }
+        state.status = 'success';
         commentAdapter.removeOne(state, action.payload);
+      })
+      .addCase(deleteChildComment.rejected, (state) => {
+        state.status = 'failed';
       });
   },
 });

@@ -1,24 +1,15 @@
-import { Box, Drawer } from '@mui/material';
-import { useState } from 'react';
+import { Box, Drawer, Typography } from '@mui/material';
+
 import NotebookDrawer from './NotebookDrawer/NoteBookDrawer';
 
-export default function Notebook() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
   return (
     <>
-      <div className="drawer_size_min">
-        <button
-          type="button"
-          className="btn btn-link"
-          onClick={() => setIsDrawerOpen(true)}
-        >
-          Notebook
-        </button>
-      </div>
+      <Typography textAlign="center">Notebook</Typography>
       <Drawer
         anchor="right"
         open={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+        onClose={() => setIsDrawerOpen(() => false)}
       >
         <Box width="400px">
           <NotebookDrawer />

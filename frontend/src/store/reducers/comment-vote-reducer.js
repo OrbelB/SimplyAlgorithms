@@ -33,7 +33,6 @@ export const commentVotesSlice = createSlice({
       })
       .addCase(listVotesByPage.fulfilled, (state, action) => {
         if (!action?.payload) return;
-        console.info(action.payload, 'object that is gotten');
         state.status = 'success';
         commentVotesAdapter.upsertMany(state, action.payload);
       })
@@ -62,6 +61,10 @@ export const commentVotesSlice = createSlice({
         if (!action?.payload) return;
         state.status = 'success';
         commentVotesAdapter.upsertOne(state, action.payload);
+      })
+      .addCase(voteComment.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
       });
   },
 });

@@ -16,12 +16,12 @@ export default function QuizProgress() {
     <div>
       {currentUserInfo.map(({ index }) => {
         return (
-          <div key={index} className="container-fluid w-100">
+          <div key={index} className="container-fluid">
             <div className="row">
               <div className="col text-center">
                 <h5 className="text-center m-4">Scores</h5>
                 <div className="row">
-                  <div className="col-3">
+                  <div className="col-auto col-3">
                     {linechar.map(({ qname, dtachart }) => (
                       <Chart
                         key={nanoid()}

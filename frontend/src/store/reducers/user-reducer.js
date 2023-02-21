@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import noUserImageTemplate from '../../assets/noPictureTemplate.png';
+import noUserImageTemplate from '../../assets/person-fill.png';
 import {
   fetchUser,
   updatePassword,
@@ -170,7 +170,6 @@ export const userSlice = createSlice({
       })
       .addCase(updatePreferences.fulfilled, (state, action) => {
         state.status = 'success';
-        console.info(action.payload);
         state.userPreferences = action.payload;
       })
       .addCase(updatePreferences.rejected, (state, action) => {

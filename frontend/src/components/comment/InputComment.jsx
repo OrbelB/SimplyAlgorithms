@@ -1,3 +1,4 @@
+import { Avatar } from '@mui/material';
 import cx from 'classnames';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -41,13 +42,13 @@ export default function InputComment() {
   };
 
   return (
-    <div className={cx('container-fluid', styles['input-comment-style'])}>
+    <div className={cx('container-fluid mb-4', styles['input-comment-style'])}>
       <form className={cx('grid p-3')} onSubmit={handleSubmitForm}>
         <div className="row justify-content-evenly">
           <div className="col-auto col-sm-auto m-auto align-self-center">
-            <img
+            <Avatar
+              sx={{ width: 45, height: 45 }}
               src={profilePicture}
-              className="rounded-circle"
               height="50"
               alt="profile"
               loading="lazy"

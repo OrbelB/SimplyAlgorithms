@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { TextField } from '@mui/material';
+import { TextareaAutosize, TextField } from '@mui/material';
 import UnderConstruction from '../../underconstruction/UnderConstruction';
 import useValidateInput from '../../../hooks/use-ValidateInput';
 
@@ -86,28 +87,28 @@ export default function ForumEdit() {
   }
 
   return (
-    <div className="container-fluid form-group pt-5">
+    <div className="container form-group pt-5">
       <div className="row justify-content-center">
         <TextField
-          className="col-auto w-75 mb-5"
+          className="col-auto w-100 mb-5"
           id="margin-dense"
           required
           label="Title"
           value={title}
           onChange={titleChangeHandler}
         />
-        <TextField
-          className="col-auto w-50 mb-5"
+        <TextareaAutosize
+          className="col-auto w-100 mb-5"
           id="filled-multiline-flexible"
           label="Description"
-          rows={15}
+          minRows={15}
           multiline
           required
           value={description}
           onChange={descriptionChangeHandler}
         />
         <h4 className="row justify-content-center">Current Categories</h4>
-        <div className="w-75">
+        <div className="w-100">
           <TagForm currentTags={currentTags} setCurrentTags={setCurrentTags} />
         </div>
       </div>

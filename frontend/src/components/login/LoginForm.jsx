@@ -87,15 +87,17 @@ export default function LoginForm() {
         </div>
       )}
       <form onSubmit={onSubmitFormHandler}>
-        <div className="row mt-5 m-0">
-          <div className="col m-0 p-0">
-            <label className="form-label m-0 mb-2 p-0" htmlFor="username-form">
+        <div className="row  justify-content-between mt-5 mb-1">
+          <div className="col-auto m-0 p-0">
+            <label className="form-label" htmlFor="username-form">
               Username
             </label>
           </div>
           {usernameInputHasError && (
-            <div className="col ms-0 p-0 alert alert-danger align-content-center">
-              <p className="text-center small">username cannot be empty!</p>
+            <div className="col-auto p-0 m-1 alert alert-danger">
+              <p className="text-center small mt-2">
+                username cannot be empty!
+              </p>
             </div>
           )}
         </div>
@@ -116,14 +118,14 @@ export default function LoginForm() {
             required
           />
         </div>
-        <div className="row mt-5 m-0">
-          <div className="col m-0 p-0">
+        <div className="row  justify-content-between mt-5 m-0">
+          <div className="col-auto m-0 p-0">
             <label className="form-label m-0 mb-2 p-0" htmlFor="password-form">
               Password
             </label>
           </div>
           {passwordInputHasError && (
-            <div className="col ms-0 p-0 alert alert-danger align-content-center">
+            <div className="col-auto ms-0 p-1 alert alert-danger align-content-center">
               <p className="text-center small">password cannot be empty!</p>
             </div>
           )}
@@ -165,7 +167,7 @@ export default function LoginForm() {
           </div>
         </div>
         <div className="row justify-content-center justify-content-sm-between mt-5">
-          <div className="col-auto ">
+          <div className="col-auto col-md-4">
             <div className="form-check">
               <input
                 className="form-check-input rounded-circle"
@@ -178,20 +180,23 @@ export default function LoginForm() {
               </label>
             </div>
           </div>
-          <div className="col-auto align-items-end">
-            <PasswordReset setShowNotification={setShowNotification} />
-            {/* {console.log(showNotification, ' LOGIN FORM')} */}
-          </div>
-        </div>
-        <div className="row justify-content-end pt-1">
-          <div className="col-auto align-items-end">
-            <ForgotUsername />
-          </div>
         </div>
         <div className="row justify-content-center mt-5">
-          <button type="submit" className="btn btn-primary btn-block mb-4">
+          <button
+            type="submit"
+            className="btn btn-primary btn-block mb-3"
+            style={{ minWidth: 250 }}
+          >
             Sign In
           </button>
+        </div>
+        <div className="row justify-content-center">
+          <div className="col-auto">
+            <PasswordReset setShowNotification={setShowNotification} />
+          </div>
+          <div className="col-auto">
+            <ForgotUsername />
+          </div>
         </div>
       </form>
     </>

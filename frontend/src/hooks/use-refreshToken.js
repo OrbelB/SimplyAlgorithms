@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser, fetchUserDashboardInfo } from '../services/user';
 import { refreshAccessToken } from '../services/auth';
 import { authActions } from '../store/reducers/auth-reducer';
-import image from '../assets/noPictureTemplate.png';
+import image from '../assets/person-fill.png';
 
 export default function useRefreshToken() {
   const { jwtRefreshToken, userId, isLoggedIn, jwtAccessToken, status } =
@@ -13,7 +13,6 @@ export default function useRefreshToken() {
   const [once, setOnce] = useState(true);
 
   useEffect(() => {
-    console.count();
     if (jwtRefreshToken !== '' && once) {
       setOnce(false);
       dispatch(refreshAccessToken(jwtRefreshToken));

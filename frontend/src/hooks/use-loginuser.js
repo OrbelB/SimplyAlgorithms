@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // import { useLocation } from "react-router-dom";
 import { useEffect } from 'react';
 import { fetchUser, fetchUserDashboardInfo } from '../services/user';
-import templateImage from '../assets/noPictureTemplate.png';
+import templateImage from '../assets/person-fill.png';
 
 export default function useLoginUser(redirectTo) {
   const { jwtAccessToken, userId, isLoggedIn } = useSelector(

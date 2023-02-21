@@ -1,20 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .category {
-    min-width: 40vh;
-    background-color: var(--color-bg-main);
-    border-radius: 10px 10px 10px 10px;
-    border: 1px solid #4beff8;
-    font-family: 'Readex Pro', sans-serif;
-    font-size: 3vh;
-    width: 40vh;
-    margin-bottom: 20px;
+  background-color: var(--color-bg-main) !important;
+  border-radius: 10px 10px 10px 10px !important;
+  border: 1px solid #4beff8 !important;
+  color: black !important;
+  font-family: 'Readex Pro', sans-serif !important;
+  font-size: 20px !important;
+  padding: 12px !important;
+  width: 100% !important;
+  margin-bottom: 20px !important;
 }
 
 .last-button {
-    background-color: var(--color-border-input-form);
-    border-radius: 10px 10px 10px 10px;
-    font-size: 3vh;
-    font-family: 'Readex Pro', sans-serif;
-    border: 1px solid #0f52d8;
+  background-color: var(--color-border-input-form);
+  border-radius: 10px 10px 10px 10px;
+  font-size: 3vw;
+  font-family: 'Readex Pro', sans-serif;
+  border: 1px solid #0f52d8;
 }

@@ -17,25 +17,28 @@ export default function Categories() {
             <p className="stuff">What Are Algorithms?</p>
           </NavLink>
         </button>
-        <div className="topicrow">
-          <button type="button" className="topic t1">
+        <div className="row justify-content-center">
+          <button type="button" className="topic t1 col-10 col-lg-5">
             <NavLink to="/sorting">
               <p className="stuff">Sorting</p>
             </NavLink>
           </button>
-          <button type="button" className="topic t2">
+          <button
+            type="button"
+            className="topic t2 col-10 col-lg-5 text-center"
+          >
             <NavLink to="/trees">
               <p className="stuff">Trees</p>
             </NavLink>
           </button>
         </div>
-        <div className="topicrow">
-          <button type="button" className="topic t3">
+        <div className="row justify-content-center">
+          <button type="button" className="topic t3 col-10 col-lg-5">
             <NavLink to="/graphs">
               <p className="stuff">Graphs</p>
             </NavLink>
           </button>
-          <button type="button" className="topic t4">
+          <button type="button" className="topic t4 col-10 col-lg-5">
             <NavLink to="/datastructures">
               <p className="stuff">Data Structures</p>
             </NavLink>

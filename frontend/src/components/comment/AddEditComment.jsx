@@ -1,3 +1,4 @@
+import { Avatar } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -33,11 +34,11 @@ export default function AddEditComment({
       onSubmit={getChildComment}
       className="row justify-content-evenly mt-2"
     >
-      <div className="col-auto col-sm-auto">
-        <img
+      <div className="col-auto col-sm-auto col-md-2">
+        <Avatar
+          sx={{ width: 40, height: 40 }}
           src={profilePicture}
           className="rounded-circle"
-          height="38"
           alt="Profile of Current User"
           loading="lazy"
         />
@@ -51,18 +52,18 @@ export default function AddEditComment({
           type="text"
         />
       </div>
-      <div className="row justify-content-end pt-1">
-        <div className="col-auto col-sm-auto">
+      <div className="row justify-content-end g-0">
+        <div className="col-auto col-sm-auto btn-group pe-md-2">
           <button
-            className="btn"
+            className="btn btn-danger"
             onClick={handleCancelChildComment}
             type="button"
           >
             CANCEL
           </button>
         </div>
-        <div className="col-auto col-sm-auto">
-          <button className="btn" type="submit">
+        <div className="col-auto col-sm-auto btn-group">
+          <button className="btn btn-success" type="submit">
             REPLY
           </button>
         </div>

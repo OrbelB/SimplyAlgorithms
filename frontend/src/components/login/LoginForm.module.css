@@ -1,17 +1,24 @@
 .input-style {
     width: 80%;
-    padding: 10px 25px;
-    border: 0;
+    padding: 1rem 2rem;
+    border: none;
+    background: none;
     border-radius: 20px;
     margin: 0;
     outline: none;
 }
 
+.input-style[type=text] {
+    border: 0;
+}
+
 .row-input-style {
+    min-width: 275px !important;
     border-color: var(--color-border-input-form) !important;
 }
 
 .row-input-style-invalid {
+    min-width: 275px !important;
     border-color: var(--color-border-input-form-invalid) !important;
 }
 
@@ -20,4 +27,3 @@
         display: none;
     }
 }
-

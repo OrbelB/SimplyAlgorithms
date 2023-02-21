@@ -46,11 +46,11 @@ export const updateChildComment = createAsyncThunk(
   'ChildComment/update',
   async (passedCommentToUpdateParams) => {
     const { commentToUpdate, accessToken } = passedCommentToUpdateParams;
+
     const response = await commentEndpoints.update(
       commentToUpdate,
       accessToken
     );
-
     return response.data;
   }
 );

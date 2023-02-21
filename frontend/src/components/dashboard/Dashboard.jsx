@@ -13,53 +13,54 @@ import ShowMoreHighlights from './HighlightsDB/ShowMoreHighlights/ShowMoreHighli
 export default function Dashboard() {
   const { username } = useSelector((state) => state.user);
   return (
-    <div>
-      <div className="container-fluid w-100">
-        <div className="row mt-4">
-          <div className="col-lg-10 justify-content-start">
-            <h2>{username}&apos;s Dashboard</h2>
+    <div className="container-fluid">
+      <div className="row ps-2 justify-content-between mt-4">
+        <div className="col-auto align-self-center 0">
+          <h2>
+            {`${username.charAt(0).toUpperCase()}${username.substring(1)}`}
+            &apos;s Dashboard
+          </h2>
+        </div>
+        <div className="col-auto">
+          <Notifications />
+        </div>
+      </div>
+      <div className="row mt-4 ps-3">
+        <div className="card border-dark quizzes">
+          <h4 className="card-header text-center">Quizzes</h4>
+          <QuizProgress />
+        </div>
+      </div>
+      <div className="row mt-3 mb-3">
+        <div className="col-lg-3 mt-2">
+          <div className="mt-2 mb-4">
+            <DayStreak />
           </div>
-          <div className="col-md">
-            <Notifications />
+          <div className="card rvp">
+            <div className="card-header text-center">
+              <h5>Recently Viewed Posts</h5>
+            </div>
+            <RecentlyViewedPosts />
           </div>
         </div>
-        <div className="row mt-3">
-          <div className="card border-dark quizzes">
-            <h4 className="card-header text-center">Quizzes</h4>
-            <QuizProgress />
+        <div className="col-lg-4 mt-2">
+          <div className="card border-dark topics">
+            <h4 className="card-header text-center">Topics</h4>
+            <TopicsDB />
           </div>
         </div>
-        <div className="row mt-3 mb-3">
-          <div className="col-lg-3 mt-2">
-            <div className="mt-2 mb-4">
-              <DayStreak />
-            </div>
-            <div className="card rvp">
-              <div className="card-header text-center">
-                <h5>Recently Viewed Posts</h5>
-              </div>
-              <RecentlyViewedPosts />
-            </div>
+        <div className="col-lg mt-2">
+          <div className="card side-right-1">
+            <h4 className="card-header text-center">Notifications</h4>
+            <CommentsDB />
+            <ShowMoreComments />
           </div>
-          <div className="col-lg-4 mt-2">
-            <div className="card border-dark topics">
-              <h4 className="card-header text-center">Topics</h4>
-              <TopicsDB />
-            </div>
-          </div>
-          <div className="col-lg mt-2">
-            <div className="card side-right-1">
-              <h4 className="card-header text-center">Notifications</h4>
-              <CommentsDB />
-              <ShowMoreComments />
-            </div>
-          </div>
-          <div className="col-lg mt-2">
-            <div className="card side-right-2">
-              <h4 className="card-header text-center">Highlights</h4>
-              <HighlightsDB />
-              <ShowMoreHighlights />
-            </div>
+        </div>
+        <div className="col-lg mt-2">
+          <div className="card side-right-2">
+            <h4 className="card-header text-center">Highlights</h4>
+            <HighlightsDB />
+            <ShowMoreHighlights />
           </div>
         </div>
       </div>

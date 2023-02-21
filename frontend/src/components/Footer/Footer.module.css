@@ -1,12 +1,11 @@
 .box {
   background-color: white;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 }
 .web_nav {
   border-left: 1px solid black;
 }
 .web_soc {
+  min-height: 100% !important;
   border-left: 1px solid black;
 }
 
@@ -30,25 +29,19 @@
   color: white;
 }
 
-@media only screen and (max-width: 1500px) {
+@media only screen and (min-width: 1500px) {
   .web_nav {
-    font-size: 1.2vw;
+    font-size: 1.1vw;
   }
   .web_soc {
-    font-size: 1.2vw;
+    font-size: 1.1vw;
   }
   .nav-footer-link {
-    font-size: 15pt;
+    font-size: 14pt;
   }
 
   .social-link {
     font-size: 15pt;
-  }
-  .web-logo {
-    text-align: center;
-    width: 135px;
-    height: 135px;
-    margin-left: 5%;
   }
   .email {
     font-size: 15pt;
@@ -57,15 +50,11 @@
     font-size: 12pt;
   }
 }
-@media only screen and (max-width: 1000px) {
-  .web_soc {
-    margin-left: 10px;
-  }
+@media only screen and (max-width: 1500px) {
   .web-logo {
     text-align: center;
-    width: 125px;
-    height: 125px;
-    margin-left: 10%;
+    width: 150px;
+    height: 150px;
   }
   .name {
     display: none;
@@ -77,7 +66,6 @@
 
 @media only screen and (max-width: 500px) {
   .web-logo {
-    text-align: center;
     width: 125px;
     height: 125px;
   }
@@ -86,9 +74,7 @@
     font-size: 18px;
   }
   .web_soc {
-    border: none;
     font-size: 18px;
-    margin-left: 0;
   }
   .box {
     text-align: center;

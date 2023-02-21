@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { RiQuestionnaireFill } from 'react-icons/ri';
-import { Fab, TextField, Tooltip } from '@mui/material';
+import { Fab, TextareaAutosize, TextField, Tooltip } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useValidateInput from '../../../hooks/use-ValidateInput';
@@ -83,18 +83,6 @@ export default function Post() {
           <RiQuestionnaireFill />
         </Fab>
       </Tooltip>
-
-      {/* <button
-        type="button"
-        className="btn btn-outline-secondary btn-lg"
-        onClick={handleShow}
-      >
-        <div>
-          Ask A Question
-          <RiQuestionnaireFill />
-        </div>
-      </button> */}
-
       {/* <!-- Modal --> */}
       <Modal
         show={showSignUp}
@@ -123,53 +111,13 @@ export default function Post() {
               currentTags={tagsSelected}
               setCurrentTags={setTagsSelected}
             />
-            {/* <label htmlFor="inputCategory" className="form-label">
-              Category
-            </label>
-            <select
-              id="inputCategory"
-              className="form-select"
-              onChange={addTagToSave}
-            >
-              {tags.map((tag) => (
-                <option value={tag.tagId} key={tag.tagId}>
-                  {tag.tag}
-                </option>
-              ))}
-            </select>
           </div>
-
-          <div className="col-md-4 w-100 form-group">
-            <label htmlFor="question_categories" className="col-form-label">
-              Or create your own category
-            </label>
-            <input
-              type="text"
-              class="form-control"
-              id="question_categories"
-              value={newTagName}
-              onChange={updateTagName}
-              onKeyDown={addNewTag}
-            />
-           */}
-          </div>
-          {/* <div className="row mt-2 justify-content-center">
-            {tagsSelected?.map((tag) => (
-              <Chip
-                key={tag.tagId === "" ? nanoid() : tag.tagId}
-                className="col-auto m-1"
-                label={tag.tag}
-                variant="outlined"
-                onDelete={() => removeTag(tag.tagId, tag.tag)}
-              />
-            ))}
-          </div> */}
-          <TextField
+          <TextareaAutosize
+            minRows={5}
             className="w-100 mb-5"
             label="Message"
             type="text"
             id="forum_post_question"
-            multiline
             rows="4"
             value={message}
             onChange={messageChangedHandler}
@@ -187,111 +135,6 @@ export default function Post() {
           </button>
         </Modal.Footer>
       </Modal>
-      {/* <div
-        className="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2 className="modal-title" id="staticBackdropLabel">
-                My Forum Post
-              </h2>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <div className="mb-0 form-group">
-                <label htmlFor="forum_post_title" className="col-form-label">
-                  Title:
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="forum_post_title"
-                  value={title}
-                  onChange={titleChangedHandler}
-                  onBlur={titleBlurHandler}
-                />
-              </div>
-              <div className="col-md-4 w-100">
-                <label htmlFor="inputCategory" className="form-label">
-                  Category
-                </label>
-                <select
-                  id="inputCategory"
-                  className="form-select"
-                  onChange={addTagToSave}
-                >
-                  {tags.map((tag) => (
-                    <option value={tag.tagId} key={tag.tagId}>
-                      {tag.tag}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div class="col-md-4 w-100 form-group">
-                <label htmlFor="question_categories" className="col-form-label">
-                  Or create your own Category:
-                </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="question_categories"
-                  value={newTagName}
-                  onChange={updateTagName}
-                  onKeyDown={addNewTag}
-                />
-              </div>
-              <div className="row mt-2 justify-content-center">
-                {tagsSelected?.map((tag) => (
-                  <Chip
-                    key={tag.tagId === "" ? nanoid() : tag.tagId}
-                    className="col-auto m-1"
-                    label={tag.tag}
-                    variant="outlined"
-                    onDelete={() => removeTag(tag.tagId, tag.tag)}
-                  />
-                ))}
-              </div>
-
-              <div className="mb-3">
-                <label htmlFor="question_text" className="col-form-label">
-                  Message:
-                </label>
-                <textarea
-                  className="form-control"
-                  id="forum_post_question"
-                  value={message}
-                  onChange={messageChangedHandler}
-                  onBlur={messageBlurHandler}
-                ></textarea>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={saveNewForum}
-                disabled={!canFormBeSubmitted}
-              >
-                Post
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-     */}
     </>
   );
 }

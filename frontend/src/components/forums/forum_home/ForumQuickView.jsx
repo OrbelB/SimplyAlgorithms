@@ -40,12 +40,18 @@ export default function ForumQuickView({
       <Card
         key={pageId}
         sx={{ maxWidth: 1200 }}
+        raised
         className="preview-section m-3 m-md-5"
       >
-        <CardActionArea onClick={() => removeData()} className="p-4">
+        <CardActionArea
+          onClick={removeData}
+          sx={{ borderBottom: '1px solid black' }}
+          className="p-3 pb-5"
+        >
           <div className="row">
-            <div className="col-auto col-md-2 mt-1">
+            <div className="col-auto col-md-2">
               <Avatar
+                sx={{ width: 60, height: 60 }}
                 src={userDto.profilePicture}
                 className="m-auto m-md-3"
                 alt="current profile user"
@@ -66,7 +72,7 @@ export default function ForumQuickView({
               : title}
           </Typography>
         </CardActionArea>
-        <CardActions className="p-4">
+        <CardActions className="pb-4">
           <div className="row justify-content-between btn-group">
             <div className="col-auto col-lg-4 m-0 p-0 align-self-end ">
               <i className="bi bi-hand-thumbs-up ms-4"> {` ${upVotes}`}</i>

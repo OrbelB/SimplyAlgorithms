@@ -1,7 +1,5 @@
 /* eslint-disable react/jsx-filename-extension */
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/layout/Layout';
-import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import ForumPage from './pages/ForumPage';
 import UserProfile from './pages/UserProfilePage';
@@ -28,6 +26,8 @@ import useRefreshToken from './hooks/use-refreshToken';
 import PasswordResetPage from './components/login/PasswordResetPage';
 import QuizPage from './pages/QuizHomePage';
 import QuizSample from './pages/q_pages/QuizSample';
+import Layout from './components/layout/Layout';
+import HomePage from './pages/HomePage';
 import CreateTopicPage from './pages/CreateTopicPage';
 
 function App() {

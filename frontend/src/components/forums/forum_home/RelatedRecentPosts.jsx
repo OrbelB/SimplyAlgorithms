@@ -3,7 +3,8 @@ import './PostPreview.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
-import { Avatar } from '@mui/material';
+import { Avatar, Card, CardActionArea } from '@mui/material';
+import debounce from 'lodash.debounce';
 import {
   selectAllViewedForums,
   viewForumsActions,
@@ -33,44 +34,32 @@ export default function RelatedRecentPosts() {
     forumViewsUpdateStore.arguments
   );
 
+  const resetData = (pageId) => {
+    dispatch(forumActions.resetData());
+    dispatch(viewForumsActions.resetData({}));
+    navigate(`/forums/${pageId}`);
+  };
+
   if (status === 'success') {
-    return (
-      <div>
-        {viewedForums?.map((viewedForum) => (
-          <div
-            key={viewedForum?.pageId}
-            className="side-section"
-            onClick={() => {
-              dispatch(forumActions.resetData());
-              dispatch(viewForumsActions.resetData({}));
-              navigate(`/forums/${viewedForum.pageId}`);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'enter') {
-                dispatch(forumActions.resetData());
-                dispatch(viewForumsActions.resetData({}));
-                navigate(`/forums/${viewedForum.pageId}`);
-              }
-            }}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="line-one">
-              <Avatar
-                className="m-2"
-                height="60"
-                alt="current profile user"
-                loading="lazy"
-                src={viewedForum?.userDto?.profilePicture}
-              />
-              <h2 className="side-username">
-                {viewedForum?.userDto?.username}
-              </h2>
-            </div>
-            <h2 className="line-two">{viewedForum?.title}</h2>
+    return viewedForums?.map(({ pageId, userDto, title }) => (
+      <Card key={pageId} raised sx={{ marginBottom: 5 }}>
+        <CardActionArea
+          sx={{ padding: '0.5rem 1rem' }}
+          onClick={debounce(() => resetData(pageId), 100)}
+        >
+          <div className="line-one">
+            <Avatar
+              className="m-2"
+              width="50"
+              alt="current profile user"
+              loading="lazy"
+              src={userDto?.profilePicture}
+            />
+            <h2 className="side-username">{userDto?.username}</h2>
           </div>
-        ))}
-      </div>
-    );
+          <h2 className="line-two">{title}</h2>
+        </CardActionArea>
+      </Card>
+    ));
   }
 }

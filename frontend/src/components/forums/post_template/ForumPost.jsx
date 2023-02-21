@@ -126,13 +126,8 @@ export default function ForumPost() {
   }
   if (status === 'success' || status === 'completed') {
     return (
-      <div key={pageId} className={cx(fp.window, 'container-fluid')}>
+      <div key={pageId} className={cx(fp.window)}>
         <div>
-          {/* <div className={cx(fp["side2"])}>
-            <h1 className={cx(fp["category-label"])}>Related Posts</h1>
-            <div className={cx(fp["related-posts"])}>
-            </div>
-          </div> */}
           <div
             className={cx(
               fp.post,

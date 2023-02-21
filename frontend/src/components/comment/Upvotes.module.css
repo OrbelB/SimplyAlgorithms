@@ -11,3 +11,14 @@
     font-size: large;
     color: #5357B6;
 }
+
+@media only screen and (max-width: 720px) {
+    .container-style {
+        width: 3.5em;
+    }
+    .num-style {
+        font-size: small;
+    }
+    
+}
+

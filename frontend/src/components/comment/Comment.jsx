@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable react/jsx-no-comment-textnodes */
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChildComment from './ChildComment';
@@ -16,6 +13,7 @@ import {
 } from '../../services/comment';
 import { selectChildrenCommentsByParentCommentId } from '../../store/reducers/comment-reducer';
 import { forumActions } from '../../store/reducers/forum-reducer';
+import AlertSnackBar from '../alert-messages-snackbar/AlertSnackBar';
 
 // main comment section; shows all the parent comments
 export default function Comment({
@@ -25,7 +23,7 @@ export default function Comment({
   commentText,
   createdDate,
   upVotes,
-  replies = [], // will be removed
+  replies = [],
   replyCount,
   parentCommentId,
   downVotes,
@@ -35,7 +33,9 @@ export default function Comment({
   const { jwtAccessToken, userId: authUserId } = useSelector(
     (state) => state.auth
   );
+  const status = useSelector((state) => state.comment.status);
   const pageId = useSelector((state) => state.forum.forum.pageId);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const dispatch = useDispatch();
   const hasReplies = showReplies && replyCount > 0;
   const childrenComments = useSelector((state) =>
@@ -57,20 +57,29 @@ export default function Comment({
   };
 
   // creates the child comment
-  const getChildComment = (passedChildComment) => {
-    setInputChildComment(!inputChildComment);
-    dispatch(
-      createChildComment({
-        parentCommentId,
-        childComment: {
-          pageId,
-          commentText: passedChildComment,
-          userId: authUserId,
-        },
-        accessToken: jwtAccessToken,
-      })
-    );
-    dispatch(forumActions.addSingleReply({ commentId: parentCommentId }));
+  const getChildComment = async (passedChildComment) => {
+    try {
+      setInputChildComment(!inputChildComment);
+      await dispatch(
+        createChildComment({
+          parentCommentId,
+          childComment: {
+            pageId,
+            commentText: passedChildComment,
+            userId: authUserId,
+          },
+          accessToken: jwtAccessToken,
+        })
+      ).unwrap();
+    } catch (err) {
+      setShowErrorMessage(true);
+    } finally {
+      // updates reply count from the forum object
+      // do it only after the comment has been succesfully created
+      if (status === 'success') {
+        dispatch(forumActions.addSingleReply({ commentId: parentCommentId }));
+      }
+    }
   };
 
   // deletes parent comment
@@ -85,17 +94,26 @@ export default function Comment({
   };
 
   // deletes child comment
-  const handleDeleteChildComment = (childUserId, commentId) => {
-    dispatch(
-      deleteChildComment({
-        userId: childUserId,
-        accessToken: jwtAccessToken,
-        commentId,
-      })
-    );
-    // updates reply count from the forum object
-    // do it only after the comment has been succesfully delete it
-    dispatch(forumActions.removeSingleReply({ commentId: parentCommentId }));
+  const handleDeleteChildComment = async (childUserId, commentId) => {
+    try {
+      await dispatch(
+        deleteChildComment({
+          userId: childUserId,
+          accessToken: jwtAccessToken,
+          commentId,
+        })
+      ).unwrap();
+    } catch (err) {
+      setShowErrorMessage(true);
+    } finally {
+      // updates reply count from the forum object
+      // do it only after the comment has been succesfully delete it
+      if (status !== 'failed') {
+        dispatch(
+          forumActions.removeSingleReply({ commentId: parentCommentId })
+        );
+      }
+    }
   };
 
   // edits the  parent comment
@@ -130,9 +148,16 @@ export default function Comment({
   };
 
   return (
-    <div className="container-fluid p-4">
-      <div className="grid">
-        <div className="row justify-content-center">
+    <>
+      {showErrorMessage && (
+        <AlertSnackBar
+          typeMessage="error"
+          passedMessage="The server is probably down, try again later"
+          removeData={() => setShowErrorMessage(false)}
+        />
+      )}
+      <div className="container-fluid">
+        <div className="row justify-content-center g-2">
           <CommentBox
             commentId={parentCommentId}
             userId={userId}
@@ -152,22 +177,33 @@ export default function Comment({
                 cancelReplyElement={handleCancelComment}
               />
             )}
-            {replyCount > 0 && (
-              <div className="row">
-                <div className="col-sm-auto">
+            <div className="row">
+              <div className="col-sm-auto m-0 p-0">
+                {replyCount > 0 ? (
                   <i
                     className={`btn bi bi-caret-${
                       showReplies ? 'up' : 'down'
                     } font-weight-normal`}
                     role="button"
+                    tabIndex={0}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' && !event.ctrlKey) {
+                        handleShowReplies();
+                      }
+                    }}
                     onClick={handleShowReplies}
                   >
                     {` ${replyCount} `}
                     {replies.length === 1 ? 'reply' : 'replies'}
                   </i>
-                </div>
+                ) : (
+                  <>
+                    <br />
+                    <br />
+                  </>
+                )}
               </div>
-            )}
+            </div>
             {hasReplies && (
               <div className="row m-0 p-0">
                 {childrenComments?.map(({ comment }) => (
@@ -190,6 +226,6 @@ export default function Comment({
           </CommentBox>
         </div>
       </div>
-    </div>
+    </>
   );
 }

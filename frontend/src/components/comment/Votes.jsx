@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { voteComment, deleteCommentVote } from '../../services/comment';
 import styles from './Upvotes.module.css';
 import { selectAllCommentVotes } from '../../store/reducers/comment-vote-reducer';
+import AlertSnackBar from '../alert-messages-snackbar/AlertSnackBar';
 
 export default function Votes({ commentId, upVotes, downVotes }) {
   const location = useLocation();
@@ -17,8 +18,9 @@ export default function Votes({ commentId, upVotes, downVotes }) {
     jwtAccessToken,
     isLoggedIn,
   } = useSelector((state) => state.auth);
-
   const allCommentVotes = useSelector(selectAllCommentVotes);
+  const voteStatus = useSelector((state) => state.commentVotes.status);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
 
   const handleUpVotes = async () => {
     const isThereAVote = allCommentVotes.find(
@@ -33,13 +35,20 @@ export default function Votes({ commentId, upVotes, downVotes }) {
       !isThereAVote ||
       (isThereAVote.commentId === null && isThereAVote.userId === null)
     ) {
-      dispatch(
-        voteComment({
-          votedComment: { commentId, userId: authUserID, likeDislike: true },
-          accessToken: jwtAccessToken,
-        })
-      );
-      setVotes(votes + 1);
+      try {
+        await dispatch(
+          voteComment({
+            votedComment: { commentId, userId: authUserID, likeDislike: true },
+            accessToken: jwtAccessToken,
+          })
+        ).unwrap();
+      } catch (err) {
+        setShowErrorMessage(true);
+      } finally {
+        if (voteStatus !== 'failed') {
+          setVotes(votes + 1);
+        }
+      }
     } else {
       // votes are not for this specific comment
       if (
@@ -49,23 +58,41 @@ export default function Votes({ commentId, upVotes, downVotes }) {
         return;
       }
       if (isThereAVote.likeDislike) {
-        dispatch(
-          deleteCommentVote({
-            userId: authUserID,
-            commentId,
-            accessToken: jwtAccessToken,
-          })
-        );
-        setVotes(votes - 1);
+        try {
+          await dispatch(
+            deleteCommentVote({
+              userId: authUserID,
+              commentId,
+              accessToken: jwtAccessToken,
+            })
+          ).unwrap();
+        } catch (err) {
+          setShowErrorMessage(true);
+        } finally {
+          if (voteStatus !== 'failed') {
+            setVotes(votes - 1);
+          }
+        }
       }
       if (!isThereAVote.likeDislike) {
-        dispatch(
-          voteComment({
-            votedComment: { commentId, userId: authUserID, likeDislike: true },
-            accessToken: jwtAccessToken,
-          })
-        );
-        setVotes(votes + 2);
+        try {
+          dispatch(
+            voteComment({
+              votedComment: {
+                commentId,
+                userId: authUserID,
+                likeDislike: true,
+              },
+              accessToken: jwtAccessToken,
+            })
+          ).unwrap();
+        } catch (error) {
+          setShowErrorMessage(true);
+        } finally {
+          if (voteStatus !== 'failed') {
+            setVotes(votes + 2);
+          }
+        }
       }
     }
   };
@@ -83,13 +110,18 @@ export default function Votes({ commentId, upVotes, downVotes }) {
       !isThereAVote ||
       (isThereAVote.commentId === null && isThereAVote.userId === null)
     ) {
-      dispatch(
-        voteComment({
-          votedComment: { commentId, userId: authUserID, likeDislike: false },
-          accessToken: jwtAccessToken,
-        })
-      );
-      setVotes(votes - 1);
+      try {
+        await dispatch(
+          voteComment({
+            votedComment: { commentId, userId: authUserID, likeDislike: false },
+            accessToken: jwtAccessToken,
+          })
+        ).unwrap();
+      } catch (err) {
+        setShowErrorMessage(true);
+      } finally {
+        setVotes(votes - 1);
+      }
     } else {
       if (
         isThereAVote.commentId !== commentId ||
@@ -99,70 +131,102 @@ export default function Votes({ commentId, upVotes, downVotes }) {
       }
       // remove the vote if it exists when liked
       if (!isThereAVote.likeDislike) {
-        dispatch(
-          deleteCommentVote({
-            userId: authUserID,
-            commentId,
-            accessToken: jwtAccessToken,
-          })
-        );
-        setVotes(votes + 1);
+        try {
+          dispatch(
+            deleteCommentVote({
+              userId: authUserID,
+              commentId,
+              accessToken: jwtAccessToken,
+            })
+          ).unwrap();
+        } catch (err) {
+          setShowErrorMessage(true);
+        } finally {
+          if (voteStatus !== 'failed') {
+            setVotes(votes + 1);
+          }
+        }
       }
       if (isThereAVote.likeDislike) {
-        dispatch(
-          voteComment({
-            votedComment: { commentId, userId: authUserID, likeDislike: false },
-            accessToken: jwtAccessToken,
-          })
-        );
-        setVotes(votes - 2);
+        try {
+          dispatch(
+            voteComment({
+              votedComment: {
+                commentId,
+                userId: authUserID,
+                likeDislike: false,
+              },
+              accessToken: jwtAccessToken,
+            })
+          ).unwrap();
+        } catch (err) {
+          setShowErrorMessage(true);
+        } finally {
+          if (voteStatus !== 'failed') {
+            setVotes(votes - 2);
+          }
+        }
       }
     }
   };
 
   return (
-    <div className={cx('container-fluid square', styles['container-style'])}>
-      <div className="grid">
-        <div
-          type="button"
-          className="row-cols-auto justify-content-center align-self-start text-center p-2"
-        >
-          <i
-            className={cx('bi bi-plus', styles['btn-sign-style'])}
-            onClick={() => {
-              handleUpVotes();
-            }}
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'enter') {
+    <>
+      {showErrorMessage && (
+        <AlertSnackBar
+          typeMessage="error"
+          passedMessage="The server has an error, try again later"
+          removeData={() => setShowErrorMessage(false)}
+        />
+      )}
+      <div
+        className={cx(
+          'container-fluid border square',
+          styles['container-style']
+        )}
+      >
+        <div className="grid">
+          <div
+            type="button"
+            className="row-cols-auto justify-content-center align-self-start text-center p-2"
+          >
+            <i
+              className={cx('bi bi-plus', styles['btn-sign-style'])}
+              onClick={() => {
                 handleUpVotes();
-              }
-            }}
-            role="button"
-          />
-        </div>
-        <div className="row-cols-auto justify-content-center align-self-center text-center p-2">
-          <p className={styles['num-style']}>{votes}</p>
-        </div>
-        <div
-          type="button"
-          className="row-cols-auto justify-content-center align-self-end text-center p-2"
-        >
-          <i
-            className={cx('bi bi-dash', styles['btn-sign-style'])}
-            onClick={() => {
-              handleDownVotes();
-            }}
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'enter') {
+              }}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'enter') {
+                  handleUpVotes();
+                }
+              }}
+              role="button"
+            />
+          </div>
+          <div className="row-cols-auto justify-content-center align-self-center text-center p-2">
+            <p className={styles['num-style']}>{votes}</p>
+          </div>
+          <div
+            type="button"
+            className="row-cols-auto justify-content-center align-self-end text-center p-2"
+          >
+            <i
+              className={cx('bi bi-dash', styles['btn-sign-style'])}
+              onClick={() => {
                 handleDownVotes();
-              }
-            }}
-            role="button"
-          />
+              }}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'enter') {
+                  handleDownVotes();
+                }
+              }}
+              role="button"
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

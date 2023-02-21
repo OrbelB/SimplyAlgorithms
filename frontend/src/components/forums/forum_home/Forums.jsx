@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import PostPreview from './PostPreview';
 import Post from '../post/Post';
-import Related_RecentPosts from './RelatedRecentPosts';
+import RelatedRecentPost from './RelatedRecentPosts';
 import Tags from '../tags/Tags';
 import { fetchForumList } from '../../../services/forum';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
@@ -37,13 +37,14 @@ export default function Forums() {
   };
   return (
     <div className="forums-section container-fluid">
-      <h1 className="forum-title center">FORUMS</h1>
+      <h1 className="forum-title text-center">FORUMS</h1>
       <div className="row justify-content-around">
-        <div className="column">
+        <div className="col-auto col-md-3">
           <div className="side1">
             <Tags />
           </div>
-
+        </div>
+        <div className="col-auto col-md-6">
           <div className="middle">
             <div className="filters pb-5 pt-2">
               <button
@@ -84,15 +85,18 @@ export default function Forums() {
             <br />
             <PostPreview />
           </div>
-          {isLoggedIn && jwtAccessToken !== '' && (
+        </div>
+
+        {isLoggedIn && jwtAccessToken !== '' && (
+          <div className="col-auto col-md-3">
             <div className="side2">
               <div className="recent-posts">
                 <h1 className="category-label">Recently Viewed Posts</h1>
-                <Related_RecentPosts />
+                <RelatedRecentPost />
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
