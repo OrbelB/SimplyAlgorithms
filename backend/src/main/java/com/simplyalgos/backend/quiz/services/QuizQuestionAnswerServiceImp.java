@@ -38,7 +38,7 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService{
                 questionAnswer.getAnswer());
 
     }
-
+    //spaghetti
     @Override
     public void saveAllQuizQuestionAnswers(QuizQuestionDTO quizQuestionDTO) {
         Iterator<QuizQuestionAnswerDTO> quizQuestionAnswerDTOIterator = quizQuestionDTO.getAnswers().iterator();

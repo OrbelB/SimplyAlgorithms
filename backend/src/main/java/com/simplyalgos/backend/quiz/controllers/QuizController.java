@@ -1,6 +1,6 @@
 package com.simplyalgos.backend.quiz.controllers;
 
-import com.simplyalgos.backend.quiz.dtos.QuizDTO;
+import com.simplyalgos.backend.quiz.dtos.FullQuizDTO;
 import com.simplyalgos.backend.quiz.security.CreateQuizPermission;
 import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
 import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
@@ -57,17 +57,11 @@ public class QuizController {
 //    will be getting a quizDTO
     @CreateQuizPermission
     @PostMapping(path="/create", consumes = "application/json")
-    public ResponseEntity<?> createQuiz(@RequestBody QuizDTO quizDTO){
-        log.info("Creating a new Quiz: " + quizDTO.getTitle());
-        return ResponseEntity.status(HttpStatus.CREATED).body(quizService.createQuiz(quizDTO));
+    public ResponseEntity<?> createQuiz(@RequestBody FullQuizDTO createQuizDTO){
+        log.info("Creating a new Quiz: " + createQuizDTO.getQuizDTO().getTag().getTag());
+        return ResponseEntity.status(HttpStatus.CREATED).body(quizService.createQuiz(createQuizDTO));
     }
 
-//    Will be getting a quizQuestionDTO
-    @CreateQuizPermission
-    @PostMapping(path="/addQuestion", consumes = "application/json")
-    public ResponseEntity<?> createQuiz(){
-        return null;
-    }
 
 
     @DeleteQuizPermission

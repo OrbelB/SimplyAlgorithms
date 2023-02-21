@@ -1,7 +1,9 @@
 package com.simplyalgos.backend.quiz.services;
 
 import com.simplyalgos.backend.quiz.domains.Quiz;
+import com.simplyalgos.backend.quiz.dtos.FullQuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizDTO;
+import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.mappers.QuizMapper;
 import com.simplyalgos.backend.quiz.repositories.QuizRepository;
 import com.simplyalgos.backend.tag.domains.Tag;
@@ -17,12 +19,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
-import java.sql.Timestamp;
+
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import com.simplyalgos.backend.utils.StringUtils;
 
@@ -37,6 +36,8 @@ public class QuizServiceImp implements QuizService {
     private final TagRepository tagRepository;
 
     private final QuizMapper quizMapper;
+
+    private final QuizQuestionService quizQuestionService;
 
     @Override
     public ObjectPagedList<?> listQuizPages(Pageable pageable) { //why must i do this? why?
@@ -69,12 +70,13 @@ public class QuizServiceImp implements QuizService {
     }
 
     @Override
-    public UUID createQuiz(QuizDTO quizDTO) {
+    public UUID createQuiz(FullQuizDTO newFullQuiz) {
+        QuizDTO quizDTO = newFullQuiz.getQuizDTO();
         log.debug("Creating a new Quiz");
         log.debug("Here is the tag information " + quizDTO.getTag().getTag() + " this tag Id: " + quizDTO.getTag().getTagId());
 
+
         Tag quizTag = null;
-        Date createdDate = new Date();
         if(StringUtils.isNotNullAndEmptyOrBlank(quizDTO.getTag())){
             log.debug("inside the tag if else");
             if(!StringUtils.isNotNullAndEmptyOrBlank(quizDTO.getTag().getTagId().toString())){
@@ -94,14 +96,31 @@ public class QuizServiceImp implements QuizService {
                 log.debug("Tag already exists tagId: " +  quizTag.getTagId());
             }
         }
+
         Quiz newQuiz = Quiz.builder()
-//                .createdDate(new Timestamp(createdDate.getTime()))
                 .title(quizDTO.getTitle())
                 .score(quizDTO.getScore())
                 .tagId(quizTag)
                 .build();
         quizRepository.saveAndFlush(newQuiz);
+        quizRepository.flush();
+        newFullQuiz.getQuizDTO().setQuizId(newQuiz.getQuizId());
+        log.debug("message final " + newFullQuiz.getQuizDTO().getQuizId());
+        //new creating the questions for the quiz
+        List<QuizQuestionDTO> quizQuestionDTOList = newFullQuiz.getQuizQuestionDTO();
+
+        log.debug("adding the questions to the quiz");
+        for(int i = 0; i < quizQuestionDTOList.size(); i++){
+            quizQuestionDTOList.get(i).setQuizId(newQuiz.getQuizId());
+            quizQuestionService.createQuizQuestion(quizQuestionDTOList.get(i));
+        }
+
+
+
+
+
         log.debug("Finished creating new Quiz");
+
         return newQuiz.getQuizId();
     }
 
