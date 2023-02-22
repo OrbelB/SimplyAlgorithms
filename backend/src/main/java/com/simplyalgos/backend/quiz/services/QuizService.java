@@ -13,7 +13,7 @@ public interface QuizService {
 
     ObjectPagedList listQuizPageWithTag(Pageable pageable, String tag);
 
-    UUID createQuiz(FullQuizDTO newFullQuiz);
+    UUID createQuizWithFullQuizDTO(FullQuizDTO newFullQuiz);
 
     UUID deleteQuiz(UUID quizId);
 

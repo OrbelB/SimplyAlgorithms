@@ -1,9 +1,13 @@
 package com.simplyalgos.backend.quiz.domains;
 
-import com.simplyalgos.backend.quiz.domains.quizId.QuestionAnswerId;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.usertype.UserTypeLegacyBridge;
+
+import java.util.UUID;
 
 
 @NoArgsConstructor
@@ -14,8 +18,16 @@ import jakarta.persistence.*;
 @Entity(name = "question_answer")
 public class QuestionAnswer {
 
-    @EmbeddedId
-    private QuestionAnswerId questionAnswerId;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Type(value = UserTypeLegacyBridge.class,
+            parameters = @org.hibernate.annotations.Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
+                    value = "org.hibernate.type.UUIDCharType"))
+    private UUID answerId;
 
     private String answer;
 
@@ -24,7 +36,6 @@ public class QuestionAnswer {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "question_id", referencedColumnName = "question_id")
-    @MapsId("questionId")
     private QuizQuestion answerBelongsToQuestion;
 
 

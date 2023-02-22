@@ -1,6 +1,9 @@
 package com.simplyalgos.backend.quiz.controllers;
 
+import com.simplyalgos.backend.quiz.dtos.DeleteQuizDTO;
 import com.simplyalgos.backend.quiz.dtos.FullQuizDTO;
+import com.simplyalgos.backend.quiz.dtos.QuizDTO;
+import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.security.CreateQuizPermission;
 import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
 import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
@@ -12,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @CrossOrigin
@@ -54,20 +60,28 @@ public class QuizController {
     }
 
 
-//    will be getting a quizDTO
+//    Tested & passed
+//    Front end must make sure at least one question is correct
     @CreateQuizPermission
     @PostMapping(path="/create", consumes = "application/json")
-    public ResponseEntity<?> createQuiz(@RequestBody FullQuizDTO createQuizDTO){
-        log.info("Creating a new Quiz: " + createQuizDTO.getQuizDTO().getTag().getTag());
-        return ResponseEntity.status(HttpStatus.CREATED).body(quizService.createQuiz(createQuizDTO));
+    public ResponseEntity<?> createQuiz(@RequestBody FullQuizDTO fullQuizDTO){
+        log.info("Creating a new Quiz: " + fullQuizDTO.getQuizDTO().getTag().getTag());
+        var response = ResponseEntity.status(HttpStatus.CREATED)
+                .body(quizService.createQuizWithFullQuizDTO(fullQuizDTO));
+        List<QuizQuestionDTO> quizQuestionDTOList = quizQuestionService
+                .createAllQuizQuestionAndAnswers(fullQuizDTO.getQuizQuestionDTO(), response.getBody());
+
+        for(int i = 0; i <quizQuestionDTOList.size(); i++) {
+            questionAnswerService.saveAllQuizQuestionAnswers(quizQuestionDTOList.get(i));
+        }
+        return response;
     }
 
-
-
     @DeleteQuizPermission
-    @PostMapping(path = "/delete")
-    public ResponseEntity<?> deleteQuiz(){
-        return null;
+    @PostMapping(path = "/delete", consumes = "application/json")
+    public ResponseEntity<?> deleteQuiz(@RequestBody DeleteQuizDTO deleteQuizDTO){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(quizService.deleteQuiz(deleteQuizDTO.getQuizId()));
     }
 
     @UpdateQuizPermission

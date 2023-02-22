@@ -1,7 +1,9 @@
 package com.simplyalgos.backend.quiz.domains;
 
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.tag.domains.Tag;
+import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.utils.StringUtils;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -48,12 +50,18 @@ public class Quiz {
     private Tag tagId;
 
     //mapping question to quiz
-    @OneToMany(mappedBy = "belongsToThisQuiz")
+    @OneToMany(mappedBy = "belongsToThisQuiz", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QuizQuestion> questions = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "quizReference")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "quizReference")
     private Set<TakeQuiz> quizzesTaken = new HashSet<>();
+
+    @JsonIncludeProperties({"userId", "username", "profilePicture"})
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "user_id"))
+    private User createdBy;
+
 
     public void setTag(Tag tag){
         if(StringUtils.isNotNullAndEmptyOrBlank(tag)){

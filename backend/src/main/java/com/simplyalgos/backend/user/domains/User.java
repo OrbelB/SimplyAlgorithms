@@ -6,6 +6,7 @@ import com.simplyalgos.backend.comment.domains.CommentVote;
 import com.simplyalgos.backend.page.domains.Forum;
 import com.simplyalgos.backend.page.domains.PageVote;
 import com.simplyalgos.backend.page.domains.Views;
+import com.simplyalgos.backend.quiz.domains.Quiz;
 import com.simplyalgos.backend.quiz.domains.TakeQuiz;
 import com.simplyalgos.backend.report.domains.CommentReport;
 import com.simplyalgos.backend.report.domains.PageReport;
@@ -163,6 +164,9 @@ public class User implements UserDetails, CredentialsContainer {
 
     @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Forum> forumsCreated = new HashSet<>();
+
+    @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Quiz> quizzesCraeted = new HashSet<>();
 
     @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserNotification> userNotifications = new HashSet<>();

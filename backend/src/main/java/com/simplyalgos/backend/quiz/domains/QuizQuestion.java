@@ -43,8 +43,8 @@ public class QuizQuestion {
     @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")
     private Quiz belongsToThisQuiz;
 
-//    possible change this to UUIDs
-    @OneToMany(mappedBy = "answerBelongsToQuestion")
+
+    @OneToMany(mappedBy = "answerBelongsToQuestion" )
     private Set<QuestionAnswer> answerChoices =  new HashSet<>();
 
 }

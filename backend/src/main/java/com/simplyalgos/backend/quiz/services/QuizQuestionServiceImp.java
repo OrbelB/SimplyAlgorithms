@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.quiz.services;
 
+import com.simplyalgos.backend.quiz.domains.Quiz;
 import com.simplyalgos.backend.quiz.domains.QuizQuestion;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
@@ -23,25 +24,44 @@ public class QuizQuestionServiceImp implements QuizQuestionService{
     private final QuizRepository quizRepository;
 
     private final QuizQuestionAnswerServiceImp quizQuestionAnswerService;
+
+
+//    will create the quiz and its answers;
+    @Override
+    public List<QuizQuestionDTO> createAllQuizQuestionAndAnswers(List<QuizQuestionDTO> quizQuestionDTOList, UUID quizId) {
+        log.debug("creating the quiz");
+        log.debug("Quiz exists: " + quizRepository.existsById(quizId));
+        for(int i = 0; i < quizQuestionDTOList.size(); i++){
+            quizQuestionDTOList.get(i).setQuizId(quizId);
+            log.debug(i + " index with quiz id: " + quizId);
+            UUID quizQuestionId = createQuizQuestion(quizQuestionDTOList.get(i));
+            log.debug("The new question id: " + quizQuestionId);
+            quizQuestionDTOList.get(i).setQuestionId(quizQuestionId);
+        }
+        log.debug("finished creating the quiz question");
+        return quizQuestionDTOList;
+    }
+
     @Override
 //    this is assuming quiz id is already created
 //    Answers and question will come in the QuizQuestionDTO, will separate and save each in Controller layer
-    public QuizQuestionDTO createQuizQuestion(QuizQuestionDTO quizQuestionDTO) {
+    public UUID createQuizQuestion(QuizQuestionDTO quizQuestionDTO) {
         log.debug("Creating a new quiz question in createQuizQuestion with quiz id: " + quizQuestionDTO.getQuizId());
-        if(quizRepository.existsById(quizQuestionDTO.getQuizId())) throw new NoSuchElementException(
-                MessageFormat.format("Quiz with id {0} not found", quizQuestionDTO.getQuizId()));{
+
+        Optional<Quiz> optionalQuiz = quizRepository.findById(quizQuestionDTO.getQuizId());
+
+        if(optionalQuiz.isPresent()){
             QuizQuestion quizQuestion = questionRepository.saveAndFlush(
                     QuizQuestion.builder()
-                            .belongsToThisQuiz(quizRepository.findById(quizQuestionDTO.getQuizId()).get())
+                            .belongsToThisQuiz(optionalQuiz.get())
                             .question(quizQuestionDTO.getQuestion())
                             .picture(quizQuestionDTO.getPicture())
                             .build()
-        );
-            quizQuestionDTO.setQuestionId(quizQuestion.getQuestionId());
-            log.debug("Quiz question new create, Moving onto creating the Question answers");
-            quizQuestionAnswerService.saveAllQuizQuestionAnswers(quizQuestionDTO);
-            return quizQuestionDTO;
+            );
+            return quizQuestion.getQuestionId();
         }
+        throw new NoSuchElementException(
+                MessageFormat.format("Quiz with id {0} not found", quizQuestionDTO.getQuizId()));
     }
 
 
@@ -81,10 +101,8 @@ public class QuizQuestionServiceImp implements QuizQuestionService{
         }
     }
 
-//not tested
-//    SO MANY FOR LOOPS, WHO NEEDS PERFORMANCE ANYWAY?
 
-// call this to get the questions + the answers for the quiz
+
     @Override
     public List<QuizQuestionDTO> getAllQuizQuestion(UUID quizId) {
         if(quizRepository.existsById(quizId)) throw new NoSuchElementException(

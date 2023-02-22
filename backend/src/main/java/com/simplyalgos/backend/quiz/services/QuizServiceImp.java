@@ -9,6 +9,8 @@ import com.simplyalgos.backend.quiz.repositories.QuizRepository;
 import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import com.simplyalgos.backend.tag.repositories.TagRepository;
+import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,8 @@ public class QuizServiceImp implements QuizService {
     private final QuizMapper quizMapper;
 
     private final QuizQuestionService quizQuestionService;
+
+    private final UserRepository userRepository;
 
     @Override
     public ObjectPagedList<?> listQuizPages(Pageable pageable) { //why must i do this? why?
@@ -69,17 +73,17 @@ public class QuizServiceImp implements QuizService {
         );
     }
 
+    @Transactional
     @Override
-    public UUID createQuiz(FullQuizDTO newFullQuiz) {
-        QuizDTO quizDTO = newFullQuiz.getQuizDTO();
+    public UUID createQuizWithFullQuizDTO(FullQuizDTO fullQuizDTO) {
+        QuizDTO quizDTO = fullQuizDTO.getQuizDTO();
         log.debug("Creating a new Quiz");
         log.debug("Here is the tag information " + quizDTO.getTag().getTag() + " this tag Id: " + quizDTO.getTag().getTagId());
-
 
         Tag quizTag = null;
         if(StringUtils.isNotNullAndEmptyOrBlank(quizDTO.getTag())){
             log.debug("inside the tag if else");
-            if(!StringUtils.isNotNullAndEmptyOrBlank(quizDTO.getTag().getTagId().toString())){
+            if(!StringUtils.isNotNullAndEmptyOrBlank(quizDTO.getTag().getTagId())){
 //            will create the tag if it's new
                 log.debug("Here is the tag: " + quizDTO.getTag().getTag());
                 quizTag = Tag.builder()
@@ -87,8 +91,6 @@ public class QuizServiceImp implements QuizService {
                         .build();
                 tagRepository.saveAndFlush(quizTag);
                 log.debug("Creating a new Tag tagId: " + quizTag.getTagId());
-
-
             }
             else {
                 log.debug("the tag id passed in is: " + quizDTO.getTag().getTagId());
@@ -96,42 +98,37 @@ public class QuizServiceImp implements QuizService {
                 log.debug("Tag already exists tagId: " +  quizTag.getTagId());
             }
         }
+        log.debug("the paseed in user Id: " + fullQuizDTO.getUserDto().getUserId());
+        Optional<User> userOptional = userRepository.findById(fullQuizDTO.getUserDto().getUserId());
+        log.debug("the user id: " + userOptional.get().getUserId());
 
-        Quiz newQuiz = Quiz.builder()
+//        need to use this to get the Id
+        Quiz newQuiz = quizRepository.saveAndFlush(Quiz.builder()
+                .createdBy(userOptional.get())
                 .title(quizDTO.getTitle())
                 .score(quizDTO.getScore())
                 .tagId(quizTag)
-                .build();
-        quizRepository.saveAndFlush(newQuiz);
-        quizRepository.flush();
-        newFullQuiz.getQuizDTO().setQuizId(newQuiz.getQuizId());
-        log.debug("message final " + newFullQuiz.getQuizDTO().getQuizId());
-        //new creating the questions for the quiz
-        List<QuizQuestionDTO> quizQuestionDTOList = newFullQuiz.getQuizQuestionDTO();
+                .build());
 
-        log.debug("adding the questions to the quiz");
-        for(int i = 0; i < quizQuestionDTOList.size(); i++){
-            quizQuestionDTOList.get(i).setQuizId(newQuiz.getQuizId());
-            quizQuestionService.createQuizQuestion(quizQuestionDTOList.get(i));
-        }
+        fullQuizDTO.getQuizDTO().setQuizId(newQuiz.getQuizId());
 
-
-
-
-
-        log.debug("Finished creating new Quiz");
-
+        log.debug("finished creating of new quiz" + newQuiz.getQuizId());
         return newQuiz.getQuizId();
     }
 
     @Override
     public UUID deleteQuiz(UUID quizId) {
-        if(quizRepository.existsById(quizId)) throw new NoSuchElementException(
-                MessageFormat.format("Quiz with Id {0} not found ", quizId));{
-                    log.debug("deleting quiz");
-                    quizRepository.deleteById(quizId);
-                    return quizId;
+        log.debug("This is the Quiz id Passed in: " + quizId + " " + quizRepository.existsById(quizId));
+
+        if(!quizRepository.existsById(quizId)){
+            throw new NoSuchElementException(
+                    MessageFormat.format("Quiz with Id {0} not found ", quizId));
         }
+        log.debug("deleting quiz");
+//      how to make it cascade
+
+        quizRepository.deleteById(quizId);
+        return quizId;
     }
 
     @Override

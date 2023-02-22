@@ -1,10 +1,11 @@
 package com.simplyalgos.backend.quiz.services;
 
 import com.simplyalgos.backend.quiz.domains.QuestionAnswer;
-import com.simplyalgos.backend.quiz.domains.quizId.QuestionAnswerId;
+import com.simplyalgos.backend.quiz.domains.QuizQuestion;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.repositories.QuizQuestionAnswerRepository;
+import com.simplyalgos.backend.quiz.repositories.QuizQuestionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,32 +20,48 @@ import java.util.*;
 @Transactional
 public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService{
     private final QuizQuestionAnswerRepository answerRepository;
+    private final QuizQuestionRepository quizQuestionRepository;
+
+
     @Override
 //    assuming the quiz id and question id has already been created
     public QuizQuestionAnswerDTO createQuizQuestionAnswer(QuizQuestionAnswerDTO quizQuestionAnswerDTO) {
-        log.debug("Starting the creation of new Question answer for questionId " + quizQuestionAnswerDTO.getQuestionId());
-        QuestionAnswer questionAnswer = answerRepository.saveAndFlush(
-                QuestionAnswer.builder()
-                        .answer(quizQuestionAnswerDTO.getAnswer())
-                        .isCorrect(quizQuestionAnswerDTO.isCorrect())
-                        .questionAnswerId(QuestionAnswerId.builder()
-                                .questionId(UUID.fromString(quizQuestionAnswerDTO.getQuestionId()))
-                                .build())
-                        .build()
-        );
-        return new QuizQuestionAnswerDTO(questionAnswer.getQuestionAnswerId().getAnswerID().toString(),
-                questionAnswer.getQuestionAnswerId().getQuestionId().toString(),
-                questionAnswer.isCorrect(),
-                questionAnswer.getAnswer());
+        log.debug("Starting the creation of new Question answer for questionId: " + quizQuestionAnswerDTO.getQuestionId());
 
+        Optional<QuizQuestion> quizQuestionOptional = quizQuestionRepository.findById(quizQuestionAnswerDTO.getQuestionId());
+
+        log.debug("Optional QuizQuestion questionId: " + quizQuestionOptional.get().getQuestionId());
+
+        if(quizQuestionOptional.isPresent()){
+            log.debug("~~~" + quizQuestionOptional.get().getQuestionId());
+            QuestionAnswer questionAnswer = answerRepository.saveAndFlush(
+                    QuestionAnswer.builder()
+                            .answer(quizQuestionAnswerDTO.getAnswer())
+                            .isCorrect(quizQuestionAnswerDTO.isCorrect())
+                            .answerBelongsToQuestion(quizQuestionOptional.get())
+                            .build()
+            );
+            log.debug("++++");
+            return null;
+        }
+        throw new NoSuchElementException(MessageFormat.format("Question does not exists ~~", quizQuestionAnswerDTO.getQuestionId()));
     }
     //spaghetti
     @Override
     public void saveAllQuizQuestionAnswers(QuizQuestionDTO quizQuestionDTO) {
         Iterator<QuizQuestionAnswerDTO> quizQuestionAnswerDTOIterator = quizQuestionDTO.getAnswers().iterator();
-        log.debug("saving (creating) all of the answers for question: " + quizQuestionDTO.getQuizId());
-        while(quizQuestionAnswerDTOIterator.hasNext()){
-            createQuizQuestionAnswer(quizQuestionAnswerDTOIterator.next());
+        log.debug("saving (creating) all of the answers for questionId : " + quizQuestionDTO.getQuestionId());
+        Optional<QuizQuestion>  quizQuestionOptional = quizQuestionRepository.findById(quizQuestionDTO.getQuestionId());
+        if(quizQuestionOptional.isPresent()){
+            while(quizQuestionAnswerDTOIterator.hasNext()){
+                QuizQuestionAnswerDTO quizQuestionAnswerDTO = quizQuestionAnswerDTOIterator.next();
+                quizQuestionAnswerDTO.setQuestionId(quizQuestionOptional.get().getQuestionId());
+                log.debug("Quiz id is set to: " + quizQuestionOptional.get().getQuestionId());
+                createQuizQuestionAnswer(quizQuestionAnswerDTO);
+            }
+        }
+        else{
+            throw new NoSuchElementException(MessageFormat.format("Question does not exists + + +", quizQuestionDTO.getQuestionId()));
         }
     }
 
@@ -59,12 +76,8 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService{
 
     @Override
     public QuizQuestionAnswerDTO updateQuizQuestionAnswer(QuizQuestionAnswerDTO quizQuestionAnswerDTO) {
-        QuestionAnswerId questionAnswerId = QuestionAnswerId.builder()
-                .answerID(UUID.fromString(quizQuestionAnswerDTO.getAnswerId()))
-                .questionId(UUID.fromString(quizQuestionAnswerDTO.getQuestionId()))
-                .build();
 
-        Optional<QuestionAnswer> optionalQuestionAnswer = answerRepository.findById(questionAnswerId);
+        Optional<QuestionAnswer> optionalQuestionAnswer = answerRepository.findById(quizQuestionAnswerDTO.getAnswerId());
         if (optionalQuestionAnswer.isPresent()){
             log.debug("Updating the answer");
             QuestionAnswer questionAnswer = optionalQuestionAnswer.get();
@@ -78,10 +91,10 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService{
     }
 
     @Override
-    public boolean deleteQuizQuestionAnswer(QuestionAnswerId questionAnswerId) throws NoSuchElementException {
+    public boolean deleteQuizQuestionAnswer(UUID questionAnswerId) throws NoSuchElementException {
         if (answerRepository.existsById(questionAnswerId))
             throw new NoSuchElementException(
-                MessageFormat.format("Question Answer with Id {0} not found", questionAnswerId.getQuestionId()));{
+                MessageFormat.format("Question Answer with Id {0} not found", questionAnswerId));{
                     answerRepository.deleteById(questionAnswerId);
                     log.debug("Answer quiz has been deleted");
                     return true;
@@ -90,30 +103,30 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService{
 
     @Override
     public List<QuizQuestionAnswerDTO> getAllQuizQuestionAnswer(UUID questionId) {
-        List<QuestionAnswer> questionAnswersList = answerRepository.findAllByQuestionId(questionId.toString());
-        List<QuizQuestionAnswerDTO> quizQuestionAnswerDTOList = null;
-        for(int i = 0; i < questionAnswersList.size(); i++){
-            quizQuestionAnswerDTOList.add(new QuizQuestionAnswerDTO(
-                    questionAnswersList.get(i).getQuestionAnswerId().getAnswerID().toString(),
-                    questionAnswersList.get(i).getQuestionAnswerId().getQuestionId().toString(),
-                    questionAnswersList.get(i).isCorrect(),
-                    questionAnswersList.get(i).getAnswer()
-                    ));
-        }
-        log.debug("ending of listing all of question answers");
-        return quizQuestionAnswerDTOList;
+////        List<QuestionAnswer> questionAnswersList = answerRepository.findAllByQuestionId(questionId.toString());
+////        List<QuizQuestionAnswerDTO> quizQuestionAnswerDTOList = null;
+////        for(int i = 0; i < questionAnswersList.size(); i++){
+////            quizQuestionAnswerDTOList.add(new QuizQuestionAnswerDTO(
+////                    questionAnswersList.get(i).getAnswerId(),
+////                    questionAnswersList.get(i).getAnswerBelongsToQuestion().getQuestionId(),
+////                    questionAnswersList.get(i).isCorrect(),
+////                    questionAnswersList.get(i).getAnswer()
+////                    ));
+////        }
+////        log.debug("ending of listing all of question answers");
+//        return quizQuestionAnswerDTOList;
+        return null;
     }
 
     @Override
     public QuizQuestionAnswerDTO getQuizQuestionAnswer(UUID answerId, UUID questionId) {
-        QuestionAnswerId questionAnswerId = new QuestionAnswerId(answerId,questionId);
-        if(answerRepository.existsById(questionAnswerId)) throw new NoSuchElementException(
+        if(answerRepository.existsById(answerId)) throw new NoSuchElementException(
                 MessageFormat.format("Take Quiz with Id {0} not found", answerId));{
                     log.debug("returning quiz question answer");
-                    Optional<QuestionAnswer> questionAnswer = answerRepository.findById(questionAnswerId);
+                    Optional<QuestionAnswer> questionAnswer = answerRepository.findById(answerId);
                     return new QuizQuestionAnswerDTO(
-                            questionAnswer.get().getQuestionAnswerId().getAnswerID().toString(),
-                            questionAnswer.get().getQuestionAnswerId().getQuestionId().toString(),
+                            questionAnswer.get().getAnswerId(),
+                            questionAnswer.get().getAnswerBelongsToQuestion().getQuestionId(),
                             questionAnswer.get().isCorrect(),
                             questionAnswer.get().getAnswer()
                             );

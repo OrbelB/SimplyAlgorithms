@@ -9,7 +9,9 @@ import java.util.UUID;
 
 public interface QuizQuestionService {
 
-    QuizQuestionDTO createQuizQuestion(QuizQuestionDTO quizQuestionDTO);
+    List<QuizQuestionDTO> createAllQuizQuestionAndAnswers(List<QuizQuestionDTO> quizQuestionDTOList, UUID quizId);
+
+    UUID createQuizQuestion(QuizQuestionDTO quizQuestionDTO);
     QuizQuestionDTO updateQuizQuestion(QuizQuestionDTO quizQuestionDTO);
     boolean deleteQuizQuestion(UUID questionId);
 

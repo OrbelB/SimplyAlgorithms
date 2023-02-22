@@ -12,8 +12,8 @@ import java.util.UUID;
 @Data
 @Builder
 public class QuizQuestionAnswerDTO {
-    String answerId;
-    String questionId;
+    UUID answerId;
+    UUID questionId;
     boolean isCorrect;
     String answer;
 
