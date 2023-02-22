@@ -154,7 +154,7 @@ export default function MainNavigation() {
               <Box
                 component="img"
                 sx={{
-                  display: { xs: 'flex', md: 'none' },
+                  display: { sm: 'flex', md: 'none' },
                   flexGrow: 1,
                   fontWeight: 700,
                   color: 'inherit',
@@ -170,7 +170,7 @@ export default function MainNavigation() {
               <Box
                 sx={{
                   flexGrow: 1,
-                  display: { xs: 'none', md: 'flex' },
+                  display: { xs: 'none', sm: 'none', md: 'flex' },
                 }}
               >
                 <DropdownMenu
@@ -190,7 +190,7 @@ export default function MainNavigation() {
                       display: 'block',
                       fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
                       fontWeight: 700,
-                      fontSize: 16,
+                      fontSize: 20,
                       textTransform: 'none',
                     }}
                   >
@@ -198,17 +198,17 @@ export default function MainNavigation() {
                   </Button>
                 ))}
               </Box>
-
-              <Box component="div" sx={{ flexGrow: 1 }}>
+              <Box component="div" sx={{ flexGrow: 2 }}>
                 <Box
                   component="img"
                   sx={{
-                    display: { xs: 'none', md: 'flex' },
+                    display: { xs: 'none', lg: 'flex' },
                     color: 'inherit',
+
                     textDecoration: 'none',
                     height: 45,
                     width: 'auto',
-                    maxHeight: { xs: 60, md: 350 },
+                    maxHeight: { xs: 60, md: 50 },
                     maxWidth: { xs: 350, md: 'auto' },
                   }}
                   loading="lazy"

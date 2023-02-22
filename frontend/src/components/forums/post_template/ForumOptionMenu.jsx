@@ -1,19 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import jwtDecode from 'jwt-decode';
 import { deleteForum } from '../../../services/forum';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
-
-function useJwtPermssion({ permission }) {
-  const { jwtAccessToken } = useSelector((state) => state.auth);
-
-  // decode jwt token use jwt-decode
-  const decodedToken = jwtDecode(jwtAccessToken);
-
-  const isIncluded = decodedToken.roles.includes(permission);
-  return isIncluded;
-}
+import useJwtPermssionExists from '../../../hooks/use-jwtPermission';
 
 export default function ForumOptionMenu({ pageId, userId }) {
   const dispatch = useDispatch();
@@ -22,7 +12,7 @@ export default function ForumOptionMenu({ pageId, userId }) {
   const { jwtAccessToken, userId: authUserId } = useSelector(
     (state) => state.auth
   );
-  const isAdmin = useJwtPermssion({ permission: 'ROLE_ADMIN' });
+  const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
 
   const onDeleteForum = () => {
     dispatch(forumsActions.deleteForum({ pageId }));
@@ -35,12 +25,14 @@ export default function ForumOptionMenu({ pageId, userId }) {
     );
     navigate('/forums', { replace: true });
   };
+
   const onEditForum = () => {
     navigate(`/forums/edit/${pageId}`, {
       state: { from: location },
       replace: false,
     });
   };
+
   const permission = authUserId === userId || isAdmin;
   return (
     permission && (

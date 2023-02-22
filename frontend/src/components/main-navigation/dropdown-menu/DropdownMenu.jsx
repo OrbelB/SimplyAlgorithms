@@ -11,7 +11,7 @@ export default function DropdownMenu({
         sx={{
           fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
           fontWeight: 400,
-          fontSize: 15,
+          fontSize: 20,
           padding: '0.5rem 1rem',
         }}
         className="nav-link dropdown-toggle rounded-pill bg-primary text-white"

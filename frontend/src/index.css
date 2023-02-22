@@ -33,6 +33,7 @@ body, html, #root {
     --color-nav-foot: #FDFCF4;
     --color-socials-hover:var(--color-bg-alg-dash);
 }
+
 li{
     list-style: none;
 }
