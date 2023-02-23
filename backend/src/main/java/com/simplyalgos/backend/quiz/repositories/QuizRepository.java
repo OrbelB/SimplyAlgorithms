@@ -9,5 +9,5 @@ import java.util.UUID;
 
 public interface QuizRepository extends JpaRepository<Quiz, UUID> {
 
-    Page<Quiz> findAllByTagId_Tag(String tag, Pageable pageable);
+    Page<Quiz> findAllByTagId_TagId(UUID tag, Pageable pageable);
 }

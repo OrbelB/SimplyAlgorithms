@@ -1,6 +1,8 @@
 package com.simplyalgos.backend.quiz.domains;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -8,7 +10,9 @@ import org.hibernate.usertype.UserTypeLegacyBridge;
 
 
 import jakarta.persistence.*;
+
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,12 +43,25 @@ public class QuizQuestion {
     @Column(name = "picture")
     private String picture;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")
     private Quiz belongsToThisQuiz;
 
 
-    @OneToMany(mappedBy = "answerBelongsToQuestion" )
-    private Set<QuestionAnswer> answerChoices =  new HashSet<>();
+    @OneToMany(mappedBy = "answerBelongsToQuestion", cascade = CascadeType.ALL)
+    private Set<QuestionAnswer> answerChoices = new HashSet<>();
+
+//    public void setAnswerChoices(Set<QuestionAnswer> questionAnswerSet) {
+//        for (QuestionAnswer questionAnswerSetIterableTemp : questionAnswerSet) {
+//            this.answerChoices.add(
+//                    QuestionAnswer.builder()
+//                            .answer(questionAnswerSetIterableTemp.getAnswer())
+//                            .isCorrect(questionAnswerSetIterableTemp.getIsCorrect())
+//                            .answerBelongsToQuestion(this)
+//                            .build());
+//        }
+//    }
+
 
 }

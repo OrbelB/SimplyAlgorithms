@@ -13,6 +13,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class TakeQuizDTO {
+    UUID takeQuizId;
     UUID userId;
     UUID quizId;
     int score;

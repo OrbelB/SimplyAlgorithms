@@ -18,4 +18,5 @@ public class QuizQuestionDTO {
     String question;
     String picture;
     Set<QuizQuestionAnswerDTO> answers;
+    boolean deleteQuestion = false;
 }

@@ -1,5 +1,8 @@
 package com.simplyalgos.backend.quiz.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import lombok.*;
 
 import jakarta.persistence.*;
@@ -32,12 +35,11 @@ public class QuestionAnswer {
     private String answer;
 
     @Column(name = "is_correct")
-    private boolean isCorrect;
+    private short isCorrect;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIncludeProperties({"questionId"})
+    @ManyToOne
     @JoinColumn(name = "question_id", referencedColumnName = "question_id")
     private QuizQuestion answerBelongsToQuestion;
-
-
 
 }

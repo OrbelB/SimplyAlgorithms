@@ -14,7 +14,7 @@ import java.util.UUID;
 public class QuizQuestionAnswerDTO {
     UUID answerId;
     UUID questionId;
-    boolean isCorrect;
+    short isCorrect;
     String answer;
 
 }

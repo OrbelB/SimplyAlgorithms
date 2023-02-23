@@ -12,7 +12,9 @@ public interface QuizQuestionService {
     List<QuizQuestionDTO> createAllQuizQuestionAndAnswers(List<QuizQuestionDTO> quizQuestionDTOList, UUID quizId);
 
     UUID createQuizQuestion(QuizQuestionDTO quizQuestionDTO);
-    QuizQuestionDTO updateQuizQuestion(QuizQuestionDTO quizQuestionDTO);
+
+    List<QuizQuestionDTO> updateAllQuizQuestions(List<QuizQuestionDTO> quizQuestionDTOList);
+    QuizQuestionDTO updateQuizQuestionAndAnswers(QuizQuestionDTO quizQuestionDTO);
     boolean deleteQuizQuestion(UUID questionId);
 
     boolean deleteAllQuizQuestions(UUID quizId);

@@ -4,10 +4,15 @@ import com.simplyalgos.backend.quiz.domains.quizId.TakeQuizId;
 import com.simplyalgos.backend.user.domains.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.*;
+import org.hibernate.usertype.UserTypeLegacyBridge;
+
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +22,17 @@ import java.sql.Timestamp;
 @Entity(name = "take_quiz")
 public class TakeQuiz {
 
-    @EmbeddedId
-    private TakeQuizId takeQuizId;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Type(value = UserTypeLegacyBridge.class,
+            parameters = @org.hibernate.annotations.Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
+                    value = "org.hibernate.type.UUIDCharType"))
+    @Column(length = 36, name = "take_quiz_id")
+    UUID takeQuizId;
 
     private int score;
 
@@ -29,10 +43,10 @@ public class TakeQuiz {
     @UpdateTimestamp @Column(name = "finished_at")
     private Timestamp finishedAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @MapsId("userId")
-    private User userQuizReference;
+    private User takenBy;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")

@@ -11,8 +11,6 @@ import java.util.UUID;
 
 public interface QuizQuestionAnswerRepository extends JpaRepository<QuestionAnswer, UUID> {
 
-//    @Query(nativeQuery = true, value = "SELECT * FROM question_answer WHERE question_id = :question_id")
-//    List<QuestionAnswer> findAllByQuestionId(@Param("question_id") UUID questionId);
+    List<QuestionAnswer> findAllByAnswerBelongsToQuestion_QuestionId(UUID questionId);
 
-//    Set<QuestionAnswer> findAllByQuestionAnswerId_QuestionId(UUID questionId);
 }
