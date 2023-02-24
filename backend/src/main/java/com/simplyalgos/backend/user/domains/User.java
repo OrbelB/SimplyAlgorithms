@@ -153,8 +153,8 @@ public class User implements UserDetails, CredentialsContainer {
     @OneToMany(mappedBy = "userVoteReference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<CommentVote> commentVotes = new HashSet<>();
 
-    @OneToMany(mappedBy = "userQuizReference",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<TakeQuiz> quizzes = new HashSet<>();
+    @OneToMany(mappedBy = "takenBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<TakeQuiz> takenQuizzes = new HashSet<>();
 
     @OneToMany(mappedBy = "commentReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentReport> commentReports = new ArrayList<>();
@@ -166,7 +166,7 @@ public class User implements UserDetails, CredentialsContainer {
     private Set<Forum> forumsCreated = new HashSet<>();
 
     @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Quiz> quizzesCraeted = new HashSet<>();
+    private Set<Quiz> quizzesCreated = new HashSet<>();
 
     @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserNotification> userNotifications = new HashSet<>();

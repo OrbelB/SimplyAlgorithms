@@ -27,30 +27,31 @@ import java.util.*;
 @Transactional
 public class TakeQuizServiceImp implements TakeQuizService {
 
-    private final TakeQuizRepository takeQuizRepository;
+//    private final TakeQuizRepository takeQuizRepository;
     private final QuizRepository quizRepository;
 
     private final UserRepository userRepository;
 
     @Override
     public TakeQuizDTO getTimeStamp(TakeQuizDTO takeQuizDTO) throws NoSuchElementException {
-        Optional<TakeQuiz> takeQuiz = takeQuizRepository
-                .findByTakeQuizIdAndTakenBy_UserIdAndQuizReference_QuizId(
-                        takeQuizDTO.getTakeQuizId(),
-                        takeQuizDTO.getQuizId(),
-                        takeQuizDTO.getUserId());
-        if (takeQuiz.isPresent()) {
-            return TakeQuizDTO.builder()
-                    .quizId(takeQuiz.get().getQuizReference().getQuizId())
-                    .userId(takeQuiz.get().getTakenBy().getUserId())
-                    .takeQuizId(takeQuiz.get().getTakeQuizId())
-                    .startedAt(takeQuiz.get().getStartedAt())
-                    .finishedAt(takeQuiz.get().getFinishedAt())
-                    .score(takeQuiz.get().getScore())
-                    .build();
-        }
-        throw new NoSuchElementException(
-                MessageFormat.format("Take Quiz with Id {0} not found", Json.pretty(takeQuizDTO)));
+//        Optional<TakeQuiz> takeQuiz = takeQuizRepository
+//                .findByTakeQuizIdAndTakenBy_UserIdAndQuizReference_QuizId(
+//                        takeQuizDTO.getTakeQuizId(),
+//                        takeQuizDTO.getQuizId(),
+//                        takeQuizDTO.getUserId());
+//        if (takeQuiz.isPresent()) {
+//            return TakeQuizDTO.builder()
+//                    .quizId(takeQuiz.get().getQuizReference().getQuizId())
+//                    .userId(takeQuiz.get().getTakenBy().getUserId())
+//                    .takeQuizId(takeQuiz.get().getTakeQuizId())
+//                    .startedAt(takeQuiz.get().getStartedAt())
+//                    .finishedAt(takeQuiz.get().getFinishedAt())
+//                    .score(takeQuiz.get().getScore())
+//                    .build();
+//        }
+//        throw new NoSuchElementException(
+//                MessageFormat.format("Take Quiz with Id {0} not found", Json.pretty(takeQuizDTO)));
+        return null;
     }
 
 //    Use getAllUserQuizScore
@@ -66,26 +67,27 @@ public class TakeQuizServiceImp implements TakeQuizService {
 
     @Override
     public List<TakeQuizDTO> getAllUserQuizScore(UUID userId, UUID quizId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        Optional<Quiz> quizOptional = quizRepository.findById(quizId);
-
-        if (userOptional.isPresent() && quizOptional.isPresent()){
-            List<TakeQuizDTO> takeQuizDTOList = new ArrayList<>();
-            List<TakeQuiz> takeQuizList = takeQuizRepository.findAllByTakeQuizIdaAndQuizReference_QuizId(userId, quizId);
-            for(TakeQuiz takeQuiz: takeQuizList){
-                takeQuizDTOList.add(TakeQuizDTO.builder()
-                        .quizId(takeQuiz.getQuizReference().getQuizId())
-                        .userId(takeQuiz.getTakenBy().getUserId())
-                        .takeQuizId(takeQuiz.getTakeQuizId())
-                        .startedAt(takeQuiz.getStartedAt())
-                        .finishedAt(takeQuiz.getFinishedAt())
-                        .score(takeQuiz.getScore())
-                        .build());
-            }
-            return takeQuizDTOList;
-        }
-        throw new NoSuchElementException(
-                MessageFormat.format("Take quiz with id {0} not found or userId not found", quizId));
+//        Optional<User> userOptional = userRepository.findById(userId);
+//        Optional<Quiz> quizOptional = quizRepository.findById(quizId);
+//
+//        if (userOptional.isPresent() && quizOptional.isPresent()){
+//            List<TakeQuizDTO> takeQuizDTOList = new ArrayList<>();
+//            List<TakeQuiz> takeQuizList = takeQuizRepository.findAllByTakeQuizIdAndQuizReference_QuizId(userId, quizId);
+//            for(TakeQuiz takeQuiz: takeQuizList){
+//                takeQuizDTOList.add(TakeQuizDTO.builder()
+//                        .quizId(takeQuiz.getQuizReference().getQuizId())
+//                        .userId(takeQuiz.getTakenBy().getUserId())
+//                        .takeQuizId(takeQuiz.getTakeQuizId())
+//                        .startedAt(takeQuiz.getStartedAt())
+//                        .finishedAt(takeQuiz.getFinishedAt())
+//                        .score(takeQuiz.getScore())
+//                        .build());
+//            }
+//            return takeQuizDTOList;
+//        }
+//        throw new NoSuchElementException(
+//                MessageFormat.format("Take quiz with id {0} not found or userId not found", quizId));
+        return null;
     }
 
     @Override
@@ -95,43 +97,45 @@ public class TakeQuizServiceImp implements TakeQuizService {
 
     @Override
     public TakenQuizAverageScore getAverageQuizScore(UUID quizId) {
-        Optional<Quiz> quiz = quizRepository.findById(quizId);
-        if (quiz.isPresent()) {
-            List<TakeQuiz> takeQuizList = takeQuizRepository.findAllByQuizReference_QuizId(quizId);
-            double average = 0;
-            for (TakeQuiz takeQuiz : takeQuizList) {
-                average += takeQuiz.getScore();
-            }
-            return TakenQuizAverageScore.builder()
-                    .avgScore(average/takeQuizList.size())
-                    .quizId(quiz.get().getQuizId())
-                    .build();
-        }
-        throw new NoSuchElementException(
-                MessageFormat.format("Take quiz with id {0} not found", quizId));
+//        Optional<Quiz> quiz = quizRepository.findById(quizId);
+//        if (quiz.isPresent()) {
+//            List<TakeQuiz> takeQuizList = takeQuizRepository.findAllByQuizReference_QuizId(quizId);
+//            double average = 0;
+//            for (TakeQuiz takeQuiz : takeQuizList) {
+//                average += takeQuiz.getScore();
+//            }
+//            return TakenQuizAverageScore.builder()
+//                    .avgScore(average/takeQuizList.size())
+//                    .quizId(quiz.get().getQuizId())
+//                    .build();
+//        }
+//        throw new NoSuchElementException(
+//                MessageFormat.format("Take quiz with id {0} not found", quizId));
+        return null;
     }
 
     //  crated a TakenQuiz
     @Override
     public UUID takenQuizSubmit(TakeQuizDTO takeQuizDTO) {
-        Optional<Quiz> quizOptional = quizRepository.findById(takeQuizDTO.getTakeQuizId());
-        Optional<User> userOptional = userRepository.findById(takeQuizDTO.getUserId());
-        if (quizOptional.isPresent()) {
-            log.debug("Starting the creation of a new Take Quiz");
-            TakeQuiz takeQuiz = takeQuizRepository.saveAndFlush(
-                    TakeQuiz.builder()
-                            .takenBy(userOptional.get())
-                            .quizReference(quizOptional.get())
-                            .score(takeQuizDTO.getScore())
-                            .startedAt(takeQuizDTO.getStartedAt())
-                            .finishedAt(takeQuizDTO.getFinishedAt())
-                            .build()
-            );
-            log.debug("Finishing the creation of a new take quiz");
-            return takeQuiz.getTakeQuizId();
-        }
-        throw new NoSuchElementException(
-                MessageFormat.format("Take quiz with id {0} not found or user not found", takeQuizDTO.getUserId()));
+//        Optional<Quiz> quizOptional = quizRepository.findById(takeQuizDTO.getTakeQuizId());
+//        Optional<User> userOptional = userRepository.findById(takeQuizDTO.getUserId());
+//        if (quizOptional.isPresent()) {
+//            log.debug("Starting the creation of a new Take Quiz");
+//            TakeQuiz takeQuiz = takeQuizRepository.saveAndFlush(
+//                    TakeQuiz.builder()
+//                            .takenBy(userOptional.get())
+//                            .quizReference(quizOptional.get())
+//                            .score(takeQuizDTO.getScore())
+//                            .startedAt(takeQuizDTO.getStartedAt())
+//                            .finishedAt(takeQuizDTO.getFinishedAt())
+//                            .build()
+//            );
+//            log.debug("Finishing the creation of a new take quiz");
+//            return takeQuiz.getTakeQuizId();
+//        }
+//        throw new NoSuchElementException(
+//                MessageFormat.format("Take quiz with id {0} not found or user not found", takeQuizDTO.getUserId()));
+        return null;
     }
 
 //    For now dont need user to delete the quiz they have taken
