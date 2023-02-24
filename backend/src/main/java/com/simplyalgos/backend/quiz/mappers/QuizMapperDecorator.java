@@ -3,9 +3,11 @@ package com.simplyalgos.backend.quiz.mappers;
 import com.simplyalgos.backend.quiz.domains.QuestionAnswer;
 import com.simplyalgos.backend.quiz.domains.Quiz;
 import com.simplyalgos.backend.quiz.domains.QuizQuestion;
+import com.simplyalgos.backend.quiz.domains.TakeQuiz;
 import com.simplyalgos.backend.quiz.dtos.QuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
+import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
 import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,11 @@ public class QuizMapperDecorator implements QuizMapper{
     }
 
     @Override
+    public TakeQuizDTO takeQuizToTakeQuizDTO(TakeQuiz takeQuiz) {
+        return quizMapper.takeQuizToTakeQuizDTO(takeQuiz);
+    }
+
+    @Override
     public Set<QuestionAnswer> quizQuestionAnswerDTOToQuestionAnswer(Set<QuizQuestionAnswerDTO> quizQuestionAnswerDTOList) {
         return quizMapper.quizQuestionAnswerDTOToQuestionAnswer(quizQuestionAnswerDTOList);
     }
@@ -41,6 +48,17 @@ public class QuizMapperDecorator implements QuizMapper{
             ));
         }
         return quizQuestionList;
+    }
+
+    @Override
+    public List<TakeQuizDTO> takeQuizToTakeQuizDTO(List<TakeQuiz> takeQuizList) {
+        log.debug("inside takeQuiz to takeQuiz dto");
+        return quizMapper.takeQuizToTakeQuizDTO(takeQuizList) ;
+    }
+
+    @Override
+    public List<TakeQuiz> takeQuizDTOToTakeQuiz(List<TakeQuizDTO> takeQuizDTOList) {
+        return quizMapper.takeQuizDTOToTakeQuiz(takeQuizDTOList);
     }
 
     @Autowired

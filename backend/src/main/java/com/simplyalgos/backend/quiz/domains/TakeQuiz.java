@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.quiz.domains;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.quiz.domains.quizId.TakeQuizId;
 import com.simplyalgos.backend.user.domains.User;
 import lombok.*;
@@ -37,19 +38,19 @@ public class TakeQuiz {
     private int score;
 
     //hard to use can change to dates
-    @CreationTimestamp @Column(name = "started_at")
+    @Column(name = "started_at")
     private Timestamp startedAt;
 
-    @UpdateTimestamp @Column(name = "finished_at")
+    @Column(name = "finished_at")
     private Timestamp finishedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @MapsId("userId")
+    @JsonIncludeProperties({"userId", "username", "profilePicture"})
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User takenBy;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIncludeProperties({"quizId", "score"})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")
-    @MapsId("quizId")
     private Quiz quizReference;
 }

@@ -22,13 +22,16 @@ public interface QuizMapper {
     @Mapping(source = "tagId.tag", target = "tag.tag")
     QuizDTO quizToQuizDTO(Quiz quiz);
 
-
+    @Mapping(source = "takenBy.userId", target = "userId")
+    @Mapping(source = "quizReference.quizId", target = "quizId")
+    TakeQuizDTO takeQuizToTakeQuizDTO(TakeQuiz takeQuiz);
 
     Set<QuestionAnswer> quizQuestionAnswerDTOToQuestionAnswer(Set<QuizQuestionAnswerDTO> quizQuestionAnswerDTOList);
 
     @Mapping(source="quizQuestionDTO.answers", target="answersChoices")
     List<QuizQuestion> quizQuestionDTOToQuizQuestion(List<QuizQuestionDTO> quizQuestionDTO);
 
-
+    List<TakeQuizDTO> takeQuizToTakeQuizDTO(List<TakeQuiz> takeQuizList);
+    List<TakeQuiz> takeQuizDTOToTakeQuiz(List<TakeQuizDTO> takeQuizDTOList);
 
 }

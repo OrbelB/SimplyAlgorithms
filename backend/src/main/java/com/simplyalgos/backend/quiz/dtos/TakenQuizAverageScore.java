@@ -14,4 +14,5 @@ import java.util.UUID;
 public class TakenQuizAverageScore {
     UUID quizId;
     double avgScore;
+    double maxScore;
 }

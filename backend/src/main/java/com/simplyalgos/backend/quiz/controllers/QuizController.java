@@ -1,15 +1,13 @@
 package com.simplyalgos.backend.quiz.controllers;
 
-import com.simplyalgos.backend.quiz.dtos.DeleteQuizDTO;
-import com.simplyalgos.backend.quiz.dtos.FullQuizDTO;
-import com.simplyalgos.backend.quiz.dtos.QuizDTO;
-import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
+import com.simplyalgos.backend.quiz.dtos.*;
 import com.simplyalgos.backend.quiz.security.CreateQuizPermission;
 import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
 import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
 import com.simplyalgos.backend.quiz.security.UpdateQuizPermission;
 import com.simplyalgos.backend.quiz.services.*;
 import com.simplyalgos.backend.tag.dto.TagDTO;
+import com.simplyalgos.backend.user.security.perms.UserDeletePermission;
 import com.simplyalgos.backend.utils.StringUtils;
 import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
@@ -42,14 +40,13 @@ public class QuizController {
     //will retrieve the quiz pages
     @GetMapping("/list")
     public ResponseEntity<?> getQuizList(
-            @RequestParam(name = "page", defaultValue = "0", required = false)  int page,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "5", required = false) int size,
             @RequestParam(name = "filterBy", required = false) String filterBy) {
-        if(StringUtils.isNotNullAndEmptyOrBlank(filterBy)){
+        if (StringUtils.isNotNullAndEmptyOrBlank(filterBy)) {
             log.debug("Filtered quiz");
-            return ResponseEntity.ok(quizService.listQuizPageWithTag(PageRequest.of(page,size),filterBy));
-        }
-        else{
+            return ResponseEntity.ok(quizService.listQuizPageWithTag(PageRequest.of(page, size), filterBy));
+        } else {
             return ResponseEntity.ok(quizService.listQuizPages(PageRequest.of(page, size)));
         }
     }
@@ -61,9 +58,29 @@ public class QuizController {
         return ResponseEntity.ok(quizService.getFullQuiz(UUID.fromString(quizId)));
     }
 
-    @GetMapping("/user_history/{userId}")
-    public ResponseEntity<?> getUserQuizHistory(@PathVariable String userId) {
-        return null;
+    @GetMapping(value = "/user_history")
+    public ResponseEntity<?> getUserQuizHistory(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "5", required = false) int size,
+            @RequestParam(name = "userId", required = true) String userId,
+            @RequestParam(name = "byQuiz", required = false) String quizId) {
+        if (StringUtils.isNotNullAndEmptyOrBlank(quizId)) {
+            log.debug("Getting history by specific quiz");
+            return ResponseEntity.ok(takeQuizService
+                    .getAllUserTakenQuizByQuizId(PageRequest.of(page, size),
+                            userId,
+                            quizId));
+        } else {
+            log.debug("getting history by userId only");
+            return ResponseEntity.ok(takeQuizService.getAllUserTakenQuiz(PageRequest.of(page, size), userId));
+        }
+    }
+
+    @UserDeletePermission
+    @PostMapping(value = "/deleteALLUserTakenQuizzes")
+    public ResponseEntity<?> deleteALLUserTakenQuizzes(@RequestBody TakeQuizDTO takeQuizDTO){
+        return  ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(takeQuizService.deleteAllUserTakeQuizHistory(takeQuizDTO.getUserId()));
     }
 
     @GetMapping(path = "/avgQuizScore", consumes = "application/json")
@@ -71,11 +88,15 @@ public class QuizController {
         return ResponseEntity.ok(takeQuizService.getAverageQuizScore(quizDTO.getQuizId()));
     }
 
+    //    Get all the scores a specific quiz taken by the user;
 
-//    HELLO WORLD
+    @GetMapping(path = "/userQuizScore")
+    public ResponseEntity<?> getAllUserQuizScore(@RequestBody TakeQuizDTO takeQuizDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(takeQuizService.getAllUserQuizScore(takeQuizDTO.getUserId(), takeQuizDTO.getQuizId()));
+    }
 
-    //    Tested & passed
-//    Front end must make sure at least one question is correct
+    //    Front end must make sure at least one answer per question is correct
     @CreateQuizPermission
     @PostMapping(path = "/create", consumes = "application/json")
     public ResponseEntity<?> createQuiz(@RequestBody FullQuizDTO fullQuizDTO) {
@@ -94,7 +115,6 @@ public class QuizController {
         return response;
     }
 
-
     @DeleteQuizPermission
     @PostMapping(path = "/delete", consumes = "application/json")
     public ResponseEntity<?> deleteQuiz(@RequestBody DeleteQuizDTO deleteQuizDTO) {
@@ -105,15 +125,14 @@ public class QuizController {
     @UpdateQuizPermission
     @PostMapping(path = "/update", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateFullQuiz(@RequestBody FullQuizDTO fullQuizDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(quizService.updateFullQuiz(fullQuizDTO));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(quizService.updateFullQuiz(fullQuizDTO));
     }
 //    SLOW AND STEADY NOW
 
     @TakeQuizPermission
     @PostMapping("/submitQuiz")
-    public ResponseEntity<?> submitQuiz(String quizDTO) {
-        return null;
+    public ResponseEntity<?> submitQuiz(@RequestBody TakeQuizDTO takeQuizDTO) {
+        log.debug("Take quiz DTO object: " + Json.pretty(takeQuizDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(takeQuizService.createTakenQuiz(takeQuizDTO));
     }
-
-
 }
