@@ -32,6 +32,7 @@ public class CommentController {
     private final CommentService commentService;
 
     private final CommentVoteService commentVoteService;
+
     @GetMapping(path = "/list")
     public ResponseEntity<?> listComments(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
                                           @RequestParam(name = "size", required = true, defaultValue = "5") Integer size) {

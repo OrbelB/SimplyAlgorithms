@@ -2,6 +2,7 @@ package com.simplyalgos.backend.user.mappers;
 
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
 import com.simplyalgos.backend.utils.StringUtils;
@@ -16,6 +17,9 @@ public interface UserMapper {
     @Mapping(target = "userId", source = "userId")
     @Mapping(target = "role", ignore = true)
     UserDTO userToUserDto(User user);
+
+
+    UserDataDTO userTOUserDataDTO(User user);
 
     @Mapping(target = "UserPreferencesDTO.userId", ignore = true)
     @Mapping(target = "userId", source = "user.userId")

@@ -6,13 +6,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public interface TagRepository extends JpaRepository<Tag, UUID> {
 
+
+    Optional<Tag> findByTag(String tag);
 
     @Modifying
     @Query(nativeQuery = true,

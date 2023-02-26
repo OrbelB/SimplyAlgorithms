@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.web;
 
 import com.simplyalgos.backend.emailing.services.EmailService;
-import com.simplyalgos.backend.page.services.ForumService;
+import com.simplyalgos.backend.exceptions.UserNotAuthorizedException;
 import com.simplyalgos.backend.security.JpaUserDetailsService;
 import com.simplyalgos.backend.security.TokenGenerator;
 import com.simplyalgos.backend.user.domains.PasswordResetToken;
@@ -28,9 +28,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
+
 
 import org.springframework.web.bind.annotation.*;
 
@@ -54,10 +54,9 @@ public class AuthController {
     private final PasswordResetTokenService passwordResetTokenService;
 
 
-
     @Autowired
     @Qualifier("jwtRefreshTokenAuthProvider")
-    private void setJwtAuthenticationProvider(JwtAuthenticationProvider jwtAuthenticationProvider){
+    private void setJwtAuthenticationProvider(JwtAuthenticationProvider jwtAuthenticationProvider) {
         this.refreshTokenAuthProvider = jwtAuthenticationProvider;
     }
 
@@ -80,8 +79,9 @@ public class AuthController {
             );
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(tokenGenerator.createToken(authentication));
         } catch (Exception exception) {
+            String message = "Username or password is incorrect";
             log.error("username not authorized " + exception);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new UserNotAuthorizedException(message);
         }
     }
 
@@ -90,7 +90,6 @@ public class AuthController {
         try {
             Authentication authentication = refreshTokenAuthProvider
                     .authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
-
 
             log.info("authentication has this data " + authentication.getPrincipal().getClass());
             return userDetailsService.IsUserAccountNonLockedAndAuthenticated(authentication.getName()) ?
@@ -103,7 +102,7 @@ public class AuthController {
     }
 
     @PostMapping("/resetPasswordRequest")
-    public  ResponseEntity<?> resetPasswordRequest(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO){
+    public ResponseEntity<?> resetPasswordRequest(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
 
 
         User user = userService.userUserNameExists(passwordResetRequestDTO.getUsername().toString());
@@ -115,7 +114,7 @@ public class AuthController {
                 + " THE TOKEN IS: " + passwordResetToken.getPasswordResetTokenID());
 
 
-        String passwordResetLinkLocal = "http://localhost:3000/passwordReset?token="+passwordResetToken.getPasswordResetTokenID().toString();
+        String passwordResetLinkLocal = "http://localhost:3000/passwordReset?token=" + passwordResetToken.getPasswordResetTokenID().toString();
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(ResetPasswordRequestEmailValues.FROM.label);
         simpleMailMessage.setSubject(ResetPasswordRequestEmailValues.SUBJECT.label);
@@ -130,14 +129,14 @@ public class AuthController {
     }
 
     @PostMapping("/changePassword")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO){
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         passwordResetTokenService.validatePasswordResetTokenAndResetPassword(changePasswordDTO);
         return ResponseEntity.ok("~");
 
     }
 
     @PostMapping("/getUsername")
-    public  ResponseEntity<?> getUsername(@RequestBody GetUsernameDTO getUsernameDTO){
+    public ResponseEntity<?> getUsername(@RequestBody GetUsernameDTO getUsernameDTO) {
         boolean found = userService.getUsername(getUsernameDTO);
         log.info("GOT EMAIL: " + getUsernameDTO.getEmail());
         return ResponseEntity.ok(found);

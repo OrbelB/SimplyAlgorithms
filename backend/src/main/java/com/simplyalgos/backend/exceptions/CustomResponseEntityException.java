@@ -3,7 +3,6 @@ package com.simplyalgos.backend.exceptions;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -86,7 +85,7 @@ public class CustomResponseEntityException extends ResponseEntityExceptionHandle
     }
 
     @ExceptionHandler({ElementNotFoundException.class, PasswordsDontMatchException.class, TokenExpireException.class,
-            NotExpectedObjectException.class})
+            NotExpectedObjectException.class, UserNotAuthorizedException.class})
     public final ResponseEntity<?> handleCustomExceptions(WebRequest request, Exception ex) throws Exception{
         ErrorHandlerDetails.ErrorHandlerDetailsBuilder errorHandlerDetails = ErrorHandlerDetails
                 .builder()
@@ -106,7 +105,10 @@ public class CustomResponseEntityException extends ResponseEntityExceptionHandle
         }else if ( ex instanceof NotExpectedObjectException theEx){
             errorHandlerDetails.status(HttpStatus.BAD_REQUEST.value());
             return new ResponseEntity<>(errorHandlerDetails.build(), HttpStatus.BAD_REQUEST);
-        } else {
+        }else if (ex instanceof UserNotAuthorizedException theEx) {
+            errorHandlerDetails.status(HttpStatus.UNAUTHORIZED.value());
+            return new ResponseEntity<>(errorHandlerDetails.build(), HttpStatus.UNAUTHORIZED);
+        }else {
             throw ex;
         }
     }

@@ -89,7 +89,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/forums/list**", "/forums/*", "/forums/list/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/topics/list**", "/topics/*", "/topics/list/**").permitAll()
-                        .requestMatchers("/comments/**").permitAll()
+                        .requestMatchers("/comments/list").permitAll()
                         .requestMatchers(HttpMethod.GET, "/tags/**").permitAll()
                         .requestMatchers("/email/*").permitAll()
                         .requestMatchers("/error*").permitAll()

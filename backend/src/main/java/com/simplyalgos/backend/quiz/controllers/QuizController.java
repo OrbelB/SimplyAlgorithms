@@ -6,10 +6,10 @@ import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
 import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
 import com.simplyalgos.backend.quiz.security.UpdateQuizPermission;
 import com.simplyalgos.backend.quiz.services.*;
-import com.simplyalgos.backend.tag.dto.TagDTO;
 import com.simplyalgos.backend.user.security.perms.UserDeletePermission;
 import com.simplyalgos.backend.utils.StringUtils;
 import io.swagger.v3.core.util.Json;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -76,6 +76,7 @@ public class QuizController {
         }
     }
 
+
     @UserDeletePermission
     @PostMapping(value = "/deleteALLUserTakenQuizzes")
     public ResponseEntity<?> deleteALLUserTakenQuizzes(@RequestBody TakeQuizDTO takeQuizDTO){
@@ -116,9 +117,10 @@ public class QuizController {
     }
 
     @DeleteQuizPermission
-    @PostMapping(path = "/delete", consumes = "application/json")
-    public ResponseEntity<?> deleteQuiz(@RequestBody DeleteQuizDTO deleteQuizDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+    @DeleteMapping(path = "/delete", consumes = "application/json")
+    public ResponseEntity<?> deleteQuiz(@Valid @RequestBody DeleteQuizDTO deleteQuizDTO) {
+        log.error("Deleting quiz: " + deleteQuizDTO.getQuizId());
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(quizService.deleteQuiz(deleteQuizDTO.getQuizId()));
     }
 

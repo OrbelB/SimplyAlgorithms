@@ -3,6 +3,7 @@ package com.simplyalgos.backend.user.mappers;
 
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
 import com.simplyalgos.backend.user.security.Role;
@@ -26,6 +27,11 @@ public class UserMapperDecorator implements UserMapper {
             userDTO.setRole(user.getRoles().stream().findFirst().get().getRoleName());
         }
         return userDTO;
+    }
+
+    @Override
+    public UserDataDTO userTOUserDataDTO(User user) {
+        return userMapper.userTOUserDataDTO(user);
     }
 
     @Override

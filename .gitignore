@@ -48,3 +48,4 @@ build/
 /docker/db_data/mysql.sock
 /docker/.env
 /docker/db_data_custom/*
+/backend/src/main/resources/application-secrets.properties

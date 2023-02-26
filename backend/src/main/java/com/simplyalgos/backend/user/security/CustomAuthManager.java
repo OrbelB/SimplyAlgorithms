@@ -1,10 +1,7 @@
 package com.simplyalgos.backend.user.security;
 
 
-import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.enums.UserRoles;
-import com.simplyalgos.backend.user.services.UserService;
-import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -17,7 +14,6 @@ public class CustomAuthManager<Type> {
     public boolean userIdMatches(Authentication authentication, Type userId) {
 
         if (userId instanceof UUID userUUID) {
-
             return Objects.equals(authentication.getName(), userUUID.toString().trim());
         }
         return Objects.equals(authentication.getName(), (String) userId);

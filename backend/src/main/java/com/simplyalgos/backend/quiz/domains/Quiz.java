@@ -1,9 +1,7 @@
 package com.simplyalgos.backend.quiz.domains;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
-import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.utils.StringUtils;
@@ -47,24 +45,23 @@ public class Quiz {
 
     private int score;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "tag_id", nullable = false)
     private Tag tagId;
 
     //mapping question to quiz
-    @OneToMany(mappedBy = "belongsToThisQuiz", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "belongsToThisQuiz" , cascade = CascadeType.ALL)
     private List<QuizQuestion> questions = new ArrayList<>();
 
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "quizReference", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quizReference")
     private Set<TakeQuiz> quizzesTaken = new HashSet<>();
+
 
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User createdBy;
-
 
     public void setTag(Tag tag){
         if(StringUtils.isNotNullAndEmptyOrBlank(tag)){
@@ -72,28 +69,4 @@ public class Quiz {
         }
 
     }
-
-//    void setQuestions(List<QuizQuestion> quizQuestionList){
-//        for (QuizQuestion quizQuestion : quizQuestionList) {
-//            this.questions.add(
-//                    QuizQuestion.builder()
-//                            .belongsToThisQuiz(this)
-//                            .question(quizQuestion.getQuestion())
-//                            .answerChoices(quizQuestion.getAnswerChoices())
-//                            .picture(quizQuestion.getPicture())
-//                            .build()
-//            );
-//        }
-//    }
-//    public Quiz(UUID quizId, Timestamp createdDate, String title, int score, Tag tagId, List<QuizQuestion> questions, Set<TakeQuiz> quizzesTaken, User createdBy) {
-//        this.quizId = quizId;
-//        this.createdDate = createdDate;
-//        this.title = title;
-//        this.score = score;
-//        this.tagId = tagId;
-//        this.setQuestions(questions);
-//        this.quizzesTaken = quizzesTaken;
-//        this.createdBy = createdBy;
-//
-//    }
 }
