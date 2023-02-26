@@ -29,6 +29,8 @@ import QuizSample from './pages/q_pages/QuizSample';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
 import CreateTopicPage from './pages/CreateTopicPage';
+import CreateQuiz from './components/quiz/QuizCreationUpdate/CreateQuiz';
+// import UpdateQuiz from './components/quiz/QuizCreationUpdate/UpdateQuiz';
 
 function App() {
   useRefreshToken();
@@ -81,6 +83,8 @@ function App() {
         <Route path="/quiz" element={<QuizPage />} />
 
         <Route path="/quiz/sample" element={<QuizSample />} />
+        <Route path="/quiz/CreateQuiz" element={<CreateQuiz />} />
+        {/* <Route path="/quiz/UpdateQuiz" element={<UpdateQuiz />} /> */}
 
         <Route path="/team" element={<MeetTeamPage />} />
         <Route path="/createtopic" element={<CreateTopicPage />} />
