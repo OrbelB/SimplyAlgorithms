@@ -40,7 +40,7 @@ export default function CreateQuiz() {
     );
   };
   return (
-    <div className="container-fluid pt-5">
+    <div className="container-fluid">
       <div className="text-center border border-danger rounded-5 bg-info mt-5">
         <h1>Quiz creation page</h1>
         <b>
@@ -72,9 +72,8 @@ export default function CreateQuiz() {
             className="btn btn-lg btn-outline-success"
             onClick={handleAddQuestion}
           >
-            {' '}
-            <b>+</b>{' '}
-          </button>{' '}
+            <b>+</b>
+          </button>
           <br />
         </div>
       </div>

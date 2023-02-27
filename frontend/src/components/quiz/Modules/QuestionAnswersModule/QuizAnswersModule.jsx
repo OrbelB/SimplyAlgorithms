@@ -12,6 +12,11 @@ export default function QuizAnswersModule({
   questionId,
   answerId,
 }) {
+  const dispatch = useDispatch();
+
+  const handleChangeAnswerPrompt = () => {
+    dispatch(quizActions.updateQuestionAnswer({answer}))
+  }
   const temp = '';
   return (
     <div className="container-fluid pt-2">
