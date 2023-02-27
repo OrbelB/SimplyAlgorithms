@@ -1,12 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unused-vars */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
   quizDTO: {},
   quizQuestionDTO: [
     {
-      questionId: '',
+      questionId: nanoid(),
       quizId: '',
       question: '',
       picture: '',
@@ -24,6 +24,37 @@ export const quizSlice = createSlice({
   name: 'quiz',
   initialState,
   reducers: {
+    addQuizQuestion: (state, action) => {
+      state.quizQuestionDTO = state.quizQuestionDTO.concat({
+        questionId: action.payload.questionId,
+        quizId: '',
+        question: '',
+        picture: '',
+        deleteQuestion: false,
+        answers: [],
+      });
+    },
+    addQuestionAnswer: (state, action) => {
+      const { questionId, answerId } = action.payload;
+      console.info(action.payload);
+      state.quizQuestionDTO.find(
+        (question) => question.questionId === questionId
+      ).answers = state.quizQuestionDTO
+        .find((question) => question.questionId === questionId)
+        .answers.concat({
+          questionId,
+          answer: '',
+          answerId,
+          isCorrect: false,
+        });
+      // console.info(temp);
+
+      console.info(
+        state.quizQuestionDTO.find(
+          (question) => question.questionId === questionId
+        ).answers.length
+      );
+    },
     // what ever you are passing into the action their name should match
     updateQuestionProblem: (state, action) => {
       state.quizQuestionDTO.find(

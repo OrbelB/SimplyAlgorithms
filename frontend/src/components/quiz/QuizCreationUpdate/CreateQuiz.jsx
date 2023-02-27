@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
 import QuizQuestionModule from '../Modules/QuizQuestionsModule/QuizQuestionsModule';
 import { quizActions } from '../../../store/reducers/quiz-reducer';
-import  QuizModule  from '../Modules/QuizModule/QuizModule';
+import QuizModule from '../Modules/QuizModule/QuizModule';
 
 // const templateMc = {
 //   ...quizinfo,
@@ -31,43 +31,66 @@ export default function CreateQuiz() {
   //     return prevState;
   //   });
   // };
-
+  const { quizQuestionDTO } = useSelector((state) => state.quiz);
+  const dispatch = useDispatch();
+  const handleAddQuestion = () => {
+    console.info('got  in here');
+    dispatch(
+      quizActions.addQuizQuestion({questionId: nanoid()})
+    );
+  };
   return (
-    <div className="container-fluid">
-      <div className='text-center border border-danger rounded-5 bg-info mt-5'>
-      <h1>Quiz creation page</h1>
-        <b>Please review our policies before creating a quiz{' '}
-        <a href="/policies"><u>policies</u></a></b>
+    <div className="container-fluid pt-5">
+      <div className="text-center border border-danger rounded-5 bg-info mt-5">
+        <h1>Quiz creation page</h1>
+        <b>
+          Please review our policies before creating a quiz{' '}
+          <a href="/policies">
+            <u>policies</u>
+          </a>
+        </b>
       </div>
-      <div className='pt-5'>
-        <QuizModule/>
+      <div className="pt-5">
+        <QuizModule />
       </div>
-      <div className='pt-5'>
-        <QuizQuestionModule/>
-        {/* {fullQuizDTO.questions.map(
-          (index, question, picture, answerChoices) => (
-            <QuizQuestionModule
-              key={index}
-              questionId={nanoid()} // temprary quesionId
-              question={question}
-              answerChoices={answerChoices}
-              setFullQuizDTO={setFullQuizDTO}
-            />
-          )
-        )} */}
+      <div className="pt-5">
+        {quizQuestionDTO.map(({ questionId, question, picture, answers }) => (
+          <QuizQuestionModule
+            key={questionId}
+            questionId={questionId} // temprary quesionId
+            question={question}
+            picture={picture}
+            answers={answers}
+          />
+        ))}
       </div>
-      
-      <div className='row justify-content-center pt-5'>
-        <div className='col-auto'>
-          <button type='button' className='btn btn-lg btn-outline-success'> <b>+</b> </button> <br />
+
+      <div className="row justify-content-center pt-5">
+        <div className="col-auto">
+          <button
+            type="button"
+            className="btn btn-lg btn-outline-success"
+            onClick={handleAddQuestion}
+          >
+            {' '}
+            <b>+</b>{' '}
+          </button>{' '}
+          <br />
         </div>
       </div>
-      <div className='row justify-content-center pt-5'>
-        <div className='col-auto'>
-          <button type='button' className='btn btn-lg btn-outline-danger'> cancel </button> <br />
+      <div className="row justify-content-center pt-5">
+        <div className="col-auto">
+          <button type="button" className="btn btn-lg btn-outline-danger">
+            {' '}
+            cancel{' '}
+          </button>{' '}
+          <br />
         </div>
-        <div className='col-auto'>
-        <button type='button' className='btn btn-lg btn-outline-info'> create </button>
+        <div className="col-auto">
+          <button type="button" className="btn btn-lg btn-outline-info">
+            {' '}
+            create{' '}
+          </button>
         </div>
       </div>
     </div>

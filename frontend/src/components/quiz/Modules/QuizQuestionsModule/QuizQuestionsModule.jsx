@@ -3,18 +3,29 @@
 import React, { useState } from 'react';
 import { TextareaAutosize, TextField } from '@mui/material';
 import { Placeholder } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { nanoid } from '@reduxjs/toolkit';
 import QuizAnswersModule from '../QuestionAnswersModule/QuizAnswersModule';
+import { quizActions } from '../../../../store/reducers/quiz-reducer';
 
 export default function QuizQuestionModule({
+  questionId,
   question,
   picture,
-  answerChoices,
-  setFullQuizDTO,
+  answers,
+  deleteQuestion,
 }) {
   const temp = '';
+  const dispatch = useDispatch();
+
+  const handleImage = (e) => {};
+
+  const handleAddAnswer = () => {
+    dispatch(quizActions.addQuestionAnswer({ answerId: nanoid(), questionId }));
+  };
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid pt-5">
       <div className="bg-light rounded-5">
         <div className="row justify-content-end pt-3">
           <div className="col-auto ">
@@ -33,7 +44,7 @@ export default function QuizQuestionModule({
         <div className="row justify-content-center">
           <div className="text-center w-50 pb-3">
             <img
-              src="https://i.redd.it/ip7uwrb1jk281.jpg"
+              src={picture}
               height="350px"
               width="350px"
               className="rounded-4 m-4"
@@ -44,7 +55,7 @@ export default function QuizQuestionModule({
               id="questionImage"
               className="form-control"
               accept="image/png, image/jpeg, image/jpg"
-              onChange={null}
+              onChange={handleImage}
             />
           </div>
         </div>
@@ -53,7 +64,7 @@ export default function QuizQuestionModule({
             className="col-auto w-50 mb-2"
             required
             label="question?"
-            value={temp}
+            value={question}
           />
         </div>
         {/* the buttons down here will set the number of answers can fill in */}
@@ -70,7 +81,29 @@ export default function QuizQuestionModule({
           </div>
         </div>
         <div className="row">
-          <QuizAnswersModule />
+          {/* include redio buttons here to select which on us correct */}
+
+          {answers.map(({ answer, answerId, isCorrect }) => (
+            <QuizAnswersModule
+              key={answerId}
+              answer={answer}
+              answerId={answerId}
+              isCorrect={isCorrect}
+              questionId={questionId}
+            />
+          ))}
+        </div>
+        <div className="row justify-content-center">
+          <div className="col-auto">
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-success"
+              onClick={handleAddAnswer}
+            >
+              <b>+</b>
+            </button>
+            <br />
+          </div>
         </div>
       </div>
     </div>
