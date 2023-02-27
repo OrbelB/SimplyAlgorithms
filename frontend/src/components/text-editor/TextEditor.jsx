@@ -1,4 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Editor } from 'react-draft-wysiwyg';
+import './TextEditor.css';
+
+const content = {
+  blocks: [
+    {
+      key: '637gr',
+      text: 'Initialized from content state.',
+      type: 'unstyled',
+      depth: 0,
+      inlineStyleRanges: [],
+      entityRanges: [],
+      data: {},
+    },
+  ],
+  entityMap: {},
+};
+
+export default function TextEditor() {
+  const [contentState, setContentState] = useState(content);
+
+  return (
+    <div>
+      <Editor
+        toolbarClassName="editor-toolbar"
+        wrapperClassName="editor-wrapper"
+        editorClassName="editor-title"
+        onChange={(e) => setContentState(e)}
+      />
+      <br />
+      <textarea
+        className="json-display"
+        value={JSON.stringify(contentState, null, 4)}
+      />
+    </div>
+  );
+}
+
+/* import React from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import './CreateTopic.css';
 
@@ -12,7 +51,7 @@ export default function CreateTopic() {
       />
     </div>
   );
-}
+} */
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* import { useState } from 'react';
@@ -129,5 +168,4 @@ export default function CreateTopic() {
       </div>
     </div>
   );
-}
- */
+} */

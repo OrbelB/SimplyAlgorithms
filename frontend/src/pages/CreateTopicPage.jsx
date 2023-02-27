@@ -1,5 +1,5 @@
-import CreateTopic from '../components/create-topic/CreateTopic';
+import TextEditor from '../components/text-editor/TextEditor';
 
 export default function CreateTopicPage() {
-  return <CreateTopic />;
+  return <TextEditor />;
 }

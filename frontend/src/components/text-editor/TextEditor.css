@@ -1,0 +1,24 @@
+/* .topic-form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+} */
+
+.editor-name {
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-wrapper {
+    height: auto;
+    border: 1px solid black;
+}
+
+.editor-toolbar {
+    background-color: #9df7ff;
+}
+
+.json-display {
+    height: 50vh;
+    width: 50vh;
+}
