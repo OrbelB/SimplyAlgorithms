@@ -21,13 +21,13 @@
   font-size: large;
 }
 
-.team-text-butt {
+.team-butt {
   border: 1px solid black;
 }
 
-.team-text-butt:hover {
-  border: 1px solid black;
+.team-butt:hover {
   background-color: black;
+  border: 1px solid black;
 }
 
 .team-text:hover {
