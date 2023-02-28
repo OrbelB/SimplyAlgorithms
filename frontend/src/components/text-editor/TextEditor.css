@@ -1,9 +1,3 @@
-/* .topic-form {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-} */
-
 .editor-name {
     display: flex;
     flex-direction: column;
@@ -19,6 +13,5 @@
 }
 
 .json-display {
-    height: 50vh;
     width: 50vh;
 }
