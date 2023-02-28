@@ -291,6 +291,7 @@ export default function MainNavigation() {
                       handleCloseUserMenu();
                     }}
                   >
+                    <Typography textAlign="center">Notebook</Typography>
                     <Notebook
                       isDrawerOpen={isDrawerOpen}
                       setIsDrawerOpen={setIsDrawerOpen}

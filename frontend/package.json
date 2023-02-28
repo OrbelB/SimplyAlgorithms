@@ -33,6 +33,7 @@
     "react-circular-progressbar": "^2.1.0",
     "react-countdown-circle-timer": "^3.1.0",
     "react-draft-wysiwyg": "^1.15.0",
+    "react-draggable": "^4.4.5",
     "react-icons": "^4.4.0",
     "react-loading-icons": "^1.1.0",
     "react-redux": "^8.0.4",

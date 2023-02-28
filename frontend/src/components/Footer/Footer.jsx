@@ -7,7 +7,7 @@ import image from '../../assets/footer-logo.png';
 
 export default function Footer() {
   return (
-    <footer className={cx(style.box, 'mt-4')}>
+    <footer className={cx(style.box)}>
       <div className="row g-0 border-bottom border-top border-dark justify-content-center justify-content-sm-center justify-content-md-between">
         <div className="col-12 col-md-12 col-lg-3 col-xl-3 mt-4 ps-4 text-center">
           <img
