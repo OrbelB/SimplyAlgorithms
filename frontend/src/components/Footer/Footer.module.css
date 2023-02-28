@@ -22,13 +22,13 @@
 }
 
 .team-button {
-  color: black;
+  background-color: black;
   border: 1px solid black;
 }
 
 .team-button:hover {
-  border: 1px solid black;
   background-color: black;
+  border: 1px solid black;
 }
 
 .team-text:hover {
@@ -36,9 +36,8 @@
 }
 
 .team-text {
-  color: black;
+  color: white;
 }
-
 @media only screen and (min-width: 1500px) {
   .web_nav {
     font-size: 1.1vw;
