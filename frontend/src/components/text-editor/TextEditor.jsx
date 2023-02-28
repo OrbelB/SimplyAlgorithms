@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
+import { convertFromRaw } from 'draft-js';
 import './TextEditor.css';
 
 const content = {
@@ -18,7 +19,9 @@ const content = {
 };
 
 export default function TextEditor() {
-  const [contentState, setContentState] = useState(content);
+  const [contentState, setContentState] = useState(() =>
+    convertFromRaw(content)
+  );
 
   return (
     <div>
@@ -26,7 +29,7 @@ export default function TextEditor() {
         toolbarClassName="editor-toolbar"
         wrapperClassName="editor-wrapper"
         editorClassName="editor-title"
-        onChange={(e) => setContentState(e)}
+        onChange={(e) => setContentState(convertFromRaw(e))}
       />
       <br />
       <textarea

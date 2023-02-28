@@ -1,29 +1,84 @@
+/* eslint-disable no-multi-assign */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unused-vars */
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchQuizList, fetchSingleQuiz } from '../../services/quiz';
 
+const firstId = crypto.randomUUID();
 const initialState = {
   quizDTO: {},
   quizQuestionDTO: [
     {
-      questionId: nanoid(),
+      questionId: firstId,
       quizId: '',
       question: '',
       picture: '',
       deleteQuestion: false,
-      answers: [],
+      answers: [
+        {
+          questionId: firstId,
+          answer: '',
+          answerId: crypto.randomUUID(),
+          isCorrect: 1,
+        },
+        {
+          questionId: firstId,
+          answer: '',
+          answerId: crypto.randomUUID(),
+          isCorrect: 0,
+        },
+      ],
     },
   ],
   userDTO: {},
   status: 'idle',
   error: '',
   reportId: '',
+  quizList: [],
 };
 
 export const quizSlice = createSlice({
   name: 'quiz',
   initialState,
   reducers: {
+    resetData: (state) => {
+      state.quizDTO = {};
+      state.quizQuestionDTO = [
+        {
+          questionId: firstId,
+          quizId: '',
+          question: '',
+          picture: '',
+          deleteQuestion: false,
+          answers: [
+            {
+              questionId: firstId,
+              answer: '',
+              answerId: crypto.randomUUID(),
+              isCorrect: 1,
+            },
+            {
+              questionId: firstId,
+              answer: '',
+              answerId: crypto.randomUUID(),
+              isCorrect: 0,
+            },
+          ],
+        },
+      ];
+      state.userDTO = {};
+      state.status = 'idle';
+      state.error = '';
+      state.reportId = '';
+    },
+    removeQuestionAnswer: (state, action) => {
+      const { questionId, answerId } = action.payload;
+      state.quizQuestionDTO.find(
+        (question) => question.questionId === questionId
+      ).answers = state.quizQuestionDTO
+        .find((question) => question.questionId === questionId)
+        .answers.filter((answer) => answer.answerId !== answerId);
+    },
     addQuizQuestion: (state, action) => {
       state.quizQuestionDTO = state.quizQuestionDTO.concat({
         questionId: action.payload.questionId,
@@ -31,12 +86,24 @@ export const quizSlice = createSlice({
         question: '',
         picture: '',
         deleteQuestion: false,
-        answers: [],
+        answers: [
+          {
+            questionId: action.payload.questionId,
+            answer: '',
+            answerId: crypto.randomUUID(),
+            isCorrect: false,
+          },
+          {
+            questionId: action.payload.questionId,
+            answer: '',
+            answerId: crypto.randomUUID(),
+            isCorrect: false,
+          },
+        ],
       });
     },
     addQuestionAnswer: (state, action) => {
       const { questionId, answerId } = action.payload;
-      console.info(action.payload);
       state.quizQuestionDTO.find(
         (question) => question.questionId === questionId
       ).answers = state.quizQuestionDTO
@@ -48,12 +115,6 @@ export const quizSlice = createSlice({
           isCorrect: false,
         });
       // console.info(temp);
-
-      console.info(
-        state.quizQuestionDTO.find(
-          (question) => question.questionId === questionId
-        ).answers.length
-      );
     },
     // what ever you are passing into the action their name should match
     updateQuestionProblem: (state, action) => {
@@ -66,24 +127,40 @@ export const quizSlice = createSlice({
         (question) => question.questionId === action.payload.questionId
       ).picture = action.payload.picture;
     },
-    updateQuestionDeleteTag: (state, action) => {
-      state.quizQuestionDTO.find(
-        (question) => question.questionId === action.payload.questionId
-      ).deleteQuestion = action.payload.deleteQuestion;
+    updateQuizTag: (state, action) => {
+      state.quizDTO.tag = action.payload.tag;
     },
     updateQuestionAnswer: (state, action) => {
-      state.quizQuestionDTO
-        .find((question) => question.questionId === action.payload.questionId)
-        .answers.find(
-          (answer) => answer.answerId === action.payload.answerId
-        ).answer = action.payload.answer;
+      const { questionId, answerId, answer: updatedAnswer } = action.payload;
+      const answers = state.quizQuestionDTO
+        .find((question) => question.questionId === questionId)
+        .answers.map((answer) => {
+          if (answer.answerId === answerId) {
+            return { ...answer, answer: updatedAnswer };
+          }
+          return answer;
+        });
+      state.quizQuestionDTO.find(
+        (question) => question.questionId === questionId
+      ).answers = answers;
     },
     updateQuestionAnswerIsCorrect: (state, action) => {
-      state.quizQuestionDTO
-        .find((question) => question.questionId === action.payload.questionId)
-        .answers.find(
-          (answer) => answer.answerId === action.payload.answerId
-        ).isCorrect = action.payload.isCorrect;
+      const {
+        questionId,
+        answerId,
+        isCorrect: updatedIsCorrect,
+      } = action.payload;
+      const answers = state.quizQuestionDTO
+        .find((question) => question.questionId === questionId)
+        .answers.map((answer) => {
+          if (answer.answerId === answerId) {
+            return { ...answer, isCorrect: updatedIsCorrect };
+          }
+          return { ...answer, isCorrect: updatedIsCorrect === 0 ? 1 : 0 };
+        });
+      state.quizQuestionDTO.find(
+        (question) => question.questionId === questionId
+      ).answers = answers;
     },
     updateQuizTitle: (state, action) => {
       state.quizDTO.title = action.payload.title;
@@ -91,6 +168,38 @@ export const quizSlice = createSlice({
     updateQuizScore: (state, action) => {
       state.quizDTO.score = action.payload.score;
     },
+    deleteQuestion: (state, action) => {
+      state.quizQuestionDTO = state.quizQuestionDTO.filter(
+        (question) => question.questionId !== action.payload.questionId
+      );
+    },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(fetchQuizList.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchQuizList.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.quizList = action.payload.content;
+      })
+      .addCase(fetchQuizList.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(fetchSingleQuiz.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchSingleQuiz.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.quizDTO = action.payload.quizDTO;
+        state.quizQuestionDTO = action.payload.quizQuestionDTO;
+        state.userDTO = action.payload.userDTO;
+      })
+      .addCase(fetchSingleQuiz.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
   },
 });
 export const quizActions = quizSlice.actions;

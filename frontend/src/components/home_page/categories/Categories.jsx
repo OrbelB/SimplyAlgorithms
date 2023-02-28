@@ -13,7 +13,7 @@ export default function Categories() {
       ))} */}
       <div className="categories">
         <button type="button" className="t0 topic">
-          <NavLink to="/wiki">
+          <NavLink to="/wiki/Main Category">
             <p className="stuff">What Are Algorithms?</p>
           </NavLink>
         </button>

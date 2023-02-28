@@ -6,8 +6,9 @@ import { quizEndpoints } from './Api/quiz';
 
 export const fetchSingleQuiz = createAsyncThunk(
   'quiz/SingleQuiz',
-  async (quizId) => {
-    const response = await quizEndpoints.singleQuizById(quizId);
+  async (passedParams) => {
+    const { quizId, jwtAccessToken } = passedParams;
+    const response = await quizEndpoints.singleQuizById(quizId, jwtAccessToken);
     return response.data;
   }
 );
@@ -72,12 +73,14 @@ export const fetchAllUserQuizScore = createAsyncThunk(
 export const createQuiz = createAsyncThunk(
   'quiz/create',
   async (passedParams) => {
-    const { userDTO, quizDTO, quizQuestionDTO, jwtAccessToken } = passedParams;
-    const response = await quizEndpoints
-      .createQuiz(userDTO, quizDTO, quizQuestionDTO, jwtAccessToken)
-      .catch((error) => {
-        return error;
-      });
+    const { userDto, quizDTO, quizQuestionDTO, jwtAccessToken } = passedParams;
+    const response = await quizEndpoints.createQuiz(
+      userDto,
+      quizDTO,
+      quizQuestionDTO,
+      jwtAccessToken
+    );
+
     return response.data;
   }
 );

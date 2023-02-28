@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 import { useState, useCallback } from 'react';
-import { nanoid } from '@reduxjs/toolkit';
 import { NavLink } from 'react-router-dom';
 import Chart from 'react-apexcharts';
 
@@ -9,45 +8,45 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import './QuizScreen.css';
 import QuizReportForm from '../ReportQuiz/ReportQuiz';
 
-export default function QuizScreen({ retry }) {
-  const questions = [
-    {
-      questionText: 'What is the capital of France?',
-      answerOptions: [
-        { answerText: 'New York', isCorrect: false },
-        { answerText: 'London', isCorrect: false },
-        { answerText: 'Paris', isCorrect: true },
-        { answerText: 'Dublin', isCorrect: false },
-      ],
-    },
-    {
-      questionText: 'Who is CEO of Tesla?',
-      answerOptions: [
-        { answerText: 'Jeff Bezos', isCorrect: false },
-        { answerText: 'Elon Musk', isCorrect: true },
-        { answerText: 'Bill Gates', isCorrect: false },
-        { answerText: 'Tony Stark', isCorrect: false },
-      ],
-    },
-    {
-      questionText: 'The iPhone was created by which company?',
-      answerOptions: [
-        { answerText: 'Apple', isCorrect: true },
-        { answerText: 'Intel', isCorrect: false },
-        { answerText: 'Amazon', isCorrect: false },
-        { answerText: 'Microsoft', isCorrect: false },
-      ],
-    },
-    {
-      questionText: 'How many Harry Potter books are there?',
-      answerOptions: [
-        { answerText: '1', isCorrect: false },
-        { answerText: '4', isCorrect: false },
-        { answerText: '6', isCorrect: false },
-        { answerText: '7', isCorrect: true },
-      ],
-    },
-  ];
+export default function QuizScreen({ retry, questions }) {
+  // const questions = [
+  //   {
+  //     questionText: 'What is the capital of France?',
+  //     answerOptions: [
+  //       { answerText: 'New York', isCorrect: false },
+  //       { answerText: 'London', isCorrect: false },
+  //       { answerText: 'Paris', isCorrect: true },
+  //       { answerText: 'Dublin', isCorrect: false },
+  //     ],
+  //   },
+  //   {
+  //     questionText: 'Who is CEO of Tesla?',
+  //     answerOptions: [
+  //       { answerText: 'Jeff Bezos', isCorrect: false },
+  //       { answerText: 'Elon Musk', isCorrect: true },
+  //       { answerText: 'Bill Gates', isCorrect: false },
+  //       { answerText: 'Tony Stark', isCorrect: false },
+  //     ],
+  //   },
+  //   {
+  //     questionText: 'The iPhone was created by which company?',
+  //     answerOptions: [
+  //       { answerText: 'Apple', isCorrect: true },
+  //       { answerText: 'Intel', isCorrect: false },
+  //       { answerText: 'Amazon', isCorrect: false },
+  //       { answerText: 'Microsoft', isCorrect: false },
+  //     ],
+  //   },
+  //   {
+  //     questionText: 'How many Harry Potter books are there?',
+  //     answerOptions: [
+  //       { answerText: '1', isCorrect: false },
+  //       { answerText: '4', isCorrect: false },
+  //       { answerText: '6', isCorrect: false },
+  //       { answerText: '7', isCorrect: true },
+  //     ],
+  //   },
+  // ];
   const [userSelectAnswer, setUserSelectAnswer] = useState({
     position: -1,
     isCorrect: false,
@@ -56,11 +55,11 @@ export default function QuizScreen({ retry }) {
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
   const handleAnswerOptionClick = (isCorrect, index) => {
-    if (isCorrect) {
+    if (isCorrect === 1) {
       setScore(score + 1);
     }
     setUserSelectAnswer(() => {
-      return { position: index, isCorrect };
+      return { position: index, isCorrect: isCorrect === 1 };
     });
     console.info(JSON.stringify(userSelectAnswer));
   };
@@ -79,7 +78,7 @@ export default function QuizScreen({ retry }) {
   };
   const buttonStyle = useCallback(
     (answerOption, index) => {
-      return answerOption.isCorrect && userSelectAnswer.position !== -1
+      return answerOption.isCorrect === 1 && userSelectAnswer.position !== -1
         ? 'answerbutton-right'
         : userSelectAnswer.position === index
         ? 'answerbutton-wrong'
@@ -154,29 +153,27 @@ export default function QuizScreen({ retry }) {
               <div className="question-count text-center p-3 h1">
                 <span>Question {currentQuestion + 1}</span>/{questions.length}
                 <div className="question-text h3 pt-3">
-                  {questions[currentQuestion].questionText}
+                  {questions[currentQuestion].question}
                 </div>
               </div>
             </div>
           </div>
           <div className="row">
             <div className="answer-section text-center">
-              {questions[currentQuestion].answerOptions.map(
-                (answerOption, index) => (
-                  <button
-                    id={index}
-                    key={nanoid()}
-                    type="button"
-                    disabled={userSelectAnswer.position !== -1}
-                    className={buttonStyle(answerOption, index)}
-                    onClick={() =>
-                      handleAnswerOptionClick(answerOption.isCorrect, index)
-                    }
-                  >
-                    <h4>{answerOption.answerText}</h4>
-                  </button>
-                )
-              )}
+              {questions[currentQuestion].answers.map((answer, index) => (
+                <button
+                  id={answer.answerId}
+                  key={answer.answerId}
+                  type="button"
+                  disabled={userSelectAnswer.position !== -1}
+                  className={buttonStyle(answer, index)}
+                  onClick={() =>
+                    handleAnswerOptionClick(answer.isCorrect, index)
+                  }
+                >
+                  <h4>{answer.answer}</h4>
+                </button>
+              ))}
             </div>
             <br />
             <div className="text-center">

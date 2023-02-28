@@ -5,7 +5,7 @@ export default function CommentsPreview() {
   const { dashboardInfo } = useSelector((state) => state.user);
 
   const displayNotifications =
-    dashboardInfo.notifications.length !== 0 ? (
+    dashboardInfo?.notifications?.length !== 0 ? (
       dashboardInfo?.notifications?.map(
         ({ title, message, notificationId }) => (
           <div key={notificationId} className="preview-sect m-2 mb-5">
