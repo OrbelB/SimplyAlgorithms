@@ -53,11 +53,10 @@ export default function NotebookAdd({
       <div className="form-group m-3">
         <label htmlFor="note-description">Description: </label>
         <TextEditor
-          type="text"
           className="form-control"
           id="note-description"
           placeholder="Enter description"
-          value={description}
+          value={description} // value will not be registered, either way it would be submitted through markup
           onChange={inputHandlerDescription}
         />
       </div>

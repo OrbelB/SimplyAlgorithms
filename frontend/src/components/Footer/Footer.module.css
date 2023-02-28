@@ -21,11 +21,11 @@
   font-size: large;
 }
 
-.team-text-butt {
+.team-butt {
   border: 1px solid black;
 }
 
-.team-text-butt:hover {
+.team-butt:hover {
   border: 1px solid black;
   background-color: black;
 }
