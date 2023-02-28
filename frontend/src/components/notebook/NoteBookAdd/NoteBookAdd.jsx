@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-shorthand */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import TextEditor from '../../text-editor/TextEditor';
+
 export default function NotebookAdd({
   title,
   setTitle,
@@ -50,7 +52,7 @@ export default function NotebookAdd({
       </div>
       <div className="form-group m-3">
         <label htmlFor="note-description">Description: </label>
-        <textarea
+        <TextEditor
           type="text"
           className="form-control"
           id="note-description"

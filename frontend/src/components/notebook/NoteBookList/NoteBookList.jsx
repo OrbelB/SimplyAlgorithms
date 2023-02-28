@@ -5,6 +5,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
 import { useState } from 'react';
+import TextEditor from '../../text-editor/TextEditor';
 
 export default function NoteBookList({ element, notes, setNotes }) {
   const [editPage, setEditPage] = useState(false);
@@ -82,19 +83,19 @@ export default function NoteBookList({ element, notes, setNotes }) {
                     className="form-control"
                     id="edittitle"
                     placeholder="Enter title"
-                    value={element.description}
+                    value={element.title}
                   />
                 </div>
                 <div className="form-group m-3">
                   <label htmlFor="notedescription">Description: </label>
-                  <textarea
+                  <TextEditor
                     type="text"
                     className="form-control"
                     id="editdescription"
                     placeholder="Enter description"
                   >
                     {element.description}
-                  </textarea>
+                  </TextEditor>
                 </div>
                 <div className="form-group m-3">
                   <button

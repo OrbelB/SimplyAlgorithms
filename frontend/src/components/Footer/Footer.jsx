@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import cx from 'classnames';
 import style from './Footer.module.css';
@@ -119,16 +120,15 @@ export default function Footer() {
           </div>
           <div className="row justify-content-center text-center ps-5">
             <h5 className="text-center text-uppercase">Meet the Team</h5>
-            <form>
-              <div className={cx(style.team_butt, 'mb-4')}>
-                <button type="button" className="btn btn-outline-dark">
-                  <div className={cx(style.team_butt, '')}>
-                    <NavLink aria-current="page" to="/team">
-                      TEAM PAGE
-                    </NavLink>
-                  </div>
-                </button>
-              </div>
+            <form className="mb-3">
+              <Button
+                variant="outlined"
+                className={cx(style['team-text-butt'])}
+              >
+                <NavLink aria-current="page" to="/team">
+                  <div className={cx(style['team-text'])}>TEAM PAGE</div>
+                </NavLink>
+              </Button>
             </form>
           </div>
         </div>
