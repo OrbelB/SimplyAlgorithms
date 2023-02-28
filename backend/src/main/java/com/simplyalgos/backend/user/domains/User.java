@@ -1,6 +1,5 @@
 package com.simplyalgos.backend.user.domains;
 
-import com.fasterxml.jackson.annotation.*;
 import com.simplyalgos.backend.comment.domains.Comment;
 import com.simplyalgos.backend.comment.domains.CommentVote;
 import com.simplyalgos.backend.page.domains.Forum;
@@ -36,9 +35,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 @Entity(name = "users")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class User implements UserDetails, CredentialsContainer {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -153,19 +150,19 @@ public class User implements UserDetails, CredentialsContainer {
     @OneToMany(mappedBy = "userVoteReference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<CommentVote> commentVotes = new HashSet<>();
 
-    @OneToMany(mappedBy = "takenBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "takenBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TakeQuiz> takenQuizzes = new HashSet<>();
 
     @OneToMany(mappedBy = "commentReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentReport> commentReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "pageReportedBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pageReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PageReport> pageReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Forum> forumsCreated = new HashSet<>();
 
-    @OneToMany(mappedBy = "createdBy",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Quiz> quizzesCreated = new HashSet<>();
 
     @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

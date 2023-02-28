@@ -1,5 +1,8 @@
 package com.simplyalgos.backend.page.services;
 
+import com.simplyalgos.backend.page.domains.ids.CodeSnippetId;
+import com.simplyalgos.backend.page.domains.ids.PageVoteId;
+import com.simplyalgos.backend.page.domains.ids.TopicExternalResourceId;
 import com.simplyalgos.backend.page.repositories.TopicStepRepository;
 import com.simplyalgos.backend.page.domains.TopicSteps;
 import com.simplyalgos.backend.page.domains.*;
@@ -50,6 +53,13 @@ public class TopicServiceImpl implements TopicService {
     private final TopicStepRepository topicStepRepository;
 
     private final TopicExternalResourceRepository topicExternalResourceRepository;
+
+    @Override
+    public Topic getTopic(UUID topicId) {
+        return topicRepository.findById(topicId).orElseThrow(() ->
+                new NoSuchElementException(MessageFormat.format("Element not found for id {0}", topicId))
+        );
+    }
 
     @Override
     public ObjectPagedList<?> listTopicPages(Pageable pageable) {

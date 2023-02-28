@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.page.domains;
 
+import com.simplyalgos.backend.page.domains.ids.ViewsId;
 import com.simplyalgos.backend.user.domains.User;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

@@ -2,7 +2,7 @@ package com.simplyalgos.backend.page.repositories;
 
 
 import com.simplyalgos.backend.page.domains.ParentChildPages;
-import com.simplyalgos.backend.page.domains.ParentChildPagesId;
+import com.simplyalgos.backend.page.domains.ids.ParentChildPagesId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package com.simplyalgos.backend.page.repositories;
 
 
 import com.simplyalgos.backend.page.domains.TopicExternalResource;
-import com.simplyalgos.backend.page.domains.TopicExternalResourceId;
+import com.simplyalgos.backend.page.domains.ids.TopicExternalResourceId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;

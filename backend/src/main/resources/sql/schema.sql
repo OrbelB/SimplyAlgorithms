@@ -116,6 +116,44 @@ CREATE TABLE role_authority (
 -- end of user persistance layer
 
 -- page persistance layer
+
+
+-- wiki information
+
+DROP TABLE IF EXISTS simplyalgos.wiki;
+
+CREATE TABLE IF NOT EXISTS simplyalgos.wiki(
+	wiki_id VARCHAR(36) NOT NULL DEFAULT(uuid()) PRIMARY KEY,
+    wiki_name VARCHAR(60) NOT NULL UNIQUE,
+    is_parent_child VARCHAR(10) NOT NULL,
+    description JSON
+);
+
+
+DROP TABLE IF EXISTS simplyalgos.wiki_topic_page;
+
+CREATE TABLE IF NOT EXISTS simplyalgos.wiki_topic_page(
+	page_id VARCHAR(36) NOT NULL,
+    wiki_id VARCHAR(36) NOT NULL,
+    FOREIGN KEY (page_id) REFERENCES topic_page(page_id)
+    ON DELETE CASCADE,
+    FOREIGN KEY (wiki_id) REFERENCES wiki(wiki_id)
+    ON DELETE CASCADE,
+    PRIMARY KEY(page_id, wiki_id)
+);
+
+DROP TABLE IF EXISTS simplyalgos.wiki_parent_child;
+
+CREATE TABLE IF NOT EXISTS wiki_parent_child ( 
+	wiki_parent_id VARCHAR(36),
+    wiki_child_id VARCHAR(36) NOT NULL,
+    FOREIGN KEY (wiki_parent_id) REFERENCES wiki(wiki_id) 
+    ON DELETE CASCADE,
+    FOREIGN KEY (wiki_child_id) REFERENCES wiki(wiki_id)
+    ON DELETE CASCADE
+);
+
+
 CREATE TABLE page_entity (
 	page_id VARCHAR(36) NOT NULL DEFAULT(uuid()) PRIMARY KEY,
     is_forum_topic_page VARCHAR(10) NOT NULL
@@ -137,8 +175,11 @@ CREATE TABLE topic_page (
     time_complexity TEXT NOT NULL,
     explanation TEXT NOT NULL,
     title  VARCHAR(60) NOT NULL,
+    user_id VARCHAR(36) NOT NULL,
     created_date TIMESTAMP DEFAULT(CURRENT_TIME()),
     FOREIGN KEY(page_id) REFERENCES page_entity(page_id)
+		ON DELETE CASCADE,
+	FOREIGN KEY (user_id) REFERENCES users(user_id) 
 		ON DELETE CASCADE
 );
 

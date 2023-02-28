@@ -7,10 +7,7 @@ import com.simplyalgos.backend.page.domains.CodeSnippet;
 import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.domains.TopicExternalResource;
 import com.simplyalgos.backend.page.domains.TopicSteps;
-import com.simplyalgos.backend.page.dtos.CodeSnippetDTO;
-import com.simplyalgos.backend.page.dtos.FullTopicDTO;
-import com.simplyalgos.backend.page.dtos.TopicExternalResourcesDTO;
-import com.simplyalgos.backend.page.dtos.TopicStepsDTO;
+import com.simplyalgos.backend.page.dtos.*;
 import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import com.simplyalgos.backend.user.dtos.UserDataDTO;
@@ -29,6 +26,11 @@ public class TopicDecorator implements TopicMapper {
     @Qualifier("delegate")
     protected void setTopicMapper(TopicMapper topicMapper) {
         this.topicMapper = topicMapper;
+    }
+
+    @Override
+    public PageBasicInfo pageToPageBasicInfo(Topic topic) {
+        return topicMapper.pageToPageBasicInfo(topic);
     }
 
     @Override

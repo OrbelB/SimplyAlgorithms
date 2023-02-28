@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.page.services;
 
 import com.simplyalgos.backend.page.domains.PageVote;
-import com.simplyalgos.backend.page.domains.PageVoteId;
+import com.simplyalgos.backend.page.domains.ids.PageVoteId;
 import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;
 import com.simplyalgos.backend.page.mappers.PageVoteMapper;
 import com.simplyalgos.backend.page.repositories.PageVoteRepository;

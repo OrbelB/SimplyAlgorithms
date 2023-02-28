@@ -2,7 +2,7 @@ package com.simplyalgos.backend.page.repositories;
 
 
 import com.simplyalgos.backend.page.domains.PageVote;
-import com.simplyalgos.backend.page.domains.PageVoteId;
+import com.simplyalgos.backend.page.domains.ids.PageVoteId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -3,7 +3,7 @@ package com.simplyalgos.backend.page.services;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.Forum;
 import com.simplyalgos.backend.page.domains.PageEntity;
-import com.simplyalgos.backend.page.domains.PageVoteId;
+import com.simplyalgos.backend.page.domains.ids.PageVoteId;
 import com.simplyalgos.backend.page.dtos.ForumDTO;
 import com.simplyalgos.backend.page.dtos.FullForumDTO;
 import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;

@@ -91,6 +91,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/topics/list**", "/topics/*", "/topics/list/**").permitAll()
                         .requestMatchers("/comments/list").permitAll()
                         .requestMatchers(HttpMethod.GET, "/tags/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/wiki/**").permitAll()
                         .requestMatchers("/email/*").permitAll()
                         .requestMatchers("/error*").permitAll()
                         .requestMatchers("/actuator/**").permitAll()

@@ -79,6 +79,8 @@ public class TakeQuizServiceImp implements TakeQuizService {
     @Override
     public ObjectPagedList getAllUserTakenQuiz(Pageable pageable, String userId) {
         Page<TakeQuiz> takeQuizPage = takeQuizRepository.findAllByTakenBy_UserId(UUID.fromString(userId), pageable);
+        //TODO handle logic to calculate the average score of the same quizzes
+        //TODO handle logic to combine same quizzes and return the attempts
         return new ObjectPagedList<>(
                 takeQuizPage.stream()
                         .map(quizMapper::takeQuizToTakeQuizDTO)

@@ -2,6 +2,7 @@ package com.simplyalgos.backend.page.mappers;
 
 import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.dtos.FullTopicDTO;
+import com.simplyalgos.backend.page.dtos.PageBasicInfo;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,6 +11,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 @DecoratedWith(TopicDecorator.class)
 public interface TopicMapper {
+
+    PageBasicInfo pageToPageBasicInfo(Topic topic);
 
     @Mapping(target = "tags", ignore = true)
     @Mapping(target = "steps", ignore = true)

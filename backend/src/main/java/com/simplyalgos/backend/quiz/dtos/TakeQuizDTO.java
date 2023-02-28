@@ -17,6 +17,7 @@ public class TakeQuizDTO {
     UUID userId;
     UUID quizId;
     int score;
+    int maxScore;
     Timestamp startedAt;
     Timestamp finishedAt;
 

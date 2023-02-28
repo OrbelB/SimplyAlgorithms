@@ -3,6 +3,7 @@ package com.simplyalgos.backend.page.domains;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.simplyalgos.backend.page.domains.ids.ParentChildPagesId;
 import lombok.*;
 
 import jakarta.persistence.*;

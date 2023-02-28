@@ -2,11 +2,11 @@ package com.simplyalgos.backend.quiz.services;
 
 import com.simplyalgos.backend.quiz.domains.Quiz;
 import com.simplyalgos.backend.quiz.domains.QuizQuestion;
-import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
-import com.simplyalgos.backend.quiz.repositories.QuizQuestionAnswerRepository;
 import com.simplyalgos.backend.quiz.repositories.QuizQuestionRepository;
 import com.simplyalgos.backend.quiz.repositories.QuizRepository;
+import com.simplyalgos.backend.storage.StorageService;
+import com.simplyalgos.backend.utils.ImageUtils;
 import com.simplyalgos.backend.utils.StringUtils;
 import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
@@ -27,6 +27,8 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
 
     private final QuizQuestionAnswerServiceImp quizQuestionAnswerService;
 
+
+    private final StorageService storageService;
 
     //    will create the quiz and its answers;
     @Override
@@ -52,12 +54,21 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
         Quiz optionalQuiz = quizRepository.findById(quizQuestionDTO.getQuizId()).orElseThrow(
                 () -> new NoSuchElementException(
                         MessageFormat.format("Quiz with id {0} not found", quizQuestionDTO.getQuizId())));
+
+        QuizQuestion.QuizQuestionBuilder quizQuestionBuilder = QuizQuestion.builder()
+                .belongsToThisQuiz(optionalQuiz)
+                .question(quizQuestionDTO.getQuestion());
+
+        if (StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getPicture())) {
+            quizQuestionBuilder.picture(
+                    storageService.uploadImageFile(
+                            ImageUtils.convertProfilePicture(quizQuestionDTO.getPicture())
+                    )
+            );
+        }
+
         QuizQuestion quizQuestion = questionRepository.saveAndFlush(
-                QuizQuestion.builder()
-                        .belongsToThisQuiz(optionalQuiz)
-                        .question(quizQuestionDTO.getQuestion())
-                        .picture(quizQuestionDTO.getPicture())
-                        .build()
+                quizQuestionBuilder.build()
         );
         return quizQuestion.getQuestionId();
     }
@@ -69,7 +80,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
         for (QuizQuestionDTO quizQuestionDTO : quizQuestionDTOList) {
             //if needs to be deleted
             if (quizQuestionDTO.isDeleteQuestion()) {
-                log.debug("Deleting quiz Question with Id: "+quizQuestionDTO.getQuestionId());
+                log.debug("Deleting quiz Question with Id: " + quizQuestionDTO.getQuestionId());
                 deleteQuizQuestion(quizQuestionDTO.getQuestionId());
             } else if (!StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getQuestionId())) {
 
@@ -106,7 +117,14 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
             } else {
                 log.debug("Starting the update for questions");
                 optionalQuizQuestion.get().setQuestion(quizQuestionDTO.getQuestion());
-                optionalQuizQuestion.get().setPicture(quizQuestionDTO.getPicture());
+
+                if (StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getPicture())) {
+                    optionalQuizQuestion.get().setPicture(
+                            storageService.updateProfilePicture(
+                                    ImageUtils.convertProfilePicture(quizQuestionDTO.getPicture()),
+                                    optionalQuizQuestion.get().getPicture())
+                    );
+                }
                 questionRepository.saveAndFlush(optionalQuizQuestion.get());
                 log.debug("Question update has finished");
                 quizQuestionAnswerService.updateAllQuizQuestionAnswers(quizQuestionDTO);
@@ -142,8 +160,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
 
     @Override
     public List<QuizQuestionDTO> getAllQuizQuestion(UUID quizId) {
-        if (quizRepository.existsById(quizId))
-        {
+        if (quizRepository.existsById(quizId)) {
             List<QuizQuestion> quizQuestionList = questionRepository.findAllByQuizId(quizId.toString());
             List<QuizQuestionDTO> quizQuestionDTOList = new ArrayList<>();
             for (QuizQuestion quizQuestion : quizQuestionList) {

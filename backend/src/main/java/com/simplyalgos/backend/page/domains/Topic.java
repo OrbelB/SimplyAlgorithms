@@ -45,21 +45,21 @@ public class Topic extends BaseEntity {
     }
 
 
-
-
     @JsonIncludeProperties({"tags", "pageComments", "parentTopicIds", "childrenTopicIds"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id", nullable = false)
     private PageEntity pageEntityId;
 
-
-    @OneToMany(mappedBy = "topicPage", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "topicPage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TopicSteps> topicSteps = new ArrayList<>();
 
-
-    @OneToMany(mappedBy = "externalTopicPage", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "externalTopicPage", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<TopicExternalResource> topicExternalResources = new ArrayList<>();
 
-    @OneToMany(mappedBy = "topicPage")
+    @OneToMany(mappedBy = "topicPage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CodeSnippet> codeSnippets;
+
+    @OneToMany(mappedBy = "topicPage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<WikiTopicPage> parentTopicIds = new ArrayList<>();
+
 }
