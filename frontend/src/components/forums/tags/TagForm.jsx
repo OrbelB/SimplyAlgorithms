@@ -24,18 +24,22 @@ export default function TagForm({ currentTags, setCurrentTags }) {
   const tagsAvailable = useSelector(selectAllTags);
   const { totalElements } = useSelector((state) => state.tags);
 
+  // fetch all tags in database
   if (tagsAvailable.length !== totalElements || tagsAvailable.length === 0) {
-    dispatch(fetchTags({ page: 0, size: totalElements }));
+    dispatch(
+      fetchTags({ page: 0, size: totalElements === 0 ? 10 : totalElements })
+    );
   }
 
   useEffect(() => {
     if (tagId !== '' && tagSelected !== undefined && hasTagBeenAdded) {
-      if (!currentTags.find((tag) => tag.tagId === tagId)) {
+      const isTagNotPresent = !currentTags.find((tag) => tag.tagId === tagId);
+      if (isTagNotPresent) {
         setCurrentTags(currentTags.concat({ tag: tagSelected.tag, tagId }));
       }
       setHasTagBeenAdded(!hasTagBeenAdded);
     }
-  }, [currentTags, tagId, tagSelected, hasTagBeenAdded, setCurrentTags]);
+  }, [tagId, tagSelected, hasTagBeenAdded, setCurrentTags, currentTags]);
 
   const removeTag = (currTagId, tagName) => {
     const tempTags = [...currentTags];

@@ -16,8 +16,8 @@ export const fetchSingleQuiz = createAsyncThunk(
 export const fetchQuizList = createAsyncThunk(
   'quiz/list',
   async (pageParams) => {
-    const { page, size, filterBy } = pageParams;
-    const response = await quizEndpoints.list(page, size, filterBy);
+    const { page, size, filterBy, sortBy } = pageParams;
+    const response = await quizEndpoints.list(page, size, filterBy, sortBy);
     return response.data;
   }
 );
@@ -89,11 +89,12 @@ export const deleteQuiz = createAsyncThunk(
   'quiz/delete',
   async (passedParams) => {
     const { quizId, userId, jwtAccessToken } = passedParams;
-    const response = await quizEndpoints
-      .deleteQuiz(quizId, userId, jwtAccessToken)
-      .catch((error) => {
-        return error;
-      });
+    const response = await quizEndpoints.deleteQuiz(
+      quizId,
+      userId,
+      jwtAccessToken
+    );
+
     return response.data;
   }
 );
@@ -101,12 +102,14 @@ export const deleteQuiz = createAsyncThunk(
 export const updateQuiz = createAsyncThunk(
   'quiz/update',
   async (passedParams) => {
-    const { userDTO, quizDTO, quizQuestionDTO, jwtAccessToken } = passedParams;
-    const response = await quizEndpoints
-      .updateFullQuiz(userDTO, quizDTO, quizQuestionDTO, jwtAccessToken)
-      .catch((error) => {
-        return error;
-      });
+    const { userDto, quizDTO, quizQuestionDTO, jwtAccessToken } = passedParams;
+    const response = await quizEndpoints.updateFullQuiz(
+      userDto,
+      quizDTO,
+      quizQuestionDTO,
+      jwtAccessToken
+    );
+
     return response.data;
   }
 );

@@ -29,7 +29,7 @@ import QuizSample from './pages/q_pages/QuizSample';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
 import CreateTopicPage from './pages/CreateTopicPage';
-import CreateQuiz from './components/quiz/QuizCreationUpdate/CreateQuiz';
+import CreateQuiz from './components/quiz/QuizCreationUpdate/CreateUpdateQuiz';
 // import UpdateQuiz from './components/quiz/QuizCreationUpdate/UpdateQuiz';
 
 function App() {
@@ -49,18 +49,21 @@ function App() {
           <Route path=":pageId" element={<ForumPost />} />
           <Route path="edit/:pageId" element={<ForumEdit />} />
         </Route>
+
         <Route element={<RequireAuth />}>
           <Route path="/userprofile" element={<UserProfile />} />
-        </Route>
-        <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<DashboardPage />} />
-        </Route>
-        <Route element={<RequireAuth />}>
           <Route path="/settings">
             <Route path="profile" element={<SettingsPage />} />
             <Route path="account" element={<AccountTab />} />
             <Route path="security" element={<SecurityTab />} />
             <Route path="notifications" element={<NotificationTab />} />
+          </Route>
+          <Route path="/quiz">
+            <Route index element={<QuizPage />} />
+            <Route path=":quizId/edit" element={<CreateQuiz />} />
+            <Route path=":quizId" element={<QuizSample />} />
+            <Route path="CreateQuiz" element={<CreateQuiz />} />
           </Route>
         </Route>
         <Route path="/underconstruction" element={<UnderConstructionPage />} />
@@ -79,12 +82,6 @@ function App() {
         <Route path="/trees" element={<WTrees />} />
         <Route path="/graphs" element={<WGraphs />} />
         <Route path="/datastructures" element={<WDataStructures />} /> */}
-
-        <Route path="/quiz">
-          <Route index element={<QuizPage />} />
-          <Route path=":quizId" element={<QuizSample />} />
-          <Route path="CreateQuiz" element={<CreateQuiz />} />
-        </Route>
 
         {/* <Route path="/quiz/UpdateQuiz" element={<UpdateQuiz />} /> */}
 

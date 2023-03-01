@@ -2,11 +2,18 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unused-vars */
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchQuizList, fetchSingleQuiz } from '../../services/quiz';
+import {
+  createQuiz,
+  fetchQuizList,
+  fetchSingleQuiz,
+  updateQuiz,
+  deleteQuiz,
+} from '../../services/quiz';
 
 const firstId = crypto.randomUUID();
 const initialState = {
   quizDTO: {},
+  totalElements: undefined,
   quizQuestionDTO: [
     {
       questionId: firstId,
@@ -67,6 +74,8 @@ export const quizSlice = createSlice({
         },
       ];
       state.userDTO = {};
+      state.totalElements = undefined;
+      state.quizList = [];
       state.status = 'idle';
       state.error = '';
       state.reportId = '';
@@ -82,7 +91,7 @@ export const quizSlice = createSlice({
     addQuizQuestion: (state, action) => {
       state.quizQuestionDTO = state.quizQuestionDTO.concat({
         questionId: action.payload.questionId,
-        quizId: '',
+        quizId: action.payload.quizId,
         question: '',
         picture: '',
         deleteQuestion: false,
@@ -91,13 +100,13 @@ export const quizSlice = createSlice({
             questionId: action.payload.questionId,
             answer: '',
             answerId: crypto.randomUUID(),
-            isCorrect: false,
+            isCorrect: 1,
           },
           {
             questionId: action.payload.questionId,
             answer: '',
             answerId: crypto.randomUUID(),
-            isCorrect: false,
+            isCorrect: 0,
           },
         ],
       });
@@ -182,6 +191,7 @@ export const quizSlice = createSlice({
       .addCase(fetchQuizList.fulfilled, (state, action) => {
         state.status = 'success';
         state.quizList = action.payload.content;
+        state.totalElements = action.payload.totalElements;
       })
       .addCase(fetchQuizList.rejected, (state, action) => {
         state.status = 'failed';
@@ -194,9 +204,39 @@ export const quizSlice = createSlice({
         state.status = 'success';
         state.quizDTO = action.payload.quizDTO;
         state.quizQuestionDTO = action.payload.quizQuestionDTO;
-        state.userDTO = action.payload.userDTO;
+        state.userDTO = action.payload.userDto;
       })
       .addCase(fetchSingleQuiz.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(createQuiz.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(createQuiz.fulfilled, (state, action) => {
+        state.status = 'success';
+      })
+      .addCase(createQuiz.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(updateQuiz.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateQuiz.fulfilled, (state, action) => {
+        state.status = 'success';
+      })
+      .addCase(updateQuiz.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(deleteQuiz.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(deleteQuiz.fulfilled, (state, action) => {
+        state.status = 'success';
+      })
+      .addCase(deleteQuiz.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       });

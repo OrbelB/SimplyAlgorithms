@@ -3,14 +3,17 @@ import './QuizModule.css';
 // eslint-disable-next-line no-unused-vars
 import { TextareaAutosize, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 import { quizActions } from '../../../../store/reducers/quiz-reducer';
 import TagForm from '../../../forums/tags/TagForm';
 // import { tagsActions } from '../../../store/reducers/tags-reducer';
 
 export default function QuizModule() {
-  const [currentTags, setCurrentTags] = useState([]);
+  const { quizDTO } = useSelector((state) => state.quiz);
+  const [currentTags, setCurrentTags] = useState(() =>
+    quizDTO.tag ? [{ tag: quizDTO?.tag.tag, tagId: quizDTO?.tag.tagId }] : []
+  );
   const [updateQuizTag, setUpdateQuizTag] = useState(false);
   const dispatch = useDispatch();
 
@@ -33,20 +36,22 @@ export default function QuizModule() {
           className="col-auto w-100 mb-2"
           id="margin-dense"
           required
+          value={quizDTO.title}
           label="Title"
-          onChange={debounce((e) => {
+          onChange={(e) => {
             dispatch(quizActions.updateQuizTitle({ title: e.target.value }));
-          }, 1000)}
+          }}
         />
         <TextField
           className="col-auto"
           type="number"
           id="margin-dense"
+          value={quizDTO.score}
           required
           label="Max Score"
-          onChange={debounce((e) => {
+          onChange={(e) => {
             dispatch(quizActions.updateQuizScore({ score: e.target.value }));
-          }, 500)}
+          }}
         />
         <div className="w-100">
           <TagForm currentTags={currentTags} setCurrentTags={handleTags} />

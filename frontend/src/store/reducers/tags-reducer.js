@@ -28,11 +28,12 @@ export const tagSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchTags.fulfilled, (state, action) => {
+        if (action.payload?.content === undefined) return;
         state.status = 'success';
-        state.totalElements = action.payload.totalElements ?? 0;
-        state.totalPages = action.payload.totalPages ?? 0;
+        state.totalElements = action.payload?.totalElements ?? 0;
+        state.totalPages = action.payload?.totalPages ?? 0;
         // add tags
-        tagAdapter.upsertMany(state, action.payload.content ?? action.payload);
+        tagAdapter.upsertMany(state, action.payload?.content ?? action.payload);
       })
       .addCase(fetchTags.rejected, (state, action) => {
         state.status = 'failed';

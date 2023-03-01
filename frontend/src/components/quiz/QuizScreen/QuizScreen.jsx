@@ -2,59 +2,34 @@
 import { useState, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import Chart from 'react-apexcharts';
-
+import { useDispatch } from 'react-redux';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import { submitQuiz } from '../../../services/quiz';
 
 import './QuizScreen.css';
 // import QuizReportForm from '../ReportQuiz/ReportQuiz';
 import Report from '../../report/Report';
 
-export default function QuizScreen({ retry, questions }) {
-  // const questions = [
-  //   {
-  //     questionText: 'What is the capital of France?',
-  //     answerOptions: [
-  //       { answerText: 'New York', isCorrect: false },
-  //       { answerText: 'London', isCorrect: false },
-  //       { answerText: 'Paris', isCorrect: true },
-  //       { answerText: 'Dublin', isCorrect: false },
-  //     ],
-  //   },
-  //   {
-  //     questionText: 'Who is CEO of Tesla?',
-  //     answerOptions: [
-  //       { answerText: 'Jeff Bezos', isCorrect: false },
-  //       { answerText: 'Elon Musk', isCorrect: true },
-  //       { answerText: 'Bill Gates', isCorrect: false },
-  //       { answerText: 'Tony Stark', isCorrect: false },
-  //     ],
-  //   },
-  //   {
-  //     questionText: 'The iPhone was created by which company?',
-  //     answerOptions: [
-  //       { answerText: 'Apple', isCorrect: true },
-  //       { answerText: 'Intel', isCorrect: false },
-  //       { answerText: 'Amazon', isCorrect: false },
-  //       { answerText: 'Microsoft', isCorrect: false },
-  //     ],
-  //   },
-  //   {
-  //     questionText: 'How many Harry Potter books are there?',
-  //     answerOptions: [
-  //       { answerText: '1', isCorrect: false },
-  //       { answerText: '4', isCorrect: false },
-  //       { answerText: '6', isCorrect: false },
-  //       { answerText: '7', isCorrect: true },
-  //     ],
-  //   },
-  // ];
+export default function QuizScreen({
+  retry,
+  questions,
+  quizId,
+  userId,
+  stop,
+  jwtAccessToken,
+  startedAt,
+  finishedAt,
+}) {
+  const dispatch = useDispatch();
   const [userSelectAnswer, setUserSelectAnswer] = useState({
     position: -1,
     isCorrect: false,
   });
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
+
   const handleAnswerOptionClick = (isCorrect, index) => {
     if (isCorrect === 1) {
       setScore(score + 1);
@@ -62,7 +37,6 @@ export default function QuizScreen({ retry, questions }) {
     setUserSelectAnswer(() => {
       return { position: index, isCorrect: isCorrect === 1 };
     });
-    console.info(JSON.stringify(userSelectAnswer));
   };
 
   const nextQuestionChoice = () => {
@@ -70,6 +44,19 @@ export default function QuizScreen({ retry, questions }) {
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion);
     } else {
+      dispatch(
+        submitQuiz({
+          takeQuizDTO: {
+            quizId,
+            userId,
+            score: (score / questions.length) * 100,
+            maxScore: 100,
+            startedAt,
+            finishedAt,
+          },
+          jwtAccessToken,
+        })
+      );
       setShowScore(true);
     }
     setUserSelectAnswer({
@@ -77,6 +64,7 @@ export default function QuizScreen({ retry, questions }) {
       isCorrect: false,
     });
   };
+
   const buttonStyle = useCallback(
     (answerOption, index) => {
       return answerOption.isCorrect === 1 && userSelectAnswer.position !== -1
@@ -178,14 +166,30 @@ export default function QuizScreen({ retry, questions }) {
             </div>
             <br />
             <div className="text-center">
-              <button
-                hidden={userSelectAnswer.position === -1}
-                type="button"
-                onClick={() => nextQuestionChoice()}
-                className="answerbutton mt-3"
-              >
-                <h4>Next</h4>
-              </button>
+              {questions.length === currentQuestion + 1 ? (
+                <button
+                  hidden={userSelectAnswer.position === -1}
+                  type="button"
+                  onClick={() => {
+                    stop();
+                    nextQuestionChoice();
+                  }}
+                  className="answerbutton mt-3"
+                >
+                  <h4>submit</h4>
+                </button>
+              ) : (
+                <button
+                  hidden={userSelectAnswer.position === -1}
+                  type="button"
+                  onClick={() => {
+                    nextQuestionChoice();
+                  }}
+                  className="answerbutton mt-3"
+                >
+                  <h4>Next</h4>
+                </button>
+              )}
             </div>
           </div>
         </>

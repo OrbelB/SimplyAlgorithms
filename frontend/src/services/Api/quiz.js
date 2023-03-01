@@ -11,11 +11,9 @@ export const quizEndpoints = {
         Authorization: `Bearer ${jwtAccessToken}`,
       },
     }),
-  list: (page, size, filterBy) =>
+  list: (page, size, filterBy, sortBy) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/list`, {
-      params: page,
-      size,
-      filterBy,
+      params: { page, size, filterBy, sortBy },
     }),
   // CHECK
   listUserHistory: (userInfo, jwtAccessToken) =>
@@ -90,24 +88,22 @@ export const quizEndpoints = {
       }
     ),
   deleteQuiz: (quizId, userId, jwtAccessToken) =>
-    destroy(
-      `${PUBLIC_ENDPOINT_ROUTE}/delete`,
-      {
-        quizId,
+    destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
+      params: {
         userId,
+        quizId,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
-        },
-      }
-    ),
-  updateFullQuiz: (userDTO, quizDTO, quizQuestionDTO, jwtAccessToken) =>
+
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtAccessToken}`,
+      },
+    }),
+  updateFullQuiz: (userDto, quizDTO, quizQuestionDTO, jwtAccessToken) =>
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/update`,
       {
-        userDTO,
+        userDto,
         quizDTO,
         quizQuestionDTO,
       },
@@ -122,7 +118,12 @@ export const quizEndpoints = {
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/submitQuiz`,
       {
-        takeQuizDTO,
+        userId: takeQuizDTO.userId,
+        quizId: takeQuizDTO.quizId,
+        score: takeQuizDTO.score,
+        maxScore: takeQuizDTO.maxScore,
+        startedAt: takeQuizDTO.startedAt,
+        finishedAt: takeQuizDTO.finishedAt,
       },
       {
         headers: {

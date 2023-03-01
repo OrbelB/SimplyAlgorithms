@@ -1,13 +1,56 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+
 import QuizPreview from './QuizPreview/QuizPreview';
 import './QuizHome.css';
 
-const SELECTED_TOPIC_QUIZ = [
-  {
-    topic: 'topic here',
-  },
-];
+import SelectionList from '../selector';
+import useSearchBar from '../../hooks/use-searchBar';
+import useSortBy from '../../hooks/use-sortBy';
+import { quizActions } from '../../store/reducers/quiz-reducer';
+import { fetchQuizList } from '../../services/quiz';
+import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 
-export default function quizhome() {
+const SORTING_OPTIONS = ['Created Date', 'Alphabetical'];
+const SELECTED_TOPIC_QUIZ = [{ index: 1, topic: 'Topic 1' }];
+
+export default function Quizhome() {
+  const dispatch = useDispatch();
+  const { status, quizList, totalElements } = useSelector(
+    (state) => state.quiz
+  );
+  const [selection, setSelection] = useState('');
+  const { handleSortBy } = useSortBy({ actionToDispatch: fetchQuizList });
+  const navigate = useNavigate();
+  const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
+  const isTeacher = useJwtPermssionExists({ permission: 'ROLE_TEACHER' });
+
+  // handles search bar logic
+  const { handleSearch: handleSearchQuiz, searchResults: searchQuizzes } =
+    useSearchBar({
+      searchFrom: quizList,
+      valueSearched: 'title',
+      actionToDispatch: fetchQuizList,
+      debounceTime: 500,
+    });
+
+  useEffect(() => {
+    if (
+      status === 'idle' ||
+      (status === 'success' &&
+        quizList.length === 0 &&
+        totalElements === undefined)
+    ) {
+      dispatch(
+        fetchQuizList({
+          page: 0,
+          size: 20,
+        })
+      );
+    }
+  }, [status, quizList, dispatch, totalElements]);
+
   return (
     <div>
       <div className="p-5 top-quizhome">
@@ -15,6 +58,7 @@ export default function quizhome() {
           <h1 className="quiz-logo">Quizzes</h1>
           <div className="form-outline w-50 mb-5">
             <input
+              onChange={handleSearchQuiz}
               type="search"
               id="form1"
               className="form-control"
@@ -25,8 +69,8 @@ export default function quizhome() {
         </div>
       </div>
       <div className="p-5 bottom-quizhome">
-        <div className="row justify-content-start">
-          <div className="col-auto">
+        <div className="row justify-content-between align-items-center">
+          <div className="col-auto p-0 m-0">
             {SELECTED_TOPIC_QUIZ.map(({ index, topic }) => {
               return (
                 <div key={`${topic} ${index}`}>
@@ -35,26 +79,32 @@ export default function quizhome() {
               );
             })}
           </div>
-          <div className="col">
-            <div className="dropdown">
-              <button
-                className="btn btn-primary dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Sort By
-              </button>
-              <ul className="dropdown-menu">
-                <li>Action</li>
-                <li>Another action</li>
-                <li>Something else here</li>
-              </ul>
-            </div>
+          <div className="col-4 p-0 m-0 text-start">
+            <SelectionList
+              label="Sort By"
+              options={SORTING_OPTIONS}
+              setValue={setSelection}
+              value={selection}
+              handleAction={handleSortBy}
+            />
           </div>
+          {(isAdmin || isTeacher) && (
+            <div className="col-4 text-end">
+              <button
+                type="button"
+                className="quizstart"
+                onClick={() => {
+                  navigate('createquiz');
+                  dispatch(quizActions.resetData());
+                }}
+              >
+                create quiz
+              </button>
+            </div>
+          )}
         </div>
         <div className="mt-5">
-          <QuizPreview />
+          <QuizPreview quizList={searchQuizzes} status={status} />
         </div>
       </div>
     </div>

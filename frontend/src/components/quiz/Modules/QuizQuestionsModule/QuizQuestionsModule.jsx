@@ -1,11 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { TextareaAutosize, TextField } from '@mui/material';
-import { Placeholder } from 'react-bootstrap';
+import { TextareaAutosize } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { nanoid } from '@reduxjs/toolkit';
-import debounce from 'lodash.debounce';
 import QuizAnswersModule from '../QuestionAnswersModule/QuizAnswersModule';
 import { quizActions } from '../../../../store/reducers/quiz-reducer';
 import imageToStringBase64 from '../../../../utilities/image-to-data-url';
@@ -15,6 +11,7 @@ export default function QuizQuestionModule({
   question,
   picture,
   answers,
+  // eslint-disable-next-line no-unused-vars
   deleteQuestion = false,
   questionLength,
 }) {
@@ -57,29 +54,32 @@ export default function QuizQuestionModule({
       <div className="bg-light rounded-5">
         <div className="row justify-content-end pt-3">
           <div className="col-auto ">
-            <input
-              type="radio"
-              className="btn-check"
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-danger"
               name="delete question"
               id="danger-outlined"
-              autoComplete="off"
               onClick={() => {
-                dispatch(quizActions.deleteQuestion({ questionId }));
+                dispatch(
+                  quizActions.deleteQuestion({
+                    questionId,
+                    deleteQuestion: true,
+                  })
+                );
               }}
               disabled={questionLength === 1}
-            />
-            <label className="btn btn-outline-danger" htmlFor="danger-outlined">
+            >
               delete question
-            </label>
+            </button>
           </div>
         </div>
         <div className="row justify-content-center">
           <div className="text-center w-50 pb-3">
             <img
               src={
-                image !== undefined
-                  ? URL.createObjectURL(image)
-                  : 'https://via.placeholder.com/350x350'
+                picture ||
+                (image && URL.createObjectURL(image)) ||
+                'https://via.placeholder.com/350x350'
               }
               height="350px"
               width="350px"
@@ -96,10 +96,11 @@ export default function QuizQuestionModule({
           </div>
         </div>
         <div className="row justify-content-center pb-5">
-          <TextField
+          <TextareaAutosize
+            value={question}
             className="w-75 mb-2"
             required
-            onChange={debounce((e) => handleChangeQuestionPrompt(e), 100)}
+            onChange={(e) => handleChangeQuestionPrompt(e)}
             label="question?"
           />
         </div>
@@ -134,7 +135,3 @@ export default function QuizQuestionModule({
     </div>
   );
 }
-// {/*
-// // {question.answers.map(() => (
-// //         <QuizAnswersModule {..args}/>)
-// //         } */}
