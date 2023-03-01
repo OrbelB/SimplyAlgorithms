@@ -1,13 +1,11 @@
 package com.simplyalgos.backend.utils;
 
 import com.simplyalgos.backend.TestUtil;
-import com.simplyalgos.backend.exceptions.NotExpectedObjectException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 class ImageUtilsTest {
@@ -20,6 +18,7 @@ class ImageUtilsTest {
         File file = ImageUtils.convertProfilePicture(DUMMY_IMAGE);
 
         //checking if the file was created, not null, is a file, can be read and is not empty
+        assert file != null;
         TestUtil.assertFile(file);
     }
 
@@ -31,18 +30,15 @@ class ImageUtilsTest {
 
     @Test
     void fileIsNotBase64WithMessage() {
-        Executable executable = () -> ImageUtils.convertProfilePicture("test");
-        NotExpectedObjectException exception = assertThrows(NotExpectedObjectException.class, executable, "Expected throw HTTP 400");
-        assertAll("File Exception Message",
-                () -> assertEquals("The string is not a base 64 string", exception.getMessage(), "The message is not the same"),
-                () -> assertEquals("The string is not a base 64 string", exception.getLocalizedMessage(), "The message is not the same")
-        );
+
+        // file not base 64 should return null
+        File file = ImageUtils.convertProfilePicture("test");
+        assertNull(file, "file is not base 64");
     }
 
     @Test
     void fileIsNotBase64AndIncludesComma() {
-        Executable executable = () -> ImageUtils.convertProfilePicture("test,test");
-        NotExpectedObjectException exception = assertThrows(NotExpectedObjectException.class, executable, "Expected throw HTTP 400");
-        assertEquals("The string is not a base 64 string", exception.getMessage());
+        File file =  ImageUtils.convertProfilePicture("test,test");
+        assertNull(file, "file is not base 64 and includes comma");
     }
 }

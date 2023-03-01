@@ -1,18 +1,25 @@
 package com.simplyalgos.backend.quiz.controllers;
 
-import com.simplyalgos.backend.quiz.dtos.*;
+import com.simplyalgos.backend.quiz.dtos.FullQuizDTO;
+import com.simplyalgos.backend.quiz.dtos.QuizDTO;
+import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
+import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
 import com.simplyalgos.backend.quiz.security.CreateQuizPermission;
 import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
 import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
 import com.simplyalgos.backend.quiz.security.UpdateQuizPermission;
-import com.simplyalgos.backend.quiz.services.*;
+import com.simplyalgos.backend.quiz.services.QuizQuestionAnswerService;
+import com.simplyalgos.backend.quiz.services.QuizQuestionService;
+import com.simplyalgos.backend.quiz.services.QuizService;
+import com.simplyalgos.backend.quiz.services.TakeQuizService;
 import com.simplyalgos.backend.user.security.perms.UserDeletePermission;
 import com.simplyalgos.backend.utils.StringUtils;
 import io.swagger.v3.core.util.Json;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RequestMapping("quiz")
 @Slf4j
 @RestController
@@ -29,7 +36,6 @@ import java.util.UUID;
 // only logged-in users may take a quiz
 // not finsihed
 public class QuizController {
-
 
     private final QuizService quizService;
     private final TakeQuizService takeQuizService;
@@ -42,13 +48,23 @@ public class QuizController {
     public ResponseEntity<?> getQuizList(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "5", required = false) int size,
-            @RequestParam(name = "filterBy", required = false) String filterBy) {
+            @RequestParam(name = "filterBy", required = false) String filterBy,
+            @RequestParam(name = "sortBy", required = false) String sortBy) {
+
         if (StringUtils.isNotNullAndEmptyOrBlank(filterBy)) {
-            log.debug("Filtered quiz");
-            return ResponseEntity.ok(quizService.listQuizPageWithTag(PageRequest.of(page, size), filterBy));
-        } else {
-            return ResponseEntity.ok(quizService.listQuizPages(PageRequest.of(page, size)));
+            log.debug("Filtered quiz " + filterBy);
+            return ResponseEntity.ok(quizService.listQuizPagesByTitle(PageRequest.of(page, size), filterBy));
         }
+
+        if (StringUtils.isNotNullAndEmptyOrBlank(sortBy)) {
+            log.debug("Sorted quiz " + sortBy);
+
+            return ResponseEntity.ok(quizService.listQuizPages(PageRequest.of(page, size, Sort.by(sortBy).ascending())));
+
+        }
+
+        return ResponseEntity.ok(quizService.listQuizPages(PageRequest.of(page, size)));
+
     }
 
     //will retrieve the whole quiz
@@ -79,8 +95,8 @@ public class QuizController {
 
     @UserDeletePermission
     @PostMapping(value = "/deleteALLUserTakenQuizzes")
-    public ResponseEntity<?> deleteALLUserTakenQuizzes(@RequestBody TakeQuizDTO takeQuizDTO){
-        return  ResponseEntity.status(HttpStatus.ACCEPTED)
+    public ResponseEntity<?> deleteALLUserTakenQuizzes(@RequestBody TakeQuizDTO takeQuizDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(takeQuizService.deleteAllUserTakeQuizHistory(takeQuizDTO.getUserId()));
     }
 
@@ -117,11 +133,12 @@ public class QuizController {
     }
 
     @DeleteQuizPermission
-    @DeleteMapping(path = "/delete", consumes = "application/json")
-    public ResponseEntity<?> deleteQuiz(@Valid @RequestBody DeleteQuizDTO deleteQuizDTO) {
-        log.error("Deleting quiz: " + deleteQuizDTO.getQuizId());
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<?> deleteQuiz(@RequestParam(name = "quizId") @NotNull UUID quizId,
+                                        @RequestParam(name = "userId") @NotNull UUID userId) {
+        log.error("Deleting quiz: " + quizId);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(quizService.deleteQuiz(deleteQuizDTO.getQuizId()));
+                .body(quizService.deleteQuiz(quizId));
     }
 
     @UpdateQuizPermission
@@ -138,3 +155,10 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.CREATED).body(takeQuizService.createTakenQuiz(takeQuizDTO));
     }
 }
+
+
+
+
+
+
+

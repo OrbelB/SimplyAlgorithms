@@ -11,6 +11,8 @@ public interface QuizService {
 
     ObjectPagedList<?> listQuizPages(Pageable pageable);
 
+    ObjectPagedList<?> listQuizPagesByTitle(Pageable pageable, String title);
+
     ObjectPagedList listQuizPageWithTag(Pageable pageable, String tag);
 
     FullQuizDTO updateFullQuiz(FullQuizDTO fullQuizDTO);

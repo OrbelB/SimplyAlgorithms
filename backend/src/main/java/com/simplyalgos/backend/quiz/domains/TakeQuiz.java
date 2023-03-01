@@ -1,15 +1,12 @@
 package com.simplyalgos.backend.quiz.domains;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
-import com.simplyalgos.backend.quiz.domains.quizId.TakeQuizId;
 import com.simplyalgos.backend.user.domains.User;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import jakarta.persistence.*;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import java.sql.Timestamp;
@@ -41,6 +38,7 @@ public class TakeQuiz {
     @Column(name = "started_at")
     private Timestamp startedAt;
 
+    @CreationTimestamp
     @Column(name = "finished_at")
     private Timestamp finishedAt;
 

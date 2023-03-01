@@ -149,6 +149,7 @@ public class TakeQuizServiceImp implements TakeQuizService {
     //  PASSED TESTS
     @Override
     public UUID createTakenQuiz(TakeQuizDTO takeQuizDTO) {
+        log.info("Checking if the quiz exists" + Json.pretty(takeQuizDTO));
         Optional<Quiz> quizOptional = quizRepository.findById(takeQuizDTO.getQuizId());
         Optional<User> userOptional = userRepository.findById(takeQuizDTO.getUserId());
         log.debug("creating a new Take Quiz With: " + Json.pretty(takeQuizDTO));

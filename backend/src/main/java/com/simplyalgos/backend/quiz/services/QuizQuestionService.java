@@ -1,8 +1,6 @@
 package com.simplyalgos.backend.quiz.services;
 
-import com.simplyalgos.backend.quiz.domains.quizId.QuizQuestionId;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.UUID;

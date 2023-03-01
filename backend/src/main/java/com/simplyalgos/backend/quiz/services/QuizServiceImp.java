@@ -64,6 +64,20 @@ public class QuizServiceImp implements QuizService {
     }
 
     @Override
+    public ObjectPagedList<?> listQuizPagesByTitle(Pageable pageable, String title) {
+        Page<Quiz> quizPage = quizRepository.findAllByTitleStartingWith(title, pageable);
+        return new ObjectPagedList<>(
+                quizPage.stream()
+                        .collect(Collectors.toList()),
+                PageRequest.of(
+                        quizPage.getPageable().getPageNumber(),
+                        quizPage.getPageable().getPageSize(),
+                        quizPage.getSort()),
+                quizPage.getTotalElements()
+        );
+    }
+
+    @Override
     public ObjectPagedList<?> listQuizPageWithTag(Pageable pageable, String tag) {
         Page<Quiz> quizPage = quizRepository.findAllByTagId_TagId(UUID.fromString(tag), pageable);
         return new ObjectPagedList<>(
@@ -143,7 +157,6 @@ public class QuizServiceImp implements QuizService {
     @Override
     public UUID deleteQuiz(UUID quizId) {
         log.debug("This is the Quiz id Passed in: " + quizId.toString() + " " + quizRepository.existsById(quizId));
-
         if (!quizRepository.existsById(quizId)) {
             throw new NoSuchElementException(
                     MessageFormat.format("Quiz with Id {0} not found ", quizId.toString()));
@@ -159,8 +172,8 @@ public class QuizServiceImp implements QuizService {
     public FullQuizDTO updateFullQuiz(FullQuizDTO fullQuizDTO) {
         Optional<Quiz> quizOptional = quizRepository.findById(fullQuizDTO.getQuizDTO().getQuizId());
         if (quizOptional.isPresent()) {
-           QuizDTO quizDTO = updateQuiz(fullQuizDTO.getQuizDTO());
-           UserDataDTO userDTO = userMapper.userTOUserDataDTO(userService.getUser(quizOptional.get().getCreatedBy().getUserId()));
+            QuizDTO quizDTO = updateQuiz(fullQuizDTO.getQuizDTO());
+            UserDataDTO userDTO = userMapper.userTOUserDataDTO(userService.getUser(quizOptional.get().getCreatedBy().getUserId()));
             fullQuizDTO.setQuizDTO(quizDTO);
             fullQuizDTO.setQuizQuestionDTO(quizQuestionService.updateAllQuizQuestions(fullQuizDTO.getQuizQuestionDTO()));
             fullQuizDTO.setUserDto(userDTO);

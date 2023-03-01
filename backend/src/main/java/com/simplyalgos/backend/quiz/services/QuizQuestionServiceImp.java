@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -73,18 +74,33 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
         return quizQuestion.getQuestionId();
     }
 
+
+    private void removeQuestionsMissingInList(List<UUID> questionIds, UUID quizId) {
+
+        List<QuizQuestion> quizQuestions = questionRepository
+                .findAllByQuestionIdNotInAndBelongsToThisQuiz_QuizId(questionIds, quizId);
+
+        // delete questions in the list that are not in the updated Quiz
+        for (QuizQuestion quizQuestion : quizQuestions) {
+            deleteQuizQuestion(quizQuestion.getQuestionId());
+        }
+    }
+
     @Override
     public List<QuizQuestionDTO> updateAllQuizQuestions(List<QuizQuestionDTO> quizQuestionDTOList) {
         List<QuizQuestionDTO> updatedQuizQuestionsDTO = new ArrayList<>();
+
+        List<UUID> questionIds = quizQuestionDTOList
+                .stream()
+                .map(QuizQuestionDTO::getQuestionId)
+                .toList();
+
+        // remove questions not added to quizDto
+        removeQuestionsMissingInList(questionIds, quizQuestionDTOList.get(0).getQuizId());
         //questions
         for (QuizQuestionDTO quizQuestionDTO : quizQuestionDTOList) {
-            //if needs to be deleted
-            if (quizQuestionDTO.isDeleteQuestion()) {
-                log.debug("Deleting quiz Question with Id: " + quizQuestionDTO.getQuestionId());
-                deleteQuizQuestion(quizQuestionDTO.getQuestionId());
-            } else if (!StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getQuestionId())) {
-
-
+            if (!StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getQuestionId()) ||
+                    !questionRepository.existsById(quizQuestionDTO.getQuestionId())) {
                 log.debug("Adding a new Quiz question");
                 log.debug("This is the quiz id ~~~: " + quizQuestionDTO.getQuizId());
                 quizQuestionDTO.setQuestionId(
@@ -119,11 +135,14 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
                 optionalQuizQuestion.get().setQuestion(quizQuestionDTO.getQuestion());
 
                 if (StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getPicture())) {
-                    optionalQuizQuestion.get().setPicture(
-                            storageService.updateProfilePicture(
-                                    ImageUtils.convertProfilePicture(quizQuestionDTO.getPicture()),
-                                    optionalQuizQuestion.get().getPicture())
-                    );
+                    File file = ImageUtils.convertProfilePicture(quizQuestionDTO.getPicture());
+                    if (StringUtils.isNotNullAndEmptyOrBlank(file)) {
+                        optionalQuizQuestion.get().setPicture(
+                                storageService.updateProfilePicture(
+                                        file,
+                                        optionalQuizQuestion.get().getPicture())
+                        );
+                    }
                 }
                 questionRepository.saveAndFlush(optionalQuizQuestion.get());
                 log.debug("Question update has finished");
@@ -136,6 +155,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
 
     @Override
     public boolean deleteQuizQuestion(UUID questionId) {
+
         if (questionRepository.existsById(questionId)) {
             questionRepository.deleteById(questionId);
             log.debug("quiz question has been deleted");

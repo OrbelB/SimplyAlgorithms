@@ -1,11 +1,9 @@
 package com.simplyalgos.backend.utils;
 
-import com.simplyalgos.backend.exceptions.NotExpectedObjectException;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
-import java.util.Arrays;
 
 
 @Slf4j
@@ -16,7 +14,7 @@ public class ImageUtils {
         String[] image = profilePicture.split(",");
 
         // check if the string is base 64 string
-        if(image.length != 2 || !isBase64(image)) throw new NotExpectedObjectException("The string is not a base 64 string");
+        if(image.length != 2 || !isBase64(image)) return null;
 
         // setting up the file format
         String fileType = switch (image[0]) { //check image's format
