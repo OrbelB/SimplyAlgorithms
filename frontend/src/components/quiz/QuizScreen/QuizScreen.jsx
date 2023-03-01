@@ -7,7 +7,8 @@ import Chart from 'react-apexcharts';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 
 import './QuizScreen.css';
-import QuizReportForm from '../ReportQuiz/ReportQuiz';
+// import QuizReportForm from '../ReportQuiz/ReportQuiz';
+import Report from '../../report/Report';
 
 export default function QuizScreen({ retry }) {
   const questions = [
@@ -124,7 +125,7 @@ export default function QuizScreen({ retry }) {
               </button>
             </NavLink>
           </div>
-          <QuizReportForm />
+          <Report />
         </div>
       ) : (
         <>
