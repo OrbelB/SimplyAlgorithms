@@ -16,6 +16,7 @@ export default function Layout({ children }) {
         <div className="position-relative">
           <Draggable>
             <Fab
+              title="Notebook"
               color="secondary"
               className=" m-4 position-fixed bottom-0 end-0"
               onClick={() => {

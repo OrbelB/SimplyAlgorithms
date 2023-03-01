@@ -74,11 +74,11 @@ export const quizEndpoints = {
         },
       }
     ),
-  createQuiz: (userDTO, quizDTO, quizQuestionDTO, jwtAccessToken) =>
+  createQuiz: (userDto, quizDTO, quizQuestionDTO, jwtAccessToken) =>
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/create`,
       {
-        userDTO,
+        userDto,
         quizDTO,
         quizQuestionDTO,
       },

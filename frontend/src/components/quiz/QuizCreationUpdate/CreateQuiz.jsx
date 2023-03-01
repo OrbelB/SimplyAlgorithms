@@ -4,9 +4,11 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
+import { useNavigate } from 'react-router-dom';
 import QuizQuestionModule from '../Modules/QuizQuestionsModule/QuizQuestionsModule';
 import { quizActions } from '../../../store/reducers/quiz-reducer';
 import QuizModule from '../Modules/QuizModule/QuizModule';
+import { createQuiz } from '../../../services/quiz';
 
 // const templateMc = {
 //   ...quizinfo,
@@ -31,13 +33,24 @@ export default function CreateQuiz() {
   //     return prevState;
   //   });
   // };
-  const { quizQuestionDTO } = useSelector((state) => state.quiz);
+  const { quizQuestionDTO, quizDTO } = useSelector((state) => state.quiz);
+  const { userId, jwtAccessToken } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleAddQuestion = () => {
-    console.info('got  in here');
+    dispatch(quizActions.addQuizQuestion({ questionId: crypto.randomUUID() }));
+  };
+  const navigate = useNavigate();
+
+  const handleSubmitQuiz = () => {
     dispatch(
-      quizActions.addQuizQuestion({questionId: nanoid()})
+      createQuiz({
+        quizQuestionDTO,
+        quizDTO,
+        userDto: { userId },
+        jwtAccessToken,
+      })
     );
+    navigate('/quiz', { replace: true });
   };
   return (
     <div className="container-fluid">
@@ -61,6 +74,7 @@ export default function CreateQuiz() {
             question={question}
             picture={picture}
             answers={answers}
+            questionLength={quizQuestionDTO.length}
           />
         ))}
       </div>
@@ -71,6 +85,7 @@ export default function CreateQuiz() {
             type="button"
             className="btn btn-lg btn-outline-success"
             onClick={handleAddQuestion}
+            disabled={quizQuestionDTO.answerslength <= 2}
           >
             <b>+</b>
           </button>
@@ -86,7 +101,11 @@ export default function CreateQuiz() {
           <br />
         </div>
         <div className="col-auto">
-          <button type="button" className="btn btn-lg btn-outline-info">
+          <button
+            type="button"
+            className="btn btn-lg btn-outline-info"
+            onClick={handleSubmitQuiz}
+          >
             {' '}
             create{' '}
           </button>

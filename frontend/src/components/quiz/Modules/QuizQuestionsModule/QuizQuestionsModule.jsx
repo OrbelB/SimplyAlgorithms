@@ -5,23 +5,51 @@ import { TextareaAutosize, TextField } from '@mui/material';
 import { Placeholder } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
+import debounce from 'lodash.debounce';
 import QuizAnswersModule from '../QuestionAnswersModule/QuizAnswersModule';
 import { quizActions } from '../../../../store/reducers/quiz-reducer';
+import imageToStringBase64 from '../../../../utilities/image-to-data-url';
 
 export default function QuizQuestionModule({
   questionId,
   question,
   picture,
   answers,
-  deleteQuestion,
+  deleteQuestion = false,
+  questionLength,
 }) {
-  const temp = '';
   const dispatch = useDispatch();
+  const [image, setImage] = useState(undefined);
 
-  const handleImage = (e) => {};
+  const handleChangeQuestionPrompt = (e) => {
+    dispatch(
+      quizActions.updateQuestionProblem({
+        questionId,
+        question: e.target.value,
+      })
+    );
+  };
+  const handleImage = async (e) => {
+    setImage(e.target.files[0]);
+    let stringBase64Image = '';
+    await imageToStringBase64(e.target.files[0]).then((data) => {
+      stringBase64Image = data;
+    });
+    dispatch(
+      quizActions.updateQuestionPicture({
+        questionId,
+        picture: stringBase64Image,
+      })
+    );
+  };
 
   const handleAddAnswer = () => {
-    dispatch(quizActions.addQuestionAnswer({ answerId: nanoid(), questionId }));
+    dispatch(
+      quizActions.addQuestionAnswer({
+        answerId: crypto.randomUUID(),
+        questionId,
+      })
+    );
   };
 
   return (
@@ -35,6 +63,10 @@ export default function QuizQuestionModule({
               name="delete question"
               id="danger-outlined"
               autoComplete="off"
+              onClick={() => {
+                dispatch(quizActions.deleteQuestion({ questionId }));
+              }}
+              disabled={questionLength === 1}
             />
             <label className="btn btn-outline-danger" htmlFor="danger-outlined">
               delete question
@@ -44,7 +76,11 @@ export default function QuizQuestionModule({
         <div className="row justify-content-center">
           <div className="text-center w-50 pb-3">
             <img
-              src={picture}
+              src={
+                image !== undefined
+                  ? URL.createObjectURL(image)
+                  : 'https://via.placeholder.com/350x350'
+              }
               height="350px"
               width="350px"
               className="rounded-4 m-4"
@@ -59,28 +95,16 @@ export default function QuizQuestionModule({
             />
           </div>
         </div>
-        <div className="row justify-content-center">
+        <div className="row justify-content-center pb-5">
           <TextField
-            className="col-auto w-50 mb-2"
+            className="w-75 mb-2"
             required
+            onChange={debounce((e) => handleChangeQuestionPrompt(e), 100)}
             label="question?"
-            value={question}
           />
         </div>
         {/* the buttons down here will set the number of answers can fill in */}
-        <div className="row justify-content-center pb-5">
-          <div className="col-auto">
-            <button className="btn btn-outline-secondary" type="button">
-              True/False
-            </button>
-          </div>
-          <div className="col-auto">
-            <button className="btn btn-outline-secondary" type="button">
-              Multiple choice
-            </button>
-          </div>
-        </div>
-        <div className="row">
+        <div className="row justify-content-center">
           {/* include redio buttons here to select which on us correct */}
 
           {answers.map(({ answer, answerId, isCorrect }) => (
@@ -90,10 +114,11 @@ export default function QuizQuestionModule({
               answerId={answerId}
               isCorrect={isCorrect}
               questionId={questionId}
+              answerLength={answers.length}
             />
           ))}
         </div>
-        <div className="row justify-content-center">
+        <div className="row justify-content-center p-4">
           <div className="col-auto">
             <button
               type="button"

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
 import '../text-editor/TextEditor.css';
 import './CreateTopic.css';
 import cx from 'classnames';
@@ -164,7 +165,7 @@ export default function CreateTopic() {
         </div>
       </div>
       <div className="detail text-center">
-        <div className="top p-5">{JSON.stringify(process)}</div>
+        <div className="top p-5">{draftToHtml(process)}</div>
         <div className="container-fluid bot">
           <div className="row justify-content-around  mt-auto mt-sm-5   p-2">
             <div className="col-auto col-sm-auto align-self-center">

@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import cx from 'classnames';
-// import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 import useValidateInput from '../../hooks/use-ValidateInput';
@@ -11,6 +10,20 @@ import styles from './LoginForm.module.css';
 import PasswordReset from './PasswordReset';
 import ConfirmPopup from '../confirmation/ConfirmPopup';
 import ForgotUsername from './ForgotUsername';
+
+// function useErrorMessage() {
+//   const [errorMessage, setErrorMessage] = useState('');
+//   const { status, error } = useSelector((state) => state.auth);
+
+//   if (status === 'failed') {
+//     setErrorMessage(error);
+//   }
+
+//   switch(errorMessage) {
+//     case ''
+//   }
+//   return errorMessage;
+// }
 
 export default function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -51,14 +64,20 @@ export default function LoginForm() {
     if (!isFormValid) return;
     dispatch(login({ username, password }));
     resetPasswordHandler();
-    resetUsernameHandler();
   };
 
-  if (status === 'success') {
-    if (handleCheckbox) {
-      Cookies.set('refresh-token', jwtRefreshToken, { expires: 7 });
+  useEffect(() => {
+    if (status === 'success') {
+      if (handleCheckbox) {
+        Cookies.set('refresh-token', jwtRefreshToken, {
+          expires: 7,
+          secure: true,
+        });
+      }
+      resetUsernameHandler();
     }
-  }
+  }, [status, handleCheckbox, jwtRefreshToken, resetUsernameHandler]);
+
   const headermes = 'PASSWORD RESET';
   const bodymes =
     'If the username matches a username we will send the user a reset password email, remeber to check the spam folder :)';
@@ -83,7 +102,7 @@ export default function LoginForm() {
       )}
       {error !== '' && (
         <div className="col ms-0 p-2 alert alert-danger align-items-center align-content-center">
-          <p className="text-center small">credentials are wrong!</p>
+          <p className="text-center small">{error}</p>
         </div>
       )}
       <form onSubmit={onSubmitFormHandler}>

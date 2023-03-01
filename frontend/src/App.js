@@ -17,10 +17,10 @@ import BinarySearchTree from './pages/t_pages/BinarySearchTree';
 import BreadtFirstSearch from './pages/t_pages/BreadtFirstSearch';
 import Arrays from './pages/t_pages/Arrays';
 import WikiPage from './pages/WikiPage';
-import WSorting from './components/wiki/WSorting';
-import WTrees from './components/wiki/WTrees';
-import WGraphs from './components/wiki/WGraphs';
-import WDataStructures from './components/wiki/WDataStructures';
+// import WSorting from './components/wiki/WSorting';
+// import WTrees from './components/wiki/WTrees';
+// import WGraphs from './components/wiki/WGraphs';
+// import WDataStructures from './components/wiki/WDataStructures';
 import ScrollToTop from './components/ScrollToTop';
 import useRefreshToken from './hooks/use-refreshToken';
 import PasswordResetPage from './components/login/PasswordResetPage';
@@ -55,7 +55,6 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
-
         <Route element={<RequireAuth />}>
           <Route path="/settings">
             <Route path="profile" element={<SettingsPage />} />
@@ -73,17 +72,20 @@ function App() {
         </Route>
 
         <Route path="/arrays" element={<Arrays />} />
+
         {/* WIKI PAGES */}
-        <Route path="/wiki" element={<WikiPage />} />
-        <Route path="/sorting" element={<WSorting />} />
+        <Route path="/wiki/:wikiName" element={<WikiPage />} />
+        {/* <Route path="/sorting" element={<WSorting />} />
         <Route path="/trees" element={<WTrees />} />
         <Route path="/graphs" element={<WGraphs />} />
-        <Route path="/datastructures" element={<WDataStructures />} />
+        <Route path="/datastructures" element={<WDataStructures />} /> */}
 
-        <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/quiz">
+          <Route index element={<QuizPage />} />
+          <Route path=":quizId" element={<QuizSample />} />
+          <Route path="CreateQuiz" element={<CreateQuiz />} />
+        </Route>
 
-        <Route path="/quiz/sample" element={<QuizSample />} />
-        <Route path="/quiz/CreateQuiz" element={<CreateQuiz />} />
         {/* <Route path="/quiz/UpdateQuiz" element={<UpdateQuiz />} /> */}
 
         <Route path="/team" element={<MeetTeamPage />} />
