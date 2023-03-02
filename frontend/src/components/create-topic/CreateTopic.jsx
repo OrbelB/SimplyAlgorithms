@@ -31,17 +31,6 @@ export default function CreateTopic() {
   const [snippets, setSnippets] = useState([{ language: '', code: '' }]);
   const [references, setReferences] = useState([{ references: '' }]);
 
-  const handleSnippetChange = (index, event) => {
-    const data = [...snippets];
-    data[index][event.target.name] = event.target.value;
-    setSnippets(data);
-  };
-
-  const addFields = () => {
-    const newSnippet = { language: '', code: '' };
-    setSnippets([...snippets, newSnippet]);
-  };
-
   const handleReferenceChange = (index, event) => {
     const data = [...references];
     data[index] = event.target.value;
@@ -53,11 +42,36 @@ export default function CreateTopic() {
     setReferences([...references, newReference]);
   };
 
+  const removeReferences = (index) => {
+    const data = [...references];
+    data.splice(index, 1);
+    setReferences(data);
+  };
+
+  const handleSnippetChange = (index, event) => {
+    const data = [...snippets];
+    data[index][event.target.name] = event.target.value;
+    setSnippets(data);
+  };
+
+  const addSnippets = () => {
+    const newSnippet = { language: '', code: '' };
+    setSnippets([...snippets, newSnippet]);
+  };
+
+  const removeSnippets = (index) => {
+    const data = [...snippets];
+    data.splice(index, 1);
+    setSnippets(data);
+  };
+
   return (
     <div className="createtopic">
+      <br />
+      <br />
       <h3>Topic Page Creation Form</h3>
       <h5>Instructions: Fill out the fields with the correct formats.</h5>
-      <h5>Preview the topic page below</h5>
+      <h5>Preview the topic page below before submitting.</h5>
       <br />
       <form className="topic-form">
         <h2>Algorithm Title</h2>
@@ -84,7 +98,7 @@ export default function CreateTopic() {
         <br />
         <br />
         <h2>Algorithm Steps, Process, Running Time/Space Complexity</h2>
-        <h4>Please manually include section titles</h4>
+        <h5>Please manually include section titles</h5>
         <Editor
           toolbarClassName="editor-toolbar"
           wrapperClassName="editor-wrapper"
@@ -120,6 +134,13 @@ export default function CreateTopic() {
                 value={input.references}
                 onChange={(e) => handleReferenceChange(index, e)}
               />
+              <button
+                type="button"
+                className="form-button w-auto"
+                onClick={() => removeReferences(index)}
+              >
+                Remove Reference
+              </button>
             </div>
           );
         })}
@@ -132,6 +153,7 @@ export default function CreateTopic() {
           Add Reference
         </button>
         <br />
+        <br />
         <h2>Code Snippets</h2>
         {snippets.map((input, index) => {
           return (
@@ -140,15 +162,24 @@ export default function CreateTopic() {
               <input
                 className="label"
                 name="language"
+                placeholder="Language"
                 value={input.language}
                 onChange={(e) => handleSnippetChange(index, e)}
               />
               <input
                 className="label"
                 name="code"
+                placeholder="Code"
                 value={input.code}
                 onChange={(e) => handleSnippetChange(index, e)}
               />
+              <button
+                type="button"
+                className="form-button w-auto"
+                onClick={() => removeSnippets(index)}
+              >
+                Remove Snippet
+              </button>
             </div>
           );
         })}
@@ -156,9 +187,9 @@ export default function CreateTopic() {
         <button
           type="button"
           className="form-button w-auto"
-          onClick={addFields}
+          onClick={addSnippets}
         >
-          Add More
+          Add Snippet
         </button>
         <br />
         <br />
