@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import {} from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
+import parse from 'html-react-parser';
 import '../text-editor/TextEditor.css';
 import './CreateTopic.css';
 import cx from 'classnames';
@@ -29,11 +29,13 @@ export default function CreateTopic() {
   const [visualizer, setVisualizer] = useState();
   const [process, setProcess] = useState(JSON.stringify(content));
   const [snippets, setSnippets] = useState([{ language: '', code: '' }]);
-  const [references, setReferences] = useState([{ references: '' }]);
+  const [references, setReferences] = useState([{ name: '', reference: '' }]);
+
+  const displayProcess = parse(draftToHtml(process));
 
   const handleReferenceChange = (index, event) => {
     const data = [...references];
-    data[index] = event.target.value;
+    data[index][event.target.name] = event.target.value;
     setReferences(data);
   };
 
@@ -124,14 +126,24 @@ export default function CreateTopic() {
         <br />
         <br />
         <h2>Further References - Links</h2>
+        <h5>Source Title and Link</h5>
+        <h5>Ex: GeeksforGeeks-QuickSort | https://www.geeksforgeeks.org/</h5>
         {references.map((input, index) => {
           return (
             // eslint-disable-next-line react/no-array-index-key
             <div key={index}>
               <input
                 className="label"
+                name="name"
+                placeholder="Title"
+                value={input.name}
+                onChange={(e) => handleReferenceChange(index, e)}
+              />
+              <input
+                className="label"
                 name="reference"
-                value={input.references}
+                placeholder="Link"
+                value={input.reference}
                 onChange={(e) => handleReferenceChange(index, e)}
               />
               <button
@@ -155,6 +167,8 @@ export default function CreateTopic() {
         <br />
         <br />
         <h2>Code Snippets</h2>
+        <h5>Language and Code</h5>
+        <h5>Ex: Java | public static void...</h5>
         {snippets.map((input, index) => {
           return (
             // eslint-disable-next-line react/no-array-index-key
@@ -231,11 +245,24 @@ export default function CreateTopic() {
         </div>
       </div>
       <div className="detail text-center">
-        <div className="top p-5">{draftToHtml(process)}</div>
+        <div className="top p-5">{displayProcess}</div>
         <div className="container-fluid bot">
           <div className="row justify-content-around  mt-auto mt-sm-5   p-2">
             <div className="col-auto col-sm-auto align-self-center">
-              <h3 className="m-3 mb-4">FUTURE REFERENCES</h3>
+              <h3 className="m-3 mb-4">FURTHER REFERENCES</h3>
+              {references.map((user) => {
+                return (
+                  <div key={user.index} className="user-card">
+                    <h4>
+                      <a href={user.reference} target="_blank" rel="noreferrer">
+                        {user.name}
+                      </a>
+                    </h4>
+                  </div>
+                );
+              })}
+              <div />
+              <div />
             </div>
           </div>
         </div>
@@ -244,112 +271,42 @@ export default function CreateTopic() {
           <div className="container">
             <nav className="bg-secondary rounded-top">
               <div className="nav nav-pills" id="nav-tab" role="tablist">
-                <button
-                  className="nav-link text-white active"
-                  id="nav-java-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-java"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-java"
-                  aria-selected="true"
-                >
-                  Java
-                </button>
-                <button
-                  className="nav-link text-white"
-                  id="nav-js-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-js"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-js"
-                  aria-selected="false"
-                >
-                  JS
-                </button>
-                <button
-                  className="nav-link text-white"
-                  id="nav-c-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-c"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-c"
-                  aria-selected="false"
-                >
-                  C
-                </button>
-                <button
-                  className="nav-link text-white "
-                  id="nav-cplusplus-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-cplusplus"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-cplusplus"
-                  aria-selected="false"
-                >
-                  C++
-                </button>
-                <button
-                  className="nav-link text-white"
-                  id="nav-python-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-python"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-python"
-                  aria-selected="false"
-                >
-                  Python
-                </button>
+                {snippets.map((user) => {
+                  return (
+                    <button
+                      key={user.language}
+                      className="nav-link text-white active"
+                      id="nav-java-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#nav-java"
+                      type="button"
+                      role="tab"
+                      aria-controls="nav-java"
+                      aria-selected="false"
+                    >
+                      {user.language}
+                    </button>
+                  );
+                })}
               </div>
             </nav>
             <div
               className="tab-content description rounded-bottom"
               id="nav-tabContent"
             >
-              <div
-                className="tab-pane fade show active"
-                id="nav-java"
-                role="tabpanel"
-                aria-labelledby="nav-java-tab"
-              >
-                <code>Words</code>
-              </div>
-              <div
-                className="tab-pane fade"
-                id="nav-js"
-                role="tabpanel"
-                aria-labelledby="nav-js-tab"
-              >
-                <code>Words</code>
-              </div>
-              <div
-                className="tab-pane fade"
-                id="nav-c"
-                role="tabpanel"
-                aria-labelledby="nav-c-tab"
-              >
-                <code>Words</code>
-              </div>
-              <div
-                className="tab-pane fade"
-                id="nav-cplusplus"
-                role="tabpanel"
-                aria-labelledby="nav-cplusplus-tab"
-              >
-                <code>Words</code>
-              </div>
-              <div
-                className="tab-pane fade"
-                id="nav-python"
-                role="tabpanel"
-                aria-labelledby="nav-python-tab"
-              >
-                <code>Words</code>
-              </div>
+              {snippets.map((user) => {
+                return (
+                  <div
+                    key={user.code}
+                    className="tab-pane fade show active"
+                    id="nav-java"
+                    role="tabpanel"
+                    aria-labelledby="nav-java-tab"
+                  >
+                    <code>{user.code}</code>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="bottom" />
