@@ -1,11 +1,12 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
+import {} from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import '../text-editor/TextEditor.css';
 import './CreateTopic.css';
 import cx from 'classnames';
-import RangeSlider from '../topic_page/algo-frame/RangeSlider';
 import styles from '../topic_page/algo-frame/Frame.module.css';
 
 const content = {
@@ -24,69 +25,62 @@ const content = {
 };
 
 export default function CreateTopic() {
-  const [title, setTitle] = useState(content);
-  const [visualizer, setVisualizer] = useState(content);
-  const [attribution, setAttribution] = useState(content);
-  const [process, setProcess] = useState(content);
-  const [links, setLinks] = useState(content);
-  const [videos, setVideos] = useState(content);
+  const [title, setTitle] = useState('');
+  const [visualizer, setVisualizer] = useState();
+  const [process, setProcess] = useState(JSON.stringify(content));
+  const [snippets, setSnippets] = useState([{ language: '', code: '' }]);
+  const [references, setReferences] = useState([{ references: '' }]);
+
+  const handleSnippetChange = (index, event) => {
+    const data = [...snippets];
+    data[index][event.target.name] = event.target.value;
+    setSnippets(data);
+  };
+
+  const addFields = () => {
+    const newSnippet = { language: '', code: '' };
+    setSnippets([...snippets, newSnippet]);
+  };
+
+  const handleReferenceChange = (index, event) => {
+    const data = [...references];
+    data[index] = event.target.value;
+    setReferences(data);
+  };
+
+  const addReferences = () => {
+    const newReference = { references: '' };
+    setReferences([...references, newReference]);
+  };
 
   return (
     <div className="createtopic">
-      <h3>Topic Page Creation: </h3>
+      <h3>Topic Page Creation Form</h3>
+      <h5>Instructions: Fill out the fields with the correct formats.</h5>
+      <h5>Preview the topic page below</h5>
       <br />
       <form className="topic-form">
         <h2>Algorithm Title</h2>
-        <Editor
-          toolbarClassName="editor-toolbar"
-          wrapperClassName="editor-wrapper"
-          editorClassName="editor-title"
-          onChange={(e) => setTitle(e)}
-        />
-        <textarea
-          className="json-display"
-          value={JSON.stringify(title, null, 4)}
-        />
+        <label>
+          <input
+            className="label"
+            type="text"
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </label>
         <br />
         <br />
         <h2>Embedded Visualizer or Video Source</h2>
-        <Editor
-          toolbarClassName="editor-toolbar"
-          wrapperClassName="editor-wrapper"
-          editorClassName="editor-title"
-          onChange={(e) => setVisualizer(e)}
-          toolbar={{
-            options: ['embedded'],
-            embedded: {
-              className: undefined,
-              component: undefined,
-              popupClassName: undefined,
-              embedCallback: undefined,
-              defaultSize: {
-                height: 'auto',
-                width: 'auto',
-              },
-            },
-          }}
-        />
-        <textarea
-          className="json-display"
-          value={JSON.stringify(visualizer, null, 4)}
-        />
-        <br />
-        <br />
-        <h2>Visualizer Attribution, Page Author, Date</h2>
-        <h4>Write on separate lines</h4>
-        <Editor
-          toolbarClassName="editor-toolbar"
-          wrapperClassName="editor-wrapper"
-          editorClassName="editor-title"
-          onChange={(e) => setAttribution(e)}
-        />
-        <textarea
-          className="json-display"
-          value={JSON.stringify(attribution, null, 4)}
-        />
+        <label>
+          <input
+            className="label"
+            type="url"
+            value={visualizer}
+            onChange={(e) => setVisualizer(e.target.value)}
+          />
+        </label>
         <br />
         <br />
         <h2>Algorithm Steps, Process, Running Time/Space Complexity</h2>
@@ -96,71 +90,112 @@ export default function CreateTopic() {
           wrapperClassName="editor-wrapper"
           editorClassName="editor-title"
           onChange={(e) => setProcess(e)}
-        />
-        <textarea
-          className="json-display"
-          value={JSON.stringify(process, null, 4)}
+          toolbar={{
+            options: [
+              'inline',
+              'blockType',
+              'fontSize',
+              'fontFamily',
+              'list',
+              'textAlign',
+              'colorPicker',
+              'link',
+              'emoji',
+              'image',
+              'remove',
+              'history',
+            ],
+          }}
         />
         <br />
         <br />
         <h2>Further References - Links</h2>
-        <Editor
-          toolbarClassName="editor-toolbar"
-          wrapperClassName="editor-wrapper"
-          editorClassName="editor-title"
-          onChange={(e) => setLinks(e)}
-        />
-        <textarea
-          className="json-display"
-          value={JSON.stringify(links, null, 4)}
-        />
+        {references.map((input, index) => {
+          return (
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={index}>
+              <input
+                className="label"
+                name="reference"
+                value={input.references}
+                onChange={(e) => handleReferenceChange(index, e)}
+              />
+            </div>
+          );
+        })}
+        <br />
+        <button
+          type="button"
+          className="form-button w-auto"
+          onClick={addReferences}
+        >
+          Add Reference
+        </button>
+        <br />
+        <h2>Code Snippets</h2>
+        {snippets.map((input, index) => {
+          return (
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={index}>
+              <input
+                className="label"
+                name="language"
+                value={input.language}
+                onChange={(e) => handleSnippetChange(index, e)}
+              />
+              <input
+                className="label"
+                name="code"
+                value={input.code}
+                onChange={(e) => handleSnippetChange(index, e)}
+              />
+            </div>
+          );
+        })}
+        <br />
+        <button
+          type="button"
+          className="form-button w-auto"
+          onClick={addFields}
+        >
+          Add More
+        </button>
         <br />
         <br />
-        <h2>Further References - Videos</h2>
-        <Editor
-          toolbarClassName="editor-toolbar"
-          wrapperClassName="editor-wrapper"
-          editorClassName="editor-title"
-          onChange={(e) => setVideos(e)}
-          toolbar={{
-            options: ['embedded'],
-            embedded: {
-              className: undefined,
-              component: undefined,
-              popupClassName: undefined,
-              embedCallback: undefined,
-              defaultSize: {
-                height: 'auto',
-                width: 'auto',
-              },
-            },
-          }}
-        />
-        <textarea
-          className="json-display"
-          value={JSON.stringify(videos, null, 4)}
-        />
-        <br />
-        <br />
-        <button type="button">Create Topic</button>
+        <button type="button" className="form-button w-auto">
+          Create Topic
+        </button>
         <br />
       </form>
       <br />
-      <h1>Page Preview</h1>
+      <h1>New Topic Page Preview:</h1>
       <br />
+      <br />
+      <div className="Frame_algo_title__lDbbF">{title}</div>
       <div className={cx(styles['container-style'], 'container-fluid')}>
         <div className="row justify-content-between">
-          <div className="col col-sm-auto mt-3">
-            <h1 className="ms-auto m-0 p-3 text-start">Algorithm Title</h1>
-          </div>
-          <div className="col col-sm-auto mt-3">
-            <RangeSlider />
-          </div>
-        </div>
-        <div className="row">
-          <div className="bg-transparent">
-            {/* TODO create algo component and logic */}
-            <center> algo goes here</center>
+          <div className="col col-sm-auto mt-3" />
+          <div className="row">
+            <iframe
+              id="viz_alg"
+              src={visualizer}
+              className="Frame_website__ZlBLM"
+              loading="lazy"
+              title="bubble sort algorithm visualizer by algorithm-visualizer.org"
+            />
+            <div className="bg-transparent" />
+            <div className="Frame_credit__KSKRG">
+              Algorithm visualizer brought to you by
+              <a
+                className=""
+                href="https://algorithm-visualizer.org/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {' '}
+                algorithm-visualizer.org
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -170,20 +205,6 @@ export default function CreateTopic() {
           <div className="row justify-content-around  mt-auto mt-sm-5   p-2">
             <div className="col-auto col-sm-auto align-self-center">
               <h3 className="m-3 mb-4">FUTURE REFERENCES</h3>
-              <ul>
-                <li>{JSON.stringify(links)}</li>
-              </ul>
-            </div>
-            <div className="col-auto  text-center vid">
-              <iframe
-                className="rounded-4 "
-                width="auto"
-                height="auto"
-                src={JSON.stringify(videos)}
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
             </div>
           </div>
         </div>

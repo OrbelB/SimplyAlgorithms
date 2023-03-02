@@ -1,9 +1,39 @@
- .topic-form {
+.topic-form {
     display: flex;
     align-items: center;
     flex-direction: column;
 } 
 
-h2 {
+h5 {
     text-align: center;
+}
+
+.container-fluid {
+    height: fit-content;
+}
+
+.label {
+    font-size: 1.5em;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.form-button {
+    background-color: #9df7ff;
+    border-radius: 10px 10px 10px 10px;
+    border-color: lightgray;
+    color: black;
+    font-family: 'Readex Pro', sans-serif;
+    font-size: 1.5em;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+}   
+
+.form-button:hover{
+    color: black;
+    box-shadow: #9df7ff 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.form-button{
+    box-shadow: none;
+    transform: translateY(0);
 }
