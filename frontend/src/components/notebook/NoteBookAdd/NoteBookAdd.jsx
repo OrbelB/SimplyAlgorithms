@@ -54,6 +54,9 @@ export default function NotebookAdd({
         <label htmlFor="note-description">Description: </label>
         <TextEditor
           className="form-control"
+          toolbar="editor-toolbar"
+          wrapper="editor-wrapper"
+          editor="editor-title"
           id="note-description"
           placeholder="Enter description"
           value={description} // value will not be registered, either way it would be submitted through markup

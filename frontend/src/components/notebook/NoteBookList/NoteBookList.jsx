@@ -93,6 +93,9 @@ export default function NoteBookList({ element, notes, setNotes }) {
                   <TextEditor
                     type="text"
                     className="form-control"
+                    toolbar="editor-toolbar"
+                    wrapper="editor-wrapper"
+                    editor="editor-title"
                     id="editdescription"
                     placeholder="Enter description"
                   >
