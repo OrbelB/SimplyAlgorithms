@@ -8,6 +8,8 @@ import com.simplyalgos.backend.quiz.mappers.QuizMapper;
 import com.simplyalgos.backend.quiz.repositories.QuizRepository;
 import com.simplyalgos.backend.quiz.repositories.TakeQuizRepository;
 import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.dtos.TakenQuizzesDashboardDTO;
+import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
@@ -24,6 +26,9 @@ import org.springframework.data.domain.Pageable;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+
+
+import java.util.Collections;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -81,6 +86,11 @@ public class TakeQuizServiceImp implements TakeQuizService {
         Page<TakeQuiz> takeQuizPage = takeQuizRepository.findAllByTakenBy_UserId(UUID.fromString(userId), pageable);
         //TODO handle logic to calculate the average score of the same quizzes
         //TODO handle logic to combine same quizzes and return the attempts
+
+
+
+
+
         return new ObjectPagedList<>(
                 takeQuizPage.stream()
                         .map(quizMapper::takeQuizToTakeQuizDTO)
@@ -147,6 +157,9 @@ public class TakeQuizServiceImp implements TakeQuizService {
     }
 
     //  PASSED TESTS
+
+//    check the number of quiz questions and calculate the score based on the number of questions user has gotten correct
+//    each question has the same weight
     @Override
     public UUID createTakenQuiz(TakeQuizDTO takeQuizDTO) {
         log.info("Checking if the quiz exists" + Json.pretty(takeQuizDTO));
@@ -184,4 +197,27 @@ public class TakeQuizServiceImp implements TakeQuizService {
         log.info("deleteOldUserTakenQuizHistory not implemented");
         return userId;
     }
+
+    private final UserMapper userMapper;
+    @Override
+    public void test(List<TakeQuiz> takeQuizList) {
+        List<TakenQuizzesDashboardDTO> takenQuizzesDashboardDTOList
+                = quizMapper.takeQuizToTakenQuizzesDashboardDTO(takeQuizList);
+
+        int i = 0;
+        for(TakenQuizzesDashboardDTO takenQuizzesDashboardDTO1: takenQuizzesDashboardDTOList){
+            log.debug("INDEX " + i + "\n " + Json.pretty(takenQuizzesDashboardDTO1));
+        }
+
+
+    }
+
+
+    private int getTimeDiff(TakeQuiz takeQuiz){
+        long mill = takeQuiz.getStartedAt().getTime() - takeQuiz.getFinishedAt().getTime();
+        log.debug("The time: " + (mill / 60000));
+        int min = (int) (mill / 60000);
+        return (min < 0) ? ((-1)*min) : min;
+    }
+
 }

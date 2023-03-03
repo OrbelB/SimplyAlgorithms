@@ -32,12 +32,13 @@ public class TakeQuiz {
     @Column(length = 36, name = "take_quiz_id")
     UUID takeQuizId;
 
-    private int score;
+    private double score;
 
     //hard to use can change to dates
     @Column(name = "started_at")
     private Timestamp startedAt;
 
+//    UNCOMMENT THIS ASAP
     @CreationTimestamp
     @Column(name = "finished_at")
     private Timestamp finishedAt;

@@ -20,5 +20,4 @@ public class QuizDTO {
     String title;
     int score;
     TagDTO tag;
-
 }

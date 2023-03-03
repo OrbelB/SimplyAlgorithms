@@ -8,6 +8,7 @@ import com.simplyalgos.backend.quiz.dtos.QuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
+import com.simplyalgos.backend.user.dtos.TakenQuizzesDashboardDTO;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -33,5 +34,9 @@ public interface QuizMapper {
 
     List<TakeQuizDTO> takeQuizToTakeQuizDTO(List<TakeQuiz> takeQuizList);
     List<TakeQuiz> takeQuizDTOToTakeQuiz(List<TakeQuizDTO> takeQuizDTOList);
+
+
+
+    List<TakenQuizzesDashboardDTO> takeQuizToTakenQuizzesDashboardDTO(List<TakeQuiz> takeQuizList);
 
 }

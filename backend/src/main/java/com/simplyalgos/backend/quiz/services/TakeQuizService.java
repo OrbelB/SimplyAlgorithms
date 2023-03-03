@@ -36,4 +36,7 @@ public interface TakeQuizService {
 //    will delete quizzes taken a month ago.
 //    will delete based on finished time stamp.
     UUID deleteOldUserTakenQuizHistory(UUID userId);
+
+    void test(List<TakeQuiz> takeQuizList);
+
 }

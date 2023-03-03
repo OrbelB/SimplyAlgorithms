@@ -16,11 +16,9 @@ public class TakeQuizDTO {
     UUID takeQuizId;
     UUID userId;
     UUID quizId;
-    int score;
+    double score;
     int maxScore;
     Timestamp startedAt;
     Timestamp finishedAt;
-
-
-
+    int correct; //the number of questions answered correctly
 }

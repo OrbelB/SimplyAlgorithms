@@ -34,7 +34,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
     //    will create the quiz and its answers;
     @Override
     public List<QuizQuestionDTO> createAllQuizQuestionAndAnswers(List<QuizQuestionDTO> quizQuestionDTOList, UUID quizId) {
-        log.debug("creating the quiz");
+        log.debug("creating the quiz questions");
         log.debug("Quiz exists: " + quizRepository.existsById(quizId));
         for (int i = 0; i < quizQuestionDTOList.size(); i++) {
             quizQuestionDTOList.get(i).setQuizId(quizId);
@@ -60,6 +60,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
                 .belongsToThisQuiz(optionalQuiz)
                 .question(quizQuestionDTO.getQuestion());
 
+        log.debug("ADDING PICTURE");
         if (StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getPicture())) {
             quizQuestionBuilder.picture(
                     storageService.uploadImageFile(
