@@ -80,6 +80,7 @@ public class QuizController {
     public ResponseEntity<?> getUserQuizHistory(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "5", required = false) int size,
+//            @RequestParam(name = "sortBy", required = true) String sortBy,
             @RequestParam(name = "userId", required = true) String userId,
             @RequestParam(name = "byQuiz", required = false) String quizId) {
         if (StringUtils.isNotNullAndEmptyOrBlank(quizId)) {
@@ -159,12 +160,12 @@ public class QuizController {
 
     private final TakeQuizRepository t;
 
-    @PostMapping("/test")
-    public ResponseEntity<?> testing(){
-        List<TakeQuiz> takeQuiz = t.findAll();
-        takeQuizService.test(takeQuiz);
-        return null;
-    }
+//    @PostMapping("/test")
+//    public ResponseEntity<?> testing(){
+//        List<TakeQuiz> takeQuiz = t.findAll();
+//        takeQuizService.test(takeQuiz);
+//        return null;
+//    }
 
 }
 
