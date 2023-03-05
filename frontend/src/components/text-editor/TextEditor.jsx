@@ -10,7 +10,6 @@ export default function TextEditor(props) {
   }, [props.value]);
 
   // Convert the ContentState to a raw object
-  // eslint-disable-next-line no-unused-vars
   const initialRawContentState = useMemo(() => {
     return convertToRaw(initialContentState);
   }, [initialContentState]);

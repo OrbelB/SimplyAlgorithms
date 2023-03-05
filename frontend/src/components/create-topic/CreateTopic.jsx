@@ -120,6 +120,7 @@ export default function CreateTopic() {
           toolbar="editor-toolbar"
           wrapper="editor-wrapper"
           editor="editor-title"
+          value={content}
           editorOptions={options}
           setter={setProcess}
         />

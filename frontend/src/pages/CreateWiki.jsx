@@ -203,7 +203,6 @@ export default function CreateWiki() {
 
     dispatch(updateWiki({ wiki: wikiToUpdate, jwtAccessToken }));
   };
-  console.info('pageOrWiki', wikiNames);
 
   let helperText;
 
