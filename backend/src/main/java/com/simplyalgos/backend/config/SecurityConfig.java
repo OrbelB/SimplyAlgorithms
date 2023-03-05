@@ -98,6 +98,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui.html**").permitAll()
                         .requestMatchers("/v3/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/quiz/list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/wiki/list/**, wiki/list").permitAll()
                 )
                 .authorizeHttpRequests()
                 .anyRequest()

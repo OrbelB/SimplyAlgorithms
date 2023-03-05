@@ -1,8 +1,7 @@
 package com.simplyalgos.backend.page.domains;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.page.domains.ids.WikiParentChildId;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +11,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "wikiParentChildId")
 @Entity(name = "wiki_parent_child")
 public class WikiParentChild {
 
@@ -29,7 +27,7 @@ public class WikiParentChild {
     @ManyToOne
     @JoinColumn(name = "wiki_child_id", referencedColumnName = "wiki_id")
     @MapsId("wikiChildId")
-    @JsonIgnore
+    @JsonIncludeProperties({"wikiId","wikiName"})
     private Wiki wikiChild;
 
 

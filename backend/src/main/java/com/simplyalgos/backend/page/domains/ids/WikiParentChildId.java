@@ -12,6 +12,8 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Embeddable
 public class WikiParentChildId implements Serializable {
 
@@ -27,10 +29,7 @@ public class WikiParentChildId implements Serializable {
     @Column(name = "wiki_child_id", length = 36, columnDefinition = "varchar")
     private UUID wikiChildId;
 
-    @Builder
-    public WikiParentChildId(UUID wikiParentId, UUID wikiChildId) {
-        this.wikiParentId = wikiParentId;
-        this.wikiChildId = wikiChildId;
-    }
+
+
 
 }

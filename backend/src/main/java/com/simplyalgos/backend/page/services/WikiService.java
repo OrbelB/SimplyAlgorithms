@@ -1,17 +1,34 @@
 package com.simplyalgos.backend.page.services;
 
 
-import com.simplyalgos.backend.page.dtos.PageBasicInfo;
+import com.simplyalgos.backend.page.domains.Wiki;
+import com.simplyalgos.backend.page.dtos.PageWikiInfo;
 import com.simplyalgos.backend.page.dtos.WikiDTO;
+import com.simplyalgos.backend.page.dtos.WikiInfo;
 
 import java.util.Set;
 import java.util.UUID;
 
 public interface WikiService {
 
-    Set<?>  getWikiMainCategories();
+    Set<?> getWikiMainCategories();
 
-    UUID  saveWikiMainCategory(WikiDTO wiki);
+    String saveWiki(WikiDTO wiki);
 
-    Set<PageBasicInfo> getWikiTopics(UUID wikiId);
+    Set<WikiInfo> getAvailableWikis();
+
+    Set<?> getWikiTopics(UUID wikiId);
+
+    Set<PageWikiInfo> getWikiTopicsBasicInfo();
+
+    boolean isWikiNameAvailable(String name);
+
+
+    UUID deleteWiki(UUID wikiId);
+
+    Wiki getWiki(UUID wikiId);
+
+    String updateWiki(WikiDTO wiki);
+
+    Wiki getWiki(String wikiName);
 }

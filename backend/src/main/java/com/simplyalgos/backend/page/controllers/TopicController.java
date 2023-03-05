@@ -5,6 +5,7 @@ import com.simplyalgos.backend.page.services.TopicService;
 import com.simplyalgos.backend.page.dtos.FullTopicDTO;
 import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;
 import com.simplyalgos.backend.page.security.perms.CreateVotePermission;
+import com.simplyalgos.backend.page.services.WikiService;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.security.perms.CreateReportPermission;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,8 @@ import java.util.UUID;
 public class TopicController {
 
     private final TopicService topicService;
+
+    private final WikiService wikiService;
 
 
     @GetMapping("/list")
@@ -110,6 +113,16 @@ public class TopicController {
     }
 
 
+    @GetMapping(path = "/list/available-pages", produces = "application/json")
+    public ResponseEntity<?> listAvailablePages() {
+        return ResponseEntity.ok(wikiService.getWikiTopicsBasicInfo());
+    }
+
+
+    @GetMapping(path ="name/available", produces = "application/json")
+    public ResponseEntity<?> isNameAvailable(@RequestParam(name = "name") String name){
+        return ResponseEntity.ok(topicService.isPageNameUnique(name.trim()));
+    }
 
 
 }

@@ -307,4 +307,14 @@ public class TopicServiceImpl implements TopicService {
     public Object listVotesByPage(UUID pageId) {
         return pageVoteService.listVotesByPage(pageId);
     }
+
+    @Override
+    public Set<PageWikiInfo> getWikiInfo(Set<UUID> pageIds) {
+        return topicRepository.findAllByPageIdNotIn(pageIds, PageWikiInfo.class);
+    }
+
+    @Override
+    public boolean isPageNameUnique(String pageName) {
+        return !topicRepository.existsByTitle(pageName);
+    }
 }

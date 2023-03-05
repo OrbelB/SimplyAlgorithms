@@ -1,19 +1,29 @@
 package com.simplyalgos.backend.page.services;
 
+import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.Wiki;
+import com.simplyalgos.backend.page.domains.WikiParentChild;
 import com.simplyalgos.backend.page.domains.WikiTopicPage;
-import com.simplyalgos.backend.page.dtos.PageBasicInfo;
+import com.simplyalgos.backend.page.domains.ids.WikiParentChildId;
+import com.simplyalgos.backend.page.domains.ids.WikiTopicPageId;
+import com.simplyalgos.backend.page.dtos.PageWikiInfo;
 import com.simplyalgos.backend.page.dtos.WikiDTO;
-import com.simplyalgos.backend.page.mappers.TopicMapper;
+import com.simplyalgos.backend.page.dtos.WikiInfo;
 import com.simplyalgos.backend.page.mappers.WikiMapper;
+import com.simplyalgos.backend.page.repositories.WikiParentChildRepository;
 import com.simplyalgos.backend.page.repositories.WikiRepository;
 import com.simplyalgos.backend.page.repositories.WikiTopicPageRepository;
+import com.simplyalgos.backend.page.repositories.projection.TopicNameAndIDOnly;
+import com.simplyalgos.backend.page.repositories.projection.WikiNameAndIdOnly;
+import com.simplyalgos.backend.page.repositories.projection.WikiTopicPageOnly;
+import com.simplyalgos.backend.page.repositories.projection.WikiTopicPageWikiOnly;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,7 +40,7 @@ public class WikiServiceImpl implements WikiService {
 
     private final WikiMapper wikiMapper;
 
-    private final TopicMapper topicMapper;
+    private final WikiParentChildRepository wikiParentChildRepository;
 
     private final WikiTopicPageRepository wikiTopicPageRepository;
 
@@ -39,23 +49,240 @@ public class WikiServiceImpl implements WikiService {
         return new HashSet<>(wikiRepository.findAll());
     }
 
+
+    /**
+     * This method will update the wiki information and remove the children wikis that are not in the passed list
+     * as well as the topic pages that are not in the passed list
+     *
+     * @param wiki
+     * @return the wikiName that was updated in the database
+     */
     @Override
-    public UUID saveWikiMainCategory(WikiDTO wiki) {
-        Wiki newWiki = wikiMapper.wikiDTOToWiki(wiki);
-        // TODO check to see if it is already part of the wiki
-        wiki.pageIds().forEach(pageId -> {
-            newWiki.getWikiTopicPages()
-                    .add(WikiTopicPage.builder().topicPage(topicService.getTopic(pageId)).wikiCategory(newWiki).build()); //TEST
+    public String updateWiki(WikiDTO wiki) {
+        Wiki wikiToUpdate = wikiRepository.findById(wiki.getWikiId()).orElseThrow(() -> new ElementNotFoundException("Wiki not found"));
+        wikiToUpdate.setWikiName(wiki.getWikiName());
+        wikiToUpdate.setDescription(wiki.getDescription());
+        if (Objects.equals(wikiToUpdate.getIsParentChild(), "parent")) {
+            log.info("Updating children wikis from a parent");
+            updateChildrenWikis(wiki.getWikiIds(), wikiToUpdate);
+        } else if (Objects.equals(wikiToUpdate.getIsParentChild(), "child")) {
+            updateTopicPages(wiki.getPageIds(), wikiToUpdate);
+        }
+
+        return wikiRepository.save(wikiToUpdate).getWikiName();
+    }
+
+    /**
+     * This method will get the wiki information by the name
+     *
+     * @param wikiName
+     * @return the wiki information that was found: includes the children wikis and the topic pages
+     * @throws ElementNotFoundException if the wiki is not found
+     */
+    @Override
+    public Wiki getWiki(String wikiName) {
+        return wikiRepository.getWikiByWikiName(wikiName).orElseThrow(ElementNotFoundException::new);
+    }
+
+
+    /**
+     * This method handles updating the children wikis for a parent wiki
+     *
+     * @param wikiIds      the list of children wikis to add / keep
+     * @param wikiToUpdate the wiki parent to update information
+     * @throws ElementNotFoundException if the wiki is not found
+     */
+    private void updateChildrenWikis(Set<UUID> wikiIds, Wiki wikiToUpdate) {
+        wikiIds.forEach((id) -> {
+            // if it does not exist add it
+            if (!wikiParentChildRepository.existsById(WikiParentChildId.builder()
+                    .wikiParentId(wikiToUpdate.getWikiId())
+                    .wikiChildId(id)
+                    .build())) {
+                wikiToUpdate.addWikiChild(WikiParentChild.builder()
+                        .wikiParent(wikiToUpdate)
+                        .wikiChild(getWiki(id))
+                        .wikiParentChildId(WikiParentChildId.builder()
+                                .wikiParentId(wikiToUpdate.getWikiId())
+                                .wikiChildId(id)
+                                .build())
+                        .build());
+            }
         });
-        return wikiRepository.save(newWiki).getWikiId();
+
+        //remove the ones that are not in the list
+        Set<WikiParentChild> wikiParentChildToRemove =
+                wikiParentChildRepository.getWikiParentChildByWikiParentChildIdNotInAndWikiParent(
+                        wikiIds.stream()
+                                .map(wikiId -> WikiParentChildId.builder()
+                                        .wikiParentId(wikiToUpdate.getWikiId())
+                                        .wikiChildId(wikiId)
+                                        .build())
+                                .collect(Collectors.toSet()), wikiToUpdate);
+        for (WikiParentChild wikiChildToRemove : wikiParentChildToRemove) {
+            wikiParentChildRepository.deleteById(wikiChildToRemove.getWikiParentChildId());
+        }
+    }
+
+
+    /**
+     * This method will update the wiki topic pages to keep/ add / remove
+     *
+     * @param pageIds    the list of topic pages to add / keep
+     * @param updateWiki the wiki to update information
+     * @throws ElementNotFoundException if the wiki is not found
+     */
+    private void updateTopicPages(Set<UUID> pageIds, Wiki updateWiki) {
+        pageIds.forEach((id) -> {
+            // if it does not exist add it
+            if (!wikiTopicPageRepository.existsById(WikiTopicPageId.builder()
+                    .wikiId(updateWiki.getWikiId())
+                    .pageId(id)
+                    .build())) {
+                updateWiki.addWikiTopicPage(WikiTopicPage.builder()
+                        .wikiCategory(updateWiki)
+                        .topicPage(topicService.getTopic(id))
+                        .wikiTopicPageId(WikiTopicPageId.builder()
+                                .wikiId(updateWiki.getWikiId())
+                                .pageId(id)
+                                .build())
+                        .build());
+            }
+        });
+
+        //remove the ones that are not in the list
+        Set<WikiTopicPage> wikiTopicPagesToRemove = wikiTopicPageRepository.findAllByWikiTopicPageIdNotInAndWikiCategory(pageIds.stream()
+                .map(pageId -> WikiTopicPageId.builder()
+                        .wikiId(updateWiki.getWikiId())
+                        .pageId(pageId)
+                        .build())
+                .collect(Collectors.toSet()), updateWiki);
+
+        for (WikiTopicPage wikiTopicPage : wikiTopicPagesToRemove) {
+            wikiTopicPageRepository.deleteById(wikiTopicPage.getWikiTopicPageId());
+        }
+    }
+
+    /**
+     * This method is used to save a new wiki main category
+     *
+     * @param wiki the wiki object to be saved
+     * @return the id of the saved wiki
+     */
+    @Override
+    public String saveWiki(WikiDTO wiki) {
+        Wiki newWiki = wikiMapper.wikiDTOToWiki(wiki);
+        if (wiki.getPageIds().size() > 0) {
+            // map the pages to the wiki
+            newWiki.setWikiTopicPages(wiki.getPageIds().stream()
+                    .map(topicService::getTopic)
+                    .map(topic -> WikiTopicPage.builder()
+                            .wikiCategory(newWiki)
+                            .topicPage(topic)
+                            .wikiTopicPageId(WikiTopicPageId.builder()
+                                    .wikiId(newWiki.getWikiId())
+                                    .pageId(topic.getPageId())
+                                    .build())
+                            .build())
+                    .collect(Collectors.toSet()));
+            newWiki.setIsParentChild("child");
+        } else if (wiki.getWikiIds().size() > 0) {
+            // map the wikis to the wiki
+            newWiki.setWikiChildren(wiki.getWikiIds().stream()
+                    .map(wikiRepository::getReferenceById)
+                    .map(wikiChild -> WikiParentChild.builder()
+                            .wikiParent(newWiki)
+                            .wikiChild(wikiChild)
+                            .wikiParentChildId(WikiParentChildId.builder()
+                                    .wikiParentId(newWiki.getWikiId())
+                                    .wikiChildId(wikiChild.getWikiId())
+                                    .build()).build())
+                    .collect(Collectors.toSet()));
+            newWiki.setIsParentChild("parent");
+        } else {
+            newWiki.setIsParentChild("child");
+        }
+        return wikiRepository.save(newWiki).getWikiName();
+    }
+
+
+    /**
+     * This method is used to get the basic info of all the wikis that are not part of another wiki
+     *
+     * @return Set of WikiInfo objects includes the wiki name and id
+     */
+    @Override
+    public Set<WikiInfo> getAvailableWikis() {
+        Set<UUID> wikiIds = wikiParentChildRepository.findAllWikiTopicPageWikiOnlyProjectedBy().stream()
+                .map(WikiTopicPageWikiOnly::getWikiChild)
+                .map(WikiNameAndIdOnly::getWikiId)
+                .collect(Collectors.toSet());
+        if (wikiIds.isEmpty()) wikiIds.add(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+
+        return wikiRepository.findAllByWikiIdNotIn(wikiIds, WikiInfo.class);
+
     }
 
     @Override
-    public Set<PageBasicInfo> getWikiTopics(UUID wikiId) {
-        Set<WikiTopicPage> wikiTopicPages = wikiTopicPageRepository.getWikiTopicPageByWikiTopicPageId_WikiId(wikiId);
-        return wikiTopicPages.stream()
-                .map(WikiTopicPage::getTopicPage)
-                .map(topicMapper::pageToPageBasicInfo)
-                .collect(Collectors.toSet());
+    public Set<WikiTopicPage> getWikiTopics(UUID wikiId) {
+        return wikiTopicPageRepository.getWikiTopicPageByWikiTopicPageId_WikiId(wikiId);
+
     }
+
+    /**
+     * This method is used to get the basic info of all the topics in the wiki that are available
+     *
+     * @return Set of PageWikiInfo
+     */
+    @Override
+    public Set<PageWikiInfo> getWikiTopicsBasicInfo() {
+        Set<UUID> pageIds = wikiTopicPageRepository.findAllProjectedBy().stream()
+                .map(WikiTopicPageOnly::getTopicPage)
+                .map(TopicNameAndIDOnly::getPageId)
+                .collect(Collectors.toSet());
+        // to ensure it finds at least one page in the event that there are no pages in the wiki
+        if (pageIds.isEmpty()) {
+            pageIds.add(UUID.fromString("c0a80101-0000-0000-0000-000000000000"));
+        }
+        return topicService.getWikiInfo(
+                pageIds
+        );
+    }
+
+    @Override
+    public boolean isWikiNameAvailable(String name) {
+        return !wikiRepository.existsByWikiName(name.trim());
+    }
+
+
+    /**
+     * This method is used to delete a wiki by id
+     *
+     * @param wikiId the id used to delete object
+     * @return the id of the deleted wiki
+     */
+    @Override
+    public UUID deleteWiki(UUID wikiId) {
+        if (wikiRepository.existsById(wikiId)) {
+            wikiRepository.deleteById(wikiId);
+            return wikiId;
+        }
+        throw new ElementNotFoundException("Wiki with id " + wikiId + " does not exist");
+    }
+
+    /**
+     * This method is used to get a wiki by id
+     *
+     * @param wikiId the id used to get object
+     * @return the wiki object
+     */
+    @Override
+    public Wiki getWiki(UUID wikiId) {
+        return wikiRepository.findById(wikiId)
+                .orElseThrow(() ->
+                        new ElementNotFoundException("Wiki with id " + wikiId + " does not exist")
+                );
+    }
+
+
 }

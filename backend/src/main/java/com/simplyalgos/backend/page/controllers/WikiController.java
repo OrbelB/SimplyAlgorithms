@@ -3,6 +3,7 @@ package com.simplyalgos.backend.page.controllers;
 
 import com.simplyalgos.backend.page.dtos.WikiDTO;
 import com.simplyalgos.backend.page.services.WikiService;
+import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,18 +22,44 @@ public class WikiController {
 
     private final WikiService wikiService;
 
-    @GetMapping("/mainCategories")
+    @GetMapping("/list")
     public ResponseEntity<?> getWikiMainCategories() {
         return ResponseEntity.ok(wikiService.getWikiMainCategories());
     }
-    @GetMapping("/{wikiId}")
-    public ResponseEntity<?> getWiki(@PathVariable UUID wikiId) {
-        return ResponseEntity.ok(wikiService.getWikiTopics(wikiId));
+
+    @GetMapping("/{wikiName}")
+    public ResponseEntity<?> getWikiByName(@PathVariable String wikiName) {
+        return ResponseEntity.ok(wikiService.getWiki(wikiName));
+    }
+
+    @GetMapping("/list/available")
+    public ResponseEntity<?> getAvailableWikis() {
+        return ResponseEntity.ok(wikiService.getAvailableWikis());
     }
 
     @PreAuthorize("hasRole(T(com.simplyalgos.backend.user.enums.UserRoles).ADMIN.name())")
-    @PostMapping("/category/create")
-    public ResponseEntity<?> createWikiMainCategory(WikiDTO wiki) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(wikiService.saveWikiMainCategory(wiki));
+    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> createWikiMainCategory(@RequestBody WikiDTO wiki) {
+        log.info("check object "  + Json.pretty(wiki));
+        return ResponseEntity.status(HttpStatus.CREATED).body(wikiService.saveWiki(wiki));
+    }
+
+    @PreAuthorize("hasRole(T(com.simplyalgos.backend.user.enums.UserRoles).ADMIN.name())")
+    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> updateWikiMainCategory(@RequestBody WikiDTO wiki) {
+        log.info("check object "  + Json.pretty(wiki));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(wikiService.updateWiki(wiki));
+    }
+
+
+    @GetMapping(path = "name/available")
+    public ResponseEntity<?> isWikiNameAvailable(@RequestParam String name) {
+        return ResponseEntity.ok(wikiService.isWikiNameAvailable(name));
+    }
+
+    @PreAuthorize("hasRole(T(com.simplyalgos.backend.user.enums.UserRoles).ADMIN.name())")
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteWiki(@RequestParam(name = "wikiId") UUID wikiId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(wikiService.deleteWiki(wikiId));
     }
 }

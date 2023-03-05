@@ -1,8 +1,7 @@
 package com.simplyalgos.backend.page.domains;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.page.domains.ids.WikiTopicPageId;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +12,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "wikiTopicPageId")
 @Entity(name = "wiki_topic_page")
 public class WikiTopicPage {
 
@@ -27,9 +25,8 @@ public class WikiTopicPage {
 
 
     @ManyToOne
+    @JsonIncludeProperties({"pageId","title"})
     @JoinColumn(name = "page_id", referencedColumnName = "page_id")
     @MapsId("pageId")
     private Topic topicPage;
-
-
 }
