@@ -4,6 +4,8 @@ import {
   createTopic,
   deleteTopic,
   updateTopic,
+  fetchTopicNames,
+  getNameAvailability,
 } from '../../services/topic';
 
 // initial state for slice  which defines the data for this specific domain
@@ -11,8 +13,10 @@ const initialState = {
   topic: {},
   pageId: '',
   status: 'idle',
+  topicNames: [],
   error: '',
   reportId: '',
+  nameAvailable: null,
 };
 
 // creation of the slice, reducers or function that mutate the state
@@ -21,7 +25,10 @@ export const topicSlice = createSlice({
   initialState,
   reducers: {
     resetData: (state) => {
-      state.Topic = {};
+      state.topic = {};
+      state.topicNames = [];
+      state.nameAvailable = null;
+      state.reportId = '';
       state.status = 'idle';
       state.error = '';
       state.pageId = '';
@@ -108,6 +115,26 @@ export const topicSlice = createSlice({
       .addCase(reportTopic.fulfilled, (state, action) => {
         state.status = 'success';
         state.reportId = action.payload;
+      })
+      .addCase(fetchTopicNames.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(fetchTopicNames.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.topicNames = action.payload;
+      })
+      .addCase(fetchTopicNames.rejected, (state) => {
+        state.status = 'failed';
+      })
+      .addCase(getNameAvailability.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(getNameAvailability.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.nameAvailable = action.payload;
+      })
+      .addCase(getNameAvailability.rejected, (state) => {
+        state.status = 'failed';
       });
   },
 });

@@ -125,4 +125,20 @@ export const topicEndpoints = {
         Authorization: 'Bearer ' + passedParams.accessToken,
       },
     }),
+  getAvailablePages: () =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/list/available-pages`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
+  nameIsAvailable: (name, jwtAccessToken) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/name/available`, {
+      params: {
+        name,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
+      },
+    }),
 };

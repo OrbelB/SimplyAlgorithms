@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 
 export default function OptionsMenu({
-  userId,
+  userId = '',
   handleOnDelete,
   handleOnEdit,
   handleCancelAction = () => {},
@@ -24,7 +24,7 @@ export default function OptionsMenu({
     handleCancelAction();
   };
 
-  const permission = authUserId === userId;
+  const permission = authUserId === userId || isAdmin;
   const seeOptions = permission || canReply || isAdmin;
   return (
     seeOptions && (
