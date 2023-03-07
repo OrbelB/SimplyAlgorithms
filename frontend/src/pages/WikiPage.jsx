@@ -1,157 +1,51 @@
-import { NavLink, useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import draftToHtml from 'draftjs-to-html';
+import parse from 'html-react-parser';
 import WikiHome from '../components/wiki/WikiHome';
-
-const links = {
-  link: 'What Are ALgorithms',
-  title: 'What Are ALgorithms',
-  pages: [
-    {
-      link: 'sorting',
-      title: 'Sorting',
-    },
-    {
-      link: 'trees',
-      title: 'Trees',
-    },
-    {
-      link: 'graphs',
-      title: 'Graphs',
-    },
-    { link: 'datastructures', title: 'Data Structures' },
-  ],
-};
-
-function Top() {
-  return (
-    <>
-      <NavLink
-        to={`/wiki/${links.title}`}
-        data-toggle="tab"
-        className="nav-item nav-link has-icon nav-link-faded fs"
-      >
-        {links.link}
-      </NavLink>
-      {links.pages.map((link) => (
-        <NavLink
-          key={link.link}
-          to={`/wiki/${link.link}`}
-          data-toggle="tab"
-          className="nav-item nav-link has-icon nav-link-faded indent fs"
-        >
-          {link.title}
-        </NavLink>
-      ))}
-    </>
-  );
-
-  /* <NavLink
-        to="/wiki"
-        data-toggle="tab"
-        className="nav-item nav-link has-icon nav-link-faded fs"
-      >
-        WHAT ARE ALGORITHMS?
-      </NavLink>
-      <br />
-      <NavLink
-        to="/sorting"
-        data-toggle="tab"
-        className="nav-item nav-link has-icon nav-link-faded indent fs"
-      >
-        Sorting
-      </NavLink>
-      <NavLink
-        to="/trees"
-        data-toggle="tab"
-        className="nav-item nav-link has-icon nav-link-faded indent fs"
-      >
-        Trees
-      </NavLink>
-      <NavLink
-        to="/graphs"
-        data-toggle="tab"
-        className="nav-item nav-link has-icon nav-link-faded indent fs"
-      >
-        Graphs
-      </NavLink>
-      <NavLink
-        to="/datastructures"
-        data-toggle="tab"
-        className="nav-item nav-link has-icon nav-link-faded indent fs"
-      >
-        Data Structures
-      </NavLink> */
-}
-
-function Bottom() {
-  return (
-    <>
-      <h3>What Are Algorithms?</h3>
-      <h5>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur
-      </h5>
-      <br />
-      <h3>How Do They Work?</h3>
-      <h5>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur
-      </h5>
-      <br />
-      <h3>Complexity</h3>
-      <h5>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur
-      </h5>
-      <br />
-      <h3>Some Examples</h3>
-      <h5>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur
-      </h5>
-      <br />
-      <h3>For Further Reference</h3>
-      <h5>google.com</h5>
-    </>
-  );
-}
-
-// //form for creating a new page
-// function CreateWiki() {
-//   return (
-//     <div>
-//       <h1>Create a new wiki page</h1>
-//       <form>
-//         <label htmlFor="title">
-//           Title:
-//           <input type="text" id="title" name="title" />
-//         </label>
-//         <label htmlFor="content">
-//           Content:
-//           <input type="text" id="content" name="content" />
-//         </label>
-//         <label htmlFor="pages">
-//           Pages:
-//           <input type="text" name="pages" />
-//         </label>
-//         <input type="submit" value="Submit" />
-//       </form>
-//     </div>
-//   );
-// }
+import Aside from '../components/wiki/Aside';
+import { fetchSingleWiki } from '../services/wiki';
+import { wikiActions } from '../store/reducers/wiki-reducer';
 
 export default function WikiPage() {
   const { wikiName } = useParams();
-  return <WikiHome title={wikiName} Top={<Top />} Bottom={<Bottom />} />;
+  const [runOnce, setRunOnce] = useState(true);
+  const { status, wiki } = useSelector((state) => state.wiki);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (
+      (status === 'idle' && Object.keys(wiki).length === 0) ||
+      wikiName !== wiki.wikiName
+    ) {
+      setRunOnce(false);
+      dispatch(fetchSingleWiki(wikiName));
+    }
+  }, [status, wiki, wikiName, dispatch, runOnce]);
+
+  const body = useMemo(() => {
+    return parse(draftToHtml(wiki?.description));
+  }, [wiki?.description]);
+
+  if (status === 'failed') {
+    dispatch(wikiActions.resetData());
+    navigate('/wiki/Main Category', { replace: true });
+  }
+
+  if (wiki && status === 'success') {
+    return (
+      <WikiHome
+        title={wikiName}
+        wikiId={wiki.wikiId}
+        Aside={
+          <Aside
+            links={wiki.links}
+            path={wiki.isParentChild === 'child' ? 'topic' : 'wiki'}
+          />
+        }
+        Body={body}
+      />
+    );
+  }
 }

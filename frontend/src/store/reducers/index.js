@@ -11,6 +11,7 @@ import { topicSlice } from './topic-reducer';
 import { topicVotesSlice } from './topic-votes-reducer';
 import { forumVotesSlice } from './forum-vote-reducer';
 import { quizSlice } from './quiz-reducer';
+import { wikiSlice } from './wiki-reducer';
 
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   topicVotes: topicVotesSlice.reducer,
   forumVotes: forumVotesSlice.reducer,
   quiz: quizSlice.reducer,
+  wiki: wikiSlice.reducer,
 });
 
 export default rootReducer;

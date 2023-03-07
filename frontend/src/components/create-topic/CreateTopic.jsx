@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import parse from 'html-react-parser';
+import cx from 'classnames';
+import TextEditor from '../text-editor/TextEditor';
 import '../text-editor/TextEditor.css';
 import './CreateTopic.css';
-import cx from 'classnames';
 import styles from '../topic_page/algo-frame/Frame.module.css';
 
 const content = {
@@ -23,6 +23,20 @@ const content = {
   ],
   entityMap: {},
 };
+
+const options = [
+  'inline',
+  'blockType',
+  'fontSize',
+  'fontFamily',
+  'textAlign',
+  'colorPicker',
+  'link',
+  'emoji',
+  'image',
+  'remove',
+  'history',
+];
 
 export default function CreateTopic() {
   const [title, setTitle] = useState('');
@@ -101,27 +115,14 @@ export default function CreateTopic() {
         <br />
         <h2>Algorithm Steps, Process, Running Time/Space Complexity</h2>
         <h5>Please manually include section titles</h5>
-        <Editor
-          toolbarClassName="editor-toolbar"
-          wrapperClassName="editor-wrapper"
-          editorClassName="editor-title"
-          onChange={(e) => setProcess(e)}
-          toolbar={{
-            options: [
-              'inline',
-              'blockType',
-              'fontSize',
-              'fontFamily',
-              'list',
-              'textAlign',
-              'colorPicker',
-              'link',
-              'emoji',
-              'image',
-              'remove',
-              'history',
-            ],
-          }}
+
+        <TextEditor
+          toolbar="editor-toolbar"
+          wrapper="editor-wrapper"
+          editor="editor-title"
+          value={content}
+          editorOptions={options}
+          setter={setProcess}
         />
         <br />
         <br />

@@ -14,7 +14,6 @@ body, html, #root {
 }
 
 @import '~react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-  
 
 #root {
     min-height: 100vh;

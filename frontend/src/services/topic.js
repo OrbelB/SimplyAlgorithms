@@ -104,3 +104,20 @@ export const deleteTopicVote = createAsyncThunk(
     return response.data;
   }
 );
+
+export const fetchTopicNames = createAsyncThunk(
+  'topic/list-names',
+  async () => {
+    const response = await topicEndpoints.getAvailablePages();
+    return response.data;
+  }
+);
+
+export const getNameAvailability = createAsyncThunk(
+  'topic/name-availability',
+  async (passedParams) => {
+    const { name, jwtAccessToken } = passedParams;
+    const response = await topicEndpoints.nameIsAvailable(name, jwtAccessToken);
+    return response.data;
+  }
+);

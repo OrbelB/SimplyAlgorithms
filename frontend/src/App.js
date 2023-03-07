@@ -30,6 +30,8 @@ import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
 import CreateTopicPage from './pages/CreateTopicPage';
 import CreateQuiz from './components/quiz/QuizCreationUpdate/CreateUpdateQuiz';
+import CreateWiki from './pages/CreateWiki';
+import { wikiActions } from './store/reducers/wiki-reducer';
 // import UpdateQuiz from './components/quiz/QuizCreationUpdate/UpdateQuiz';
 
 function App() {
@@ -49,7 +51,6 @@ function App() {
           <Route path=":pageId" element={<ForumPost />} />
           <Route path="edit/:pageId" element={<ForumEdit />} />
         </Route>
-
         <Route element={<RequireAuth />}>
           <Route path="/userprofile" element={<UserProfile />} />
           <Route path="/dashboard" element={<DashboardPage />} />
@@ -66,27 +67,31 @@ function App() {
             <Route path="CreateQuiz" element={<CreateQuiz />} />
           </Route>
         </Route>
-        <Route path="/underconstruction" element={<UnderConstructionPage />} />
         {/* SAMPLE TOPIC PAGES */}
 
         <Route path="/search">
           <Route path="binarysearchtree" element={<BinarySearchTree />} />
           <Route path="bfs" element={<BreadtFirstSearch />} />
         </Route>
-
         <Route path="/arrays" element={<Arrays />} />
 
         {/* WIKI PAGES */}
-        <Route path="/wiki/:wikiName" element={<WikiPage />} />
+        <Route path="/wiki" action={() => wikiActions.resetData()}>
+          <Route index element={<Navigate replace to="Main Category" />} />
+          <Route path=":wikiName" element={<WikiPage />} />
+          <Route path="new/create" element={<CreateWiki />} />
+          <Route path=":wikiName/edit" element={<CreateWiki />} />
+        </Route>
         {/* <Route path="/sorting" element={<WSorting />} />
         <Route path="/trees" element={<WTrees />} />
         <Route path="/graphs" element={<WGraphs />} />
-        <Route path="/datastructures" element={<WDataStructures />} /> */}
+      <Route path="/datastructures" element={<WDataStructures />} /> */}
 
         {/* <Route path="/quiz/UpdateQuiz" element={<UpdateQuiz />} /> */}
 
         <Route path="/team" element={<MeetTeamPage />} />
         <Route path="/createtopic" element={<CreateTopicPage />} />
+        <Route path="/underconstruction" element={<UnderConstructionPage />} />
         <Route
           path="*"
           element={<Navigate replace to="/underconstruction" />}
