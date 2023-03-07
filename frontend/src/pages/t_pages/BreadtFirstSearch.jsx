@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { Slide, useScrollTrigger } from '@mui/material';
 import AlgoFram from '../../components/algo-frame/AlgoFrame';
 // import AlgVisBtns from  "../../components/topic_page_samples/breath_first_search/alg_vis_btns/AlgVisBtns"
 import Detail from '../../components/topic_page_samples/breath_first_search/detail/Detail';
@@ -11,6 +12,8 @@ import { forumActions } from '../../store/reducers/forum-reducer';
 import { listVotesByPage } from '../../services/comment';
 import { commentActions } from '../../store/reducers/comment-reducer';
 import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
+import NavbarTopic from '../../components/navbarFortopic/NavbarTopic';
+import Vote from '../../components/vote_comp/Vote';
 
 const bfs = 'https://algorithm-visualizer.org/brute-force/breadth-first-search';
 const VIZ_TITLE = 'BREADTH FIRST SEARCH';
@@ -59,17 +62,38 @@ export default function BreadthFirstSearch() {
     }
   }, [authUserId, dispatch, isLoggedIn, jwtAccessToken, commentVoteStatus]);
 
+  const trigger = useScrollTrigger();
+
   return (
     <>
       {/* <AlgoFram/> */}
       {/* <AlgVisBtns/> */}
-      <AlgoFram vis_url={bfs} viz_title={VIZ_TITLE} />
-      <Detail />
-      <CodeSnippet />
+      <section id="visualizer">
+        <AlgoFram vis_url={bfs} viz_title={VIZ_TITLE} />
+      </section>
+      <Slide className="position-fixed m-4 bottom-0 end-50" in={!trigger}>
+        <div>
+          <NavbarTopic />
+        </div>
+      </Slide>
+
+      <Slide className="position-fixed m-2 bottom-0 start-50" in={!trigger}>
+        <div>
+          <Vote like_={0} dislike_={0} />
+        </div>
+      </Slide>
+      <section id="content">
+        <Detail />
+      </section>
+      <section id="code">
+        <CodeSnippet />
+      </section>
       {/* <TopicQuiz/> */}
-      {status === 'completed' && forum && (
-        <CommentFrame passedComments={forum.comments} pageId={forum.pageId} />
-      )}
+      <section id="comments">
+        {status === 'completed' && forum && (
+          <CommentFrame passedComments={forum.comments} pageId={forum.pageId} />
+        )}
+      </section>
     </>
   );
 }

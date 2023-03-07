@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import cx from 'classnames';
 import { BiLike, BiDislike } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
-
+import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { voteForum, deleteForumVote } from '../../services/forum';
 import fp from './vote.module.css';
@@ -126,23 +126,29 @@ export default function Vote({ like_, dislike_ }) {
     <div
       className={cx(
         fp.vote,
-        'row m-3 p-2 justify-content-around align-items-center self-align-center border rounded-pill bg-info bg-opacity-50'
+        'row m-3 justify-content-around align-items-center self-align-center'
       )}
     >
-      <button
+      <Button
+        variant="contained"
+        color="success"
+        size="large"
         onClick={likeForum}
-        className={cx(fp.ld, 'col-auto')}
+        className={cx(fp.ld, 'm-1 col-auto rounded-pill')}
         type="button"
       >
         <BiLike /> {` ${like}`}
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="contained"
+        color="error"
+        size="large"
         onClick={dislikeForum}
-        className={cx(fp.ld, 'col-auto')}
+        className={cx(fp.ld, 'm-1 col-auto rounded-pill')}
         type="button"
       >
         <BiDislike /> {` ${dislike}`}
-      </button>
+      </Button>
     </div>
   );
 }

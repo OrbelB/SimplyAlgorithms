@@ -1,9 +1,12 @@
+import { Slide, useScrollTrigger } from '@mui/material';
 import AlgoFrame from '../../components/topic_page/algo-frame/AlgoFrame';
-import AlgVisBtns from '../../components/topic_page/alg_vis_btns/AlgVisBtns';
+// import AlgVisBtns from '../../components/topic_page/alg_vis_btns/AlgVisBtns';
 import Detail from '../../components/topic_page/detail/Detail';
 import CodeSnippet from '../../components/topic_page/code-snippet/CodeSnippet';
 // import TopicQuiz from "../../components/topic_page/topic_quiz/TopicQuiz";
 import CommentFrame from '../../components/comment/CommentFrame';
+import NavbarTopic from '../../components/navbarFortopic/NavbarTopic';
+import Vote from '../../components/vote_comp/Vote';
 
 const staticComments = [
   {
@@ -22,15 +25,37 @@ const staticComments = [
     replyCount: 0,
   },
 ];
+
 export default function TemplateTopicPage() {
+  const trigger = useScrollTrigger();
   return (
     <>
-      <AlgoFrame />
-      <AlgVisBtns />
-      <Detail />
-      <CodeSnippet />
+      <section id="visualizer">
+        <AlgoFrame />
+      </section>
+
+      <Slide className="position-fixed m-4 bottom-0 end-50" in={!trigger}>
+        <div>
+          <NavbarTopic />
+        </div>
+      </Slide>
+
+      <Slide className="position-fixed m-2 bottom-0 start-50" in={!trigger}>
+        <div>
+          <Vote like_={0} dislike_={0} />
+        </div>
+      </Slide>
+      {/* <AlgVisBtns /> */}
+      <section id="content">
+        <Detail />
+      </section>
+      <section id="code">
+        <CodeSnippet />
+      </section>
       {/* <TopicQuiz /> */}
-      <CommentFrame passedComments={staticComments} pageId={1} />
+      <section id="comments">
+        <CommentFrame passedComments={staticComments} pageId={1} />
+      </section>
     </>
   );
 }

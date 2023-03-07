@@ -2,6 +2,7 @@
 // import AlgVisBtns from  "../../components/topic_page_samples/arrays/alg_vis_btns/AlgVisBtns"
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { Slide, useScrollTrigger } from '@mui/material';
 import Detail from '../../components/topic_page_samples/arrays/detail/Detail';
 import CodeSnippet from '../../components/topic_page_samples/arrays/code-snippet/CodeSnippet';
 // import TopicQuiz from "../../components/topic_page_samples/arrays/topic_quiz/TopicQuiz"
@@ -11,6 +12,8 @@ import { forumActions } from '../../store/reducers/forum-reducer';
 import { listVotesByPage } from '../../services/comment';
 import { commentActions } from '../../store/reducers/comment-reducer';
 import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
+import NavbarTopic from '../../components/navbarFortopic/NavbarTopic';
+import Vote from '../../components/vote_comp/Vote';
 
 const ARRAY_PAGE_ID = 'c9fc9f60-6468-45ed-ab1f-5463f4b72865';
 
@@ -58,16 +61,35 @@ export default function Arrays() {
     }
   }, [authUserId, dispatch, isLoggedIn, jwtAccessToken, commentVoteStatus]);
 
+  const trigger = useScrollTrigger();
+
   return (
     <>
       {/* <AlgoFram/> */}
       {/* <AlgVisBtns/> */}
-      <Detail />
-      <CodeSnippet />
+      <Slide className="position-fixed m-3 bottom-0 end-50" in={!trigger}>
+        <div>
+          <NavbarTopic />
+        </div>
+      </Slide>
+
+      <Slide className="position-fixed m-1 bottom-0 start-50" in={!trigger}>
+        <div>
+          <Vote like_={0} dislike_={0} />
+        </div>
+      </Slide>
+      <section id="content">
+        <Detail />
+      </section>
+      <section id="code">
+        <CodeSnippet />
+      </section>
       {/* <TopicQuiz/> */}
-      {status === 'completed' && forum && (
-        <CommentFrame passedComments={forum.comments} pageId={forum.pageId} />
-      )}
+      <section id="comments">
+        {status === 'completed' && forum && (
+          <CommentFrame passedComments={forum.comments} pageId={forum.pageId} />
+        )}
+      </section>
     </>
   );
 }
