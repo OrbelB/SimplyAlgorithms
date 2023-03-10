@@ -13,7 +13,7 @@ const content = {
   blocks: [
     {
       key: '637gr',
-      text: 'Initialized from content state.',
+      text: '',
       type: 'unstyled',
       depth: 0,
       inlineStyleRanges: [],
@@ -41,6 +41,7 @@ const options = [
 export default function CreateTopic() {
   const [title, setTitle] = useState('');
   const [visualizer, setVisualizer] = useState();
+  const [attribution, setAttribution] = useState();
   const [process, setProcess] = useState(JSON.stringify(content));
   const [snippets, setSnippets] = useState([{ language: '', code: '' }]);
   const [references, setReferences] = useState([{ name: '', reference: '' }]);
@@ -91,6 +92,7 @@ export default function CreateTopic() {
       <br />
       <form className="topic-form">
         <h2>Algorithm Title</h2>
+        <h5>Note: Once set, title cannot be changed</h5>
         <label>
           <input
             className="label"
@@ -109,6 +111,18 @@ export default function CreateTopic() {
             type="url"
             value={visualizer}
             onChange={(e) => setVisualizer(e.target.value)}
+          />
+        </label>
+        <br />
+        <br />
+        <h2>Source Attribution</h2>
+        <label>
+          <input
+            className="label"
+            type="text"
+            required
+            value={attribution}
+            onChange={(e) => setAttribution(e.target.value)}
           />
         </label>
         <br />
@@ -181,8 +195,8 @@ export default function CreateTopic() {
                 value={input.language}
                 onChange={(e) => handleSnippetChange(index, e)}
               />
-              <input
-                className="label"
+              <textarea
+                className="label2"
                 name="code"
                 placeholder="Code"
                 value={input.code}
@@ -227,19 +241,19 @@ export default function CreateTopic() {
               src={visualizer}
               className="Frame_website__ZlBLM"
               loading="lazy"
-              title="bubble sort algorithm visualizer by algorithm-visualizer.org"
+              title="algorithm visualizer"
             />
             <div className="bg-transparent" />
             <div className="Frame_credit__KSKRG">
               Algorithm visualizer brought to you by
               <a
                 className=""
-                href="https://algorithm-visualizer.org/"
+                href={attribution}
                 target="_blank"
                 rel="noreferrer"
               >
                 {' '}
-                algorithm-visualizer.org
+                {attribution}
               </a>
             </div>
           </div>
@@ -271,19 +285,36 @@ export default function CreateTopic() {
           <h1>Implementations</h1>
           <div className="container">
             <nav className="bg-secondary rounded-top">
-              <div className="nav nav-pills" id="nav-tab" role="tablist">
-                {snippets.map((user) => {
+              <div
+                className="nav navbar-code nav-pills"
+                id="nav-tab"
+                role="tablist"
+              >
+                <button
+                  key={snippets[0].language}
+                  className="nav-link active text-white"
+                  id={snippets[0].language}
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-java"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-java"
+                  aria-selected="true"
+                >
+                  {snippets[0].language}
+                </button>
+                {snippets.slice(1).map((user) => {
                   return (
                     <button
                       key={user.language}
-                      className="nav-link text-white active"
-                      id="nav-java-tab"
+                      className="nav-link text-white"
+                      id={user.language}
                       data-bs-toggle="tab"
                       data-bs-target="#nav-java"
                       type="button"
                       role="tab"
                       aria-controls="nav-java"
-                      aria-selected="false"
+                      aria-selected="true"
                     >
                       {user.language}
                     </button>
@@ -295,12 +326,21 @@ export default function CreateTopic() {
               className="tab-content description rounded-bottom"
               id="nav-tabContent"
             >
-              {snippets.map((user) => {
+              <div
+                key={snippets[0].code}
+                className="tab-pane fade active show ws"
+                id={snippets[0].code}
+                role="tabpanel"
+                aria-labelledby="nav-java-tab"
+              >
+                <code>{snippets[0].code}</code>
+              </div>
+              {snippets.slice(1).map((user) => {
                 return (
                   <div
                     key={user.code}
-                    className="tab-pane fade show active"
-                    id="nav-java"
+                    className="tab-pane fade ws"
+                    id={user.code}
                     role="tabpanel"
                     aria-labelledby="nav-java-tab"
                   >

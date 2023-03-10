@@ -15,6 +15,18 @@ h5 {
 .label {
     font-size: 1.5em;
     border-radius: 10px 10px 10px 10px;
+    height: 3em;
+    width: 25em;
+    display: flex;
+    flex-direction: column;
+}
+
+.label2 {
+    font-size: 1.5em;
+    border-radius: 10px 10px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    width: 25em;
 }
 
 .form-button {
@@ -36,4 +48,14 @@ h5 {
 .form-button{
     box-shadow: none;
     transform: translateY(0);
+}
+
+.ws {
+    white-space: pre-wrap;
+    text-align: left;
+}
+
+.editor-wrapper {
+    height: 40vh;
+    font-size: 1.5em;
 }
