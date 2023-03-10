@@ -100,7 +100,7 @@ export default function BubbleSort() {
 
       <Slide
         direction="up"
-        className="position-fixed m-3 d-none d-sm-flex"
+        className="position-fixed m-3 d-none d-lg-flex"
         style={{
           bottom: '0',
           left: '40%',
