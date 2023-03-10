@@ -1,15 +1,20 @@
-import { Box, Drawer } from '@mui/material';
+import { Box, Drawer, useMediaQuery, useTheme } from '@mui/material';
 
 import NotebookDrawer from './NotebookDrawer/NoteBookDrawer';
 
 export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.up('sm'));
   return (
     <Drawer
-      anchor="right"
+      anchor={isSmallScreen ? 'right' : 'bottom'}
       open={isDrawerOpen}
       onClose={() => setIsDrawerOpen(() => false)}
     >
-      <Box width="400px">
+      <Box
+        height={isSmallScreen ? '' : '600px'}
+        width={isSmallScreen ? '450px' : 'auto'}
+      >
         <NotebookDrawer />
       </Box>
     </Drawer>
