@@ -1,12 +1,25 @@
 import { Fab, Slide, useScrollTrigger } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MainNavigation from '../main-navigation/MainNavigation';
 import Footer from '../Footer/Footer';
 import Notebook from '../notebook/Notebook';
 
 export default function Layout({ children }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const trigger = useScrollTrigger();
+  const [open, setOpen] = useState(false);
+  const trigger = useScrollTrigger({
+    target: window,
+    threshold: 50,
+  });
+
+  useEffect(() => {
+    if (!trigger) {
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+      }, 2500);
+    }
+  }, [trigger]);
   return (
     <>
       <header style={{ minHeight: '50px' }}>
@@ -14,7 +27,11 @@ export default function Layout({ children }) {
       </header>
       <main style={{ flex: 1 }}>
         <div className="position-relative">
-          <Slide className="m-4 position-fixed bottom-0 end-0" in={!trigger}>
+          <Slide
+            direction="up"
+            className="m-4 position-fixed bottom-0 end-0"
+            in={open}
+          >
             <Fab
               title="Notebook"
               color="secondary"

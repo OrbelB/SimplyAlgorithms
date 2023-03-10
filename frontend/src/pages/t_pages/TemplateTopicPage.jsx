@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Slide, useScrollTrigger } from '@mui/material';
 import AlgoFrame from '../../components/topic_page/algo-frame/AlgoFrame';
 // import AlgVisBtns from '../../components/topic_page/alg_vis_btns/AlgVisBtns';
@@ -27,24 +28,52 @@ const staticComments = [
 ];
 
 export default function TemplateTopicPage() {
-  const trigger = useScrollTrigger();
+  const [open, setOpen] = useState(false);
+  const trigger = useScrollTrigger({
+    target: window,
+    threshold: 50,
+  });
+
+  useEffect(() => {
+    if (!trigger) {
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+      }, 2500);
+    }
+  }, [trigger]);
   return (
     <>
       <section id="visualizer">
         <AlgoFrame />
       </section>
 
-      <Slide className="position-fixed m-4 bottom-0 end-50" in={!trigger}>
+      <Slide
+        direction="up"
+        className="position-fixed m-2 bottom-0 start-0"
+        in={open}
+      >
+        <div>
+          <Vote like_={0} dislike_={0} />
+        </div>
+      </Slide>
+
+      <Slide
+        direction="up"
+        className="position-fixed m-3 d-none d-sm-flex"
+        style={{
+          bottom: '0',
+          left: '40%',
+          transform: 'translateX(-50%)',
+          margin: '0 auto',
+        }}
+        in={open}
+      >
         <div>
           <NavbarTopic />
         </div>
       </Slide>
 
-      <Slide className="position-fixed m-2 bottom-0 start-50" in={!trigger}>
-        <div>
-          <Vote like_={0} dislike_={0} />
-        </div>
-      </Slide>
       {/* <AlgVisBtns /> */}
       <section id="content">
         <Detail />

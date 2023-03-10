@@ -1,7 +1,7 @@
 // import AlgoFram from "../../components/topic_page_samples/arrays/algo-frame/AlgoFrame"
 // import AlgVisBtns from  "../../components/topic_page_samples/arrays/alg_vis_btns/AlgVisBtns"
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Slide, useScrollTrigger } from '@mui/material';
 import Detail from '../../components/topic_page_samples/arrays/detail/Detail';
 import CodeSnippet from '../../components/topic_page_samples/arrays/code-snippet/CodeSnippet';
@@ -61,21 +61,48 @@ export default function Arrays() {
     }
   }, [authUserId, dispatch, isLoggedIn, jwtAccessToken, commentVoteStatus]);
 
-  const trigger = useScrollTrigger();
+  const [open, setOpen] = useState(false);
+  const trigger = useScrollTrigger({
+    target: window,
+    threshold: 50,
+  });
+
+  useEffect(() => {
+    if (!trigger) {
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+      }, 2500);
+    }
+  }, [trigger]);
 
   return (
     <>
       {/* <AlgoFram/> */}
       {/* <AlgVisBtns/> */}
-      <Slide className="position-fixed m-3 bottom-0 end-50" in={!trigger}>
+      <Slide
+        direction="up"
+        className="position-fixed m-2 bottom-0 start-0"
+        in={open}
+      >
         <div>
-          <NavbarTopic />
+          <Vote like_={0} dislike_={0} />
         </div>
       </Slide>
 
-      <Slide className="position-fixed m-1 bottom-0 start-50" in={!trigger}>
+      <Slide
+        direction="up"
+        className="position-fixed m-3 d-none d-sm-flex"
+        style={{
+          bottom: '0',
+          left: '40%',
+          transform: 'translateX(-50%)',
+          margin: '0 auto',
+        }}
+        in={open}
+      >
         <div>
-          <Vote like_={0} dislike_={0} />
+          <NavbarTopic />
         </div>
       </Slide>
       <section id="content">

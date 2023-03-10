@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Slide, useScrollTrigger } from '@mui/material';
 import NavbarTopic from '../../components/navbarFortopic/NavbarTopic';
 import AlgoFram from '../../components/algo-frame/AlgoFrame';
@@ -64,7 +64,20 @@ export default function BinarySearchTree() {
     }
   }, [authUserId, dispatch, isLoggedIn, jwtAccessToken, commentVoteStatus]);
 
-  const trigger = useScrollTrigger();
+  const [open, setOpen] = useState(false);
+  const trigger = useScrollTrigger({
+    target: window,
+    threshold: 50,
+  });
+
+  useEffect(() => {
+    if (!trigger) {
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+      }, 2500);
+    }
+  }, [trigger]);
 
   return (
     <>
@@ -73,16 +86,29 @@ export default function BinarySearchTree() {
       <section id="visualizer">
         {VIZ_TITLE && <AlgoFram vis_url={bst} viz_title={VIZ_TITLE} />}
       </section>
-
-      <Slide className="position-fixed m-4 bottom-0 end-50" in={!trigger}>
+      <Slide
+        direction="up"
+        className="position-fixed m-2 bottom-0 start-0"
+        in={open}
+      >
         <div>
-          <NavbarTopic />
+          <Vote like_={0} dislike_={0} />
         </div>
       </Slide>
 
-      <Slide className="position-fixed m-2 bottom-0 start-50" in={!trigger}>
+      <Slide
+        direction="up"
+        className="position-fixed m-3 d-none d-sm-flex"
+        style={{
+          bottom: '0',
+          left: '40%',
+          transform: 'translateX(-50%)',
+          margin: '0 auto',
+        }}
+        in={open}
+      >
         <div>
-          <Vote like_={0} dislike_={0} />
+          <NavbarTopic />
         </div>
       </Slide>
 

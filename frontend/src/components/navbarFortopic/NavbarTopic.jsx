@@ -5,11 +5,15 @@ export default function NavbarTopic() {
   return (
     <div className="rounded-pill">
       <BottomNavigation
-        sx={{ border: 3, borderColor: 'grey.500' }}
+        sx={{
+          border: 3,
+          borderColor: 'grey.500',
+        }}
         className="rounded-pill"
         showLabels
       >
         <BottomNavigationAction
+          sx={{ fontWeight: 'bold' }}
           label={
             <HashLink smooth to="#visualizer">
               Visualizer
@@ -17,6 +21,7 @@ export default function NavbarTopic() {
           }
         />
         <BottomNavigationAction
+          sx={{ fontWeight: 'bold' }}
           label={
             <HashLink smooth to="#content">
               Content
@@ -24,6 +29,7 @@ export default function NavbarTopic() {
           }
         />
         <BottomNavigationAction
+          sx={{ fontWeight: 'bold' }}
           label={
             <HashLink smooth to="#code">
               Code
@@ -31,6 +37,7 @@ export default function NavbarTopic() {
           }
         />
         <BottomNavigationAction
+          sx={{ fontWeight: 'bold' }}
           label={
             <HashLink smooth to="#comments">
               Comments
