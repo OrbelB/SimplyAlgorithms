@@ -21,16 +21,6 @@
   font-size: large;
 }
 
-.team-button {
-  background-color: black;
-  border: 1px solid black;
-}
-
-.team-button:hover {
-  background-color: black;
-  border: 1px solid black;
-}
-
 .team-text:hover {
   color: white;
 }

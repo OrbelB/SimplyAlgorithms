@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { NavLink } from 'react-router-dom';
 import InputComment from './InputComment';
 import Comment from './Comment';
 
@@ -7,14 +6,6 @@ import Comment from './Comment';
 export default function CommentFrame({ passedComments }) {
   return (
     <div className="bg-white mt-5 mb-2">
-      <div>
-        <label className="h5">
-          Have a question? Check our{' '}
-          <NavLink className="link-warning" to="/forums">
-            forums
-          </NavLink>
-        </label>
-      </div>
       <InputComment />
       {passedComments.map((comment) => (
         <Comment

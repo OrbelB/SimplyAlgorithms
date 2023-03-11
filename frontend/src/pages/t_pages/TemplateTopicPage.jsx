@@ -8,6 +8,7 @@ import CodeSnippet from '../../components/topic_page/code-snippet/CodeSnippet';
 import CommentFrame from '../../components/comment/CommentFrame';
 import NavbarTopic from '../../components/navbarFortopic/NavbarTopic';
 import Vote from '../../components/vote_comp/Vote';
+import ForumPreview from '../../components/forums-preview/ForumPreview';
 
 const staticComments = [
   {
@@ -80,6 +81,9 @@ export default function TemplateTopicPage() {
       </section>
       <section id="code">
         <CodeSnippet />
+      </section>
+      <section id="forumspreview">
+        <ForumPreview />
       </section>
       {/* <TopicQuiz /> */}
       <section id="comments">

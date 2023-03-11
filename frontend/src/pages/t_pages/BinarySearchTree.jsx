@@ -14,6 +14,7 @@ import { listVotesByPage } from '../../services/comment';
 import { commentActions } from '../../store/reducers/comment-reducer';
 import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
 import Vote from '../../components/vote_comp/Vote';
+import ForumPreview from '../../components/forums-preview/ForumPreview';
 
 const bst =
   'https://algorithm-visualizer.org/branch-and-bound/binary-search-tree';
@@ -98,7 +99,7 @@ export default function BinarySearchTree() {
 
       <Slide
         direction="up"
-        className="position-fixed m-3 d-none d-lg-flex"
+        className="position-fixed m-4 d-none d-lg-flex"
         style={{
           bottom: '0',
           left: '40%',
@@ -115,53 +116,57 @@ export default function BinarySearchTree() {
       <section id="content">
         <Detail>
           <>
-            <p className="lh-lg">
-              1. Start from the root.
-              <br />
-              2. Compare the searching element with root, if less than root,
-              then recursively call left subtree, else recursively call right
-              subtree.
-              <br />
-              3. If the element to search is found anywhere, return true, else
-              return false.
-            </p>
-            <br />
-            <h2>INSERTION STEPS</h2>
-            <div className="size text-center">
+            <div className="top p-5">
+              <h2>SEARCH STEPS</h2>
               <p className="lh-lg">
                 1. Start from the root.
                 <br />
-                2. Compare the inserting element with root, if less than root,
+                2. Compare the searching element with root, if less than root,
                 then recursively call left subtree, else recursively call right
                 subtree.
                 <br />
-                3. After reaching the end, just insert that node at left(if less
-                than current) or else right.
+                3. If the element to search is found anywhere, return true, else
+                return false.
               </p>
+              <br />
+              <h2>INSERTION STEPS</h2>
+              <div className="size text-center">
+                <p className="lh-lg">
+                  1. Start from the root.
+                  <br />
+                  2. Compare the inserting element with root, if less than root,
+                  then recursively call left subtree, else recursively call
+                  right subtree.
+                  <br />
+                  3. After reaching the end, just insert that node at left(if
+                  less than current) or else right.
+                </p>
+              </div>
+              <br />
+              <h2>DELETION STEPS:</h2>
+              <div className="size text-center">
+                <p className="lh-lg">
+                  1. Node to be deleted is the leaf: Simply remove from the
+                  tree.
+                  <br />
+                  2. Node to be deleted has only one child: Copy the child to
+                  the node and delete the child
+                  <br />
+                  3. Node to be deleted has two children: Find inorder successor
+                  of the node. Copy contents of the inorder successor to the
+                  node and delete the inorder successor. Note that inorder
+                  predecessor can also be used.
+                </p>
+              </div>
+              <br />
+              <b className="size">
+                The important thing to note is, inorder successor is needed only
+                when the right child is not empty. In this particular case,
+                inorder successor can be obtained by finding the minimum value
+                in the right child of the node.
+              </b>
             </div>
-            <br />
-            <h2>DELETION STEPS:</h2>
-            <div className="size text-center">
-              <p className="lh-lg">
-                1. Node to be deleted is the leaf: Simply remove from the tree.
-                <br />
-                2. Node to be deleted has only one child: Copy the child to the
-                node and delete the child
-                <br />
-                3. Node to be deleted has two children: Find inorder successor
-                of the node. Copy contents of the inorder successor to the node
-                and delete the inorder successor. Note that inorder predecessor
-                can also be used.
-              </p>
-            </div>
-            <br />
-            <b className="size">
-              The important thing to note is, inorder successor is needed only
-              when the right child is not empty. In this particular case,
-              inorder successor can be obtained by finding the minimum value in
-              the right child of the node.
-            </b>
-            <div className="mid rounded-5 ">
+            <div className="mid ">
               <h2 className="mb-4">HOW DOES THE ALGORITHM WORKS?</h2>
               <p className="size text-start">
                 A binary Search Tree is a node-based binary tree data structure
@@ -231,7 +236,7 @@ export default function BinarySearchTree() {
               </div>
               <div className="row justify-content-around  mt-auto mt-sm-5   p-2">
                 <div className="col-auto col-sm-auto align-self-center">
-                  <h3 className="m-3 mb-4">FURTHER REFERENCES</h3>
+                  <h2 className="m-3 mb-4">FURTHER REFERENCES</h2>
                   <ul className="size">
                     <li>
                       <a
@@ -285,6 +290,9 @@ export default function BinarySearchTree() {
         <CodeSnippet />
       </section>
       {/* <TopicQuiz/> */}
+      <section id="forumspreview">
+        <ForumPreview />
+      </section>
       <section id="comments">
         {status === 'completed' && forum && (
           <CommentFrame passedComments={forum.comments} pageId={forum.pageId} />

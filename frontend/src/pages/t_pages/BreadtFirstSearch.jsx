@@ -14,6 +14,7 @@ import { commentActions } from '../../store/reducers/comment-reducer';
 import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
 import NavbarTopic from '../../components/navbarFortopic/NavbarTopic';
 import Vote from '../../components/vote_comp/Vote';
+import ForumPreview from '../../components/forums-preview/ForumPreview';
 
 const bfs = 'https://algorithm-visualizer.org/brute-force/breadth-first-search';
 const VIZ_TITLE = 'BREADTH FIRST SEARCH';
@@ -113,6 +114,9 @@ export default function BreadthFirstSearch() {
       </section>
       <section id="code">
         <CodeSnippet />
+      </section>
+      <section id="forumspreview">
+        <ForumPreview />
       </section>
       {/* <TopicQuiz/> */}
       <section id="comments">

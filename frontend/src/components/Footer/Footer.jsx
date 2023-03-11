@@ -120,13 +120,13 @@ export default function Footer() {
           </div>
           <div className="row justify-content-center text-center ps-5">
             <h5 className="text-center text-uppercase">Meet the Team</h5>
-            <form className="mb-3">
-              <Button variant="contained" className={cx(style['team-button'])}>
+            <div className="mb-3">
+              <Button variant="contained">
                 <NavLink aria-current="page" to="/team">
                   <div className={cx(style['team-text'])}>TEAM PAGE</div>
                 </NavLink>
               </Button>
-            </form>
+            </div>
           </div>
         </div>
       </div>

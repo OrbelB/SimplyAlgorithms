@@ -14,6 +14,7 @@ import { commentActions } from '../../store/reducers/comment-reducer';
 import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
 import NavbarTopic from '../../components/navbarFortopic/NavbarTopic';
 import Vote from '../../components/vote_comp/Vote';
+import ForumPreview from '../../components/forums-preview/ForumPreview';
 
 const ARRAY_PAGE_ID = 'c9fc9f60-6468-45ed-ab1f-5463f4b72865';
 
@@ -110,6 +111,9 @@ export default function Arrays() {
       </section>
       <section id="code">
         <CodeSnippet />
+      </section>
+      <section id="forumspreview">
+        <ForumPreview />
       </section>
       {/* <TopicQuiz/> */}
       <section id="comments">
