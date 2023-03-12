@@ -1,13 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import draftToHtml from 'draftjs-to-html';
 import parse from 'html-react-parser';
 import cx from 'classnames';
+import { Button } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import TextEditor from '../text-editor/TextEditor';
 import '../text-editor/TextEditor.css';
 import './CreateTopic.css';
 import styles from '../topic_page/algo-frame/Frame.module.css';
+import { fetchWikiNames, createWiki, updateWiki } from '../../services/wiki';
 
 const content = {
   blocks: [
@@ -38,13 +42,95 @@ const options = [
   'history',
 ];
 
+function getIds(searchBar, names, prop, title) {
+  return searchBar.pages
+    .map((item) => {
+      const matchingItems = names.filter((name) => name[title] === item.title);
+      return matchingItems.length > 0
+        ? matchingItems.map((name) => name[`${prop}Id`])[0]
+        : undefined;
+    })
+    .filter((id) => id !== undefined);
+}
+
 export default function CreateTopic() {
   const [title, setTitle] = useState('');
+  const [searchBar, setSearchBar] = useState({});
+  const [pageOrWiki, setPageOrWiki] = useState('');
+  const wikiName = useParams();
+  const {
+    nameAvailable: wikiNameAvailable,
+    wikiNames,
+    wiki,
+  } = useSelector((state) => state.wiki);
+  const dispatch = useDispatch();
+  const { topicNames } = useSelector((state) => state.topic);
+  const { jwtAccessToken } = useSelector((state) => state.auth);
   const [visualizer, setVisualizer] = useState();
   const [attribution, setAttribution] = useState();
   const [process, setProcess] = useState(JSON.stringify(content));
   const [snippets, setSnippets] = useState([{ language: '', code: '' }]);
   const [references, setReferences] = useState([{ name: '', reference: '' }]);
+
+  const isReadyToSubmit =
+    (wikiNameAvailable || wiki.wikiName) &&
+    title !== '' &&
+    Object.values(content).length > 0 &&
+    searchBar?.pages?.length > 0;
+
+  const handleSaveTopic = async (e) => {
+    e.preventDefault();
+    if (!isReadyToSubmit) return;
+
+    let pageIds = [];
+    let wikiIds = [];
+    // get the page ids by the page names from the search bar
+    if (pageOrWiki === 'page') {
+      pageIds = getIds(searchBar, topicNames, 'page', 'title');
+    } else if (pageOrWiki === 'wiki') {
+      wikiIds = getIds(searchBar, wikiNames, 'wiki', 'wikiName');
+    }
+
+    const wikiToCreate = {
+      wikiName: title,
+      description: content,
+      pageIds,
+      wikiIds,
+    };
+
+    dispatch(createWiki({ wiki: wikiToCreate, jwtAccessToken }));
+  };
+
+  const handleUpdateTopic = async (e) => {
+    e.preventDefault();
+    if (!isReadyToSubmit) return;
+    let pageIds = [];
+    let wikiIds = [];
+    // get the page ids by the page names from the search bar
+    if (wiki.isParentChild === 'child') {
+      let newPageNames = wiki.wikiTopicPages.map(({ topicPage }) => {
+        return { title: topicPage.title, pageId: topicPage.pageId };
+      });
+      newPageNames = [...newPageNames, ...topicNames];
+      pageIds = getIds(searchBar, newPageNames, 'page', 'title');
+    } else if (wiki.isParentChild === 'parent') {
+      let newWikiNames = wiki.wikiChildren.map(({ wikiChild }) => {
+        return { wikiName: wikiChild.wikiName, wikiId: wikiChild.wikiId };
+      });
+      newWikiNames = [...newWikiNames, ...wikiNames];
+      wikiIds = getIds(searchBar, newWikiNames, 'wiki', 'wikiName');
+    }
+
+    const wikiToUpdate = {
+      wikiId: wiki.wikiId,
+      wikiName: wiki.wikiName,
+      description: content,
+      pageIds,
+      wikiIds,
+    };
+
+    dispatch(updateWiki({ wiki: wikiToUpdate, jwtAccessToken }));
+  };
 
   const displayProcess = parse(draftToHtml(process));
 
@@ -102,6 +188,29 @@ export default function CreateTopic() {
             onChange={(e) => setTitle(e.target.value)}
           />
         </label>
+        <br />
+        <br />
+        <h2>Category Selection</h2>
+        <h5>Note: Once set, category cannot be changed</h5>
+        <div className="col-auto col-md-6 text-center">
+          <Button
+            variant="contained"
+            disabled={wiki.isParentChild === 'child'}
+            onClick={() => {
+              setPageOrWiki('wiki');
+              if (wiki?.links?.pages?.length === 0) {
+                setSearchBar({
+                  ...searchBar,
+                  pages: [],
+                });
+              }
+
+              if (wikiNames.length === 0) dispatch(fetchWikiNames());
+            }}
+          >
+            Embed Wikis
+          </Button>
+        </div>
         <br />
         <br />
         <h2>Embedded Visualizer or Video Source</h2>
@@ -222,9 +331,16 @@ export default function CreateTopic() {
         </button>
         <br />
         <br />
-        <button type="button" className="form-button w-auto">
-          Create Topic
-        </button>
+        <Button
+          variant="contained"
+          color="success"
+          size="large"
+          type="submit"
+          disabled={!isReadyToSubmit}
+          onClick={wikiName.wikiName ? handleUpdateTopic : handleSaveTopic}
+        >
+          Save
+        </Button>
         <br />
       </form>
       <br />
