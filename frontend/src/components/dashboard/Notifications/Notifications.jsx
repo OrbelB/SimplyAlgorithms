@@ -1,30 +1,27 @@
 import './Notifications.css';
-import { useSelector } from 'react-redux';
+import { Modal } from 'react-bootstrap';
 import NotificationsPreview from './NotificationsPreview/NotifcationsPreview';
 
-export default function Notifications() {
-  const { dashboardInfo } = useSelector((state) => state.user);
+export default function Notifications({ show, setShow }) {
   return (
     <>
-      {/* <!-- Button trigger modal --> */}
-      <div className="">
-        <button
-          type="button"
-          className="bts btn"
-          data-bs-toggle="modal"
-          data-bs-target="#notificationdb"
-        >
-          <h5>
-            Notifications
-            <span className="badge">
-              {dashboardInfo?.notifications?.length}
-            </span>
-          </h5>
-        </button>
-      </div>
-
       {/* <!-- Modal --> */}
-      <div
+      <Modal
+        show={show}
+        backdrop="static"
+        keyboard={false}
+        onHide={() => setShow(false)}
+      >
+        <Modal.Header closeButton className="btr text-center">
+          <Modal.Title>Notifications</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="btr">
+          <div className="secondline">
+            <NotificationsPreview setShow={setShow} />
+          </div>
+        </Modal.Body>
+      </Modal>
+      {/* <div
         className="modal fade"
         id="notificationdb"
         data-bs-backdrop="static"
@@ -55,7 +52,7 @@ export default function Notifications() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

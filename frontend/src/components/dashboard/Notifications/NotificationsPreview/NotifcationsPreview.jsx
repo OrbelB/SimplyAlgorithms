@@ -1,8 +1,12 @@
-import './NotificationsPreview.css';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { removeSingleNotification } from '../../../../services/user';
+import {
+  removeSingleNotification,
+  fetchUserDashboardInfo,
+} from '../../../../services/user';
 import { forumActions } from '../../../../store/reducers/forum-reducer';
+import './NotificationsPreview.css';
 
 const NOTIFICATION_PREVIEWS = [
   {
@@ -27,16 +31,36 @@ const NOTIFICATION_PREVIEWS = [
 
 export { NOTIFICATION_PREVIEWS };
 
-export default function NotificationsPreview() {
-  const { dashboardInfo } = useSelector((state) => state.user);
+export default function NotificationsPreview({ setShow }) {
+  const { dashboardInfo, status } = useSelector((state) => state.user);
   const { userId: authUserId, jwtAccessToken } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (status === 'idle' && dashboardInfo?.notifications?.length === 0) {
+      dispatch(
+        fetchUserDashboardInfo({
+          userId: authUserId,
+          jwtAccessToken,
+        })
+      );
+    }
+    return () => {};
+  }, [
+    authUserId,
+    dashboardInfo?.notifications?.length,
+    dispatch,
+    jwtAccessToken,
+    status,
+  ]);
+
+  // TODO: Refactor this function to be more dynamic and not hard coded.
   function handleNavigation(notificationId, referenceId, message, title) {
     if (message.includes('post.')) {
-      document.getElementById('modal-notification-close').click();
+      setShow(false);
       dispatch(forumActions.resetData());
       navigate(`/forums/${referenceId}`, {
         preventScrollReset: true,
@@ -45,26 +69,27 @@ export default function NotificationsPreview() {
     }
     if (message.includes('replies')) {
       if (title.includes('Binary Search Trees')) {
-        document.getElementById('modal-notification-close').click();
+        setShow(false);
+
         navigate(`/search/binarysearchtree`, {
           preventScrollReset: true,
           replace: true,
         });
       }
       if (title.includes('BFS')) {
-        document.getElementById('modal-notification-close').click();
+        setShow(false);
         navigate(`/search/bfs`, {
           preventScrollReset: true,
         });
       }
       if (title.includes('Bubble Sort')) {
-        document.getElementById('modal-notification-close').click();
+        setShow(false);
         navigate(`/search/bfs`, {
           preventScrollReset: true,
         });
       }
       if (title.includes('Bubble Sort')) {
-        document.getElementById('modal-notification-close').click();
+        setShow(false);
         navigate(`/search/bfs`, {
           preventScrollReset: true,
         });

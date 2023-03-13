@@ -1,11 +1,29 @@
-/* eslint-disable react/prop-types */
+import { useCallback, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { wikiActions } from '../../../store/reducers/wiki-reducer';
 import './Categories.css';
+import { fetchSubCategories } from '../../../services/wiki';
 
 export default function Categories() {
   const dispatch = useDispatch();
+  const { status, subCategories } = useSelector((state) => state.wiki);
+  useEffect(() => {
+    if (status === 'idle' && subCategories.length === 0) {
+      dispatch(fetchSubCategories());
+    }
+
+    if (status === 'success' && subCategories.length === 0) {
+      dispatch(wikiActions.resetData());
+    }
+  });
+
+  const getRandomRGB = useCallback(() => {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
+  }, []);
 
   const handleRedirect = () => {
     dispatch(wikiActions.resetData());
@@ -25,12 +43,24 @@ export default function Categories() {
           </NavLink>
         </button>
         <div className="row justify-content-center">
-          <button type="button" className="topic t1 col-10 col-lg-5">
-            <NavLink to="/wiki/sorting" onClick={handleRedirect}>
-              <p className="stuff">Sorting</p>
-            </NavLink>
-          </button>
-          <button
+          {subCategories.map((subCategory) => (
+            <button
+              key={subCategory.wikiId}
+              type="button"
+              style={{ backgroundColor: getRandomRGB() }}
+              className="topic col-10 col-lg-5"
+            >
+              <NavLink
+                to={`/wiki/${subCategory.wikiName}`}
+                onClick={handleRedirect}
+              >
+                <p className="stuff">{subCategory.wikiName}</p>
+              </NavLink>
+            </button>
+          ))}
+        </div>
+
+        {/* <button
             type="button"
             className="topic t2 col-10 col-lg-5 text-center"
           >
@@ -49,8 +79,7 @@ export default function Categories() {
             <NavLink to="/wiki/datastructures" onClick={handleRedirect}>
               <p className="stuff">Data Structures</p>
             </NavLink>
-          </button>
-        </div>
+          </button> */}
       </div>
       <div className="bottom" />
     </div>

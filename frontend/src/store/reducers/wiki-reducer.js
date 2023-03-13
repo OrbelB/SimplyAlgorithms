@@ -5,11 +5,13 @@ import {
   updateWiki,
   getNameAvailability,
   fetchWikiNames,
+  fetchSubCategories,
 } from '../../services/wiki';
 
 const initialState = {
   wiki: {},
   wikiNames: [],
+  subCategories: [],
   status: 'idle',
   wikiId: null,
   error: '',
@@ -22,6 +24,7 @@ export const wikiSlice = createSlice({
   reducers: {
     resetData: (state) => {
       state.wiki = {};
+      state.subCategories = [];
       state.wikiId = null;
       state.wikiNames = [];
       state.status = 'idle';
@@ -96,9 +99,20 @@ export const wikiSlice = createSlice({
       .addCase(updateWiki.fulfilled, (state, action) => {
         state.status = 'success';
         state.wikiId = action.payload;
-        console.info('wikiId', state.wikiId);
       })
       .addCase(updateWiki.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(fetchSubCategories.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchSubCategories.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.subCategories = action.payload;
+        console.info('subCategories', action.payload);
+      })
+      .addCase(fetchSubCategories.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       });

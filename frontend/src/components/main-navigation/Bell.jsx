@@ -1,85 +1,62 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useState } from 'react';
+import { Badge } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import cx from 'classnames';
-import styles from './Bell.module.css';
-import image from '../../assets/under-construction.jpg';
+
+import { fetchUserDashboardInfo } from '../../services/user';
+
+import Notifications from '../dashboard/Notifications/Notifications';
 
 export default function Bell() {
   const [clickedBell, setClickedBell] = useState(false);
   const handleBellButtonClicked = () => {
     setClickedBell(!clickedBell);
   };
+  const dispatch = useDispatch();
+  const { dashboardInfo, status } = useSelector((state) => state.user);
+  const { userId: authUserId, jwtAccessToken } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (status === 'idle' && dashboardInfo?.notifications?.length === 0) {
+      dispatch(
+        fetchUserDashboardInfo({
+          userId: authUserId,
+          jwtAccessToken,
+        })
+      );
+    }
+    return () => {};
+  }, [
+    authUserId,
+    dashboardInfo?.notifications?.length,
+    dispatch,
+    jwtAccessToken,
+    status,
+  ]);
+
   return (
     <>
-      {clickedBell ? (
-        <span
-          onClick={handleBellButtonClicked}
-          data-bs-toggle="modal"
-          data-bs-target="#featureunderconstruction"
-          className={cx('bi bi-bell-fill', styles['custom-bell'])}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'enter') {
-              handleBellButtonClicked();
-            }
-          }}
-          role="button"
-        />
-      ) : (
-        <span
-          onClick={handleBellButtonClicked}
-          data-bs-toggle="modal"
-          data-bs-target="#featureunderconstruction"
-          className={cx('bi bi-bell', styles['custom-bell'])}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'enter') {
-              handleBellButtonClicked();
-            }
-          }}
-          role="button"
-        />
-      )}
-
-      <div
-        className="modal fade"
-        id="featureunderconstruction"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
+      <Notifications setShow={setClickedBell} show={clickedBell} />
+      <Badge
+        badgeContent={dashboardInfo?.notifications?.length}
+        color="info"
+        onClick={handleBellButtonClicked}
       >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              />
-            </div>
-            <div className="modal-body">
-              <div className="text-center">
-                <div className="font text-align-center">
-                  <h2>This Feature is under Construction!</h2>
-                </div>
-                <img
-                  src={image}
-                  height="100%"
-                  width="100%"
-                  alt="under"
-                  className="rounded-circle text-align-center"
-                />
-                <div className="font text-center">
-                  <h2>Come back at a later time.</h2>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <span
+          data-bs-toggle="modal"
+          className={cx(`bi bi-bell${clickedBell ? '-fill' : ''}`)}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'enter') {
+              handleBellButtonClicked();
+            }
+          }}
+          role="button"
+        />
+      </Badge>
     </>
   );
 }

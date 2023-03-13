@@ -48,6 +48,12 @@ export const wikiEndpoints = {
         'Content-Type': 'application/json',
       },
     }),
+  listSubCategories: () =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/list/subcategories`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
   delete: (wikiId, jwtAccessToken) =>
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
       params: {

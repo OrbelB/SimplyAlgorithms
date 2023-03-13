@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 import { deleteWiki } from '../../services/wiki';
 import { wikiActions } from '../../store/reducers/wiki-reducer';
 import OptionsMenu from '../options-menu';
@@ -14,6 +15,7 @@ export default function WikiHome({
   disabled = false,
 }) {
   const dispatch = useDispatch();
+  const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
   const navigate = useNavigate();
   const { status } = useSelector((state) => state.wiki);
   const { jwtAccessToken } = useSelector((state) => state.auth);
@@ -63,27 +65,29 @@ export default function WikiHome({
               </div>
             </div>
           </div>
-          <div className="col-auto">
-            <div className="row-cols pb-5">
-              <Button
-                disabled={disabled}
-                variant="contained"
-                color="success"
-                size="small"
-                onClick={handleAdd}
-              >
-                CREATE A NEW WIKI
-              </Button>
-            </div>
-            {!disabled && (
-              <div className="row-cols">
-                <OptionsMenu
-                  handleOnDelete={handleDelete}
-                  handleOnEdit={handleEdit}
-                />
+          {isAdmin && (
+            <div className="col-auto">
+              <div className="row-cols pb-5">
+                <Button
+                  disabled={disabled}
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={handleAdd}
+                >
+                  CREATE A NEW WIKI
+                </Button>
               </div>
-            )}
-          </div>
+              {!disabled && (
+                <div className="row-cols">
+                  <OptionsMenu
+                    handleOnDelete={handleDelete}
+                    handleOnEdit={handleEdit}
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

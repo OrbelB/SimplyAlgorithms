@@ -67,3 +67,11 @@ export const deleteWiki = createAsyncThunk(
     return response.data;
   }
 );
+
+export const fetchSubCategories = createAsyncThunk(
+  'wiki/getSubCategories',
+  async () => {
+    const response = await wikiEndpoints.listSubCategories();
+    return response.data;
+  }
+);

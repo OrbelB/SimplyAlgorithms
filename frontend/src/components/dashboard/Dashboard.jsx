@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import RecentlyViewedPosts from './RecentlyViewPosts/RecentlyViewedPosts';
 import TopicsDB from './TopicsDB/TopicsDB';
@@ -11,7 +12,8 @@ import ShowMoreComments from './CommentsDB/ShowMoreComments/ShowMoreComments';
 import ShowMoreHighlights from './HighlightsDB/ShowMoreHighlights/ShowMoreHighlights';
 
 export default function Dashboard() {
-  const { username } = useSelector((state) => state.user);
+  const { username, dashboardInfo } = useSelector((state) => state.user);
+  const [showNotifications, setShowNotifications] = useState(false);
   return (
     <div className="container-fluid">
       <div className="row ps-2 justify-content-between mt-4">
@@ -22,7 +24,26 @@ export default function Dashboard() {
           </h2>
         </div>
         <div className="col-auto">
-          <Notifications />
+          <div className="">
+            <button
+              type="button"
+              onClick={() => setShowNotifications(true)}
+              className="bts btn"
+              data-bs-toggle="modal"
+              data-bs-target="#notificationdb"
+            >
+              <h5>
+                Notifications
+                <span className="badge">
+                  {dashboardInfo?.notifications?.length}
+                </span>
+              </h5>
+            </button>
+          </div>
+          <Notifications
+            show={showNotifications}
+            setShow={setShowNotifications}
+          />
         </div>
       </div>
       <div className="row mt-4 ps-3">

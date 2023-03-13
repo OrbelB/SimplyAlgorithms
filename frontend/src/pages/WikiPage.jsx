@@ -12,15 +12,16 @@ export default function WikiPage() {
   const { wikiName } = useParams();
   const [runOnce, setRunOnce] = useState(true);
   const { status, wiki } = useSelector((state) => state.wiki);
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (
-      (status === 'idle' && Object.keys(wiki).length === 0) ||
-      wikiName !== wiki.wikiName
-    ) {
-      setRunOnce(false);
+    if (status === 'idle') {
       dispatch(fetchSingleWiki(wikiName));
+    }
+    if (wikiName !== wiki?.wikiName && status === 'success' && runOnce) {
+      setRunOnce(false);
+      dispatch(wikiActions.resetData());
     }
   }, [status, wiki, wikiName, dispatch, runOnce]);
 

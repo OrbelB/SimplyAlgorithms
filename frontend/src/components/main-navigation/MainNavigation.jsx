@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Container,
@@ -216,9 +216,11 @@ export default function MainNavigation() {
                   src={image}
                 />
               </Box>
-              <Box component="div" className="me-3">
-                <Bell />
-              </Box>
+              {isLoggedIn && (
+                <Box component="div" className="me-3">
+                  <Bell />
+                </Box>
+              )}
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Setting">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -302,144 +304,6 @@ export default function MainNavigation() {
             </Toolbar>
           </Container>
         </AppBar>
-      )}
-
-      {showNew && (
-        <nav
-          className="navbar navbar-expand-lg border-bottom border-dark"
-          style={{ minHeight: '120px' }}
-        >
-          <div className="container-fluid justify-content-between">
-            <div className="d-flex">
-              <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="navbar-toggler-icon" />
-              </button>
-              <div
-                className="collapse navbar-collapse mt-4  mt-md-0 mb-3 mb-md-0"
-                id="navbarSupportedContent"
-              >
-                <ul className="navbar-nav">
-                  <DropdownMenu
-                    dropdownTitle="Categories"
-                    nestedDropdownSelections={nestedDropdownMenu}
-                  />
-                  <li className="nav-item">
-                    <NavLink
-                      className="nav-link p-3"
-                      aria-current="page"
-                      to="home"
-                    >
-                      Home
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink className="nav-link p-3" to="dashboard">
-                      Dashboard
-                    </NavLink>
-                  </li>
-                  <li className="nav-item me-auto">
-                    <NavLink className="nav-link p-3" to="forums">
-                      Forums
-                    </NavLink>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="navbar-nav flex-row d-none d-xl-flex">
-              <img
-                className="ime nav-item me-lg-1 p-0"
-                src={image}
-                height="60px"
-                width="auto"
-                alt="nav-logo"
-                loading="lazy"
-              />
-            </div>
-            <div className="navbar-nav flex-row">
-              {/* <form className="nav-item me-2 d-flex" role="search">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button className="btn btn-outline-primary" type="button">
-                <span className="bi bi-search"></span>
-              </button>
-            </form> */}
-              <div className="nav-item m-auto  me-3 me-lg-1">
-                <Bell />
-              </div>
-              <div className="nav-item m-auto dropdown  me-3 me-lg-1">
-                <i
-                  className="nav-link dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  id="navbarDropdownMenuAvatar"
-                >
-                  <img
-                    src={profilePicture}
-                    className="rounded-circle"
-                    height="45"
-                    width="45"
-                    alt="profile"
-                    loading="lazy"
-                  />
-                </i>
-                <ul
-                  className="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="navbarDropdownMenuAvatar"
-                >
-                  <li>
-                    <NavLink className="dropdown-item" to="userprofile">
-                      My Profile
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink className="dropdown-item" to="settings/profile">
-                      Settings
-                    </NavLink>
-                  </li>
-                  <li>
-                    {isLoggedIn ? (
-                      <i
-                        type="button"
-                        className="dropdown-item"
-                        onClick={handleLogout}
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === 'enter') {
-                            handleLogout();
-                          }
-                        }}
-                        role="button"
-                      >
-                        Logout
-                      </i>
-                    ) : (
-                      <NavLink className="dropdown-item" to="login">
-                        Login
-                      </NavLink>
-                    )}
-                  </li>
-                  <div className="dropdown-divider"> </div>
-                  <li>
-                    <Notebook />
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </nav>
       )}
     </>
   );
