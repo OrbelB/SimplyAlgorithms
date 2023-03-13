@@ -14,4 +14,6 @@ public interface WikiParentChildRepository extends JpaRepository<WikiParentChild
 
     Set<WikiParentChild> getWikiParentChildByWikiParentChildIdNotInAndWikiParent(Set<WikiParentChildId> parentId, Wiki wikiParent);
 
+    void deleteByWikiParentChildIdNotInAndWikiParent(Set<WikiParentChildId> parentId, Wiki wikiParent);
+
 }

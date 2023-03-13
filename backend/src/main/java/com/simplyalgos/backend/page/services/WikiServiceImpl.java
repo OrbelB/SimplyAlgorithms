@@ -51,10 +51,20 @@ public class WikiServiceImpl implements WikiService {
 
 
     /**
-     * This method will update the wiki information and remove the children wikis that are not in the passed list
-     * as well as the topic pages that are not in the passed list
+     * This method will get the sub categories information which includes wikiName and wikiId
+     * @return the wiki sub category information (wikiName and wikiId) as a set of WikiNameAndIdOnly
+     */
+    @Override
+    public Set<?> getSubCategories() {
+        return wikiRepository.findAllByIsParentChild("child", WikiNameAndIdOnly.class);
+    }
+
+
+    /**
+     * This method will update the wiki information and remove the children wikis that are not in the previous list
+     * as well as the topic pages that are not in the previous list
      *
-     * @param wiki
+     * @param wiki the wiki information that will be updated
      * @return the wikiName that was updated in the database
      */
     @Override
@@ -75,7 +85,7 @@ public class WikiServiceImpl implements WikiService {
     /**
      * This method will get the wiki information by the name
      *
-     * @param wikiName
+     * @param wikiName the name of the wiki
      * @return the wiki information that was found: includes the children wikis and the topic pages
      * @throws ElementNotFoundException if the wiki is not found
      */
@@ -110,18 +120,14 @@ public class WikiServiceImpl implements WikiService {
             }
         });
 
-        //remove the ones that are not in the list
-        Set<WikiParentChild> wikiParentChildToRemove =
-                wikiParentChildRepository.getWikiParentChildByWikiParentChildIdNotInAndWikiParent(
-                        wikiIds.stream()
-                                .map(wikiId -> WikiParentChildId.builder()
-                                        .wikiParentId(wikiToUpdate.getWikiId())
-                                        .wikiChildId(wikiId)
-                                        .build())
-                                .collect(Collectors.toSet()), wikiToUpdate);
-        for (WikiParentChild wikiChildToRemove : wikiParentChildToRemove) {
-            wikiParentChildRepository.deleteById(wikiChildToRemove.getWikiParentChildId());
-        }
+
+        wikiParentChildRepository.deleteByWikiParentChildIdNotInAndWikiParent(
+                wikiIds.stream()
+                        .map(wikiId -> WikiParentChildId.builder()
+                                .wikiParentId(wikiToUpdate.getWikiId())
+                                .wikiChildId(wikiId)
+                                .build())
+                        .collect(Collectors.toSet()), wikiToUpdate);
     }
 
 
@@ -150,17 +156,13 @@ public class WikiServiceImpl implements WikiService {
             }
         });
 
-        //remove the ones that are not in the list
-        Set<WikiTopicPage> wikiTopicPagesToRemove = wikiTopicPageRepository.findAllByWikiTopicPageIdNotInAndWikiCategory(pageIds.stream()
+        // remove the ones that are not in the list
+        wikiTopicPageRepository.deleteByWikiTopicPageIdNotInAndWikiCategory(pageIds.stream()
                 .map(pageId -> WikiTopicPageId.builder()
                         .wikiId(updateWiki.getWikiId())
                         .pageId(pageId)
                         .build())
                 .collect(Collectors.toSet()), updateWiki);
-
-        for (WikiTopicPage wikiTopicPage : wikiTopicPagesToRemove) {
-            wikiTopicPageRepository.deleteById(wikiTopicPage.getWikiTopicPageId());
-        }
     }
 
     /**

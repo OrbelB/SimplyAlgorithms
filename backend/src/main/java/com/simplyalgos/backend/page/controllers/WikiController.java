@@ -27,6 +27,11 @@ public class WikiController {
         return ResponseEntity.ok(wikiService.getWikiMainCategories());
     }
 
+    @GetMapping("/list/subcategories")
+    public ResponseEntity<?> getSubCategories() {
+        return ResponseEntity.ok(wikiService.getSubCategories());
+    }
+
     @GetMapping("/{wikiName}")
     public ResponseEntity<?> getWikiByName(@PathVariable String wikiName) {
         return ResponseEntity.ok(wikiService.getWiki(wikiName));

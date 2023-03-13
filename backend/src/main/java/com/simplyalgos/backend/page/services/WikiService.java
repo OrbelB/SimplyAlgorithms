@@ -13,6 +13,8 @@ public interface WikiService {
 
     Set<?> getWikiMainCategories();
 
+    Set<?> getSubCategories();
+
     String saveWiki(WikiDTO wiki);
 
     Set<WikiInfo> getAvailableWikis();
@@ -22,7 +24,6 @@ public interface WikiService {
     Set<PageWikiInfo> getWikiTopicsBasicInfo();
 
     boolean isWikiNameAvailable(String name);
-
 
     UUID deleteWiki(UUID wikiId);
 

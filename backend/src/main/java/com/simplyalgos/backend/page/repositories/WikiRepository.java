@@ -14,4 +14,6 @@ public interface WikiRepository extends JpaRepository<Wiki, UUID> {
     Optional<Wiki> getWikiByWikiName(String name);
 
     <T> Set<T> findAllByWikiIdNotIn(Set<UUID> wikiIds, Class<T> type);
+
+    <T> Set<T> findAllByIsParentChild(String isParentChild, Class<T> type);
 }

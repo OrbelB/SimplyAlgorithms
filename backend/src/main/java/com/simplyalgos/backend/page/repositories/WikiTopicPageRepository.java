@@ -14,9 +14,13 @@ import java.util.UUID;
 public interface WikiTopicPageRepository extends JpaRepository<WikiTopicPage, WikiTopicPageId> {
 
 
+    void deleteByWikiTopicPageIdNotInAndWikiCategory(Set<WikiTopicPageId> wikiTopicPageIds, Wiki wikiCategory);
+
     Set<WikiTopicPage> findAllByWikiTopicPageIdNotInAndWikiCategory(Set<WikiTopicPageId> wikiTopicPageIds, Wiki wikiCategory);
 
     List<WikiTopicPageOnly> findAllProjectedBy();
     Set<WikiTopicPage> getWikiTopicPageByWikiTopicPageId_WikiId(UUID wikiId);
+
+
 
 }
