@@ -67,6 +67,8 @@ export default function BubbleSort() {
   }, [authUserId, dispatch, isLoggedIn, jwtAccessToken, commentVoteStatus]);
 
   const [open, setOpen] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
+
   const trigger = useScrollTrigger({
     target: window,
     threshold: 50,
@@ -75,11 +77,33 @@ export default function BubbleSort() {
   useEffect(() => {
     if (!trigger) {
       setOpen(true);
+      setIsScrolling(true);
       setTimeout(() => {
-        setOpen(false);
+        setIsScrolling(false);
       }, 2500);
     }
   }, [trigger]);
+
+  useEffect(() => {
+    let timeoutId;
+
+    const handleScroll = () => {
+      setOpen(true);
+      setIsScrolling(true);
+
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
+        setIsScrolling(false);
+      }, 2500);
+    };
+
+    window.addEventListener('scroll', handleScroll, false);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll, false);
+    };
+  }, []);
 
   return (
     <>
@@ -92,7 +116,7 @@ export default function BubbleSort() {
       <Slide
         direction="up"
         className="position-fixed m-2 bottom-0 start-0"
-        in={open}
+        in={!isScrolling && open}
       >
         <div>
           <Vote like_={0} dislike_={0} />
@@ -108,7 +132,7 @@ export default function BubbleSort() {
           transform: 'translateX(-50%)',
           margin: '0 auto',
         }}
-        in={open}
+        in={!isScrolling && open}
       >
         <div>
           <NavbarTopic />
