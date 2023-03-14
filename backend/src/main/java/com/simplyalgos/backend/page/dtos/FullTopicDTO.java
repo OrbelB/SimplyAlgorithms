@@ -5,6 +5,7 @@ import com.simplyalgos.backend.tag.dto.TagDTO;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,12 +16,11 @@ import java.util.UUID;
 public class FullTopicDTO {
 
     UUID pageId;
+    UUID userId;
     Date createdDate;
     String title;
     String video;
-    String runningTime;
-    String timeComplexity;
-    String explanation;
+    Map<String, Object> pageDescription;
     Set<TagDTO> tags;
     Set<CommentBasicDTO> comments;
     Set<CodeSnippetDTO> codeSnippet;

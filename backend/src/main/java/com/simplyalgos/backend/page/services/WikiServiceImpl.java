@@ -174,7 +174,7 @@ public class WikiServiceImpl implements WikiService {
     @Override
     public String saveWiki(WikiDTO wiki) {
         Wiki newWiki = wikiMapper.wikiDTOToWiki(wiki);
-        if (wiki.getPageIds().size() > 0) {
+        if (wiki.getPageIds() != null && wiki.getPageIds().size() > 0) {
             // map the pages to the wiki
             newWiki.setWikiTopicPages(wiki.getPageIds().stream()
                     .map(topicService::getTopic)
@@ -188,8 +188,8 @@ public class WikiServiceImpl implements WikiService {
                             .build())
                     .collect(Collectors.toSet()));
             newWiki.setIsParentChild("child");
-        } else if (wiki.getWikiIds().size() > 0) {
-            // map the wikis to the wiki
+        } else if (wiki.getWikiIds() != null && wiki.getWikiIds().size() > 0) {
+            // map the sub categories or sub wikis to the wiki
             newWiki.setWikiChildren(wiki.getWikiIds().stream()
                     .map(wikiRepository::getReferenceById)
                     .map(wikiChild -> WikiParentChild.builder()

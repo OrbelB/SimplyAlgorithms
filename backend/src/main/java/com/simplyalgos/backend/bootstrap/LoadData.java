@@ -19,10 +19,7 @@ import jakarta.transaction.Transactional;
 import java.sql.Date;
 import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -50,15 +47,19 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void loadDefaultTopicPages() {
+
+        Map<String, Object> pageDescription = new HashMap<>();
+        pageDescription.put("description", "template");
         topicRepository.save(
                 Topic.builder()
                         .pageId(UUID.fromString("3ba9a5c8-a328-4c88-80e0-57872ed56bde"))
                         .downVotes(0)
                         .upVotes(0)
                         .video("template")
-                        .timeComplexity("template")
-                        .runningTime("template")
-                        .explanation("explanation")
+                        .source("template")
+                        .createdBy(userRepository.findByUsername("admin")
+                                .orElseThrow(() -> new NoSuchElementException("admin")))
+                        .pageDescription(pageDescription)
                         .title("Bubble Sort")
                         .downVotes(0)
                         .build()
@@ -71,9 +72,10 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                         .downVotes(0)
                         .upVotes(0)
                         .video("template")
-                        .timeComplexity("template")
-                        .runningTime("template")
-                        .explanation("explanation")
+                        .source("template")
+                        .createdBy(userRepository.findByUsername("admin")
+                                .orElseThrow(() -> new NoSuchElementException("admin")))
+                        .pageDescription(pageDescription)
                         .title("Binary Search Trees")
                         .downVotes(0)
                         .build()
@@ -84,10 +86,11 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                         .pageId(UUID.fromString("c9fc9f60-6468-45ed-ab1f-5463f4b72865"))
                         .downVotes(0)
                         .upVotes(0)
+                        .source("template")
                         .video("template")
-                        .timeComplexity("template")
-                        .runningTime("template")
-                        .explanation("explanation")
+                        .createdBy(userRepository.findByUsername("admin")
+                                .orElseThrow(() -> new NoSuchElementException("admin")))
+                        .pageDescription(pageDescription)
                         .title("Arrays")
                         .downVotes(0)
                         .build()
@@ -98,10 +101,11 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                         .pageId(UUID.fromString("54e9d8be-f123-4360-9c76-0c4c2ccd99eb"))
                         .downVotes(0)
                         .upVotes(0)
+                        .source("template")
                         .video("template")
-                        .timeComplexity("template")
-                        .runningTime("template")
-                        .explanation("explanation")
+                        .createdBy(userRepository.findByUsername("admin")
+                                .orElseThrow(() -> new NoSuchElementException("admin")))
+                        .pageDescription(pageDescription)
                         .title("BFS")
                         .downVotes(0)
                         .build()

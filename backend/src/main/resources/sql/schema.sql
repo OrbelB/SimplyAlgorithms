@@ -171,12 +171,13 @@ CREATE TABLE parent_child_pages (
 CREATE TABLE topic_page (
 	page_id VARCHAR(36) NOT NULL PRIMARY KEY,
     video VARCHAR(500) NOT NULL,
-    running_time TEXT NOT NULL,
-    time_complexity TEXT NOT NULL,
-    explanation TEXT NOT NULL,
+    page_description JSON NOT NULL,
+    source VARCHAR(260) NOT NULL,
     title  VARCHAR(60) NOT NULL,
     user_id VARCHAR(36) NOT NULL,
-    created_date TIMESTAMP DEFAULT(CURRENT_TIME()),
+    up_votes INT NOT NULL,
+    down_votes INT NOT NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
     FOREIGN KEY(page_id) REFERENCES page_entity(page_id)
 		ON DELETE CASCADE,
 	FOREIGN KEY (user_id) REFERENCES users(user_id) 

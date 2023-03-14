@@ -82,7 +82,7 @@ public class TopicServiceImpl implements TopicService {
         ));
     }
 
-    //TODO needs more work to remove children no specify
+    //TODO needs more work to remove children not specify
     @Transactional
     @Override
     public void updateTopicPage(FullTopicDTO fullTopicDTO) {
@@ -90,15 +90,10 @@ public class TopicServiceImpl implements TopicService {
         topicToUpdate.ifPresentOrElse(
                 topic -> {
                     if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getTitle())) topic.setTitle(fullTopicDTO.getTitle());
-                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getExplanation()))
-                        topic.setExplanation(fullTopicDTO.getExplanation());
-                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getVideo())) topic.setVideo(fullTopicDTO.getVideo());
-                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getTimeComplexity()))
-                        topic.setTimeComplexity(fullTopicDTO.getTimeComplexity());
-                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getRunningTime()))
-                        topic.setRunningTime(fullTopicDTO.getRunningTime());
                     if (fullTopicDTO.getSteps() != null)
                         mapStepsToTopic(topic, fullTopicDTO.getSteps());
+                    if(StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getPageDescription()))
+                        topic.setPageDescription(fullTopicDTO.getPageDescription());
                     if (fullTopicDTO.getExternalResources() != null)
                         mapExternalResourcesToTopic(topic, fullTopicDTO.getExternalResources());
                     if (fullTopicDTO.getCodeSnippet() != null)
@@ -125,9 +120,7 @@ public class TopicServiceImpl implements TopicService {
                 Topic.builder()
                         .pageId(UUID.randomUUID())
                         .title(fullTopicDTO.getTitle())
-                        .explanation(fullTopicDTO.getExplanation())
-                        .runningTime(fullTopicDTO.getRunningTime())
-                        .timeComplexity(fullTopicDTO.getTimeComplexity())
+                        .pageDescription(fullTopicDTO.getPageDescription())
                         .video(fullTopicDTO.getVideo())
                         .build()
         );
