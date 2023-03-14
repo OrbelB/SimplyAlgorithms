@@ -5,7 +5,7 @@ import './ForumPreview.css';
 
 export default function ForumPreview() {
   return (
-    <Box className="forum-section text-center p-5">
+    <Box sx={{ bgcolor: '#FDFCF4' }} className="forum-section text-center p-5">
       <h4>
         Need more clarification on this topic, dont be afraid to ask in the
         Forum.
