@@ -1,8 +1,12 @@
 import './QuizProgress.css';
 import { nanoid } from '@reduxjs/toolkit';
 import Chart from 'react-apexcharts';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { currentUserInfo } from '../../../pages/UserProfilePage';
 import QuizDB from './QuizDB/QuizDB';
+import useJwtPermssionExists from '../../../hooks/use-jwtPermission';
+import { quizActions } from '../../../store/reducers/quiz-reducer';
 
 const linechar = [
   {
@@ -12,16 +16,20 @@ const linechar = [
 ];
 
 export default function QuizProgress() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
+  const isTeacher = useJwtPermssionExists({ permission: 'ROLE_TEACHER' });
   return (
     <div>
-      {currentUserInfo.map(({ index }) => {
+      {currentUserInfo.map(() => {
         return (
-          <div key={index} className="container-fluid">
+          <div key={nanoid()} className="container-fluid">
             <div className="row">
               <div className="col text-center">
                 <h5 className="text-center m-4">Scores</h5>
-                <div className="row">
-                  <div className="col-auto col-3">
+                <div className="row justify-content-sm-center justify-content-md-center justify-content-lg-between">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-4">
                     {linechar.map(({ qname, dtachart }) => (
                       <Chart
                         key={nanoid()}
@@ -61,7 +69,7 @@ export default function QuizProgress() {
                       </Chart>
                     ))}
                   </div>
-                  <div className="col">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 align-self-center text-center">
                     {linechar.map(({ dtachart }) => (
                       <Chart
                         key={nanoid()}
@@ -88,6 +96,20 @@ export default function QuizProgress() {
                       </Chart>
                     ))}
                   </div>
+                  {(isAdmin || isTeacher) && (
+                    <div className="col-12 cold-sm-12 col-md-12 col-lg-4 text-none text-lg-end">
+                      <button
+                        type="button"
+                        className="quizstart"
+                        onClick={() => {
+                          navigate('/quiz/createquiz');
+                          dispatch(quizActions.resetData());
+                        }}
+                      >
+                        create quiz
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

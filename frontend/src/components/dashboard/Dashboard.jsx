@@ -19,8 +19,8 @@ export default function Dashboard() {
       <div className="row ps-2 justify-content-between mt-4">
         <div className="col-auto align-self-center 0">
           <h2>
-            {`${username.charAt(0).toUpperCase()}${username.substring(1)}`}
-            &apos;s Dashboard
+            {username.toUpperCase()}
+            &apos;S DASHBOARD
           </h2>
         </div>
         <div className="col-auto">

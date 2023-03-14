@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit';
 import './ShowMoreHighlights.css';
 import HighlightsPreview from '../HighlightsPreview/HighlightsPreview';
 import { SELECTEDTOPICS2 } from '../HighlightsDB';
@@ -43,9 +44,9 @@ export default function ShowMoreHighlights() {
             </div>
             <div className="modal-body">
               <div>
-                {SELECTEDTOPICS2.map(({ index, topic }) => {
+                {SELECTEDTOPICS2.map(({ topic }) => {
                   return (
-                    <div key={index}>
+                    <div key={nanoid()}>
                       <div className="firstline">
                         <div className="topic-selected">
                           <h5>Topic: {topic}</h5>

@@ -44,8 +44,8 @@ export const updateWiki = createAsyncThunk(
 export const getNameAvailability = createAsyncThunk(
   'wiki/isNameAvailable',
   async (passedParams) => {
-    const { name, jwtAccessToken } = passedParams;
-    const response = await wikiEndpoints.nameIsAvailable(name, jwtAccessToken);
+    const { name } = passedParams;
+    const response = await wikiEndpoints.nameIsAvailable(name);
 
     return response.data;
   }

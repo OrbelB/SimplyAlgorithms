@@ -76,7 +76,7 @@ export default function Comment({
     } finally {
       // updates reply count from the forum object
       // do it only after the comment has been succesfully created
-      if (status === 'success') {
+      if (status !== 'failed') {
         dispatch(forumActions.addSingleReply({ commentId: parentCommentId }));
       }
     }

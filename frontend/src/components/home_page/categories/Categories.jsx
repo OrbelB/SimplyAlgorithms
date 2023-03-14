@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { wikiActions } from '../../../store/reducers/wiki-reducer';
@@ -7,16 +7,19 @@ import { fetchSubCategories } from '../../../services/wiki';
 
 export default function Categories() {
   const dispatch = useDispatch();
+  const [runOnce, setRunOnce] = useState(true);
   const { status, subCategories } = useSelector((state) => state.wiki);
   useEffect(() => {
     if (status === 'idle' && subCategories.length === 0) {
       dispatch(fetchSubCategories());
     }
 
-    if (status === 'success' && subCategories.length === 0) {
+    // do it once when component mounts
+    if (status === 'success' && subCategories.length === 0 && runOnce) {
       dispatch(wikiActions.resetData());
+      setRunOnce(false);
     }
-  });
+  }, [status, subCategories, dispatch, runOnce]);
 
   const getRandomRGB = useCallback(() => {
     const r = Math.floor(Math.random() * 256);

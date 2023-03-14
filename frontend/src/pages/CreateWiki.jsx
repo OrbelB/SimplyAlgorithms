@@ -51,8 +51,8 @@ const initialContent = {
 };
 
 function getIds(searchBar, names, prop, title) {
-  return searchBar.pages
-    .map((item) => {
+  return searchBar?.pages
+    ?.map((item) => {
       const matchingItems = names.filter((name) => name[title] === item.title);
       return matchingItems.length > 0
         ? matchingItems.map((name) => name[`${prop}Id`])[0]
@@ -95,14 +95,13 @@ export default function CreateWiki() {
     if (wikiName.wikiName && (wiki.description || wiki.links) && once) {
       setContent(wiki.description ?? initialContent);
       setPages(wiki.links.pages.map((page) => page.title));
-
       setSearchBar(wiki.links);
       setTitle(wiki.title);
       setOnce(false);
     }
 
     if (createdWikiId) {
-      navigate(`/wiki/${title}`, { replace: true });
+      navigate(`/wiki/${createdWikiId}`, { replace: true });
       dispatch(wikiActions.resetData());
     }
   }, [
@@ -147,8 +146,7 @@ export default function CreateWiki() {
   const isReadyToSubmit =
     (wikiNameAvailable || wiki.wikiName) &&
     title !== '' &&
-    Object.values(content).length > 0 &&
-    searchBar?.pages?.length > 0;
+    Object.values(content).length > 0;
 
   const handleSaveTopic = async (e) => {
     e.preventDefault();
@@ -170,7 +168,7 @@ export default function CreateWiki() {
       wikiIds,
     };
 
-    dispatch(createWiki({ wiki: wikiToCreate, jwtAccessToken }));
+    await dispatch(createWiki({ wiki: wikiToCreate, jwtAccessToken }));
   };
 
   const handleUpdateTopic = async (e) => {
@@ -208,7 +206,10 @@ export default function CreateWiki() {
 
   if (Object.keys(wikiName).length !== 0 && !wikiNameAvailable) {
     helperText = `You cannot change the title of your wiki when updating it, the title is ${wiki.wikiName}`;
-  } else if (!wikiNameAvailable && Object.keys(wikiName).length === 0) {
+  } else if (
+    !wikiNameAvailable === false &&
+    Object.keys(wikiName).length === 0
+  ) {
     helperText = 'Name is taken choose another one';
   } else {
     helperText = 'Enter a title for your wiki page';
@@ -231,7 +232,7 @@ export default function CreateWiki() {
         <div className="row justify-content-center pt-5 pb-5 g-0">
           <TextField
             disabled={wikiName?.wikiName !== undefined}
-            error={!wikiNameAvailable && wikiNameAvailable !== null}
+            error={wikiNameAvailable !== null && !wikiNameAvailable}
             id="outlined-basic"
             onChange={handleTitleChange}
             label="Title"

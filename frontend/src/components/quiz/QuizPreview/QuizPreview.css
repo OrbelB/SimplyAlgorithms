@@ -1,8 +1,10 @@
 .quizpreview {
   border: 2px solid black;
   border-radius: 25px;
+  width: 400px !important;
   background-color: #d9d9d9;
 }
 .nav-hover:hover {
   color: black;
+ 
 }

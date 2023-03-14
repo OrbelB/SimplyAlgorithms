@@ -10,7 +10,7 @@ export default function QuizDB({ quizList, status }) {
   const dispatch = useDispatch();
   if (status === 'success') {
     return (
-      <div className="d-flex flex-wrap align-content-between">
+      <div className="flex d-flex flex-wrap justify-content-around g-0 mt-5">
         {quizList.map(({ quizId, title, score, createdBy }) => (
           <NavLink
             key={nanoid()}

@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit';
 import HighlightsPreview from './HighlightsPreview/HighlightsPreview';
 
 const SELECTEDTOPICS2 = [
@@ -10,9 +11,9 @@ export { SELECTEDTOPICS2 };
 export default function HighlightsDB() {
   return (
     <div>
-      {SELECTEDTOPICS2.map(({ index, topic }) => {
+      {SELECTEDTOPICS2.map(({ topic }) => {
         return (
-          <div key={index}>
+          <div key={nanoid()}>
             <div className="firstline p-2">
               <div className="topic-selected">
                 <h5>Topic: {topic}</h5>

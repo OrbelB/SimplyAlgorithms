@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit';
 import CommentsPreview from '../CommentsPreview/CommentsPreview';
 import { SELECTED_TOPICS } from '../CommentsDB';
 import './ShowMoreComments.css';
@@ -43,9 +44,9 @@ export default function ShowMoreComments() {
             </div>
             <div className="modal-body">
               <div>
-                {SELECTED_TOPICS.map(({ index, topic }) => {
+                {SELECTED_TOPICS.map(({ topic }) => {
                   return (
-                    <div key={index}>
+                    <div key={nanoid()}>
                       <div className="firstline">
                         <div className="topic-selected">
                           <h5>Topic: {topic}</h5>

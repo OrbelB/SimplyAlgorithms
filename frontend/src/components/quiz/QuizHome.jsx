@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import QuizPreview from './QuizPreview/QuizPreview';
@@ -8,9 +8,9 @@ import './QuizHome.css';
 import SelectionList from '../selector';
 import useSearchBar from '../../hooks/use-searchBar';
 import useSortBy from '../../hooks/use-sortBy';
-import { quizActions } from '../../store/reducers/quiz-reducer';
+// import { quizActions } from '../../store/reducers/quiz-reducer';
 import { fetchQuizList } from '../../services/quiz';
-import useJwtPermssionExists from '../../hooks/use-jwtPermission';
+// import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 
 const SORTING_OPTIONS = ['Created Date', 'Alphabetical'];
 const SELECTED_TOPIC_QUIZ = [{ index: 1, topic: 'Topic 1' }];
@@ -22,9 +22,9 @@ export default function Quizhome() {
   );
   const [selection, setSelection] = useState('');
   const { handleSortBy } = useSortBy({ actionToDispatch: fetchQuizList });
-  const navigate = useNavigate();
-  const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
-  const isTeacher = useJwtPermssionExists({ permission: 'ROLE_TEACHER' });
+  // const navigate = useNavigate();
+  // const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
+  // const isTeacher = useJwtPermssionExists({ permission: 'ROLE_TEACHER' });
 
   // handles search bar logic
   const { handleSearch: handleSearchQuiz, searchResults: searchQuizzes } =
@@ -79,7 +79,7 @@ export default function Quizhome() {
               );
             })}
           </div>
-          <div className="col-4 p-0 m-0 text-start">
+          <div className="col-4 p-0 m-0 text-end">
             <SelectionList
               label="Sort By"
               options={SORTING_OPTIONS}
@@ -88,7 +88,7 @@ export default function Quizhome() {
               handleAction={handleSortBy}
             />
           </div>
-          {(isAdmin || isTeacher) && (
+          {/* {(isAdmin || isTeacher) && (
             <div className="col-4 text-end">
               <button
                 type="button"
@@ -101,11 +101,10 @@ export default function Quizhome() {
                 create quiz
               </button>
             </div>
-          )}
+          )} */}
         </div>
-        <div className="mt-5">
-          <QuizPreview quizList={searchQuizzes} status={status} />
-        </div>
+
+        <QuizPreview quizList={searchQuizzes} status={status} />
       </div>
     </div>
   );

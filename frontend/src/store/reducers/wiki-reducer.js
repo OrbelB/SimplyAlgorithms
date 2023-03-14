@@ -110,7 +110,6 @@ export const wikiSlice = createSlice({
       .addCase(fetchSubCategories.fulfilled, (state, action) => {
         state.status = 'success';
         state.subCategories = action.payload;
-        console.info('subCategories', action.payload);
       })
       .addCase(fetchSubCategories.rejected, (state, action) => {
         state.status = 'failed';

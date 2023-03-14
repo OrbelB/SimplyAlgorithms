@@ -16,14 +16,13 @@ export const wikiEndpoints = {
         'Content-Type': 'application/json',
       },
     }),
-  nameIsAvailable: (name, jwtAccessToken) =>
+  nameIsAvailable: (name) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/name/available`, {
       params: {
         name,
       },
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwtAccessToken}`,
       },
     }),
   create: (wiki, jwtAccessToken) =>

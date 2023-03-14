@@ -7,7 +7,8 @@ export default function NestedDropdownMenu({ selection, title, links }) {
   return (
     <li>
       <i
-        className="dropdown-item font-weight-bold"
+        className="dropdown-item"
+        style={{ fontWeight: 600, fontSize: 20 }}
         role="button"
         unselectable="off"
         data-toggle="dropdown"
@@ -19,7 +20,8 @@ export default function NestedDropdownMenu({ selection, title, links }) {
         {selection?.map((topic, index) => (
           <li key={`${topic[index]}`}>
             <NavLink
-              className="dropdown-item"
+              style={{ fontWeight: 600, fontSize: 20 }}
+              className="dropdown-item font-size-20"
               to={links[index]}
               onClick={() => {
                 dispatch(forumActions.resetData());

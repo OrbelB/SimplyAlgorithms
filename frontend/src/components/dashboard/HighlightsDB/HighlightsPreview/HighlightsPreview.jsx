@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit';
 import './HighlightsPreview.css';
 
 const HIGHLIGHTS_PREVIEWS = [
@@ -22,21 +23,15 @@ const HIGHLIGHTS_PREVIEWS = [
 ];
 
 export default function HighlightsPreview() {
-  return (
-    <div>
-      {HIGHLIGHTS_PREVIEWS.map(({ id, category, comment }) => {
-        return (
-          <>
-            <div key={id} className="preview-sect m-2">
-              <div className="first-line">
-                <h4 className="preview-category">{category}</h4>
-              </div>
-              <p className="preview-comment">{comment}</p>
-            </div>
-            <br />
-          </>
-        );
-      })}
+  return HIGHLIGHTS_PREVIEWS.map(({ category, comment }) => (
+    <div key={nanoid()}>
+      <div className="preview-sect m-2">
+        <div className="first-line">
+          <h4 className="preview-category">{category}</h4>
+        </div>
+        <p className="preview-comment">{comment}</p>
+      </div>
+      <br />
     </div>
-  );
+  ));
 }
