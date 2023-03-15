@@ -44,7 +44,7 @@ public class UserNotes {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_updated")
-    private Timestamp LastUpdated;
+    private Timestamp lastUpdated;
 
     @Column(name = "is_public")
     private short isPublic;
