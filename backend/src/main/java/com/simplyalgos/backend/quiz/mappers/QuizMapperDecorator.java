@@ -10,7 +10,7 @@ import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
 import com.simplyalgos.backend.user.dtos.TakenQuizzesDashboardDTO;
 import com.simplyalgos.backend.user.mappers.UserMapper;
-import com.simplyalgos.backend.user.mappers.UserMapperImpl_;
+import com.simplyalgos.backend.user.mappers.UserMapperDecorator;
 import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.*;
 public class QuizMapperDecorator implements QuizMapper{
 
     private QuizMapper quizMapper;
-    private UserMapper userMapper = new UserMapperImpl_();
+    private UserMapper userMapper = new UserMapperDecorator();
     @Override
     public QuizDTO quizToQuizDTO(Quiz quiz) {
         return quizMapper.quizToQuizDTO(quiz);

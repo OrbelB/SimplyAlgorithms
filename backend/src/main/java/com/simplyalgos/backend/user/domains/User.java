@@ -2,6 +2,8 @@ package com.simplyalgos.backend.user.domains;
 
 import com.simplyalgos.backend.comment.domains.Comment;
 import com.simplyalgos.backend.comment.domains.CommentVote;
+import com.simplyalgos.backend.notes.domains.NoteShare;
+import com.simplyalgos.backend.notes.domains.UserNotes;
 import com.simplyalgos.backend.page.domains.Forum;
 import com.simplyalgos.backend.page.domains.PageVote;
 import com.simplyalgos.backend.page.domains.Topic;
@@ -173,4 +175,9 @@ public class User implements UserDetails, CredentialsContainer {
     private Set<Topic> topicsCreated = new HashSet<>();
 
 
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserNotes> notesCreated = new HashSet<>();
+
+    @OneToMany(mappedBy = "sharedTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<NoteShare> sharedNotes = new HashSet<>();
 }
