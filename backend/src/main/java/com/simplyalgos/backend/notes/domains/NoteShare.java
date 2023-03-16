@@ -40,6 +40,7 @@ public class NoteShare {
     @Column(name = "share_date")
     private Timestamp shareDate;
 
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "share_length")
     private Timestamp shareLength;

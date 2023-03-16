@@ -22,7 +22,7 @@ public class NoteController {
 
 
     //Create note
-    //update note --> updates the json & other necessary items, as well as making the notes public / unpublic
+    //update note --> updates the json & other necessary items. Dont user this to make notes public / private
     //delete note --> delete the specified note
 
 
@@ -34,6 +34,11 @@ public class NoteController {
     //update share length
 
 
-    //update description
+    //update public note description
+    //Publish Note to user base
+    //private public note
 
+//    will notify user of the action
+//    admin make note private
+//    admin delete public note
 }

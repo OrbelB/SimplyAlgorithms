@@ -17,11 +17,18 @@ public interface NoteMapper {
 
     UserNoteDTO userNoteToUserNoteDTO(UserNotes userNotes);
 
-    UserNotes userNoteDtoToUserNote(UserNoteDTO userNoteDTO);
+    @Mapping(target = "canEdit", ignore = true)
+    NoteShareDTO noteShareToNoteShareDTO(NoteShare noteShare);
 
-    NoteShareDTO shareNoteToShareNoteDTO(NoteShare noteShare);
+    @Mapping(target = "canEdit", ignore = true)
+    NoteShare noteShareDTOToNoteShare(NoteShareDTO noteShareDTO);
 
-    PublicNoteDTO publicNoteToPublicNoteDTO(PublicNotes publicNotes);
+
+//    UserNotes userNoteDtoToUserNote(UserNoteDTO userNoteDTO);
+//
+//    NoteShareDTO shareNoteToShareNoteDTO(NoteShare noteShare);
+//
+//    PublicNoteDTO publicNoteToPublicNoteDTO(PublicNotes publicNotes);
 
 
 }

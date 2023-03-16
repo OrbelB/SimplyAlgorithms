@@ -1,5 +1,9 @@
 package com.simplyalgos.backend.notes.services;
 
+import com.simplyalgos.backend.notes.domains.UserNotes;
+import com.simplyalgos.backend.notes.dtos.FullPublicNoteDTO;
+import com.simplyalgos.backend.notes.dtos.FullShareNoteDTO;
+import com.simplyalgos.backend.notes.dtos.RequestSharedNoteDTO;
 import com.simplyalgos.backend.notes.dtos.UserNoteDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
@@ -9,15 +13,18 @@ import java.util.UUID;
 
 public interface UserNotesService {
 
-    UUID createNotePage(UserNoteDTO userNoteDTO);
+    UserNoteDTO createNotePage(UserNoteDTO userNoteDTO);
 
     UserNoteDTO updateUserNote(UserNoteDTO userNoteDTO);
 
     void deleteNotePage(UUID noteId);
 
-    UserNoteDTO getUserNote(UUID noteId);
-    UserNoteDTO getSharedNote(UUID noteId);
-    UserNoteDTO getPublicNote(UUID noteId);
+    UserNoteDTO getUserNoteDTO(UUID noteId);
+
+    UserNotes getUserNotes(UUID noteId);
+
+    FullShareNoteDTO getSharedNote(RequestSharedNoteDTO requestSharedNoteDTO);
+    FullPublicNoteDTO getPublicNote(UUID noteId);
 
 
 //    will return UserListDTO
@@ -35,8 +42,4 @@ public interface UserNotesService {
     boolean makeNotePublic(UUID noteId);
     boolean makeNotePrivate(UUID noteId);
 
-//    for admins to delete public notes that are not needed.
-    void adminDeletePublicNote(UUID noteId);
-
-    void adminMakePublicNotePrivate(UUID noteId);
 }

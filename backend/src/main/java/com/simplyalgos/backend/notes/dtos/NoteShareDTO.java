@@ -15,18 +15,25 @@ import java.util.UUID;
 @Builder
 public class NoteShareDTO {
 
-    //person it is being shared too
     UUID shareId;
+
+    //person it is being shared too
+    String ShareToUserName;
+    UUID ShareToUserId;
+
     // cannot set / update from front end
     Timestamp shareDate;
-    // CAN set / update from front end
-    Timestamp shareLength;
-    boolean canEdit;
-    //includes UserDataDTO in UserNoteDTO
-    UserNoteDTO userNoteDTO;
+    // CAN set / update from front end /
+    // if left empty then will result to default 15 days
+    Timestamp expireDate;
 
+    boolean canEdit = false;
+
+//  ------------------------------------------------------ //
 //    if the owner of the note unshared, deletes, or share length expires
 //    then sharedTo user will receive a message.
-    String errorSharedNoteMessage;
-    boolean hasError;
+    String errorSharedNoteMessage = "";
+    boolean hasError = false;
+
+    int numberOfDaysToShare = 15;
 }

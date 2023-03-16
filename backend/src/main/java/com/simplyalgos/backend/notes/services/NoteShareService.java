@@ -1,28 +1,35 @@
 package com.simplyalgos.backend.notes.services;
 
+import com.simplyalgos.backend.notes.dtos.FullShareNoteDTO;
 import com.simplyalgos.backend.notes.dtos.NoteShareDTO;
+import com.simplyalgos.backend.notes.dtos.RequestSharedNoteDTO;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
 public interface NoteShareService {
 
 //    share a note with another user
-    NoteShareDTO shareNoteToUser(NoteShareDTO noteShareDTO);
+    NoteShareDTO shareNoteToUser(FullShareNoteDTO fullShareNoteDTO);
 
     //    will basically delete the tuple from table
-    NoteShareDTO unShareNote(NoteShareDTO noteShareDTO);
+    boolean unShareNote(NoteShareDTO noteShareDTO);
 
-    //will update the share length & the edit permissions
-    NoteShareDTO updateShareStatus(NoteShareDTO noteShareDTO);
+    //will update the share length
+    NoteShareDTO updateExpireDate(NoteShareDTO noteShareDTO);
 
-    boolean removeEditPermission(NoteShareDTO noteShareDTO);
+    void removeEditPermission(NoteShareDTO noteShareDTO);
 
-    boolean grantEditPermission(NoteShareDTO noteShareDTO);
+    void grantEditPermission(NoteShareDTO noteShareDTO);
 
 //    if expired then it will return a message in
 //    errorSharedNoteMessage & flag hasError
-    NoteShareDTO getNoteShareInformation(UUID userId, UUID noteId);
+//    will delete the current tuple
+    NoteShareDTO getNoteShareInformation(RequestSharedNoteDTO requestSharedNoteDTO);
+
+//    checks if the shareLength is expired
+    boolean canAccessSharedNote(UUID shareId);
 
 
 //  How to get shared notes

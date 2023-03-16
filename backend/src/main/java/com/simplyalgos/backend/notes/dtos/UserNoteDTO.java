@@ -1,6 +1,6 @@
 package com.simplyalgos.backend.notes.dtos;
 
-import com.simplyalgos.backend.user.dtos.UserDataDTO;
+import com.simplyalgos.backend.user.dtos.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,11 +23,7 @@ public class UserNoteDTO {
     short isPublic;
     String noteBody;
 
-    UserDataDTO createdBy;
+    UserDTO createdBy;
 
-//    if the owner of the note unshared, deletes, or share length expires
-//    then sharedTo user will receive a message.
-    String errorSharedNoteMessage;
-    boolean hasError;
 
 }

@@ -15,6 +15,6 @@ public interface PublicNotesService {
     PublicNoteDTO getPublicNoteInformation(UUID noteId);
 
 //    will delete the tuple in the table
-    boolean unpublicizeNote(UUID noteId);
+    boolean makeNotePrivate(UUID noteId);
 
 }

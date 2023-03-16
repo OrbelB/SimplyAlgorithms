@@ -29,7 +29,7 @@ public class PublicNotesServiceImp implements PublicNotesService{
     }
 
     @Override
-    public boolean unpublicizeNote(UUID noteId) {
+    public boolean makeNotePrivate(UUID noteId) {
         return false;
     }
 }
