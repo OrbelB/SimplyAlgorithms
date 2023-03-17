@@ -27,14 +27,6 @@ public interface UserNotesService {
     FullPublicNoteDTO getPublicNote(UUID noteId);
 
 
-//    will return UserListDTO
-    ObjectPagedList<?> ListPersonalNotes(Pageable pageable);
-
-//    Will return FullSharedNoteDTO
-    ObjectPagedList<?> ListSharedNotes(Pageable pageable);
-
-//    Will return FullPublicNoteDTO
-    ObjectPagedList<?> ListPublicNotes(Pageable pageable);
 
     List<UserNoteDTO> getSpecificNotes(List<UUID> noteIdList);
 

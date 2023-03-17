@@ -23,6 +23,9 @@ public interface NoteMapper {
     @Mapping(target = "canEdit", ignore = true)
     NoteShare noteShareDTOToNoteShare(NoteShareDTO noteShareDTO);
 
+    @Mapping(source = "publicNote.noteId", target = "userNoteDTO.noteId")
+    PublicNoteDTO publicNoteToPublicNoteDTO(PublicNotes publicNotes);
+
 
 //    UserNotes userNoteDtoToUserNote(UserNoteDTO userNoteDTO);
 //

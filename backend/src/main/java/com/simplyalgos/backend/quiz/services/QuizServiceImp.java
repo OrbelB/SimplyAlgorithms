@@ -230,6 +230,6 @@ public class QuizServiceImp implements QuizService {
                     .build();
         }
         throw new NoSuchElementException(
-                MessageFormat.format("Quiz with Id {0} not found ", quizId));
+                MessageFormat.format("Quiz with Id {0} not found", quizId));
     }
 }

@@ -15,7 +15,7 @@ import java.util.UUID;
 public class PublicNoteDTO {
 
     UUID publicShareId;
-    String description;
+    String description = "This is a public note shared by an admin or teacher";
     // cannot set / update from front end
     Timestamp shareDate;
     UserNoteDTO userNoteDTO;

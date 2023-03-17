@@ -43,6 +43,11 @@ public class NoteMapperDecorator implements NoteMapper{
         return null;
     }
 
+    @Override
+    public PublicNoteDTO publicNoteToPublicNoteDTO(PublicNotes publicNotes) {
+        return noteMapper.publicNoteToPublicNoteDTO(publicNotes);
+    }
+
 
 //    @Override
 //    public UserNotes userNoteDtoToUserNote(UserNoteDTO userNoteDTO) {

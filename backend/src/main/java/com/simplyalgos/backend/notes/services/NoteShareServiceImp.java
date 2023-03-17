@@ -38,6 +38,8 @@ public class NoteShareServiceImp implements NoteShareService{
     private final NoteShareRepository noteShareRepository;
     private final UserNoteRepository userNoteRepository;
 
+//    will check if note is public.
+//    cannot share public notes
     @Override
     public NoteShareDTO shareNoteToUser(FullShareNoteDTO fullShareNoteDTO) {
         if(StringUtils.isNotNullAndEmptyOrBlank(fullShareNoteDTO.getNoteShareDTO().getShareToUserName())){

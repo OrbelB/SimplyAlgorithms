@@ -120,7 +120,7 @@ public class UserNotesServiceImp implements UserNotesService{
         Optional<UserNotes> userNotesOptional = userNoteRepository.findById(noteId);
         if(userNotesOptional.isPresent() && userNotesOptional.get().getIsPublic() == 1){
             return FullPublicNoteDTO.builder()
-                    .publicNoteDTO(publicNotesService.getPublicNoteInformation(noteId))
+                    .publicNoteDTO(publicNotesService.getPublicNoteInformationUsingNoteId(noteId))
                     .userNoteDTO(noteMapper.userNoteToUserNoteDTO(userNotesOptional.get()))
                     .build();
         }
@@ -128,20 +128,6 @@ public class UserNotesServiceImp implements UserNotesService{
                 MessageFormat.format("note with Id {0} not found or Note is note public", noteId));
     }
 
-    @Override
-    public ObjectPagedList<?> ListPersonalNotes(Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public ObjectPagedList<?> ListSharedNotes(Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public ObjectPagedList<?> ListPublicNotes(Pageable pageable) {
-        return null;
-    }
 
     @Override
     public List<UserNoteDTO> getSpecificNotes(List<UUID> noteIdList) {

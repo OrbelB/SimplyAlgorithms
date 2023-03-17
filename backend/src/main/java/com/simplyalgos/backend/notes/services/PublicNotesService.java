@@ -9,12 +9,21 @@ public interface PublicNotesService {
 
     PublicNoteDTO makeNotePublic(PublicNoteDTO publicNoteDTO);
 
+    //    will delete the tuple in the table
+    void makeNotePrivateUsingPublicShareId(UUID shareId);
+    void makeNotePrivateUsingNoteId(UUID noteId);
+
 //    will delete the tuple when the flag is set to 0 on the
-    PublicNoteDTO updatePublicNoteDescription(PublicNoteDTO publicNoteDTO);
+    PublicNoteDTO updatePublicNoteDescriptionUsingPublicShareId(PublicNoteDTO publicNoteDTO);
 
-    PublicNoteDTO getPublicNoteInformation(UUID noteId);
+    PublicNoteDTO updatePublicNoteDescriptionUsingNoteId(PublicNoteDTO publicNoteDTO);
 
-//    will delete the tuple in the table
-    boolean makeNotePrivate(UUID noteId);
+
+    PublicNoteDTO getPublicNoteInformationUsingPublicShareId(UUID publicShareId);
+
+    PublicNoteDTO getPublicNoteInformationUsingNoteId(UUID noteId);
+
+
+
 
 }

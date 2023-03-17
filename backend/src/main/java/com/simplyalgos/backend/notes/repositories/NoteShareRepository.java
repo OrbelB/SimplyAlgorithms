@@ -10,5 +10,8 @@ public interface NoteShareRepository extends JpaRepository<NoteShare, UUID> {
     Optional<NoteShare> findBySharedTo_UserIdAndNote_NoteId(UUID userId, UUID noteId);
     boolean existsBySharedTo_UserIdAndNote_NoteId(UUID userid, UUID noteId);
 
+    boolean existsByNote_NoteId(UUID noteId);
+
+    void deleteAllByNote_NoteId(UUID noteId);
 
 }
