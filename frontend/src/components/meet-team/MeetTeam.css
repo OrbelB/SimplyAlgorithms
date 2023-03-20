@@ -1,21 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
+
 .teampage {
-    background-color: #b8f1f7;
+    background-color: #effdff;
     background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
     height: auto;
     padding: 0% 5% 15% 5%;
 }
 
+.teampage-top {
+    text-align: center;
+    margin-bottom: 5em;
+}
+
 .teampage-title {
-    font-size: 4em;
+    font-size: 5em;
+    text-shadow: -1px 1px #ef3550,
+    -2px 2px #f48fb1,
+    -3px 3px #7e57c2,
+    -4px 4px #2196f3,
+    -5px 5px #26c6da,
+    -6px 6px #43a047,
+    -7px 7px #eeff41,
+    -8px 8px #f9a825,
+    -9px 9px #ff5722;
 }
 
 .title-description {
     font-size: 1.5em;
-}
-
-.teampage-top {
-    text-align: center;
-    margin-bottom: 4em;
+    font-family: 'Readex Pro', sans-serif;
+    padding-left: 25%;
+    padding-right: 25%;
 }
 
 .team-members {
@@ -25,23 +39,98 @@
     gap: 5%;
 }
 
-h2 {
-    padding-right: 0;
-}
-
 .member-name {
     font-size: 2em;
+    color: white;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    font-family: 'Readex Pro', sans-serif;
 }
+
+.n1 { background-color: #f39d14; }
+.n2 { background-color: #ef3550;}
+.n3 { background-color: #2196f3;}
+.n4 { background-color: #05c26d;}
 
 .portrait {
     background-color: lightgray;
-    border-radius: 50%;
-    width: 300px;
-    height: 300px;
+    border-radius: 40%;
+    width: 10em; 
+    height: 10em;
 }
 
 .member-bio {
     font-size: 1.4em;
+    color: black;
+    padding: 1em 1em 1em 1em;
+    font-family: 'Readex Pro', sans-serif;
+}
+
+.g1 { color: #f39d14; }
+.g2 { color: #ef3550; }
+.g3 { color: #2196f3; }
+.g4 { color: #05c26d; }
+
+.description-1 { background-color: #fad08d; }
+.description-2 { background-color: #f396a4; }
+.description-3 { background-color: #99d1ff; }
+.description-4 { background-color: #57f5ae; }
+
+.glow-on-hover {
+    width: 150px;
+    height: 50px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+}
+
+.glow-on-hover:before {
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+}
+
+.glow-on-hover:active {
+    color: #000
+}
+
+.glow-on-hover:active:after {
+    background: transparent;
+}
+
+.glow-on-hover:hover:before {
+    opacity: 1;
+}
+
+.glow-on-hover:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
 }
 
 @media (max-width: 500px) {
