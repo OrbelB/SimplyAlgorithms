@@ -158,7 +158,7 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.CREATED).body(takeQuizService.createTakenQuiz(takeQuizDTO));
     }
 
-    private final TakeQuizRepository t;
+//    private final TakeQuizRepository t;
 
 //    @PostMapping("/test")
 //    public ResponseEntity<?> testing(){

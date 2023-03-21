@@ -8,11 +8,9 @@ import com.simplyalgos.backend.notes.dtos.*;
 import com.simplyalgos.backend.notes.mappers.NoteMapper;
 import com.simplyalgos.backend.notes.repositories.UserNoteRepository;
 import com.simplyalgos.backend.user.mappers.UserMapper;
-import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -70,10 +68,7 @@ public class UserNotesServiceImp implements UserNotesService{
     @Override
     public FullShareNoteDTO updateSharedUserNote(FullShareNoteDTO fullShareNoteDTO) {
         UserNoteDTO userNotesDTO = getUserNoteDTO(fullShareNoteDTO.getUserNoteDTO().getNoteId());
-        NoteShareDTO noteShareDTO = noteShareService.getNoteShareInformation(RequestSharedNoteDTO.builder()
-                        .noteId(userNotesDTO.getNoteId())
-                        .userId(fullShareNoteDTO.getNoteShareDTO().getShareToUserId())
-                .build());
+        NoteShareDTO noteShareDTO = noteShareService.getNoteShareInformation(userNotesDTO.getCreatedBy().getUserId(), userNotesDTO.getNoteId());
 
         if(noteShareDTO.isCanEdit() == false && noteShareService.canAccessSharedNote(noteShareDTO.getShareId())){
             throw new UserNotAuthorizedException(MessageFormat
@@ -86,12 +81,13 @@ public class UserNotesServiceImp implements UserNotesService{
     }
 
     @Override
-    public void deleteNotePage(UUID noteId) {
+    public boolean deleteNotePage(UUID noteId) {
         if(!userNoteRepository.existsById(noteId)){
             throw new NoSuchElementException(
                     MessageFormat.format("note with Id {0} not found ", noteId));
         }
         userNoteRepository.deleteById(noteId);
+        return true;
     }
 
     @Override
@@ -110,8 +106,8 @@ public class UserNotesServiceImp implements UserNotesService{
 
     //    use this to get notes that are shared
     @Override
-    public FullShareNoteDTO getSharedNote(RequestSharedNoteDTO requestSharedNoteDTO) {
-        if(!noteShareService.canAccessSharedNote(requestSharedNoteDTO.getShareId())){
+    public FullShareNoteDTO getSharedNote(UUID shareId, UUID noteId) {
+        if(!noteShareService.canAccessSharedNote(shareId)){
             return FullShareNoteDTO.builder()
                     .noteShareDTO(NoteShareDTO.builder()
                             .hasError(true)
@@ -121,14 +117,15 @@ public class UserNotesServiceImp implements UserNotesService{
                     .build();
         }
         Optional<UserNotes> userNotesOptional =
-                userNoteRepository.findById(requestSharedNoteDTO.getNoteId());
+                userNoteRepository.findById(noteId);
         if(!userNotesOptional.isPresent()){
             throw new NoSuchElementException(
-                    MessageFormat.format("note with Id {0} not found ", requestSharedNoteDTO.getNoteId()));
+                    MessageFormat.format("note with Id {0} not found ", noteId));
         }
+
         return FullShareNoteDTO.builder()
                 .noteShareDTO(noteShareService
-                        .getNoteShareInformation(requestSharedNoteDTO))
+                        .getNoteShareInformation(userNotesOptional.get().getCreatedBy().getUserId(), noteId))
                 .userNoteDTO(noteMapper
                         .userNoteToUserNoteDTO(userNotesOptional.get()))
                 .build();

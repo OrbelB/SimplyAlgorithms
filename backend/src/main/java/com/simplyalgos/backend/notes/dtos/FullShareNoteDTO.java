@@ -1,6 +1,5 @@
 package com.simplyalgos.backend.notes.dtos;
 
-import com.simplyalgos.backend.user.dtos.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

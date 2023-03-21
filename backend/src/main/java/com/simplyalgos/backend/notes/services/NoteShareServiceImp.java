@@ -8,12 +8,9 @@ import com.simplyalgos.backend.notes.domains.NoteShare;
 import com.simplyalgos.backend.notes.domains.UserNotes;
 import com.simplyalgos.backend.notes.dtos.FullShareNoteDTO;
 import com.simplyalgos.backend.notes.dtos.NoteShareDTO;
-import com.simplyalgos.backend.notes.dtos.RequestSharedNoteDTO;
 import com.simplyalgos.backend.notes.mappers.NoteMapper;
 import com.simplyalgos.backend.notes.repositories.NoteShareRepository;
-import com.simplyalgos.backend.notes.repositories.UserNoteRepository;
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.utils.StringUtils;
 import jakarta.transaction.Transactional;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.text.MessageFormat;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -36,7 +32,7 @@ public class NoteShareServiceImp implements NoteShareService{
     private final NoteMapper noteMapper;
     private final UserService userService;
     private final NoteShareRepository noteShareRepository;
-    private final UserNoteRepository userNoteRepository;
+//    private final UserNoteRepository userNoteRepository;
 
 //    will check if note is public.
 //    cannot share public notes
@@ -49,7 +45,8 @@ public class NoteShareServiceImp implements NoteShareService{
                                     .getNoteShareDTO().getShareToUserName()));
         }
         User shareTo = userService.getUserByUsername(fullShareNoteDTO.getNoteShareDTO().getShareToUserName());
-        Optional<UserNotes> userNote = userNoteRepository.findById(fullShareNoteDTO.getUserNoteDTO().getNoteId());
+//        Optional<UserNotes> userNote = userNoteRepository.findById(fullShareNoteDTO.getUserNoteDTO().getNoteId());
+        Optional<UserNotes> userNote = null;
         if(!userNote.isPresent() && userNote.get().getIsPublic() == 0){
             throw new ElementNotFoundException(
                     MessageFormat
@@ -112,46 +109,46 @@ public class NoteShareServiceImp implements NoteShareService{
     }
 
     @Override
-    public void removeEditPermission(NoteShareDTO noteShareDTO) {
-        Optional<NoteShare> noteShare = noteShareRepository.findById(noteShareDTO.getShareId());
+    public boolean removeEditPermission(UUID shareId) {
+        Optional<NoteShare> noteShare = noteShareRepository.findById(shareId);
         if(!noteShare.isPresent()){
             throw new ElementNotFoundException(
                     MessageFormat
-                            .format("share with shareId {0} does not exists", noteShareDTO.getShareId()));
+                            .format("share with shareId {0} does not exists", shareId));
         }
         noteShare.get().setCanEdit((short) 0);
         noteShareRepository.saveAndFlush(noteShare.get());
+        return true;
     }
 
     @Override
-    public void grantEditPermission(NoteShareDTO noteShareDTO) {
-        Optional<NoteShare> noteShare = noteShareRepository.findById(noteShareDTO.getShareId());
+    public boolean grantEditPermission(UUID shareId) {
+        Optional<NoteShare> noteShare = noteShareRepository.findById(shareId);
         if(!noteShare.isPresent()){
             throw new ElementNotFoundException(
                     MessageFormat
-                            .format("share with shareId {0} does not exists", noteShareDTO.getShareId()));
+                            .format("share with shareId {0} does not exists", shareId));
         }
         noteShare.get().setCanEdit((short) 1);
         noteShareRepository.saveAndFlush(noteShare.get());
+        return true;
     }
 
     @Override
-    public NoteShareDTO getNoteShareInformation(RequestSharedNoteDTO requestSharedNoteDTO) {
-        Optional<NoteShare> noteShare = noteShareRepository.findBySharedTo_UserIdAndNote_NoteId(
-                requestSharedNoteDTO.getUserId(),
-                requestSharedNoteDTO.getNoteId());
+    public NoteShareDTO getNoteShareInformation(UUID userId, UUID noteId) {
+        Optional<NoteShare> noteShare = noteShareRepository.findBySharedTo_UserIdAndNote_NoteId(userId, noteId);
         if(!noteShare.isPresent()){
             throw new ElementNotFoundException(
                     MessageFormat
                             .format("note share with share Id {0} not found!",
-                                    requestSharedNoteDTO.getShareId()));
+                                    userId));
         }
         if(ShareLengthExpired(noteShare.get())){
             noteShareRepository.deleteById(noteShare.get().getShareId());
             throw new NoteErrorException(
                     MessageFormat
                             .format("note share with share Id {0} date length expired! (it has been deleted)",
-                                    requestSharedNoteDTO.getShareId()));
+                                    noteId));
         }
         return noteMapper.noteShareToNoteShareDTO(noteShare.get());
     }

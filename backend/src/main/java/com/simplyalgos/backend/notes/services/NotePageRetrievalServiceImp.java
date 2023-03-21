@@ -42,33 +42,35 @@ public class NotePageRetrievalServiceImp implements NotePageRetrievalService{
         );
     }
 
-    @Override
-    public ObjectPagedList<?> listUserNotesByLastUpdated(Pageable pageable) {
-        Page<UserNotes> userNotes = userNoteRepository.findAllByLastUpdated(pageable);
-        return new ObjectPagedList<>(
-                userNotes.stream()
-                        .collect(Collectors.toList()),
-                PageRequest.of(
-                        userNotes.getPageable().getPageNumber(),
-                        userNotes.getPageable().getPageSize(),
-                        userNotes.getSort()),
-                userNotes.getTotalElements()
-        );
-    }
+//    @Override
+//    public ObjectPagedList<?> listUserNotesByLastUpdated(Pageable pageable) {
+////        Page<UserNotes> userNotes = userNoteRepository.findAllByLastUpdated(pageable);
+////        return new ObjectPagedList<>(
+////                userNotes.stream()
+////                        .collect(Collectors.toList()),
+////                PageRequest.of(
+////                        userNotes.getPageable().getPageNumber(),
+////                        userNotes.getPageable().getPageSize(),
+////                        userNotes.getSort()),
+////                userNotes.getTotalElements()
+////        );
+//        return null;
+//    }
 
-    @Override
-    public ObjectPagedList<?> listUserNotesByCreatedDate(Pageable pageable) {
-        Page<UserNotes> userNotes = userNoteRepository.findAllByCreatedDate(pageable);
-        return new ObjectPagedList<>(
-                userNotes.stream()
-                        .collect(Collectors.toList()),
-                PageRequest.of(
-                        userNotes.getPageable().getPageNumber(),
-                        userNotes.getPageable().getPageSize(),
-                        userNotes.getSort()),
-                userNotes.getTotalElements()
-        );
-    }
+//    @Override
+//    public ObjectPagedList<?> listUserNotesByCreatedDate(Pageable pageable) {
+////        Page<UserNotes> userNotes = userNoteRepository.findAllByCreatedDate(pageable);
+////        return new ObjectPagedList<>(
+////                userNotes.stream()
+////                        .collect(Collectors.toList()),
+////                PageRequest.of(
+////                        userNotes.getPageable().getPageNumber(),
+////                        userNotes.getPageable().getPageSize(),
+////                        userNotes.getSort()),
+////                userNotes.getTotalElements()
+////        );
+//        return null;
+//    }
 
     @Override
     public ObjectPagedList<?> ListUserNotesByIsPublic(Pageable pageable, short isPublic) {

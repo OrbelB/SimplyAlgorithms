@@ -1,6 +1,5 @@
 package com.simplyalgos.backend.notes.domains;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.user.domains.User;
 import jakarta.persistence.*;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import java.sql.Timestamp;
-import java.util.Set;
 import java.util.UUID;
 
 @NoArgsConstructor

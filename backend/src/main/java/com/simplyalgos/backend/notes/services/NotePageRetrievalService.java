@@ -8,9 +8,9 @@ public interface NotePageRetrievalService {
     //    will return UserListDTO
     ObjectPagedList<?> ListUserNotes(Pageable pageable);
 
-    ObjectPagedList<?> listUserNotesByLastUpdated(Pageable pageable);
-
-    ObjectPagedList<?> listUserNotesByCreatedDate(Pageable pageable);
+//    ObjectPagedList<?> listUserNotesByLastUpdated(Pageable pageable);
+//
+//    ObjectPagedList<?> listUserNotesByCreatedDate(Pageable pageable);
 
     ObjectPagedList<?> ListUserNotesByIsPublic(Pageable pageable, short isPublic);
 

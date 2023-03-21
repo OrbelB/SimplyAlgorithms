@@ -6,7 +6,6 @@ import com.simplyalgos.backend.notes.dtos.PublicNoteDTO;
 import com.simplyalgos.backend.notes.mappers.NoteMapper;
 import com.simplyalgos.backend.notes.repositories.NoteShareRepository;
 import com.simplyalgos.backend.notes.repositories.PublicNoteRepository;
-import com.simplyalgos.backend.notes.repositories.UserNoteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,7 @@ import java.util.UUID;
 @Transactional
 public class PublicNotesServiceImp implements PublicNotesService{
 
-    private final UserNoteRepository userNoteRepository;
+//    private final UserNoteRepository userNoteRepository;
     private final PublicNoteRepository publicNoteRepository;
     private final NoteShareRepository noteShareRepository;
     private final NoteMapper noteMapper;
@@ -32,8 +31,9 @@ public class PublicNotesServiceImp implements PublicNotesService{
 //    if the note was previously shared it will be unshared
     @Override
     public PublicNoteDTO makeNotePublic(PublicNoteDTO publicNoteDTO) {
-        Optional<UserNotes> userNotes = userNoteRepository.findById(publicNoteDTO
-                .getUserNoteDTO().getNoteId());
+//        Optional<UserNotes> userNotes = userNoteRepository.findById(publicNoteDTO
+//                .getUserNoteDTO().getNoteId());
+        Optional<UserNotes> userNotes = null;
         if(!userNotes.isPresent()){
             throw new NoSuchElementException( MessageFormat.format("public Note with publicShareId {0} note found", publicNoteDTO
                     .getUserNoteDTO().getNoteId()));

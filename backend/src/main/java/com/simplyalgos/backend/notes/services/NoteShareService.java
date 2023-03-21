@@ -2,9 +2,7 @@ package com.simplyalgos.backend.notes.services;
 
 import com.simplyalgos.backend.notes.dtos.FullShareNoteDTO;
 import com.simplyalgos.backend.notes.dtos.NoteShareDTO;
-import com.simplyalgos.backend.notes.dtos.RequestSharedNoteDTO;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,14 +17,14 @@ public interface NoteShareService {
     //will update the share length
     NoteShareDTO updateExpireDate(NoteShareDTO noteShareDTO);
 
-    void removeEditPermission(NoteShareDTO noteShareDTO);
+    boolean removeEditPermission(UUID shareId);
 
-    void grantEditPermission(NoteShareDTO noteShareDTO);
+    boolean grantEditPermission(UUID shareId);
 
 //    if expired then it will return a message in
 //    errorSharedNoteMessage & flag hasError
 //    will delete the current tuple
-    NoteShareDTO getNoteShareInformation(RequestSharedNoteDTO requestSharedNoteDTO);
+    NoteShareDTO getNoteShareInformation(UUID userId, UUID noteId);
 
 //    checks if the shareLength is expired
     boolean canAccessSharedNote(UUID shareId);
