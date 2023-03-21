@@ -70,3 +70,33 @@ h5 {
     font-weight: bolder;
     font-size: 50px;
 }
+
+.Frame_credit__KSKRG {
+    position: relative;
+    font-weight: bolder;
+    width: 40vw;
+    left: 28vw;
+    background-color: var(--color-nav-foot);
+    border-radius: 0px 0px 10px 10px;
+    text-align: center;
+}
+
+.Frame_container-style__N5u7z {
+    height: 600px;
+    background-color: var(--color-bg-main);
+}
+
+.Frame_website__ZlBLM {
+    position: relative;
+    display: block;
+    width: 93vw;
+    height: 600px;
+    left: 3vw;
+    border: 5px solid var(--color-nav-foot);
+    border-radius: 25px;
+}
+
+.bg-transparent {
+    --bs-bg-opacity: 1;
+    background-color: transparent!important;
+}
