@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.notes.services;
 
+import com.simplyalgos.backend.exceptions.UserNotAuthorizedException;
 import com.simplyalgos.backend.exceptions.UserNoteIsAlreadyPrivateException;
 import com.simplyalgos.backend.exceptions.UserNoteIsAlreadyPublicException;
 import com.simplyalgos.backend.notes.domains.UserNotes;
@@ -67,6 +68,24 @@ public class UserNotesServiceImp implements UserNotesService{
     }
 
     @Override
+    public FullShareNoteDTO updateSharedUserNote(FullShareNoteDTO fullShareNoteDTO) {
+        UserNoteDTO userNotesDTO = getUserNoteDTO(fullShareNoteDTO.getUserNoteDTO().getNoteId());
+        NoteShareDTO noteShareDTO = noteShareService.getNoteShareInformation(RequestSharedNoteDTO.builder()
+                        .noteId(userNotesDTO.getNoteId())
+                        .userId(fullShareNoteDTO.getNoteShareDTO().getShareToUserId())
+                .build());
+
+        if(noteShareDTO.isCanEdit() == false && noteShareService.canAccessSharedNote(noteShareDTO.getShareId())){
+            throw new UserNotAuthorizedException(MessageFormat
+                    .format("User with user Id {0} does not have permission to update shared notes ", noteShareDTO.getShareToUserId()));
+        }
+        return FullShareNoteDTO.builder()
+                .userNoteDTO(updateUserNote(fullShareNoteDTO.getUserNoteDTO()))
+                .noteShareDTO(noteShareDTO)
+                .build();
+    }
+
+    @Override
     public void deleteNotePage(UUID noteId) {
         if(!userNoteRepository.existsById(noteId)){
             throw new NoSuchElementException(
@@ -116,7 +135,7 @@ public class UserNotesServiceImp implements UserNotesService{
     }
 
     @Override
-    public FullPublicNoteDTO getPublicNote(UUID noteId) {
+    public FullPublicNoteDTO getPublicNoteUserNote(UUID noteId) {
         Optional<UserNotes> userNotesOptional = userNoteRepository.findById(noteId);
         if(userNotesOptional.isPresent() && userNotesOptional.get().getIsPublic() == 1){
             return FullPublicNoteDTO.builder()
@@ -128,11 +147,6 @@ public class UserNotesServiceImp implements UserNotesService{
                 MessageFormat.format("note with Id {0} not found or Note is note public", noteId));
     }
 
-
-    @Override
-    public List<UserNoteDTO> getSpecificNotes(List<UUID> noteIdList) {
-        return null;
-    }
 
     @Override
     public boolean makeNotePublic(UUID noteId) {

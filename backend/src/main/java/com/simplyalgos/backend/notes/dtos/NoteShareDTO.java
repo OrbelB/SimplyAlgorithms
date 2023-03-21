@@ -15,6 +15,7 @@ import java.util.UUID;
 @Builder
 public class NoteShareDTO {
 
+//    THE PRIMARY KEY
     UUID shareId;
 
     //person it is being shared too

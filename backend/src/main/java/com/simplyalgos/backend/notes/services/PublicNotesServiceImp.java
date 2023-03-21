@@ -35,7 +35,8 @@ public class PublicNotesServiceImp implements PublicNotesService{
         Optional<UserNotes> userNotes = userNoteRepository.findById(publicNoteDTO
                 .getUserNoteDTO().getNoteId());
         if(!userNotes.isPresent()){
-            //throw
+            throw new NoSuchElementException( MessageFormat.format("public Note with publicShareId {0} note found", publicNoteDTO
+                    .getUserNoteDTO().getNoteId()));
         }
         if(noteShareRepository.existsByNote_NoteId(publicNoteDTO
                 .getUserNoteDTO().getNoteId())){

@@ -1,6 +1,8 @@
 package com.simplyalgos.backend.notes.repositories;
 
 import com.simplyalgos.backend.notes.domains.NoteShare;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -13,5 +15,16 @@ public interface NoteShareRepository extends JpaRepository<NoteShare, UUID> {
     boolean existsByNote_NoteId(UUID noteId);
 
     void deleteAllByNote_NoteId(UUID noteId);
+
+    Page<NoteShare> findAllByCanEdit(Pageable pageable, short canEdit);
+
+    Page<NoteShare> findAllByOrderByShareLengthDesc(Pageable pageable);
+
+    Page<NoteShare> findAllByOrderByShareLengthAsc(Pageable pageable);
+
+    Page<NoteShare> findAllByOrderByShareDateDesc(Pageable pageable);
+
+    Page<NoteShare> findAllByOrderByShareDateAsc(Pageable pageable);
+
 
 }

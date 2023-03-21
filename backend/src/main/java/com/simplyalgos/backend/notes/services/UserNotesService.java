@@ -17,6 +17,8 @@ public interface UserNotesService {
 
     UserNoteDTO updateUserNote(UserNoteDTO userNoteDTO);
 
+    FullShareNoteDTO updateSharedUserNote(FullShareNoteDTO fullShareNoteDTO);
+
     void deleteNotePage(UUID noteId);
 
     UserNoteDTO getUserNoteDTO(UUID noteId);
@@ -24,11 +26,8 @@ public interface UserNotesService {
     UserNotes getUserNotes(UUID noteId);
 
     FullShareNoteDTO getSharedNote(RequestSharedNoteDTO requestSharedNoteDTO);
-    FullPublicNoteDTO getPublicNote(UUID noteId);
+    FullPublicNoteDTO getPublicNoteUserNote(UUID noteId);
 
-
-
-    List<UserNoteDTO> getSpecificNotes(List<UUID> noteIdList);
 
     //  will update the is_public column on sql
     boolean makeNotePublic(UUID noteId);

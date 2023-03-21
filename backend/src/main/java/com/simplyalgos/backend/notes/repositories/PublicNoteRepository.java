@@ -14,4 +14,6 @@ public interface PublicNoteRepository extends JpaRepository <PublicNotes, UUID> 
 
     void deleteByPublicNote_NoteId(UUID noteId);
 
+
+
 }

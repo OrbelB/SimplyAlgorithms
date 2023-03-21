@@ -10,27 +10,33 @@ public interface NotePageRetrievalService {
 
     ObjectPagedList<?> listUserNotesByLastUpdated(Pageable pageable);
 
-    ObjectPagedList<?> listUserNotesByOldest(Pageable pageable);
+    ObjectPagedList<?> listUserNotesByCreatedDate(Pageable pageable);
 
-    ObjectPagedList<?> listUserNotesByNewest(Pageable pageable);
+    ObjectPagedList<?> ListUserNotesByIsPublic(Pageable pageable, short isPublic);
+
+    ObjectPagedList<?> ListUserNotesByIsSharedToOtherUsers(Pageable pageable);
 
 
 
     //    Will return FullSharedNoteDTO
     ObjectPagedList<?> listSharedNotes(Pageable pageable);
 
-    ObjectPagedList<?> listSharedNotesWithEditGranted(Pageable pageable);
+    ObjectPagedList<?> listSharedNotesWithEditGranted(Pageable pageable, short canEdit);
 
-    ObjectPagedList<?> listNewestSharedNote(Pageable pageable);
+    ObjectPagedList<?> listShareNoteByExpireDateDesc(Pageable pageable);
 
-    ObjectPagedList<?> listOldestSharedNote(Pageable pageable);
+    ObjectPagedList<?> listShareNoteByExpireDateAcs(Pageable pageable);
 
-    ObjectPagedList<?> listShareNoteByEarliestExpireDate(Pageable pageable);
+    ObjectPagedList<?> listShareNoteByShareDateDesc(Pageable pageable);
+
+    ObjectPagedList<?> listShareNoteByShareDateAcs(Pageable pageable);
+
+
+
+
+
 
 
     ObjectPagedList<?> listPublicNotes(Pageable pageable);
 
-    ObjectPagedList<?> listPublicNotesByNewestShareDate(Pageable pageable);
-
-    ObjectPagedList<?> listPublicNotesByOldestShareDate(Pageable pageable);
 }
