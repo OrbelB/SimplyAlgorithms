@@ -59,3 +59,14 @@ h5 {
     height: 40vh;
     font-size: 1.5em;
 }
+
+.Frame_algo_title__lDbbF {
+    position: relative;
+    background-color: var(--color-nav-foot);
+    border-radius: 10px 10px 0px 0px;
+    text-align: center;
+    width: 40vw;
+    left: 28vw;
+    font-weight: bolder;
+    font-size: 50px;
+}
