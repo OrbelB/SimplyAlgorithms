@@ -1,14 +1,11 @@
 package com.simplyalgos.backend.quiz.mappers;
 
-import com.simplyalgos.backend.quiz.domains.QuestionAnswer;
-import com.simplyalgos.backend.quiz.domains.Quiz;
-import com.simplyalgos.backend.quiz.domains.QuizQuestion;
-import com.simplyalgos.backend.quiz.domains.TakeQuiz;
+import com.simplyalgos.backend.quiz.domains.*;
 import com.simplyalgos.backend.quiz.dtos.QuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
-import com.simplyalgos.backend.user.dtos.TakenQuizzesDashboardDTO;
+import com.simplyalgos.backend.quiz.dtos.TakenQuizzesDashboardDTO;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.mappers.UserMapperDecorator;
 import io.swagger.v3.core.util.Json;
@@ -24,6 +21,7 @@ import java.util.*;
 public class QuizMapperDecorator implements QuizMapper{
 
     private QuizMapper quizMapper;
+
     private UserMapper userMapper = new UserMapperDecorator();
     @Override
     public QuizDTO quizToQuizDTO(Quiz quiz) {
@@ -140,6 +138,24 @@ public class QuizMapperDecorator implements QuizMapper{
 //            log.debug("COL: " + i + " JSON:  " + Json.pretty(takenQuizzesDashboardDTOList.get(i)));
 //        }
         return takenQuizzesDashboardDTOList;
+    }
+
+    @Override
+    public TakenQuizzesDashboardDTO takeQuizAverageToTakeQuizzesDashboardDTO(TakeQuizAverage takeQuizAverage) {
+        return TakenQuizzesDashboardDTO.builder()
+                .userId(takeQuizAverage.getUser().getUserId())
+                .avgTakeQuizId(takeQuizAverage.getAvgTakeQuizId())
+                .averageScore(takeQuizAverage.getAvgScore())
+                .lowestSore(takeQuizAverage.getLowestScore())
+                .highestScore(takeQuizAverage.getHighestScore())
+                .bestTime(takeQuizAverage.getBestTime())
+                .worstTime(takeQuizAverage.getWorstTime())
+                .averageTime(takeQuizAverage.getAvgTime())
+                .attempts(takeQuizAverage.getAttempts())
+                .quizDTO(quizMapper.quizToQuizDTO(takeQuizAverage.getReferenceQuizForAvgScore()))
+                .createdBy(userMapper.userTOUserDataDTO(takeQuizAverage
+                        .getReferenceQuizForAvgScore().getCreatedBy()))
+                .build();
     }
 
 

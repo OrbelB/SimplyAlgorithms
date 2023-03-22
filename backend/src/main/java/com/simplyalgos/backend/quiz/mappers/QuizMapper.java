@@ -1,14 +1,11 @@
 package com.simplyalgos.backend.quiz.mappers;
 
-import com.simplyalgos.backend.quiz.domains.QuestionAnswer;
-import com.simplyalgos.backend.quiz.domains.Quiz;
-import com.simplyalgos.backend.quiz.domains.QuizQuestion;
-import com.simplyalgos.backend.quiz.domains.TakeQuiz;
+import com.simplyalgos.backend.quiz.domains.*;
 import com.simplyalgos.backend.quiz.dtos.QuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
-import com.simplyalgos.backend.user.dtos.TakenQuizzesDashboardDTO;
+import com.simplyalgos.backend.quiz.dtos.TakenQuizzesDashboardDTO;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -38,5 +35,9 @@ public interface QuizMapper {
 
 
     List<TakenQuizzesDashboardDTO> takeQuizToTakenQuizzesDashboardDTO(List<TakeQuiz> takeQuizList);
+
+    TakenQuizzesDashboardDTO takeQuizAverageToTakeQuizzesDashboardDTO(TakeQuizAverage takeQuizAverage);
+
+
 
 }

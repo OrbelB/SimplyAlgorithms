@@ -22,3 +22,8 @@ public class TakeQuizDTO {
     Timestamp finishedAt;
     int correct; //the number of questions answered correctly
 }
+
+//    private double addToAverage(double average, int size, double value)
+//    {
+//        return (size * average + value) / (size + 1);
+//    }

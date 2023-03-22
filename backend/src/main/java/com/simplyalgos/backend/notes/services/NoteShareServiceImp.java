@@ -59,6 +59,9 @@ public class NoteShareServiceImp implements NoteShareService{
                     .format("Already shared Note with user {0}", fullShareNoteDTO
                             .getNoteShareDTO().getShareToUserName()));
         }
+        if(true){
+            log.debug("user must be owner of note to share it");
+        }
 
         NoteShare noteShare = noteShareRepository.saveAndFlush(NoteShare
                 .builder()

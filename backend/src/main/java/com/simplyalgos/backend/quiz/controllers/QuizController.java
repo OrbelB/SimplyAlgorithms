@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.quiz.controllers;
 
 import com.simplyalgos.backend.quiz.domains.TakeQuiz;
+import com.simplyalgos.backend.quiz.domains.TakeQuizAverage;
 import com.simplyalgos.backend.quiz.dtos.FullQuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
@@ -10,10 +11,7 @@ import com.simplyalgos.backend.quiz.security.CreateQuizPermission;
 import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
 import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
 import com.simplyalgos.backend.quiz.security.UpdateQuizPermission;
-import com.simplyalgos.backend.quiz.services.QuizQuestionAnswerService;
-import com.simplyalgos.backend.quiz.services.QuizQuestionService;
-import com.simplyalgos.backend.quiz.services.QuizService;
-import com.simplyalgos.backend.quiz.services.TakeQuizService;
+import com.simplyalgos.backend.quiz.services.*;
 import com.simplyalgos.backend.user.security.perms.UserDeletePermission;
 import com.simplyalgos.backend.utils.StringUtils;
 import io.swagger.v3.core.util.Json;
@@ -43,6 +41,8 @@ public class QuizController {
     private final TakeQuizService takeQuizService;
     private final QuizQuestionAnswerService questionAnswerService;
     private final QuizQuestionService quizQuestionService;
+
+    private final TakeQuizAverageService takeQuizAverageService;
 
     //need to pass in the tags
     //will retrieve the quiz pages
@@ -76,23 +76,18 @@ public class QuizController {
         return ResponseEntity.ok(quizService.getFullQuiz(UUID.fromString(quizId)));
     }
 
+//    new and improved
     @GetMapping(value = "/user_history")
     public ResponseEntity<?> getUserQuizHistory(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "5", required = false) int size,
-//            @RequestParam(name = "sortBy", required = true) String sortBy,
-            @RequestParam(name = "userId", required = true) String userId,
-            @RequestParam(name = "byQuiz", required = false) String quizId) {
-        if (StringUtils.isNotNullAndEmptyOrBlank(quizId)) {
-            log.debug("Getting history by specific quiz");
-            return ResponseEntity.ok(takeQuizService
-                    .getAllUserTakenQuizByQuizId(PageRequest.of(page, size),
-                            userId,
-                            quizId));
-        } else {
-            log.debug("getting history by userId only");
-            return ResponseEntity.ok(takeQuizService.getAllUserTakenQuiz(PageRequest.of(page, size), userId));
-        }
+            @RequestParam(name = "userId", required = true) String userId) {
+            return ResponseEntity.ok(takeQuizAverageService.getTakeQuizAverageList(UUID.fromString(userId), PageRequest.of(page, size)));
+    }
+
+    @GetMapping(value = "/user_history/{avgTakeQuizId}")
+    public ResponseEntity<?> getAverageQuizScore(@PathVariable String avgTakeQuizId) {
+        return ResponseEntity.ok(takeQuizAverageService.getAverageQuizScore(UUID.fromString(avgTakeQuizId)));
     }
 
 
@@ -103,6 +98,7 @@ public class QuizController {
                 .body(takeQuizService.deleteAllUserTakeQuizHistory(takeQuizDTO.getUserId()));
     }
 
+//    all scores gotten on specific quiz
     @GetMapping(path = "/avgQuizScore", consumes = "application/json")
     public ResponseEntity<?> calculateAverageQuizScore(@RequestBody QuizDTO quizDTO) {
         return ResponseEntity.ok(takeQuizService.getAverageQuizScore(quizDTO.getQuizId()));
@@ -149,12 +145,11 @@ public class QuizController {
     public ResponseEntity<?> updateFullQuiz(@RequestBody FullQuizDTO fullQuizDTO) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(quizService.updateFullQuiz(fullQuizDTO));
     }
-//    SLOW AND STEADY NOW
+//    vrooooom
 
     @TakeQuizPermission
     @PostMapping("/submitQuiz")
     public ResponseEntity<?> submitQuiz(@RequestBody TakeQuizDTO takeQuizDTO) {
-        log.debug("Take quiz DTO object: " + Json.pretty(takeQuizDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(takeQuizService.createTakenQuiz(takeQuizDTO));
     }
 

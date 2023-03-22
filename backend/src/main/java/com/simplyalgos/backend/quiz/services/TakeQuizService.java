@@ -33,10 +33,12 @@ public interface TakeQuizService {
 //    will delete everything
     UUID deleteAllUserTakeQuizHistory(UUID userId);
 
+    UUID deleteAllTakenQuizForSpecificQuiz(UUID userId, UUID quizId);
+
 //    will delete quizzes taken a month ago.
 //    will delete based on finished time stamp.
     UUID deleteOldUserTakenQuizHistory(UUID userId);
 
-    void test(List<TakeQuiz> takeQuizList);
+//    void test(List<TakeQuiz> takeQuizList);
 
 }

@@ -8,7 +8,7 @@ import com.simplyalgos.backend.quiz.mappers.QuizMapper;
 import com.simplyalgos.backend.quiz.repositories.QuizRepository;
 import com.simplyalgos.backend.quiz.repositories.TakeQuizRepository;
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.dtos.TakenQuizzesDashboardDTO;
+import com.simplyalgos.backend.quiz.dtos.TakenQuizzesDashboardDTO;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.services.UserService;
@@ -25,10 +25,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-
-
-import java.util.Collections;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -41,6 +37,8 @@ public class TakeQuizServiceImp implements TakeQuizService {
     private final UserRepository userRepository;
     private final UserService userService;
     private final QuizMapper quizMapper;
+
+    private final TakeQuizAverageService takeQuizAverageService;
 
 
     @Override
@@ -96,6 +94,9 @@ public class TakeQuizServiceImp implements TakeQuizService {
                 takeQuizPage.getTotalElements()
         );
     }
+
+
+    @Deprecated
     @Override
     public ObjectPagedList getAllUserTakenQuizByQuizId(Pageable pageable, String userId, String quizId) {
         Page<TakeQuiz> takeQuizPage = takeQuizRepository
@@ -133,13 +134,10 @@ public class TakeQuizServiceImp implements TakeQuizService {
 
             List<TakeQuiz> takeQuizList = takeQuizRepository.findAllByQuizReference_QuizId(quizId);
 
-            log.debug("This is the size: " + takeQuizList.size());
-            log.debug("Includes: " + Json.pretty(takeQuizList));
             double average = 0;
             for (TakeQuiz takeQuiz : takeQuizList) {
                 average += takeQuiz.getScore();
             }
-            log.debug("Returning the average");
             return TakenQuizAverageScore.builder()
                     .avgScore(average / takeQuizList.size())
                     .quizId(quiz.get().getQuizId())
@@ -172,6 +170,7 @@ public class TakeQuizServiceImp implements TakeQuizService {
                             .build()
             );
             log.debug("Finishing the creation of a new take quiz");
+            takeQuizAverageService.recordFunctionSelector(takeQuizDTO);
             return takeQuiz.getTakeQuizId();
         }
         log.debug("Bad request");
@@ -182,7 +181,15 @@ public class TakeQuizServiceImp implements TakeQuizService {
     @Override
     public UUID deleteAllUserTakeQuizHistory(UUID userId) {
         takeQuizRepository.deleteAllByTakenBy_UserId(userId);
+        takeQuizAverageService.resetAllAverageQuizScore(userId);
         log.info("deleteAllUserTakeQuizHistory not implemented");
+        return userId;
+    }
+
+    @Override
+    public UUID deleteAllTakenQuizForSpecificQuiz(UUID userId, UUID quizId) {
+        takeQuizRepository.deleteAllByTakenBy_UserIdAndQuizReference_QuizId(userId,quizId);
+        takeQuizAverageService.resetAverageQuizScore(userId,quizId);
         return userId;
     }
 
@@ -192,19 +199,19 @@ public class TakeQuizServiceImp implements TakeQuizService {
         return userId;
     }
 
-    private final UserMapper userMapper;
-    @Override
-    public void test(List<TakeQuiz> takeQuizList) {
-        List<TakenQuizzesDashboardDTO> takenQuizzesDashboardDTOList
-                = quizMapper.takeQuizToTakenQuizzesDashboardDTO(takeQuizList);
-
-        int i = 0;
-        for(TakenQuizzesDashboardDTO takenQuizzesDashboardDTO1: takenQuizzesDashboardDTOList){
-            log.debug("INDEX " + i + "\n " + Json.pretty(takenQuizzesDashboardDTO1));
-        }
-
-
-    }
+//    private final UserMapper userMapper;
+//    @Override
+//    public void test(List<TakeQuiz> takeQuizList) {
+//        List<TakenQuizzesDashboardDTO> takenQuizzesDashboardDTOList
+//                = quizMapper.takeQuizToTakenQuizzesDashboardDTO(takeQuizList);
+//
+//        int i = 0;
+//        for(TakenQuizzesDashboardDTO takenQuizzesDashboardDTO1: takenQuizzesDashboardDTOList){
+//            log.debug("INDEX " + i + "\n " + Json.pretty(takenQuizzesDashboardDTO1));
+//        }
+//
+//
+//    }
 
 
     private int getTimeDiff(TakeQuiz takeQuiz){

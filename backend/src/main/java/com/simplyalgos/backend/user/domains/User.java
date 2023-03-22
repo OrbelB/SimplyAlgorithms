@@ -10,6 +10,7 @@ import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.domains.Views;
 import com.simplyalgos.backend.quiz.domains.Quiz;
 import com.simplyalgos.backend.quiz.domains.TakeQuiz;
+import com.simplyalgos.backend.quiz.domains.TakeQuizAverage;
 import com.simplyalgos.backend.report.domains.CommentReport;
 import com.simplyalgos.backend.report.domains.PageReport;
 import com.simplyalgos.backend.user.security.Role;
@@ -155,6 +156,9 @@ public class User implements UserDetails, CredentialsContainer {
 
     @OneToMany(mappedBy = "takenBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TakeQuiz> takenQuizzes = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<TakeQuizAverage> AvgUserScores = new HashSet<>();
 
     @OneToMany(mappedBy = "commentReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentReport> commentReports = new ArrayList<>();

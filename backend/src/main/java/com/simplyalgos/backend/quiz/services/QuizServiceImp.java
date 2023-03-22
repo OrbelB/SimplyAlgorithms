@@ -198,7 +198,7 @@ public class QuizServiceImp implements QuizService {
     }
 
     @Override
-    public QuizDTO getQuiz(UUID quizId) {
+    public QuizDTO getQuizDTO(UUID quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new NoSuchElementException(
                 MessageFormat.format("Quiz with Id {0} not found ", quizId)));
         return new QuizDTO(
@@ -211,6 +211,12 @@ public class QuizServiceImp implements QuizService {
                         quiz.getTagId().getTag()
                 )
         );
+    }
+
+    @Override
+    public Quiz getQuiz(UUID quizId){
+        return quizRepository.findById(quizId).orElseThrow(() -> new NoSuchElementException(
+                MessageFormat.format("Quiz with Id {0} not found ", quizId)));
     }
 
     @Override

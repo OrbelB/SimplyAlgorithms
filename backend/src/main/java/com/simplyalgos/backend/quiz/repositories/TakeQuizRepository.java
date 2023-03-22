@@ -39,4 +39,6 @@ public interface TakeQuizRepository extends JpaRepository<TakeQuiz, UUID> {
 
     void deleteAllByTakenBy_UserId(UUID userId);
 
+    void deleteAllByTakenBy_UserIdAndQuizReference_QuizId(UUID userId, UUID quizId);
+
 }

@@ -57,6 +57,9 @@ public class Quiz {
     @OneToMany(mappedBy = "quizReference")
     private Set<TakeQuiz> quizzesTaken = new HashSet<>();
 
+    @OneToMany(mappedBy = "referenceQuizForAvgScore")
+    private Set<TakeQuizAverage> referenceQuizForAvgScore = new HashSet<>();
+
 
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
     @ManyToOne(fetch = FetchType.EAGER)

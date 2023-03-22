@@ -77,7 +77,7 @@ public class NoteController {
 
     //update note --> updates the json & other necessary items.
     @UpdateNotePermission
-    @PostMapping(path = "/update", consumes = "application/json")
+    @PutMapping(path = "/update", consumes = "application/json")
     public ResponseEntity<?> updateUserNotes(@RequestBody UserNoteDTO userNoteDTO){
         log.debug("updating personal user notes");
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(userNotesService.updateUserNote(userNoteDTO));
@@ -85,7 +85,7 @@ public class NoteController {
 
     //update shared note --> the user who has a note shared to them update the note
     @UpdateSharedNotePermission
-    @PostMapping(path = "/update_share_note", consumes = "application/json")
+    @PutMapping(path = "/update_share_note", consumes = "application/json")
     public ResponseEntity<?> updateSharedUserNotes(@RequestBody FullShareNoteDTO fullShareNoteDTO){
         log.debug("updating personal user notes");
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(userNotesService.updateSharedUserNote(fullShareNoteDTO));
@@ -120,7 +120,7 @@ public class NoteController {
 
     //update shared Note --> called when the shared note is updated by the receiver
     @UpdateSharedNotePermission
-    @PostMapping(path = "/updateShareNote", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "/updateShareNote", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateSharedUserNote(@RequestBody FullShareNoteDTO fullShareNoteDTO){
         log.debug("updating shared note");
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(userNotesService.updateSharedUserNote(fullShareNoteDTO));
@@ -141,7 +141,7 @@ public class NoteController {
 
     //update share length
     @ShareNotePermission
-    @PostMapping(path = "/updateExpireDate", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "/updateExpireDate", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateExpireDateOnSharedNotes(@RequestBody FullShareNoteDTO fullShareNoteDTO){
         log.debug("updatibng the expire date");
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.updateExpireDate(fullShareNoteDTO.getNoteShareDTO()));
@@ -149,7 +149,7 @@ public class NoteController {
 
     //update public note description
     @PublicNotePermission
-    @PostMapping(path = "/updatePublicNote", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "/updatePublicNote", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updatePublicNote(@RequestBody PublicNoteDTO publicNoteDTO){
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(publicNotesService
                 .updatePublicNoteDescriptionUsingNoteId(publicNoteDTO));
@@ -166,7 +166,7 @@ public class NoteController {
 
     //private public note
     @PublicNotePermission
-    @PostMapping(path = "/privateNote", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(path = "/privateNote", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> makeNotePrivate(@RequestBody PublicNoteDTO publicNoteDTO){
         publicNotesService
                 .makeNotePrivateUsingPublicShareId(publicNoteDTO.getPublicShareId());
@@ -178,7 +178,7 @@ public class NoteController {
 //    admin make note private
 //    admin delete public note
     @PublicNotePermission
-    @PostMapping(path = "/deletePublicNoteAdmin", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(path = "/deletePublicNoteAdmin", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> deletePublicNoteByAdmin(@RequestBody PublicNoteDTO publicNoteDTO){
         publicNotesService.makeNotePrivateUsingPublicShareId(publicNoteDTO.getPublicShareId());
         return ResponseEntity.status((HttpStatus.ACCEPTED))
