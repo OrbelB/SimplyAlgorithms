@@ -9,6 +9,7 @@ import './post.css';
 
 import { createForum } from '../../../services/forum';
 import TagForm from '../tags/TagForm';
+import { commentActions } from '../../../store/reducers/comment-reducer';
 
 export default function Post() {
   const [tagsSelected, setTagsSelected] = useState([]);
@@ -68,6 +69,7 @@ export default function Post() {
     setShowSignUp(!showSignUp);
   };
   if (pageId !== '' && status === 'successToIdle') {
+    dispatch(commentActions.resetData());
     navigate(`${pageId}`, { replace: true });
   }
 

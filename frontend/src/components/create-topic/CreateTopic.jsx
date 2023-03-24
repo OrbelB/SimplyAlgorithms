@@ -1,17 +1,27 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import draftToHtml from 'draftjs-to-html';
 import parse from 'html-react-parser';
 import cx from 'classnames';
-import { Button } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Button, TextField } from '@mui/material';
+import debounce from 'lodash.debounce';
+import { useNavigate, useParams } from 'react-router-dom';
+import { nanoid } from '@reduxjs/toolkit';
 import TextEditor from '../text-editor/TextEditor';
 import '../text-editor/TextEditor.css';
 import './CreateTopic.css';
 import styles from '../topic_page/algo-frame/Frame.module.css';
-import { fetchWikiNames, createWiki, updateWiki } from '../../services/wiki';
+import {
+  getNameAvailability,
+  createTopic,
+  fetchSingleTopic,
+  updateTopic,
+} from '../../services/topic';
+import { fetchWikiSubCategoriesNames } from '../../services/wiki';
+import TransferList from '../transferlist';
+import { topicActions } from '../../store/reducers/topic-reducer';
 
 const content = {
   blocks: [
@@ -54,82 +64,183 @@ function getIds(searchBar, names, prop, title) {
 }
 
 export default function CreateTopic() {
-  const [title, setTitle] = useState('');
-  const [searchBar, setSearchBar] = useState({});
-  const [pageOrWiki, setPageOrWiki] = useState('');
-  const wikiName = useParams();
-  const {
-    nameAvailable: wikiNameAvailable,
-    wikiNames,
-    wiki,
-  } = useSelector((state) => state.wiki);
+  const topicName = useParams();
   const dispatch = useDispatch();
-  const { topicNames } = useSelector((state) => state.topic);
-  const { jwtAccessToken } = useSelector((state) => state.auth);
-  const [visualizer, setVisualizer] = useState();
-  const [attribution, setAttribution] = useState();
-  const [process, setProcess] = useState(JSON.stringify(content));
-  const [snippets, setSnippets] = useState([{ language: '', code: '' }]);
-  const [references, setReferences] = useState([{ name: '', reference: '' }]);
+  const navigate = useNavigate();
+  const {
+    nameAvailable: topicNameAvailable,
+    topic,
+    urlPath,
+    status: topicStatus,
+  } = useSelector((state) => state.topic);
+  const { wikiNames } = useSelector((state) => state.wiki);
+  const { jwtAccessToken, userId } = useSelector((state) => state.auth);
+
+  const [title, setTitle] = useState(() => topic?.title ?? '');
+  const [searchBar, setSearchBar] = useState(() =>
+    topic.urlPath ? { pages: [{ title: topic.urlPath.split('/')[0] }] } : {}
+  );
+  const [pages, setPages] = useState(() =>
+    topic.urlPath ? Array.from(topic.urlPath.split('/')[0]) : []
+  );
+  const [visualizer, setVisualizer] = useState(() => topic.visualizer ?? '');
+  const [attribution, setAttribution] = useState(() => topic.source ?? '');
+  const [process, setProcess] = useState(
+    () => topic?.pageDescription ?? content
+  );
+  const [snippets, setSnippets] = useState(
+    () => topic.codeSnippets ?? [{ languageTitle: '', codeText: '' }]
+  );
+  const [references, setReferences] = useState(
+    () =>
+      topic?.topicExternalResources ?? [{ title: '', externalResourceLink: '' }]
+  );
+  const [snippetIndex, setSnippetIndex] = useState(0);
+
+  const [once, setOnce] = useState(true);
 
   const isReadyToSubmit =
-    (wikiNameAvailable || wiki.wikiName) &&
-    title !== '' &&
-    Object.values(content).length > 0 &&
+    (topicNameAvailable || topic?.title || title !== '') &&
+    Object.values(process).length > 0 &&
+    visualizer !== '' &&
+    attribution !== '' &&
     searchBar?.pages?.length > 0;
+
+  // used to fetch the topic data in the event of the topic name been part of the url
+  // for editing purposes
+  useEffect(() => {
+    if (
+      topicStatus === 'idle' &&
+      Object.keys(topic).length === 0 &&
+      topicName?.topicName
+    ) {
+      dispatch(fetchSingleTopic(topicName.topicName));
+    }
+  }, [dispatch, topic, topicName.topicName, topicStatus]);
+
+  // used to set the state of the this current edit page to the topic data
+  // that is being edited in the event of the topic name been part of the url
+  useEffect(() => {
+    if (
+      topicStatus === 'success' &&
+      (topic?.codeSnippets?.length > 0 ||
+        topic?.topicExternalResources?.length > 0) &&
+      topic?.pageDescription &&
+      once
+    ) {
+      setOnce(false);
+      setPages(Array.from([topic.urlPath.split('/')[0]]));
+      setSnippets(topic.codeSnippets);
+      setReferences(topic.topicExternalResources);
+      setSearchBar({
+        pages: [
+          {
+            link: topic.urlPath.split('/')[0],
+            title: topic.urlPath.split('/')[0],
+          },
+        ],
+      });
+      setTitle(topic.title);
+      setVisualizer(topic.visualizer);
+      setAttribution(topic.source);
+      setProcess(topic.pageDescription);
+    }
+  }, [
+    topicStatus,
+    once,
+    topic.codeSnippets,
+    topic.pageDescription,
+    topic.topicExternalResources,
+    topic.urlPath,
+    topic.title,
+    topic.visualizer,
+    topic.source,
+  ]);
+
+  // checks if the urlPath is not null and not empty and if the topicStatus is success
+  // if so, it means that the topic has been created or updated, therefore the user is redirected
+  useEffect(() => {
+    if (urlPath !== null && urlPath !== '' && topicStatus === 'success') {
+      const currentUrl = urlPath;
+      dispatch(topicActions.resetData());
+      navigate(
+        currentUrl !== null
+          ? `/wiki/${currentUrl}`
+          : `/topic/${topicName?.topicName}`
+      );
+    }
+  }, [dispatch, navigate, topicName, topicStatus, urlPath]);
+
+  const handlePageSetup = (currPages) => {
+    // remove the previous element and replace it for the new one
+    const newPage = currPages.filter((page) => !pages.includes(page));
+    // remove the previous element and replace it for the new one
+    const updatedSearchBar = {
+      ...searchBar,
+      pages: newPage.map((page) => {
+        return { link: page, title: page };
+      }),
+    };
+    setSearchBar(updatedSearchBar);
+    setPages(newPage);
+  };
+
+  const handleTitleChange = debounce((e) => {
+    setTitle(e.target.value);
+    dispatch(getNameAvailability({ name: e.target.value, jwtAccessToken }));
+  }, 900);
 
   const handleSaveTopic = async (e) => {
     e.preventDefault();
     if (!isReadyToSubmit) return;
-
-    let pageIds = [];
     let wikiIds = [];
     // get the page ids by the page names from the search bar
-    if (pageOrWiki === 'page') {
-      pageIds = getIds(searchBar, topicNames, 'page', 'title');
-    } else if (pageOrWiki === 'wiki') {
-      wikiIds = getIds(searchBar, wikiNames, 'wiki', 'wikiName');
-    }
-
-    const wikiToCreate = {
-      wikiName: title,
-      description: content,
-      pageIds,
-      wikiIds,
+    wikiIds = getIds(searchBar, wikiNames, 'wiki', 'wikiName');
+    const wikiInfo = wikiNames.find((wiki) => wiki.wikiId === wikiIds[0]);
+    const topicToCreate = {
+      userId,
+      title,
+      visualizer,
+      source: attribution,
+      pageDescription: process,
+      wikiInfo,
+      codeSnippets: snippets,
+      externalResources: references,
     };
 
-    dispatch(createWiki({ wiki: wikiToCreate, jwtAccessToken }));
+    try {
+      await dispatch(
+        createTopic({ topic: topicToCreate, jwtAccessToken })
+      ).unwrap();
+    } finally {
+      if (topicStatus === 'success' && urlPath !== null && urlPath !== '') {
+        navigate(`/wiki/${urlPath}`);
+      }
+    }
   };
 
   const handleUpdateTopic = async (e) => {
     e.preventDefault();
-    if (!isReadyToSubmit) return;
-    let pageIds = [];
-    let wikiIds = [];
-    // get the page ids by the page names from the search bar
-    if (wiki.isParentChild === 'child') {
-      let newPageNames = wiki.wikiTopicPages.map(({ topicPage }) => {
-        return { title: topicPage.title, pageId: topicPage.pageId };
-      });
-      newPageNames = [...newPageNames, ...topicNames];
-      pageIds = getIds(searchBar, newPageNames, 'page', 'title');
-    } else if (wiki.isParentChild === 'parent') {
-      let newWikiNames = wiki.wikiChildren.map(({ wikiChild }) => {
-        return { wikiName: wikiChild.wikiName, wikiId: wikiChild.wikiId };
-      });
-      newWikiNames = [...newWikiNames, ...wikiNames];
-      wikiIds = getIds(searchBar, newWikiNames, 'wiki', 'wikiName');
-    }
 
-    const wikiToUpdate = {
-      wikiId: wiki.wikiId,
-      wikiName: wiki.wikiName,
-      description: content,
-      pageIds,
-      wikiIds,
+    if (!isReadyToSubmit) return;
+    let wikiIds = {};
+
+    // get the page ids by the page names from the search bar
+    wikiIds = getIds(searchBar, wikiNames, 'wiki', 'wikiName');
+    const wikiInfo = wikiNames.find((wiki) => wiki.wikiId === wikiIds[0]);
+    const topicToUpdate = {
+      pageId: topic.pageId,
+      userId,
+      title,
+      visualizer,
+      source: attribution,
+      pageDescription: process,
+      wikiInfo: wikiInfo ?? topic.wikiInfo,
+      codeSnippets: snippets,
+      externalResources: references,
     };
 
-    dispatch(updateWiki({ wiki: wikiToUpdate, jwtAccessToken }));
+    dispatch(updateTopic({ updatedTopic: topicToUpdate, jwtAccessToken }));
   };
 
   const displayProcess = parse(draftToHtml(process));
@@ -141,7 +252,7 @@ export default function CreateTopic() {
   };
 
   const addReferences = () => {
-    const newReference = { references: '' };
+    const newReference = { title: '', externalResourceLink: '' };
     setReferences([...references, newReference]);
   };
 
@@ -158,7 +269,7 @@ export default function CreateTopic() {
   };
 
   const addSnippets = () => {
-    const newSnippet = { language: '', code: '' };
+    const newSnippet = { languageTitle: '', codeText: '' };
     setSnippets([...snippets, newSnippet]);
   };
 
@@ -167,6 +278,19 @@ export default function CreateTopic() {
     data.splice(index, 1);
     setSnippets(data);
   };
+
+  let helperText;
+
+  if (Object.keys(topicName).length !== 0 && !topicNameAvailable) {
+    helperText = `You cannot change the title of your wiki when updating it, the title is ${topic.title}`;
+  } else if (
+    topicNameAvailable === false &&
+    Object.keys(topicName).length === 0
+  ) {
+    helperText = 'Name is taken choose another one';
+  } else {
+    helperText = 'Enter a title for your topic page';
+  }
 
   return (
     <div className="createtopic">
@@ -180,12 +304,17 @@ export default function CreateTopic() {
         <h2>Algorithm Title</h2>
         <h5>Note: Once set, title cannot be changed</h5>
         <label>
-          <input
+          <TextField
+            disabled={topicName?.topicName !== undefined}
+            error={topicNameAvailable !== null && !topicNameAvailable}
+            id="outlined-basic"
+            onChange={handleTitleChange}
+            label="Title"
             className="label"
-            type="text"
+            variant="outlined"
+            margin="dense"
             required
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            helperText={helperText}
           />
         </label>
         <br />
@@ -195,22 +324,31 @@ export default function CreateTopic() {
         <div className="col-auto col-md-6 text-center">
           <Button
             variant="contained"
-            disabled={wiki.isParentChild === 'child'}
             onClick={() => {
-              setPageOrWiki('wiki');
-              if (wiki?.links?.pages?.length === 0) {
-                setSearchBar({
-                  ...searchBar,
-                  pages: [],
-                });
-              }
-
-              if (wikiNames.length === 0) dispatch(fetchWikiNames());
+              if (wikiNames.length === 0)
+                dispatch(fetchWikiSubCategoriesNames());
             }}
           >
             Embed Wikis
           </Button>
         </div>
+        {wikiNames.length > 0 && (
+          <div className="col-auto col-md-6 text-center">
+            <TransferList
+              disabledDouble
+              itemsToChooseFrom={wikiNames
+                .map((currWiki) => {
+                  if (topic?.urlPath?.split('/')[0] !== currWiki.wikiName) {
+                    return currWiki.wikiName;
+                  }
+                  return undefined;
+                })
+                .filter((curr) => curr !== undefined)}
+              itemsChosen={pages}
+              setItemsChosen={handlePageSetup}
+            />
+          </div>
+        )}
         <br />
         <br />
         <h2>Embedded Visualizer or Video Source</h2>
@@ -240,10 +378,11 @@ export default function CreateTopic() {
         <h5>Please manually include section titles</h5>
 
         <TextEditor
+          key={topic?.title}
           toolbar="editor-toolbar"
           wrapper="editor-wrapper"
           editor="editor-title"
-          value={content}
+          value={topic.pageDescription ?? process}
           editorOptions={options}
           setter={setProcess}
         />
@@ -258,16 +397,16 @@ export default function CreateTopic() {
             <div key={index}>
               <input
                 className="label"
-                name="name"
+                name="title"
                 placeholder="Title"
-                value={input.name}
+                value={input.title}
                 onChange={(e) => handleReferenceChange(index, e)}
               />
               <input
                 className="label"
-                name="reference"
+                name="externalResourceLink"
                 placeholder="Link"
-                value={input.reference}
+                value={input.externalResourceLink}
                 onChange={(e) => handleReferenceChange(index, e)}
               />
               <button
@@ -299,16 +438,16 @@ export default function CreateTopic() {
             <div key={index}>
               <input
                 className="label"
-                name="language"
+                name="languageTitle"
                 placeholder="Language"
-                value={input.language}
+                value={input?.languageTitle}
                 onChange={(e) => handleSnippetChange(index, e)}
               />
               <textarea
                 className="label2"
-                name="code"
-                placeholder="Code"
-                value={input.code}
+                name="codeText"
+                placeholder="code"
+                value={input?.codeText}
                 onChange={(e) => handleSnippetChange(index, e)}
               />
               <button
@@ -336,8 +475,8 @@ export default function CreateTopic() {
           color="success"
           size="large"
           type="submit"
-          disabled={!isReadyToSubmit}
-          onClick={wikiName.wikiName ? handleUpdateTopic : handleSaveTopic}
+          disabled={!isReadyToSubmit && topicStatus === 'pending'}
+          onClick={topicName.topicName ? handleUpdateTopic : handleSaveTopic}
         >
           Save
         </Button>
@@ -383,10 +522,14 @@ export default function CreateTopic() {
               <h3 className="m-3 mb-4">FURTHER REFERENCES</h3>
               {references.map((user) => {
                 return (
-                  <div key={user.index} className="user-card">
+                  <div key={nanoid()} className="user-card">
                     <h4>
-                      <a href={user.reference} target="_blank" rel="noreferrer">
-                        {user.name}
+                      <a
+                        href={user?.externalResourceLink}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {user?.title}
                       </a>
                     </h4>
                   </div>
@@ -401,69 +544,54 @@ export default function CreateTopic() {
           <h1>Implementations</h1>
           <div className="container">
             <nav className="bg-secondary rounded-top">
-              <div
-                className="nav navbar-code nav-pills"
-                id="nav-tab"
-                role="tablist"
-              >
-                <button
-                  key={snippets[0].language}
-                  className="nav-link active text-white"
-                  id={snippets[0].language}
-                  data-bs-toggle="tab"
-                  data-bs-target="#nav-java"
-                  type="button"
-                  role="tab"
-                  aria-controls="nav-java"
-                  aria-selected="true"
+              {snippets.length > 0 && (
+                <div
+                  key={nanoid()}
+                  className="nav navbar-code nav-pills"
+                  id="nav-tab"
+                  role="tablist"
                 >
-                  {snippets[0].language}
-                </button>
-                {snippets.slice(1).map((user) => {
-                  return (
-                    <button
-                      key={user.language}
-                      className="nav-link text-white"
-                      id={user.language}
-                      data-bs-toggle="tab"
-                      data-bs-target="#nav-java"
-                      type="button"
-                      role="tab"
-                      aria-controls="nav-java"
-                      aria-selected="true"
-                    >
-                      {user.language}
-                    </button>
-                  );
-                })}
-              </div>
+                  {snippets[snippetIndex]?.languageTitle !== '' &&
+                    snippets?.map(({ languageTitle }, index) => {
+                      return (
+                        <button
+                          key={nanoid()}
+                          className={`nav-link ${
+                            snippetIndex === index ? 'active' : ''
+                          } text-white`}
+                          id={languageTitle}
+                          onClick={() => {
+                            setSnippetIndex(index);
+                          }}
+                          data-bs-toggle="tab"
+                          data-bs-target="#nav-java"
+                          type="button"
+                          role="tab"
+                          aria-controls="nav-java"
+                          aria-selected="true"
+                        >
+                          {languageTitle}
+                        </button>
+                      );
+                    })}
+                </div>
+              )}
             </nav>
             <div
               className="tab-content description rounded-bottom"
               id="nav-tabContent"
             >
-              <div
-                key={snippets[0].code}
-                className="tab-pane fade active show ws"
-                id={snippets[0].code}
-                role="tabpanel"
-                aria-labelledby="nav-java-tab"
-              >
-                <code>{snippets[0].code}</code>
-              </div>
-              {snippets.slice(1).map((user) => {
-                return (
-                  <div
-                    key={user.code}
-                    className="tab-pane fade ws"
-                    id={user.code}
-                    role="tabpanel"
-                    aria-labelledby="nav-java-tab"
-                  >
-                    <code>{user.code}</code>
-                  </div>
-                );
-              })}
+              {snippets[snippetIndex]?.codeText !== '' && (
+                <div
+                  key={snippets[snippetIndex]?.codeText}
+                  className="tab-pane fade active show ws"
+                  id={snippets[snippetIndex]?.codeText}
+                  role="tabpanel"
+                  aria-labelledby="nav-java-tab"
+                >
+                  <code>{snippets[snippetIndex]?.codeText}</code>
+                </div>
+              )}
             </div>
           </div>
           <div className="bottom" />

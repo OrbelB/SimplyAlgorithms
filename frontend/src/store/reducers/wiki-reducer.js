@@ -6,12 +6,15 @@ import {
   getNameAvailability,
   fetchWikiNames,
   fetchSubCategories,
+  fetchWikiSubCategoriesNames,
+  fetchWikiLinks,
 } from '../../services/wiki';
 
 const initialState = {
   wiki: {},
   wikiNames: [],
   subCategories: [],
+  wikiLinks: [],
   status: 'idle',
   wikiId: null,
   error: '',
@@ -24,11 +27,11 @@ export const wikiSlice = createSlice({
   reducers: {
     resetData: (state) => {
       state.wiki = {};
-      state.subCategories = [];
       state.wikiId = null;
       state.wikiNames = [];
       state.status = 'idle';
       state.error = '';
+      state.nameAvailable = null;
     },
   },
   extraReducers: (builder) => {
@@ -109,9 +112,39 @@ export const wikiSlice = createSlice({
       })
       .addCase(fetchSubCategories.fulfilled, (state, action) => {
         state.status = 'success';
-        state.subCategories = action.payload;
+        if (action.payload.length === 0) return;
+        state.subCategories = action.payload.map((subCategory) => {
+          return {
+            ...subCategory,
+            rgb: `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(
+              Math.random() * 256
+            )}, ${Math.floor(Math.random() * 256)})`,
+          };
+        });
       })
       .addCase(fetchSubCategories.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(fetchWikiSubCategoriesNames.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchWikiSubCategoriesNames.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.wikiNames = action.payload;
+      })
+      .addCase(fetchWikiSubCategoriesNames.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(fetchWikiLinks.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchWikiLinks.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.wikiLinks = action.payload;
+      })
+      .addCase(fetchWikiLinks.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       });

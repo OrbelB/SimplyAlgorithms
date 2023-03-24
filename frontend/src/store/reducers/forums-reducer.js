@@ -16,7 +16,8 @@ const initialState = forumsAdapter.getInitialState({
   filterBy: '',
   sortBy: '',
   totalElements: 0,
-  totalPages: 0,
+  currentPage: undefined,
+  totalPages: undefined,
 });
 
 export const forumsSlice = createSlice({
@@ -26,11 +27,16 @@ export const forumsSlice = createSlice({
     setForums: (state, action) => {
       forumsAdapter.upsertMany(state, action.payload.forums);
     },
+    updateCurrentPage: (state) => {
+      state.currentPage += 1;
+    },
     resetData: (state) => {
       forumsAdapter.removeAll(state);
       state.status = 'idle';
       state.error = '';
       state.sortBy = '';
+      state.currentPage = undefined;
+      state.totalPages = undefined;
     },
     sortForums: (state, action) => {
       state.filterBy = '';
@@ -55,6 +61,7 @@ export const forumsSlice = createSlice({
       .addCase(fetchForumList.fulfilled, (state, action) => {
         state.totalElements = action.payload.totalElements;
         state.totalPages = action.payload.totalPages;
+        state.currentPage = action.payload.number;
         state.status = 'success';
         const posts = action.payload?.content?.map((forumQuickView) => {
           forumQuickView.createdDate = new Date(

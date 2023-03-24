@@ -1,43 +1,92 @@
-/* eslint-disable camelcase */
 /* eslint-disable dot-notation */
 import cx from 'classnames';
 import { Grid } from 'react-loading-icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styles from './Frame.module.css';
+import OptionsMenu from '../options-menu';
+import { deleteTopic } from '../../services/topic';
+import { topicActions } from '../../store/reducers/topic-reducer';
+import { wikiActions } from '../../store/reducers/wiki-reducer';
+import { fetchSubCategories, fetchWikiLinks } from '../../services/wiki';
+import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 // import ToggleVisibility from "../../../ToggleVisibility";
 // https://reactjs.org/docs/dom-elements.html
 
-export default function AlgoFrame({ vis_url, viz_title }) {
+export default function AlgoFrame({
+  vizUrl,
+  vizTitle,
+  vizSource,
+  topicName,
+  pageId,
+}) {
+  const { userId, jwtAccessToken } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
+  const isTeacher = useJwtPermssionExists({ permission: 'ROLE_TEACHER' });
+  const handleOnDelete = async () => {
+    try {
+      await dispatch(
+        deleteTopic({ pageId, userId, accessToken: jwtAccessToken })
+      ).unwrap();
+    } finally {
+      dispatch(fetchWikiLinks());
+      dispatch(fetchSubCategories());
+      navigate('/home', { replace: true });
+    }
+  };
+
+  const handleOnEdit = () => {
+    dispatch(wikiActions.resetData());
+    dispatch(topicActions.resetData());
+    navigate(`/topic/${topicName}/edit`);
+  };
+
   function disableLoader() {
     console.log(' Item loaded');
   }
   return (
     <div className={cx(styles['container-style'])}>
-      <div className={cx(styles['temp_view'])}>
-        <Grid />
-      </div>
-      <div className={cx(styles['algo_title'])}>{viz_title}</div>
-      <iframe
-        id="viz_alg"
-        src={vis_url}
-        className={cx(styles['website'])}
-        loading="lazy"
-        scrolling="no"
-        title="bubble sort algorithm visualizer by algorithm-visualizer.org"
-        onLoad={disableLoader}
-      >
-        <p>Your browser does not support iframes :( </p>
-      </iframe>
-      <div className={cx(styles['credit'])}>
-        Algorithm visualizer brought to you by
-        <a
-          className={cx(styles['credit_link'])}
-          href="https://algorithm-visualizer.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {' '}
-          algorithm-visualizer.org
-        </a>
+      <div className="row">
+        <div className="col-10">
+          <div className={cx(styles['temp_view'])}>
+            <Grid />
+          </div>
+          <div className={cx(styles['algo_title'])}>{vizTitle}</div>
+          <iframe
+            id="viz_alg"
+            src={vizUrl}
+            className={cx(styles['website'])}
+            loading="lazy"
+            scrolling="no"
+            title="bubble sort algorithm visualizer by algorithm-visualizer.org"
+            onLoad={disableLoader}
+          >
+            <p>Your browser does not support iframes :( </p>
+          </iframe>
+          <div className={cx(styles['credit'])}>
+            Algorithm visualizer brought to you by
+            <a
+              className={cx(styles['credit_link'])}
+              href="https://algorithm-visualizer.org/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {' '}
+              {vizSource}
+            </a>
+          </div>
+        </div>
+        {isAdmin || isTeacher ? (
+          <div className="col-1 text-end">
+            <OptionsMenu
+              handleOnDelete={handleOnDelete}
+              handleOnEdit={handleOnEdit}
+              userId={userId}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

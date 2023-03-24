@@ -22,24 +22,6 @@ import Bell from './Bell';
 import DropdownMenu from './dropdown-menu/DropdownMenu';
 import './MainNavigation.css';
 
-const nestedDropdownMenu = [
-  {
-    title: 'Sorting',
-    selections: ['Selection Sort', 'Bubble Sort'],
-    links: ['selection-sort', '/wiki/bubblesort'],
-  },
-  {
-    title: 'Trees',
-    selections: ['Binary Search Trees', 'Two Trees'],
-    links: ['/search/binarysearchtree', 'two-tree'],
-  },
-  {
-    title: 'Graphs',
-    selections: ['DFS', 'BFS'],
-    links: ['dfs', '/search/bfs'],
-  },
-];
-
 const pages = [
   { name: 'Home', path: 'home' },
   { name: 'Dashboard', path: 'dashboard' },
@@ -69,6 +51,7 @@ export default function MainNavigation() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const profilePicture = useSelector((state) => state.user.profilePicture);
   const navigate = useNavigate();
+  const { wikiLinks } = useSelector((state) => state.wiki);
   const {
     handleOpenMenu: handleOpenNavMenu,
     handleCloseMenu: handleCloseNavMenu,
@@ -175,7 +158,7 @@ export default function MainNavigation() {
               >
                 <DropdownMenu
                   dropdownTitle="Categories"
-                  nestedDropdownSelections={nestedDropdownMenu}
+                  nestedDropdownSelections={wikiLinks}
                 />
                 {pages.map(({ name, path }) => (
                   <Button

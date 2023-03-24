@@ -11,18 +11,22 @@ import {
   updateChildComment,
   deleteChildComment,
 } from '../../services/comment';
-import { selectChildrenCommentsByParentCommentId } from '../../store/reducers/comment-reducer';
-import { forumActions } from '../../store/reducers/forum-reducer';
+import {
+  commentActions,
+  selectChildrenCommentsByParentCommentId,
+} from '../../store/reducers/comment-reducer';
 import AlertSnackBar from '../alert-messages-snackbar/AlertSnackBar';
 
 // main comment section; shows all the parent comments
 export default function Comment({
+  innerRef,
   userId,
   username,
   profilePicture,
   commentText,
   createdDate,
   upVotes,
+  pageId,
   replies = [],
   replyCount,
   parentCommentId,
@@ -34,7 +38,6 @@ export default function Comment({
     (state) => state.auth
   );
   const status = useSelector((state) => state.comment.status);
-  const pageId = useSelector((state) => state.forum.forum.pageId);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const dispatch = useDispatch();
   const hasReplies = showReplies && replyCount > 0;
@@ -42,13 +45,15 @@ export default function Comment({
     selectChildrenCommentsByParentCommentId(state, parentCommentId)
   );
   const handleShowReplies = () => {
-    dispatch(
-      fetchChildrenComments({
-        page: 0,
-        size: 10,
-        parentCommentId,
-      })
-    );
+    if (!showReplies) {
+      dispatch(
+        fetchChildrenComments({
+          page: 0,
+          size: 10,
+          parentCommentId,
+        })
+      );
+    }
     setShowReplies(!showReplies);
   };
 
@@ -77,7 +82,8 @@ export default function Comment({
       // updates reply count from the forum object
       // do it only after the comment has been succesfully created
       if (status !== 'failed') {
-        dispatch(forumActions.addSingleReply({ commentId: parentCommentId }));
+        dispatch(commentActions.addSingleReply({ commentId: parentCommentId }));
+        // dispatch(forumActions.addSingleReply({ commentId: parentCommentId }));
       }
     }
   };
@@ -110,7 +116,8 @@ export default function Comment({
       // do it only after the comment has been succesfully delete it
       if (status !== 'failed') {
         dispatch(
-          forumActions.removeSingleReply({ commentId: parentCommentId })
+          commentActions.removeSingleReply({ commentId: parentCommentId })
+          // forumActions.removeSingleReply({ commentId: parentCommentId })
         );
       }
     }
@@ -156,7 +163,7 @@ export default function Comment({
           removeData={() => setShowErrorMessage(false)}
         />
       )}
-      <div className="container-fluid">
+      <div className="container-fluid" ref={innerRef}>
         <div className="row justify-content-center g-2">
           <CommentBox
             commentId={parentCommentId}

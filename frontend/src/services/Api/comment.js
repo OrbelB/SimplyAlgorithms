@@ -5,7 +5,7 @@ export const PUBLIC_ENDPOINT_ROUTE = '/comments';
 
 export const commentEndpoints = {
   listChildren: (page, size, parentCommentId) =>
-    get(`${PUBLIC_ENDPOINT_ROUTE}/list-child-comments`, {
+    get(`${PUBLIC_ENDPOINT_ROUTE}/list-children`, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -13,6 +13,17 @@ export const commentEndpoints = {
         page,
         size,
         parentCommentId,
+      },
+    }),
+  listParent: (page, size, pageId) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/list-parent`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      params: {
+        page,
+        size,
+        pageId,
       },
     }),
   createParent: (commentToSave, accessToken) =>
@@ -117,7 +128,7 @@ export const commentEndpoints = {
       },
     }),
   listVotes: (pageId, userId) =>
-    get(`${PUBLIC_ENDPOINT_ROUTE}/list/votes`, {
+    get(`${PUBLIC_ENDPOINT_ROUTE}/list-votes`, {
       params: {
         pageId,
         userId,

@@ -4,12 +4,17 @@ import { BiLike, BiDislike } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { voteForum, deleteForumVote } from '../../services/forum';
 import fp from './vote.module.css';
-import { selectByForumVoteId } from '../../store/reducers/forum-vote-reducer';
 
-// TODO fix forum vote not working properly
-export default function Vote({ like_, dislike_ }) {
+export default function Vote({
+  like_,
+  dislike_,
+  pageId,
+  votePage,
+  status,
+  deleteVote,
+  selectByVoteId = () => {},
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,10 +23,9 @@ export default function Vote({ like_, dislike_ }) {
     jwtAccessToken,
     userId: authUserId,
   } = useSelector((state) => state.auth);
-  const { forum } = useSelector((state) => state.forum);
 
   const userVote = useSelector((state) =>
-    selectByForumVoteId(state, { userId: authUserId, pageId: forum.pageId })
+    selectByVoteId(state, { userId: authUserId, pageId })
   );
 
   const [like, setlike] = useState(like_);
@@ -35,89 +39,119 @@ export default function Vote({ like_, dislike_ }) {
     return userVote !== undefined && !userVote.likeDislike;
   }, [userVote]);
 
-  const likeForum = () => {
+  const likeForum = async () => {
     if (!isLoggedIn && jwtAccessToken === '') {
       navigate('/login', { state: { from: location } });
       return;
     }
     if (likeActive) {
-      dispatch(
-        deleteForumVote({
-          pageId: forum.pageId,
-          userId: authUserId,
-          accessToken: jwtAccessToken,
-        })
-      );
-      setlike(like - 1);
-    } else {
-      dispatch(
-        voteForum({
-          voteObject: {
-            pageId: forum.pageId,
+      try {
+        await dispatch(
+          deleteVote({
+            pageId,
             userId: authUserId,
-            likeDislike: true,
-          },
-          accessToken: jwtAccessToken,
-        })
-      );
-      setlike(like + 1);
-      if (dislikeActive) {
-        dispatch(
-          voteForum({
+            accessToken: jwtAccessToken,
+          })
+        );
+      } finally {
+        if (status !== 'failed') {
+          setlike(like - 1);
+        }
+      }
+    } else {
+      try {
+        await dispatch(
+          votePage({
             voteObject: {
-              pageId: forum.pageId,
+              pageId,
               userId: authUserId,
               likeDislike: true,
             },
             accessToken: jwtAccessToken,
           })
         );
-        setlike(like + 1);
-        setdislike(dislike - 1);
+      } finally {
+        if (status !== 'failed') {
+          setlike(like + 1);
+        }
+      }
+      if (dislikeActive) {
+        try {
+          await dispatch(
+            votePage({
+              voteObject: {
+                pageId,
+                userId: authUserId,
+                likeDislike: true,
+              },
+              accessToken: jwtAccessToken,
+            })
+          );
+        } finally {
+          if (status !== 'failed') {
+            setlike(like + 1);
+            setdislike(dislike - 1);
+          }
+        }
       }
     }
   };
 
-  const dislikeForum = () => {
+  const dislikeForum = async () => {
     if (!isLoggedIn && jwtAccessToken === '') {
       navigate('/login', { state: { from: location } });
       return;
     }
     // if there is a like
     if (dislikeActive) {
-      dispatch(
-        deleteForumVote({
-          pageId: forum.pageId,
-          userId: authUserId,
-          accessToken: jwtAccessToken,
-        })
-      );
-      setdislike(dislike - 1);
-    } else {
-      dispatch(
-        voteForum({
-          voteObject: {
-            pageId: forum.pageId,
-            userId: authUserId,
-            likeDislike: false,
-          },
-          accessToken: jwtAccessToken,
-        })
-      );
-      setdislike(dislike + 1);
-      if (likeActive) {
+      try {
         dispatch(
-          voteForum({
+          deleteVote({
+            pageId,
+            userId: authUserId,
+            accessToken: jwtAccessToken,
+          })
+        );
+      } finally {
+        if (status !== 'failed') {
+          setdislike(dislike - 1);
+        }
+      }
+    } else {
+      try {
+        dispatch(
+          votePage({
             voteObject: {
-              pageId: forum.pageId,
+              pageId,
               userId: authUserId,
-              likeDislike: true,
+              likeDislike: false,
             },
             accessToken: jwtAccessToken,
           })
         );
-        setlike(dislike + 1);
-        setlike(like - 1);
+      } finally {
+        if (status !== 'failed') {
+          setdislike(dislike + 1);
+        }
+      }
+      if (likeActive) {
+        try {
+          dispatch(
+            votePage({
+              voteObject: {
+                pageId,
+                userId: authUserId,
+                likeDislike: true,
+              },
+              accessToken: jwtAccessToken,
+            })
+          );
+        } finally {
+          if (status !== 'failed') {
+            setdislike(dislike + 1);
+            setlike(like - 1);
+          }
+        }
       }
     }
   };

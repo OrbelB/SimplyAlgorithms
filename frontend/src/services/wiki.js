@@ -75,3 +75,16 @@ export const fetchSubCategories = createAsyncThunk(
     return response.data;
   }
 );
+
+export const fetchWikiSubCategoriesNames = createAsyncThunk(
+  'wiki/getSubCategoriesNames',
+  async () => {
+    const response = await wikiEndpoints.listAvailableSubCategories();
+    return response.data;
+  }
+);
+
+export const fetchWikiLinks = createAsyncThunk('wiki/getLinks', async () => {
+  const response = await wikiEndpoints.listLinks();
+  return response.data;
+});

@@ -15,7 +15,13 @@ const initialState = topicVotesAdapter.getInitialState({
 export const topicVotesSlice = createSlice({
   name: 'topicVotes',
   initialState,
-  reducers: {},
+  reducers: {
+    resetData: (state) => {
+      topicVotesAdapter.removeAll(state);
+      state.status = 'idle';
+      state.error = '';
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchVotes.pending, (state) => {
@@ -25,14 +31,12 @@ export const topicVotesSlice = createSlice({
         if (!action?.payload) return;
         const objectList = action.payload.map((topicVote) => {
           const topicVoteId = {
-            userId: topicVote?.userId,
-            pageId: topicVote?.pageId,
+            userId: topicVote.userId,
+            pageId: topicVote.pageId,
           };
           const { likeDislike } = topicVote;
-          console.info({ topicVoteId, likeDislike }, 'check this thing out');
           return { topicVoteId, likeDislike };
         });
-        console.debug(objectList);
         state.status = 'success';
         topicVotesAdapter.addMany(state, objectList);
       })
@@ -81,6 +85,6 @@ export const {
   selectAll: selectAllTopicVotes,
   selectById: selectByTopicVoteId,
   selectIds: selectAllTopicVotesIds,
-} = topicVotesAdapter.getSelectors((state) => state.TopicVotes);
+} = topicVotesAdapter.getSelectors((state) => state.topicVotes);
 
-export const TopicVoteActions = topicVotesSlice.actions;
+export const topicVoteActions = topicVotesSlice.actions;

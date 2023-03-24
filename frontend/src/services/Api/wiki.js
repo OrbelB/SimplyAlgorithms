@@ -41,6 +41,12 @@ export const wikiEndpoints = {
         },
       }
     ),
+  listLinks: () =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/list`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
   listAvailableWikis: () =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/list/available`, {
       headers: {
@@ -80,4 +86,10 @@ export const wikiEndpoints = {
         },
       }
     ),
+  listAvailableSubCategories: () =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/list/available/subcategories`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
 };

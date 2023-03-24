@@ -1,128 +1,63 @@
+import { useState } from 'react';
+import { nanoid } from '@reduxjs/toolkit';
 import 'react-tabs/style/react-tabs.css';
 import './CodeSnippet.css';
 
-const Java =
-  ' class HelloWorld {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello, World!");\n\t}\n }';
-const JavaScript = ' console.log("Hello World")';
-const C =
-  ' #include <stdio.h>\n\tint main() {\n\t\tprintf("Hello world");\n\t\treturn 0;\n\t}';
-const Cplusplus =
-  ' #include <iostream>\nint main() {\n\tstd::cout << "Hello world!";\n\treturn 0;\n}';
-const Python = ' def Greeting():\n\tprint("Hello World")\n\nGreeting()';
-
-export default function CodeSnippet() {
+export default function CodeSnippet({ snippets }) {
+  const [snippetIndex, setSnippetIndex] = useState(0);
   return (
     <div className="component">
       <h1>Implementations</h1>
       <div className="container">
         <nav className="bg-secondary rounded-top">
-          <div className="nav nav-pills" id="nav-tab" role="tablist">
-            <button
-              className="nav-link text-white active"
-              id="nav-java-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#nav-java"
-              type="button"
-              role="tab"
-              aria-controls="nav-java"
-              aria-selected="true"
+          {snippets.length > 0 && (
+            <div
+              key={nanoid()}
+              className="nav navbar-code nav-pills"
+              id="nav-tab"
+              role="tablist"
             >
-              Java
-            </button>
-            <button
-              className="nav-link text-white"
-              id="nav-js-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#nav-js"
-              type="button"
-              role="tab"
-              aria-controls="nav-js"
-              aria-selected="false"
-            >
-              JS
-            </button>
-            <button
-              className="nav-link text-white"
-              id="nav-c-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#nav-c"
-              type="button"
-              role="tab"
-              aria-controls="nav-c"
-              aria-selected="false"
-            >
-              C
-            </button>
-            <button
-              className="nav-link text-white "
-              id="nav-cplusplus-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#nav-cplusplus"
-              type="button"
-              role="tab"
-              aria-controls="nav-cplusplus"
-              aria-selected="false"
-            >
-              C++
-            </button>
-            <button
-              className="nav-link text-white"
-              id="nav-python-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#nav-python"
-              type="button"
-              role="tab"
-              aria-controls="nav-python"
-              aria-selected="false"
-            >
-              Python
-            </button>
-          </div>
+              {snippets[snippetIndex]?.languageTitle !== '' &&
+                snippets.map(({ languageTitle }, index) => {
+                  return (
+                    <button
+                      key={languageTitle}
+                      className={`nav-link ${
+                        snippetIndex === index ? 'active' : ''
+                      } text-white`}
+                      id={languageTitle}
+                      onClick={() => {
+                        setSnippetIndex(index);
+                      }}
+                      data-bs-toggle="tab"
+                      data-bs-target="#nav-java"
+                      type="button"
+                      role="tab"
+                      aria-controls="nav-java"
+                      aria-selected="true"
+                    >
+                      {languageTitle}
+                    </button>
+                  );
+                })}
+            </div>
+          )}
         </nav>
         <div
           className="tab-content description rounded-bottom"
           id="nav-tabContent"
         >
-          <div
-            className="tab-pane fade show active"
-            id="nav-java"
-            role="tabpanel"
-            aria-labelledby="nav-java-tab"
-          >
-            <code>{Java}</code>
-          </div>
-          <div
-            className="tab-pane fade"
-            id="nav-js"
-            role="tabpanel"
-            aria-labelledby="nav-js-tab"
-          >
-            <code>{JavaScript}</code>
-          </div>
-          <div
-            className="tab-pane fade"
-            id="nav-c"
-            role="tabpanel"
-            aria-labelledby="nav-c-tab"
-          >
-            <code>{C}</code>
-          </div>
-          <div
-            className="tab-pane fade"
-            id="nav-cplusplus"
-            role="tabpanel"
-            aria-labelledby="nav-cplusplus-tab"
-          >
-            <code>{Cplusplus}</code>
-          </div>
-          <div
-            className="tab-pane fade"
-            id="nav-python"
-            role="tabpanel"
-            aria-labelledby="nav-python-tab"
-          >
-            <code>{Python}</code>
-          </div>
+          {snippets[snippetIndex]?.codeText !== '' && (
+            <div
+              key={snippets[snippetIndex]?.codeText}
+              className="tab-pane fade active show ws"
+              id={snippets[snippetIndex]?.codeText}
+              role="tabpanel"
+              aria-labelledby="nav-java-tab"
+            >
+              <code>{snippets[snippetIndex]?.codeText}</code>
+            </div>
+          )}
         </div>
       </div>
       <div className="bottom" />

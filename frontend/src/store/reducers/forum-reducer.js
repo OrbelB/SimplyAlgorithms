@@ -9,13 +9,8 @@ import {
   deleteForum,
   updateForum,
 } from '../../services/forum';
-import {
-  createParentComment,
-  deleteParentComment,
-  updateParentComment,
-} from '../../services/comment';
 
-import { fetchSingleTopic } from '../../services/topic';
+// import { fetchSingleTopic } from '../../services/topic';
 
 const initialState = {
   forum: {},
@@ -60,21 +55,21 @@ export const forumSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchSingleTopic.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchSingleTopic.fulfilled, (state, action) => {
-        state.status = 'completed';
-        state.forum = {
-          ...action.payload,
-          createdDate: new Date(action.payload.createdDate).toISOString(),
-        };
-        state.pageId = '';
-      })
-      .addCase(fetchSingleTopic.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action?.error?.message;
-      })
+      // .addCase(fetchSingleTopic.pending, (state) => {
+      //   state.status = 'loading';
+      // })
+      // .addCase(fetchSingleTopic.fulfilled, (state, action) => {
+      //   state.status = 'completed';
+      //   state.forum = {
+      //     ...action.payload,
+      //     createdDate: new Date(action.payload.createdDate).toISOString(),
+      //   };
+      //   state.pageId = '';
+      // })
+      // .addCase(fetchSingleTopic.rejected, (state, action) => {
+      //   state.status = 'failed';
+      //   state.error = action?.error?.message;
+      // })
       .addCase(fetchSingleForum.pending, (state) => {
         state.status = 'loading';
       })
@@ -90,46 +85,46 @@ export const forumSlice = createSlice({
         state.status = 'failed';
         state.error = action?.error?.message;
       })
-      .addCase(createParentComment.fulfilled, (state, action) => {
-        if (!action?.payload?.rootId) {
-          return;
-        }
+      // .addCase(createParentComment.fulfilled, (state, action) => {
+      //   if (!action?.payload?.rootId) {
+      //     return;
+      //   }
 
-        const pageId = action.payload.rootId;
-        const commentToConcat = {
-          ...action?.payload?.comment,
-          createdDate: new Date(
-            action.payload.comment.createdDate
-          ).toISOString(),
-        };
-        if (pageId !== state.forum?.pageId) return;
-        state.forum.comments = state.forum.comments.concat(commentToConcat);
-      })
-      .addCase(deleteParentComment.fulfilled, (state, action) => {
-        if (!action.payload) {
-          console.log('delete could not be done');
-          return;
-        }
-        state.forum.comments = state.forum.comments.filter(
-          (comment) => comment.commentId !== action.payload
-        );
-      })
-      .addCase(updateParentComment.fulfilled, (state, action) => {
-        if (!action?.payload?.comment?.commentId) {
-          console.log('The update could not be done');
-          return;
-        }
-        const updatedComment = {
-          ...action.payload?.comment,
-          createdDate: new Date(
-            action.payload.comment.createdDate
-          ).toISOString(),
-        };
-        state.forum.comments = state.forum.comments.map((comment) => {
-          if (comment.commentId !== updatedComment.commentId) return comment;
-          return updatedComment;
-        });
-      })
+      //   const pageId = action.payload.rootId;
+      //   const commentToConcat = {
+      //     ...action?.payload?.comment,
+      //     createdDate: new Date(
+      //       action.payload.comment.createdDate
+      //     ).toISOString(),
+      //   };
+      //   if (pageId !== state.forum?.pageId) return;
+      //   state.forum.comments = state.forum.comments.concat(commentToConcat);
+      // })
+      // .addCase(deleteParentComment.fulfilled, (state, action) => {
+      //   if (!action.payload) {
+      //     console.log('delete could not be done');
+      //     return;
+      //   }
+      //   state.forum.comments = state.forum.comments.filter(
+      //     (comment) => comment.commentId !== action.payload
+      //   );
+      // })
+      // .addCase(updateParentComment.fulfilled, (state, action) => {
+      //   if (!action?.payload?.comment?.commentId) {
+      //     console.log('The update could not be done');
+      //     return;
+      //   }
+      //   const updatedComment = {
+      //     ...action.payload?.comment,
+      //     createdDate: new Date(
+      //       action.payload.comment.createdDate
+      //     ).toISOString(),
+      //   };
+      //   state.forum.comments = state.forum.comments.map((comment) => {
+      //     if (comment.commentId !== updatedComment.commentId) return comment;
+      //     return updatedComment;
+      //   });
+      // })
       .addCase(createForum.fulfilled, (state, action) => {
         if (!action?.payload) {
           console.log('nothing passed');

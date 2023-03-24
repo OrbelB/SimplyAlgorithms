@@ -18,50 +18,20 @@ export const topicEndpoints = {
         sortBy,
       },
     }),
-  create: (createdForum, jwtAccessToken) =>
-    post(
-      `${PUBLIC_ENDPOINT_ROUTE}/create`,
-      {
-        descriptionText: createdForum?.descriptionText,
-        title: createdForum?.title,
-        photo: createdForum?.photo,
-        video: createdForum?.video,
-        userDto: {
-          userId: createdForum?.userDto?.userId,
-        },
-        tags: createdForum?.tags,
+  create: (topic, jwtAccessToken) =>
+    post(`${PUBLIC_ENDPOINT_ROUTE}/create`, topic, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwtAccessToken,
-        },
-      }
-    ),
-  update: (updatedForum, jwtAccessToken) =>
-    put(
-      `${PUBLIC_ENDPOINT_ROUTE}/update`,
-      {
-        pageId: updatedForum?.pageId,
-        descriptionText: updatedForum?.descriptionText,
-        title: updatedForum?.title,
-        createdDate: updatedForum?.createdDate,
-        photo: updatedForum?.photo,
-        video: updatedForum?.video,
-        upVotes: updatedForum?.upVotes,
-        downVotes: updatedForum?.downVotes,
-        userDto: {
-          userId: updatedForum?.userDto.userId,
-        },
-        tags: updatedForum?.tags,
+    }),
+  update: (updatedTopic, jwtAccessToken) =>
+    put(`${PUBLIC_ENDPOINT_ROUTE}/update`, updatedTopic, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwtAccessToken,
-        },
-      }
-    ),
+    }),
   delete: (userId, pageId, jwtAccessToken) => {
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
       headers: {
@@ -74,7 +44,7 @@ export const topicEndpoints = {
       },
     });
   },
-  vote: (voteObject, jwtAccessToken) =>
+  vote: (voteObject, accessToken) =>
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/vote`,
       {
@@ -85,7 +55,7 @@ export const topicEndpoints = {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwtAccessToken,
+          Authorization: 'Bearer ' + accessToken,
         },
       }
     ),
@@ -119,10 +89,11 @@ export const topicEndpoints = {
     get(`${PUBLIC_ENDPOINT_ROUTE}/list/votes`, {
       params: {
         pageId: passedParams?.pageId,
+        userId: passedParams?.userId,
       },
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + passedParams.accessToken,
+        Authorization: 'Bearer ' + passedParams.jwtAccessToken,
       },
     }),
   getAvailablePages: () =>

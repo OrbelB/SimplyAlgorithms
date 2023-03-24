@@ -17,9 +17,7 @@ export const fetchTopicList = createAsyncThunk(
 export const fetchSingleTopic = createAsyncThunk(
   'topic/singleTopic',
   async (pageId) => {
-    const response = await topicEndpoints.singleById(pageId).catch((error) => {
-      return error;
-    });
+    const response = await topicEndpoints.singleById(pageId);
     return response.data;
   }
 );
@@ -27,12 +25,9 @@ export const fetchSingleTopic = createAsyncThunk(
 export const createTopic = createAsyncThunk(
   'topic/create',
   async (passedParams) => {
-    const { createdTopic, accessToken } = passedParams;
-    const response = await topicEndpoints
-      .create(createdTopic, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const { topic, jwtAccessToken } = passedParams;
+    const response = await topicEndpoints.create(topic, jwtAccessToken);
+
     return response.data;
   }
 );
@@ -40,12 +35,9 @@ export const createTopic = createAsyncThunk(
 export const updateTopic = createAsyncThunk(
   'topic/update',
   async (passedParams) => {
-    const { updatedTopic, accessToken } = passedParams;
-    const response = await topicEndpoints
-      .update(updatedTopic, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const { updatedTopic, jwtAccessToken } = passedParams;
+    const response = await topicEndpoints.update(updatedTopic, jwtAccessToken);
+
     return response.data;
   }
 );
@@ -54,11 +46,7 @@ export const deleteTopic = createAsyncThunk(
   'topic/delete',
   async (passedParams) => {
     const { pageId, userId, accessToken } = passedParams;
-    const response = await topicEndpoints
-      .delete(userId, pageId, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const response = await topicEndpoints.delete(userId, pageId, accessToken);
     return response.data;
   }
 );
@@ -67,11 +55,8 @@ export const voteTopic = createAsyncThunk(
   'topic/vote',
   async (passedParams) => {
     const { voteObject, accessToken } = passedParams;
-    const response = await topicEndpoints
-      .vote(voteObject, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const response = await topicEndpoints.vote(voteObject, accessToken);
+
     return response.data;
   }
 );

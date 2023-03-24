@@ -16,6 +16,8 @@ import {
   createWiki,
   fetchSingleWiki,
   updateWiki,
+  fetchWikiLinks,
+  fetchSubCategories,
 } from '../services/wiki';
 import AlertSnackBar from '../components/alert-messages-snackbar/AlertSnackBar';
 import { wikiActions } from '../store/reducers/wiki-reducer';
@@ -63,12 +65,6 @@ function getIds(searchBar, names, prop, title) {
 
 export default function CreateWiki() {
   const wikiName = useParams();
-  const dispatch = useDispatch();
-  const [title, setTitle] = useState('');
-  const navigate = useNavigate();
-  const { jwtAccessToken } = useSelector((state) => state.auth);
-  const { topicNames } = useSelector((state) => state.topic);
-  const [pageOrWiki, setPageOrWiki] = useState('');
   const {
     nameAvailable: wikiNameAvailable,
     wikiNames,
@@ -76,6 +72,12 @@ export default function CreateWiki() {
     status: wikiStatus,
     wiki,
   } = useSelector((state) => state.wiki);
+  const dispatch = useDispatch();
+  const [title, setTitle] = useState('');
+  const navigate = useNavigate();
+  const { jwtAccessToken } = useSelector((state) => state.auth);
+  const { topicNames } = useSelector((state) => state.topic);
+  const [pageOrWiki, setPageOrWiki] = useState('');
 
   const [once, setOnce] = useState(true);
   const [content, setContent] = useState(
@@ -103,6 +105,8 @@ export default function CreateWiki() {
     if (createdWikiId) {
       navigate(`/wiki/${createdWikiId}`, { replace: true });
       dispatch(wikiActions.resetData());
+      dispatch(fetchWikiLinks());
+      dispatch(fetchSubCategories());
     }
   }, [
     content.blocks,

@@ -6,17 +6,23 @@ import { useSelector } from 'react-redux';
 import fp from './ForumPost.module.css';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
 import CommentFrame from '../../comment/CommentFrame';
-
+import { selectByForumVoteId } from '../../../store/reducers/forum-vote-reducer';
 import {
   fetchSingleForum,
   addUserView,
   fetchVotes,
+  voteForum,
+  deleteForumVote,
 } from '../../../services/forum';
+
 import beautifyTime from '../../../utilities/beautify-time';
 import Vote from '../../vote_comp/Vote';
 import ForumOptionMenu from './ForumOptionMenu';
 import LoadingBackdrop from '../../loading/LoadingBackdrop';
-import { listVotesByPage } from '../../../services/comment';
+import {
+  listVotesByPage,
+  fetchParentComments,
+} from '../../../services/comment';
 import useUpdateStore from '../../../hooks/use-updateStore';
 import { viewForumsActions } from '../../../store/reducers/viewed-forums-reducer';
 
@@ -34,7 +40,9 @@ export default function ForumPost() {
     (state) => state.commentVotes
   );
   const { status: forumVoteStatus } = useSelector((state) => state.forumVotes);
-
+  const { status: commentStatus, commentParents } = useSelector(
+    (state) => state.comment
+  );
   const forumUpdateStore = useMemo(() => {
     return {
       conditions: [
@@ -70,6 +78,20 @@ export default function ForumPost() {
     forumUpdateStore.conditions,
     forumUpdateStore.actions,
     forumUpdateStore.arguments
+  );
+
+  const commentUpdateStore = useMemo(() => {
+    return {
+      conditions: [commentStatus === 'idle'],
+      actions: [[fetchParentComments]],
+      arguments: [[{ pageId, page: 0, size: 10 }]],
+    };
+  }, [commentStatus, pageId]);
+
+  useUpdateStore(
+    commentUpdateStore.conditions,
+    commentUpdateStore.actions,
+    commentUpdateStore.arguments
   );
 
   const commentVoteUpdateStore = useMemo(() => {
@@ -169,6 +191,11 @@ export default function ForumPost() {
               {forum?.descriptionText}
             </div>
             <Vote
+              status={forumVoteStatus}
+              deleteVote={deleteForumVote}
+              votePage={voteForum}
+              selectByVoteId={selectByForumVoteId}
+              pageId={forum?.pageId}
               like_={forum?.upVotes}
               dislike_={forum?.downVotes}
               user_voted_={forum?.upVotes > 0 || forum.downVotes > 0}
@@ -176,7 +203,10 @@ export default function ForumPost() {
           </div>
         </div>
         <div>
-          <CommentFrame passedComments={forum?.comments} page={forum?.pageId} />
+          <CommentFrame
+            passedComments={commentParents}
+            pageId={forum?.pageId}
+          />
         </div>
       </div>
     );

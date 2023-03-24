@@ -110,7 +110,11 @@ export default function BubbleSort() {
       {/* <AlgoFram/> */}
       {/* <AlgVisBtns/> */}
       <section id="visualizer">
-        <AlgoFram vis_url={BUBBLE_SORT_URL} viz_title={VIZ_TITLE} />
+        <AlgoFram
+          vis_url={BUBBLE_SORT_URL}
+          viz_title={VIZ_TITLE}
+          vis_source="algorithms.org"
+        />
       </section>
 
       <Slide

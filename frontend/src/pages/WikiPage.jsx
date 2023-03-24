@@ -48,7 +48,7 @@ export default function WikiPage() {
         Aside={
           <Aside
             links={wiki.links}
-            path={wiki.isParentChild === 'child' ? 'topic' : 'wiki'}
+            path={wiki.isParentChild === 'child' ? '' : 'wiki'}
           />
         }
         Body={body}

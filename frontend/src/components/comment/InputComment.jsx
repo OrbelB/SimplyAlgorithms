@@ -8,12 +8,11 @@ import { createParentComment } from '../../services/comment';
 import styles from './InputComment.module.css';
 
 // display the input field for a comment
-export default function InputComment() {
+export default function InputComment({ pageId }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const { profilePicture, userId } = useSelector((state) => state.user);
   const { jwtAccessToken } = useSelector((state) => state.auth);
-  const { forum } = useSelector((state) => state.forum);
   const [text, setText] = useState('');
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const navigate = useNavigate();
@@ -26,11 +25,11 @@ export default function InputComment() {
     if (!isLoggedIn)
       navigate('/login', { state: { from: location }, replace: true });
     if (text.length === 0 || text === '') return;
-    if (forum.pageId === undefined) return;
+    if (pageId === undefined) return;
     dispatch(
       createParentComment({
         commentToSave: {
-          pageId: forum.pageId,
+          pageId,
           userId,
           commentText: text,
         },

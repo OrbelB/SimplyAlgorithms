@@ -65,7 +65,6 @@ export const viewedForumsSlice = createSlice({
         state.status = 'pending';
       })
       .addCase(addUserView.fulfilled, (state, action) => {
-        console.info(action.payload);
         state.status = 'idle';
         // eslint-disable-next-line no-unused-vars
         const post = {

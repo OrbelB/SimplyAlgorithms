@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { forumActions } from '../../../store/reducers/forum-reducer';
+import { topicActions } from '../../../store/reducers/topic-reducer';
+import { commentActions } from '../../../store/reducers/comment-reducer';
 
-export default function NestedDropdownMenu({ selection, title, links }) {
+export default function NestedDropdownMenu({ title, links }) {
   const dispatch = useDispatch();
   return (
     <li>
@@ -17,17 +18,18 @@ export default function NestedDropdownMenu({ selection, title, links }) {
         {title}
       </i>
       <ul className="dropdown-menu dropdown-submenu text-center">
-        {selection?.map((topic, index) => (
-          <li key={`${topic[index]}`}>
+        {links?.map(({ title: LinkTitle, pageId, urlPath }) => (
+          <li key={pageId}>
             <NavLink
               style={{ fontWeight: 600, fontSize: 20 }}
               className="dropdown-item font-size-20"
-              to={links[index]}
+              to={urlPath !== null ? `/wiki/${urlPath}` : `/topic/${LinkTitle}`}
               onClick={() => {
-                dispatch(forumActions.resetData());
+                dispatch(topicActions.resetData());
+                dispatch(commentActions.resetData());
               }}
             >
-              {topic}
+              {LinkTitle}
             </NavLink>
           </li>
         ))}

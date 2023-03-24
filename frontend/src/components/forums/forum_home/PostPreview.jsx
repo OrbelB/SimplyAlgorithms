@@ -1,22 +1,36 @@
 import './PostPreview.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { forumActions } from '../../../store/reducers/forum-reducer';
 import { fetchForumList } from '../../../services/forum';
 import ForumQuickView from './ForumQuickView';
 import AlertSnackBar from '../../alert-messages-snackbar/AlertSnackBar';
-import { selectSortedForums } from '../../../store/reducers/forums-reducer';
+import {
+  forumsActions,
+  selectSortedForums,
+} from '../../../store/reducers/forums-reducer';
+import usePaginationWithInfiniteScroll from '../../../hooks/use-pagination';
 
 export default function PostPreview() {
-  const [page, setPage] = useState(1);
-  const { totalPages } = useSelector((state) => state.forums);
-  const [loadMorePages, setLoadMorePages] = useState(false);
-  const { reportId } = useSelector((state) => state.forum);
-  const { filterBy: filterForumBy } = useSelector((state) => state.forums);
+  const {
+    totalPages,
+    currentPage,
+    status,
+    filterBy: filterForumBy,
+  } = useSelector((state) => state.forums);
 
+  const { lastElementChild: lastElement } = usePaginationWithInfiniteScroll({
+    totalPages,
+    currPage: currentPage,
+    updateCurrPage: forumsActions.updateCurrentPage,
+    itemId: '',
+    itemName: '',
+    fetchFunction: fetchForumList,
+    status,
+  });
+  const { reportId } = useSelector((state) => state.forum);
   const dispatch = useDispatch();
   const forums = useSelector(selectSortedForums);
-
   const showedForums = useMemo(() => {
     if (filterForumBy !== '') {
       return forums.filter((forum) =>
@@ -25,13 +39,6 @@ export default function PostPreview() {
     }
     return forums;
   }, [filterForumBy, forums]);
-
-  const clickViewMorePages = (event) => {
-    event.preventDefault();
-    dispatch(fetchForumList({ page, size: 5, sortBy: '' }));
-    setPage(page + 1);
-    setLoadMorePages(!loadMorePages);
-  };
 
   const removeReportId = () => {
     dispatch(forumActions.removeSingleReportId());
@@ -47,26 +54,31 @@ export default function PostPreview() {
         />
       )}
       <div>
-        {showedForums.map((forum) => (
-          <ForumQuickView
-            key={forum?.pageId}
-            pageId={forum?.pageId}
-            title={forum?.title}
-            userDto={forum?.userDto}
-            upVotes={forum?.upVotes}
-            downVotes={forum?.downVotes}
-          />
-        ))}
-        <div className="row justify-content-center">
-          <button
-            type="button"
-            className="btn btn-outline-primary"
-            onClick={clickViewMorePages}
-            hidden={totalPages === page}
-          >
-            load more pages..
-          </button>
-        </div>
+        {showedForums.map((forum, index) => {
+          if (showedForums.length === index + 1) {
+            return (
+              <ForumQuickView
+                innerRef={lastElement}
+                key={forum?.pageId}
+                pageId={forum?.pageId}
+                title={forum?.title}
+                userDto={forum?.userDto}
+                upVotes={forum?.upVotes}
+                downVotes={forum?.downVotes}
+              />
+            );
+          }
+          return (
+            <ForumQuickView
+              key={forum?.pageId}
+              pageId={forum?.pageId}
+              title={forum?.title}
+              userDto={forum?.userDto}
+              upVotes={forum?.upVotes}
+              downVotes={forum?.downVotes}
+            />
+          );
+        })}
       </div>
     </>
   );

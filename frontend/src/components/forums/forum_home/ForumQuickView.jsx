@@ -22,6 +22,7 @@ export default function ForumQuickView({
   title,
   upVotes,
   downVotes,
+  innerRef,
 }) {
   const { isLoggedIn } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -36,77 +37,24 @@ export default function ForumQuickView({
   }, [dispatch, navigate, pageId]);
 
   return (
-    <>
-      <Card
-        key={pageId}
-        sx={{ maxWidth: 1200 }}
-        raised
-        className="preview-section m-3 m-md-5"
-      >
-        <CardActionArea
-          onClick={removeData}
-          sx={{ borderBottom: '1px solid black' }}
-          className="p-3 pb-5"
-        >
-          <div className="row">
-            <div className="col-auto col-md-2">
-              <Avatar
-                sx={{ width: 60, height: 60 }}
-                src={userDto.profilePicture}
-                className="m-auto m-md-3"
-                alt="current profile user"
-                loading="lazy"
-              />
-            </div>
-            <h2 className="preview-username col-auto col-md-2">
-              {userDto.username}
-            </h2>
-          </div>
-          <Typography
-            variant="h2"
-            component="h2"
-            className="row justify-content-center"
-          >
-            {title.trim().length > 40
-              ? title.substring(0, 40).concat('...')
-              : title}
-          </Typography>
-        </CardActionArea>
-        <CardActions className="pb-4">
-          <div className="row justify-content-between btn-group">
-            <div className="col-auto col-lg-4 m-0 p-0 align-self-end ">
-              <i className="bi bi-hand-thumbs-up ms-4"> {` ${upVotes}`}</i>
-              <i className="bi bi-hand-thumbs-down ms-4"> {` ${downVotes}`}</i>
-            </div>
-            <div className="col-4 m-0 p-0 align-self-end">
-              {isLoggedIn && <Report pageId={pageId} />}
-            </div>
-          </div>
-        </CardActions>
-      </Card>
-      {/*
-      <article
-        key={pageId}
-        className="container-fluid p-4 preview-section row"
-        style={{ cursor: 'pointer' }}
-        typeof="button"
+    <Card
+      ref={innerRef}
+      key={pageId}
+      sx={{ maxWidth: 1200 }}
+      raised
+      className="preview-section m-3 m-md-5"
+    >
+      <CardActionArea
+        onClick={removeData}
+        sx={{ borderBottom: '1px solid black' }}
+        className="p-3 pb-5"
       >
         <div className="row">
-          <div
-            className="col-auto col-md-2 mt-1"
-            onClick={() => removeData()}
-            onKeyDown={(e) => {
-              if (e.key === 'enter') {
-                removeData();
-              }
-            }}
-            role="button"
-            tabIndex={0}
-          >
-            <img
+          <div className="col-auto col-md-2">
+            <Avatar
+              sx={{ width: 60, height: 60 }}
               src={userDto.profilePicture}
-              className="rounded-circle m-2"
-              height="38"
+              className="m-auto m-md-3"
               alt="current profile user"
               loading="lazy"
             />
@@ -116,23 +64,17 @@ export default function ForumQuickView({
           </h2>
         </div>
         <Typography
-          variant="h3"
-          component="div"
+          variant="h2"
+          component="h2"
           className="row justify-content-center"
-          onClick={() => removeData()}
-          onKeyDown={(e) => {
-            if (e.key === 'enter') {
-              removeData();
-            }
-          }}
-          tabIndex={0}
-          role="button"
         >
           {title.trim().length > 40
             ? title.substring(0, 40).concat('...')
             : title}
         </Typography>
-        <div className="row justify-content-between m-4 btn-group">
+      </CardActionArea>
+      <CardActions className="pb-4">
+        <div className="row justify-content-between btn-group">
           <div className="col-auto col-lg-4 m-0 p-0 align-self-end ">
             <i className="bi bi-hand-thumbs-up ms-4"> {` ${upVotes}`}</i>
             <i className="bi bi-hand-thumbs-down ms-4"> {` ${downVotes}`}</i>
@@ -141,7 +83,7 @@ export default function ForumQuickView({
             {isLoggedIn && <Report pageId={pageId} />}
           </div>
         </div>
-      </article> */}
-    </>
+      </CardActions>
+    </Card>
   );
 }

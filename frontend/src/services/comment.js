@@ -15,6 +15,15 @@ export const fetchChildrenComments = createAsyncThunk(
   }
 );
 
+export const fetchParentComments = createAsyncThunk(
+  'parent/list',
+  async (pageParams) => {
+    const { page, size, pageId } = pageParams;
+    const response = await commentEndpoints.listParent(page, size, pageId);
+    return response.data;
+  }
+);
+
 export const createChildComment = createAsyncThunk(
   'childComment/create',
   async (passedCommentToSave) => {

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 import RecentlyViewedPosts from './RecentlyViewPosts/RecentlyViewedPosts';
 import TopicsDB from './TopicsDB/TopicsDB';
 import './Dashboard.css';
@@ -10,10 +12,17 @@ import HighlightsDB from './HighlightsDB/HighlightsDB';
 import Notifications from './Notifications/Notifications';
 import ShowMoreComments from './CommentsDB/ShowMoreComments/ShowMoreComments';
 import ShowMoreHighlights from './HighlightsDB/ShowMoreHighlights/ShowMoreHighlights';
+import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 
 export default function Dashboard() {
   const { username, dashboardInfo } = useSelector((state) => state.user);
   const [showNotifications, setShowNotifications] = useState(false);
+  const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
+  const isTeacher = useJwtPermssionExists({ permission: 'ROLE_TEACHER' });
+  const navigate = useNavigate();
+  const handleRedirect = () => {
+    navigate('/topic/new/create');
+  };
   return (
     <div className="container-fluid">
       <div className="row ps-2 justify-content-between mt-4">
@@ -23,23 +32,34 @@ export default function Dashboard() {
             &apos;S DASHBOARD
           </h2>
         </div>
-        <div className="col-auto">
-          <div className="">
-            <button
-              type="button"
-              onClick={() => setShowNotifications(true)}
-              className="bts btn"
-              data-bs-toggle="modal"
-              data-bs-target="#notificationdb"
+        {isAdmin || isTeacher ? (
+          <div className="col-auto align-self-center 0">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleRedirect}
+              className="bts"
             >
-              <h5>
-                Notifications
-                <span className="badge">
-                  {dashboardInfo?.notifications?.length}
-                </span>
-              </h5>
-            </button>
+              create topic
+            </Button>
           </div>
+        ) : null}
+        <div className="col-auto">
+          <button
+            type="button"
+            onClick={() => setShowNotifications(true)}
+            className="bts btn"
+            data-bs-toggle="modal"
+            data-bs-target="#notificationdb"
+          >
+            <h5>
+              Notifications
+              <span className="badge">
+                {dashboardInfo?.notifications?.length}
+              </span>
+            </h5>
+          </button>
+
           <Notifications
             show={showNotifications}
             setShow={setShowNotifications}

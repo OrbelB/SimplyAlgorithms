@@ -31,6 +31,7 @@ import HomePage from './pages/HomePage';
 import CreateTopicPage from './pages/CreateTopicPage';
 import CreateQuiz from './components/quiz/QuizCreationUpdate/CreateUpdateQuiz';
 import CreateWiki from './pages/CreateWiki';
+import TopicPage from './pages/TopicPage';
 import { wikiActions } from './store/reducers/wiki-reducer';
 // import UpdateQuiz from './components/quiz/QuizCreationUpdate/UpdateQuiz';
 
@@ -81,16 +82,15 @@ function App() {
           <Route path=":wikiName" element={<WikiPage />} />
           <Route path="new/create" element={<CreateWiki />} />
           <Route path=":wikiName/edit" element={<CreateWiki />} />
+          <Route path=":wikiName/:topicName" element={<TopicPage />} />
         </Route>
-        {/* <Route path="/sorting" element={<WSorting />} />
-        <Route path="/trees" element={<WTrees />} />
-        <Route path="/graphs" element={<WGraphs />} />
-      <Route path="/datastructures" element={<WDataStructures />} /> */}
-
-        {/* <Route path="/quiz/UpdateQuiz" element={<UpdateQuiz />} /> */}
-
         <Route path="/team" element={<MeetTeamPage />} />
-        <Route path="/createtopic" element={<CreateTopicPage />} />
+
+        <Route path="/topic">
+          <Route path="new/create" element={<CreateTopicPage />} />
+          <Route path=":topicName/edit" element={<CreateTopicPage />} />
+          <Route path=":topicName" element={<TopicPage />} />
+        </Route>
         <Route path="/underconstruction" element={<UnderConstructionPage />} />
         <Route
           path="*"

@@ -4,6 +4,7 @@ import {
   createTopic,
   deleteTopic,
   updateTopic,
+  fetchSingleTopic,
   fetchTopicNames,
   getNameAvailability,
 } from '../../services/topic';
@@ -11,7 +12,8 @@ import {
 // initial state for slice  which defines the data for this specific domain
 const initialState = {
   topic: {},
-  pageId: '',
+  pageId: null,
+  urlPath: null,
   status: 'idle',
   topicNames: [],
   error: '',
@@ -32,6 +34,7 @@ export const topicSlice = createSlice({
       state.status = 'idle';
       state.error = '';
       state.pageId = '';
+      state.urlPath = null;
     },
     addSingleReply: (state, action) => {
       state.topic.comments = state.topic.comments.map((comment) => {
@@ -60,51 +63,47 @@ export const topicSlice = createSlice({
   extraReducers(builder) {
     // extra reducers used to handle the api call on updates
     builder
-      // .addCase(fetchSingleTopic.pending, (state, action) => {
-      //   state.status = "loading";
-      // })
-      // .addCase(fetchSingleTopic.fulfilled, (state, action) => {
-      //   console.log("in here");
-      //   state.status = "success";
-      //   state.Topic = {
-      //     ...action.payload,
-      //     createdDate: new Date(action.payload.createdDate).toISOString(),
-      //   };
-      //   state.pageId = "";
-      // })
-      // .addCase(fetchSingleTopic.rejected, (state, action) => {
-      //   state.status = "failed";
-      //   state.error = action?.error?.message;
-      // })
+      .addCase(fetchSingleTopic.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchSingleTopic.fulfilled, (state, action) => {
+        state.topic = {
+          ...action.payload,
+          createdDate: new Date(action.payload?.createdDate ?? 0).toISOString(),
+        };
+        state.pageId = '';
+        state.status = 'success';
+      })
+      .addCase(fetchSingleTopic.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action?.error?.message;
+      })
       .addCase(createTopic.fulfilled, (state, action) => {
         if (!action?.payload) {
-          console.log('nothing passed');
           return;
         }
-        state.status = 'successToIdle';
-        state.pageId = action.payload;
+        state.status = 'success';
+        state.urlPath = action.payload;
       })
       .addCase(deleteTopic.fulfilled, (state, action) => {
         if (action?.payload) {
           return;
         }
-        if (state.topic.pageId === action?.payload) {
-          state.topic = {};
-          state.status = 'idle';
-          state.error = '';
-          state.pageId = '';
-        }
+        state.topic = {};
+        state.topicNames = [];
+        state.nameAvailable = null;
+        state.reportId = '';
+        state.status = 'idle';
+        state.error = '';
+        state.pageId = '';
+        state.urlPath = null;
       })
       .addCase(updateTopic.pending, (state) => {
         state.status = 'pending';
       })
       .addCase(updateTopic.fulfilled, (state, action) => {
-        state.status = 'completed';
-        state.topic = {
-          ...action.payload,
-          createdDate: new Date(action.payload.createdDate).toISOString(),
-        };
-        state.pageId = '';
+        state.status = 'success';
+        state.urlPath = action.payload;
       })
       .addCase(updateTopic.rejected, (state) => {
         state.status = 'failed';

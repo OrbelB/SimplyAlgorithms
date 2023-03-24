@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 import { deleteWiki } from '../../services/wiki';
+import { topicActions } from '../../store/reducers/topic-reducer';
 import { wikiActions } from '../../store/reducers/wiki-reducer';
 import OptionsMenu from '../options-menu';
 import './WikiHome.css';
@@ -25,6 +26,7 @@ export default function WikiHome({
     } finally {
       if (status === 'success') {
         dispatch(wikiActions.resetData());
+        dispatch(topicActions.resetData());
         navigate('/wiki/Main Category', { replace: true });
       }
     }
@@ -33,6 +35,7 @@ export default function WikiHome({
   const handleEdit = async () => {
     navigate(`/wiki/${title}/edit`, { replace: true });
     dispatch(wikiActions.resetData());
+    dispatch(topicActions.resetData());
   };
 
   const handleAdd = async () => {

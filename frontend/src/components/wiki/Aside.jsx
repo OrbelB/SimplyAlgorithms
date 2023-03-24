@@ -22,7 +22,7 @@ export default function Aside({ links = {}, disabled = false, path = 'wiki' }) {
         <NavLink
           onClick={handleNavigation}
           key={link?.title}
-          to={`/${path}/${link?.title}`}
+          to={`${path === '' ? `${link?.title}` : `/${path}/${link?.title}`} `}
           data-toggle="tab"
           className="nav-item nav-link has-icon nav-link-faded indent fs"
         >

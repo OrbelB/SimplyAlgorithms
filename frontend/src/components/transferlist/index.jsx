@@ -26,11 +26,12 @@ export default function TransferList({
   itemsToChooseFrom,
   itemsChosen,
   setItemsChosen,
+  disabledDouble,
 }) {
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState(itemsToChooseFrom);
 
-  const leftChecked = intersection(checked, left);
+  const leftChecked = intersection(checked, itemsToChooseFrom);
   const rightChecked = intersection(checked, itemsChosen);
 
   const handleToggle = (value) => () => {
@@ -58,7 +59,7 @@ export default function TransferList({
 
   const handleCheckedRight = () => {
     setItemsChosen(itemsChosen.concat(leftChecked));
-    setLeft(not(left, leftChecked));
+    setLeft(not(itemsToChooseFrom, leftChecked));
     setChecked(not(checked, leftChecked));
   };
 
@@ -82,7 +83,7 @@ export default function TransferList({
               numberOfChecked(items) !== items.length &&
               numberOfChecked(items) !== 0
             }
-            disabled={items.length === 0}
+            disabled={items.length === 0 || disabledDouble}
             inputProps={{
               'aria-label': 'all items selected',
             }}

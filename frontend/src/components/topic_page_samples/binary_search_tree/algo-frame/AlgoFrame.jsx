@@ -1,6 +1,6 @@
+import cx from 'classnames';
 import RangeSlider from './RangeSlider';
 import styles from './Frame.module.css';
-import cx from 'classnames';
 
 export default function AlgoFrame() {
   return (
@@ -15,7 +15,7 @@ export default function AlgoFrame() {
       </div>
       <div className="row">
         <div className="bg-transparent">
-          {/*TODO create algo component and logic*/}
+          {/* TODO create algo component and logic */}
           <center> algo goes here</center>
         </div>
       </div>

@@ -12,6 +12,7 @@ import store from './store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { fetchTags } from './services/tag';
+import { fetchWikiLinks, fetchSubCategories } from './services/wiki';
 import interceptors from './services/Api/interceptors';
 
 interceptors(store);
@@ -21,6 +22,8 @@ store.dispatch(
     size: 15,
   })
 );
+store.dispatch(fetchWikiLinks());
+store.dispatch(fetchSubCategories());
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
