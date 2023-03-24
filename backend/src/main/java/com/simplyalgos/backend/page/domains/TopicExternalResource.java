@@ -3,13 +3,14 @@ package com.simplyalgos.backend.page.domains;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.page.domains.ids.TopicExternalResourceId;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-
-import jakarta.persistence.*;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 
 @Getter
@@ -22,20 +23,22 @@ import java.util.UUID;
 )
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "topicExternalResourceId")
 public class TopicExternalResource {
-
     @EmbeddedId
     private TopicExternalResourceId topicExternalResourceId;
 
+    private String title;
     @CreationTimestamp
     private Timestamp createdDate;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "page_id", referencedColumnName = "page_id", updatable = false, insertable = false)
-    private Topic externalTopicPage;
+    @ManyToOne
+    @JoinColumn(name = "page_id", referencedColumnName = "page_id")
+    @MapsId("pageId")
+    private Topic topicPage;
+
     @Builder
-    public TopicExternalResource(TopicExternalResourceId topicExternalResourceId, Timestamp createdDate,
-                                 Topic externalTopicPage, UUID pageId, String externalLinkResource) {
+    public TopicExternalResource(TopicExternalResourceId topicExternalResourceId, String title, Timestamp createdDate, Topic topicPage) {
         this.topicExternalResourceId = topicExternalResourceId;
+        this.title = title;
         this.createdDate = createdDate;
-        this.externalTopicPage = externalTopicPage;
+        this.topicPage = topicPage;
     }
 }

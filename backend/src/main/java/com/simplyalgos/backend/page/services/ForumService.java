@@ -4,6 +4,7 @@ import com.simplyalgos.backend.page.domains.ids.PageVoteId;
 import com.simplyalgos.backend.page.dtos.ForumDTO;
 import com.simplyalgos.backend.page.dtos.FullForumDTO;
 import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;
+import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +25,7 @@ public interface ForumService {
 
     UUID deleteForum(String pageId, String userId);
 
-   FullForumDTO getForumPage(String pageId);
-
+    ForumInformation getForumPage(String pageId);
     FullForumDTO updateForum(ForumDTO forumDTO);
 
     UUID reportForum(PageReportDTO pageReportDTO);
@@ -37,8 +37,7 @@ public interface ForumService {
     Object listVotesByPage(UUID pageId);
 
     Object getForumVoteByPageAndUserId(UUID pageId, UUID userId);
-    FullForumDTO addForumUserView(UUID userId, UUID pageId);
-
+    ForumInformation addForumUserView(UUID userId, UUID pageId);
 
     List<?> listForumsByUserViewForums(UUID userId, Pageable pageable);
 }

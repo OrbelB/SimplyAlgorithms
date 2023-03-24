@@ -22,10 +22,8 @@ public class WikiTopicPage {
     @JoinColumn(name = "wiki_id", referencedColumnName = "wiki_id")
     @MapsId("wikiId")
     private Wiki wikiCategory;
-
-
     @ManyToOne
-    @JsonIncludeProperties({"pageId","title"})
+    @JsonIncludeProperties({"pageId","title", "urlPath"})
     @JoinColumn(name = "page_id", referencedColumnName = "page_id")
     @MapsId("pageId")
     private Topic topicPage;

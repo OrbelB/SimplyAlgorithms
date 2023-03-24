@@ -16,17 +16,16 @@ public class ParentChildComment {
     @EmbeddedId
     private ParentChildCommentId parentChildCommentId;
 
-
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_comment_id", referencedColumnName = "comment_id")
-    @MapsId("parentComment")
+    @MapsId("parentCommentId")
     private Comment parentComment;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "child_comment_id", referencedColumnName = "comment_id")
-    @MapsId("childComment")
+    @MapsId("childCommentId")
     private Comment childComment;
 
     @Builder

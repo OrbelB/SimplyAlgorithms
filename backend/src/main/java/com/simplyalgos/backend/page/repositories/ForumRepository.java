@@ -25,7 +25,9 @@ public interface ForumRepository extends JpaRepository<Forum, UUID> {
     );
 
 
+     <T> Optional<T> findByPageId(UUID pageId, Class<T> type);
 
+     <T> Page<T> findAllProjectBy(Pageable pageable, Class<T> type);
 
 
     @Modifying

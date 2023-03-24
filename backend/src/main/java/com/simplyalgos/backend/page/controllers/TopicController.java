@@ -1,14 +1,14 @@
 package com.simplyalgos.backend.page.controllers;
 
 import com.simplyalgos.backend.comment.security.DeleteVotePermission;
-import com.simplyalgos.backend.page.services.TopicService;
 import com.simplyalgos.backend.page.dtos.FullTopicDTO;
 import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;
 import com.simplyalgos.backend.page.security.perms.CreateVotePermission;
+import com.simplyalgos.backend.page.services.TopicService;
 import com.simplyalgos.backend.page.services.WikiService;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.security.perms.CreateReportPermission;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.MessageFormat;
 import java.util.UUID;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("topics")
 @Slf4j
 @CrossOrigin
@@ -33,8 +33,8 @@ public class TopicController {
 
 
     @GetMapping("/list")
-    public ResponseEntity<?> listPages(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
-                                       @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
+    public ResponseEntity<?> listPages(@RequestParam(name = "page",  defaultValue = "0") Integer page,
+                                       @RequestParam(name = "size",  defaultValue = "5") Integer size,
                                        @RequestParam(name = "sortBy", required = false) String sortBy) {
         if (!(sortBy == null)) {
             if (sortBy.equals("upVotes")) {
@@ -46,36 +46,34 @@ public class TopicController {
         return ResponseEntity.ok(topicService.listTopicPages(PageRequest.of(page, size)));
     }
 
-    @GetMapping("/{pageId}")
-    public ResponseEntity<?> getSingleTopicPage(@PathVariable UUID pageId) {
-        return ResponseEntity.ok(topicService.getTopicPage(pageId));
+    @GetMapping("/{pageTitle}")
+    public ResponseEntity<?> getSingleTopicPageByName(@PathVariable String pageTitle) {
+        return ResponseEntity.ok(topicService.getTopicPage(pageTitle));
     }
 
     @PreAuthorize("hasAuthority('topic.create')")
     @PostMapping(path = "/create", consumes = "application/json")
-    public ResponseEntity<?> createForum(@RequestBody FullTopicDTO fullTopicDTO) {
-        topicService.createPage(fullTopicDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> createForum(@RequestBody FullTopicDTO topic) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(topicService.createPage(topic));
     }
 
-    @PreAuthorize("hasAuthority('topic.delete')")
+    @PreAuthorize("hasAuthority('topic.remove')")
     @DeleteMapping(path = "/delete")
-    public ResponseEntity<?> deleteForum(@RequestParam(name = "userId", required = true) UUID userId,
-                                         @RequestParam(name = "pageId", required = true) UUID pageId) {
+    public ResponseEntity<?> deleteForum(@RequestParam(name = "userId") UUID userId,
+                                         @RequestParam(name = "pageId") UUID pageId) {
         log.info(MessageFormat.format("this is userId {0}, and this is pageId {1} ", userId, pageId));
         topicService.deleteTopicPage(pageId, userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PreAuthorize("hasAuthority('topic.update')")
-    @PutMapping(path = "/update", consumes = "application/json")
+    @PutMapping(path = "/update", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateForum(@RequestBody FullTopicDTO fullTopicDTO) {
-        topicService.updateTopicPage(fullTopicDTO);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.accepted().body(topicService.updateTopicPage(fullTopicDTO));
     }
 
     @CreateVotePermission
-    @GetMapping(path = "/vote", consumes = "application/json")
+    @PostMapping(path = "/vote", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> likeOrDislike(@RequestBody LikeDislikeDTO likeDislikeDTO) {
         log.info(MessageFormat.format("userid {0}, pageId {1}, likeDislikeDTO {2}",
                 likeDislikeDTO.userId(),
@@ -108,16 +106,15 @@ public class TopicController {
     }
 
     @GetMapping(path = "/list/votes")
-    public ResponseEntity<?> listVotesByCommentId(@RequestParam(name = "pageId") UUID pageId) {
-        return ResponseEntity.ok(topicService.listVotesByPage(pageId));
+    public ResponseEntity<?> listVotesByPageId(@RequestParam(name = "pageId") UUID pageId,
+                                               @RequestParam(name = "userId") UUID userId) {
+        return ResponseEntity.ok(topicService.listVotesByPageAndUserId(pageId, userId));
     }
-
 
     @GetMapping(path = "/list/available-pages", produces = "application/json")
     public ResponseEntity<?> listAvailablePages() {
         return ResponseEntity.ok(wikiService.getWikiTopicsBasicInfo());
     }
-
 
     @GetMapping(path ="name/available", produces = "application/json")
     public ResponseEntity<?> isNameAvailable(@RequestParam(name = "name") String name){

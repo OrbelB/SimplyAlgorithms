@@ -7,5 +7,7 @@ import lombok.*;
 @Getter
 @Builder
 public class TopicExternalResourcesDTO {
+
+    String title;
     String externalResourceLink;
 }

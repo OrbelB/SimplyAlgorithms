@@ -24,7 +24,8 @@ public class ParentChildCommentServiceImpl implements ParentChildCommentService 
 
     @Override
     public Page<ParentChildComment> getChildrenCommentList(UUID parentComment, Pageable pageable) {
+        log.debug("parentComment: " + parentComment);
         return parentChildCommentRepository
-                .findAllByParentChildCommentId_ParentComment_CommentId(parentComment, pageable);
+                .findAllByParentChildCommentId_ParentCommentId(parentComment, pageable);
     }
 }

@@ -1,13 +1,12 @@
 package com.simplyalgos.backend.comment.domains;
 
-import com.simplyalgos.backend.comment.domains.Comment;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
-
-import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -19,19 +18,18 @@ public class ParentChildCommentId implements Serializable {
     @Type(value = UserTypeLegacyBridge.class,
             parameters = @org.hibernate.annotations.Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
                     value = "org.hibernate.type.UUIDCharType"))
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent_comment_id", referencedColumnName = "comment_id")
-    private Comment parentComment;
+    @Column(name = "parent_comment_id", length = 36, columnDefinition = "varchar")
+    private UUID parentCommentId;
 
     @Type(value = UserTypeLegacyBridge.class,
             parameters = @org.hibernate.annotations.Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
-                    value = "org.hibernate.type.UUIDCharType"))    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "child_comment_id", referencedColumnName = "comment_id")
-    private Comment childComment;
+                    value = "org.hibernate.type.UUIDCharType"))
+    @Column(name = "child_comment_id", length = 36, columnDefinition = "varchar")
+    private UUID childCommentId;
 
     @Builder
-    public ParentChildCommentId(Comment parentComment, Comment childComment) {
-        this.parentComment = parentComment;
-        this.childComment = childComment;
+    public ParentChildCommentId(UUID parentComment, UUID childComment) {
+        this.parentCommentId = parentComment;
+        this.childCommentId = childComment;
     }
 }

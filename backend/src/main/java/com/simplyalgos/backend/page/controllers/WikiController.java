@@ -67,4 +67,11 @@ public class WikiController {
     public ResponseEntity<?> deleteWiki(@RequestParam(name = "wikiId") UUID wikiId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(wikiService.deleteWiki(wikiId));
     }
+
+
+    @GetMapping("list/available/subcategories")
+    public ResponseEntity<?> getAvailableSubCategories() {
+        return ResponseEntity.ok(wikiService.getAllWikiSubCategoriesBasicInfo());
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.page.repositories;
 
+import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.domains.Wiki;
 import com.simplyalgos.backend.page.domains.WikiTopicPage;
 import com.simplyalgos.backend.page.domains.ids.WikiTopicPageId;
@@ -16,6 +17,7 @@ public interface WikiTopicPageRepository extends JpaRepository<WikiTopicPage, Wi
 
     void deleteByWikiTopicPageIdNotInAndWikiCategory(Set<WikiTopicPageId> wikiTopicPageIds, Wiki wikiCategory);
 
+    void deleteByWikiTopicPageIdNotInAndTopicPage(Set<WikiTopicPageId> wikiTopicPageIds, Topic topicPage);
     Set<WikiTopicPage> findAllByWikiTopicPageIdNotInAndWikiCategory(Set<WikiTopicPageId> wikiTopicPageIds, Wiki wikiCategory);
 
     List<WikiTopicPageOnly> findAllProjectedBy();

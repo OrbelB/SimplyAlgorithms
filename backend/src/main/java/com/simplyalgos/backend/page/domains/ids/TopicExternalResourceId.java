@@ -21,11 +21,10 @@ public class TopicExternalResourceId implements Serializable {
     private String externalResourceLink;
 
 
-
     @Type(value = UserTypeLegacyBridge.class,
             parameters = @Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
                     value = "org.hibernate.type.UUIDCharType"))
-    @Column(name = "page_id")
+    @Column(name = "page_id", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID pageId;
 
     public TopicExternalResourceId(String externalResourceLink, UUID pageId) {

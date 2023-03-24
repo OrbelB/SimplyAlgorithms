@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class CodeSnippetDTO {
+
     String languageTitle;
     String codeText;
 }

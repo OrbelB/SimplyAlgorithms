@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.page.services;
 
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
+import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.domains.Wiki;
 import com.simplyalgos.backend.page.domains.WikiParentChild;
 import com.simplyalgos.backend.page.domains.WikiTopicPage;
@@ -13,16 +14,12 @@ import com.simplyalgos.backend.page.mappers.WikiMapper;
 import com.simplyalgos.backend.page.repositories.WikiParentChildRepository;
 import com.simplyalgos.backend.page.repositories.WikiRepository;
 import com.simplyalgos.backend.page.repositories.WikiTopicPageRepository;
-import com.simplyalgos.backend.page.repositories.projection.TopicNameAndIDOnly;
-import com.simplyalgos.backend.page.repositories.projection.WikiNameAndIdOnly;
-import com.simplyalgos.backend.page.repositories.projection.WikiTopicPageOnly;
-import com.simplyalgos.backend.page.repositories.projection.WikiTopicPageWikiOnly;
+import com.simplyalgos.backend.page.repositories.projection.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -45,13 +42,14 @@ public class WikiServiceImpl implements WikiService {
     private final WikiTopicPageRepository wikiTopicPageRepository;
 
     @Override
-    public Set<Wiki> getWikiMainCategories() {
-        return new HashSet<>(wikiRepository.findAll());
+    public Set<WikiInformation> getWikiMainCategories() {
+        return wikiRepository.findAllByIsParentChild("child", WikiInformation.class);
     }
 
 
     /**
      * This method will get the sub categories information which includes wikiName and wikiId
+     *
      * @return the wiki sub category information (wikiName and wikiId) as a set of WikiNameAndIdOnly
      */
     @Override
@@ -69,7 +67,8 @@ public class WikiServiceImpl implements WikiService {
      */
     @Override
     public String updateWiki(WikiDTO wiki) {
-        Wiki wikiToUpdate = wikiRepository.findById(wiki.getWikiId()).orElseThrow(() -> new ElementNotFoundException("Wiki not found"));
+        Wiki wikiToUpdate = wikiRepository.findById(wiki.getWikiId())
+                .orElseThrow(() -> new ElementNotFoundException("Wiki not found"));
         wikiToUpdate.setWikiName(wiki.getWikiName());
         wikiToUpdate.setDescription(wiki.getDescription());
         if (Objects.equals(wikiToUpdate.getIsParentChild(), "parent")) {
@@ -78,7 +77,6 @@ public class WikiServiceImpl implements WikiService {
         } else if (Objects.equals(wikiToUpdate.getIsParentChild(), "child")) {
             updateTopicPages(wiki.getPageIds(), wikiToUpdate);
         }
-
         return wikiRepository.save(wikiToUpdate).getWikiName();
     }
 
@@ -92,6 +90,11 @@ public class WikiServiceImpl implements WikiService {
     @Override
     public Wiki getWiki(String wikiName) {
         return wikiRepository.getWikiByWikiName(wikiName).orElseThrow(ElementNotFoundException::new);
+    }
+
+    @Override
+    public Set<WikiInfo> getAllWikiSubCategoriesBasicInfo() {
+        return wikiRepository.findAllByIsParentChild("child", WikiInfo.class);
     }
 
 
@@ -145,9 +148,11 @@ public class WikiServiceImpl implements WikiService {
                     .wikiId(updateWiki.getWikiId())
                     .pageId(id)
                     .build())) {
+                Topic topic = topicService.getTopic(id);
+                topic.setUrlPath(updateWiki.getWikiName() + "/" + topic.getTitle());
                 updateWiki.addWikiTopicPage(WikiTopicPage.builder()
                         .wikiCategory(updateWiki)
-                        .topicPage(topicService.getTopic(id))
+                        .topicPage(topic)
                         .wikiTopicPageId(WikiTopicPageId.builder()
                                 .wikiId(updateWiki.getWikiId())
                                 .pageId(id)
@@ -159,10 +164,10 @@ public class WikiServiceImpl implements WikiService {
         // remove the ones that are not in the list
         wikiTopicPageRepository.deleteByWikiTopicPageIdNotInAndWikiCategory(pageIds.stream()
                 .map(pageId -> WikiTopicPageId.builder()
-                        .wikiId(updateWiki.getWikiId())
-                        .pageId(pageId)
-                        .build())
-                .collect(Collectors.toSet()), updateWiki);
+                            .wikiId(updateWiki.getWikiId())
+                            .pageId(pageId)
+                            .build()
+                ).collect(Collectors.toSet()), updateWiki);
     }
 
     /**
@@ -178,17 +183,23 @@ public class WikiServiceImpl implements WikiService {
             // map the pages to the wiki
             newWiki.setWikiTopicPages(wiki.getPageIds().stream()
                     .map(topicService::getTopic)
-                    .map(topic -> WikiTopicPage.builder()
-                            .wikiCategory(newWiki)
-                            .topicPage(topic)
-                            .wikiTopicPageId(WikiTopicPageId.builder()
-                                    .wikiId(newWiki.getWikiId())
-                                    .pageId(topic.getPageId())
-                                    .build())
-                            .build())
-                    .collect(Collectors.toSet()));
+                    .map(topic -> {
+                        topic.setUrlPath(wiki.getWikiName() + "/" + topic.getUrlPath());
+                        return WikiTopicPage.builder()
+                                .wikiCategory(newWiki)
+                                .topicPage(topic)
+                                .wikiTopicPageId(WikiTopicPageId.builder()
+                                        .wikiId(newWiki.getWikiId())
+                                        .pageId(topic.getPageId())
+                                        .build())
+                                .build();
+                    })
+                    .collect(Collectors.toSet())
+            );
             newWiki.setIsParentChild("child");
-        } else if (wiki.getWikiIds() != null && wiki.getWikiIds().size() > 0) {
+        } else if (wiki.getWikiIds() != null && wiki.getWikiIds().
+
+                size() > 0) {
             // map the sub categories or sub wikis to the wiki
             newWiki.setWikiChildren(wiki.getWikiIds().stream()
                     .map(wikiRepository::getReferenceById)
@@ -204,7 +215,10 @@ public class WikiServiceImpl implements WikiService {
         } else {
             newWiki.setIsParentChild("child");
         }
-        return wikiRepository.save(newWiki).getWikiName();
+        return wikiRepository.save(newWiki).
+
+                getWikiName();
+
     }
 
 
@@ -222,13 +236,11 @@ public class WikiServiceImpl implements WikiService {
         if (wikiIds.isEmpty()) wikiIds.add(UUID.fromString("00000000-0000-0000-0000-000000000000"));
 
         return wikiRepository.findAllByWikiIdNotIn(wikiIds, WikiInfo.class);
-
     }
 
     @Override
     public Set<WikiTopicPage> getWikiTopics(UUID wikiId) {
         return wikiTopicPageRepository.getWikiTopicPageByWikiTopicPageId_WikiId(wikiId);
-
     }
 
     /**

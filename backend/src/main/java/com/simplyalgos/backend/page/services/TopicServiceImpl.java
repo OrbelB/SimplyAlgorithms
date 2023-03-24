@@ -1,22 +1,26 @@
 package com.simplyalgos.backend.page.services;
 
+import com.simplyalgos.backend.page.domains.CodeSnippet;
+import com.simplyalgos.backend.page.domains.Topic;
+import com.simplyalgos.backend.page.domains.TopicExternalResource;
+import com.simplyalgos.backend.page.domains.WikiTopicPage;
 import com.simplyalgos.backend.page.domains.ids.CodeSnippetId;
 import com.simplyalgos.backend.page.domains.ids.PageVoteId;
 import com.simplyalgos.backend.page.domains.ids.TopicExternalResourceId;
-import com.simplyalgos.backend.page.repositories.TopicStepRepository;
-import com.simplyalgos.backend.page.domains.TopicSteps;
-import com.simplyalgos.backend.page.domains.*;
+import com.simplyalgos.backend.page.domains.ids.WikiTopicPageId;
 import com.simplyalgos.backend.page.dtos.*;
 import com.simplyalgos.backend.page.mappers.TopicMapper;
-import com.simplyalgos.backend.page.repositories.CodeSnippetRepository;
-import com.simplyalgos.backend.page.repositories.TopicExternalResourceRepository;
-import com.simplyalgos.backend.page.repositories.TopicRepository;
-import com.simplyalgos.backend.report.services.PageReportService;
+import com.simplyalgos.backend.page.repositories.*;
+import com.simplyalgos.backend.page.repositories.projection.TopicInformation;
+import com.simplyalgos.backend.page.repositories.projection.TopicNameAndIDOnly;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
+import com.simplyalgos.backend.report.services.PageReportService;
 import com.simplyalgos.backend.tag.services.TagService;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.utils.StringUtils;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
+import io.swagger.v3.core.util.Json;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,15 +29,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Slf4j
+@Transactional
 @Service
 public class TopicServiceImpl implements TopicService {
+    private final WikiTopicPageRepository wikiTopicPageRepository;
+    private final WikiRepository wikiRepository;
     private final PageVoteService pageVoteService;
 
     private final TopicRepository topicRepository;
@@ -46,11 +55,7 @@ public class TopicServiceImpl implements TopicService {
 
     private final CodeSnippetRepository codeSnippetRepository;
 
-    private final TagService tagService;
-
     private final UserService userService;
-
-    private final TopicStepRepository topicStepRepository;
 
     private final TopicExternalResourceRepository topicExternalResourceRepository;
 
@@ -76,175 +81,183 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public FullTopicDTO getTopicPage(UUID pageId) {
-        return topicMapper.topicToFullTopicDTO(topicRepository.findById(pageId).orElseThrow(() ->
-                new NoSuchElementException(MessageFormat.format("Element not found for id {0}", pageId))
-        ));
+    public TopicInformation getTopicPage(UUID pageId) {
+        return topicRepository.findByPageId(pageId, TopicInformation.class).orElseThrow(() ->
+                new NoSuchElementException(MessageFormat.format("Page not found for id {0}", pageId))
+        );
     }
 
-    //TODO needs more work to remove children not specify
-    @Transactional
     @Override
-    public void updateTopicPage(FullTopicDTO fullTopicDTO) {
-        Optional<Topic> topicToUpdate = topicRepository.findById(fullTopicDTO.getPageId());
-        topicToUpdate.ifPresentOrElse(
-                topic -> {
-                    if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getTitle())) topic.setTitle(fullTopicDTO.getTitle());
-                    if (fullTopicDTO.getSteps() != null)
-                        mapStepsToTopic(topic, fullTopicDTO.getSteps());
-                    if(StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getPageDescription()))
-                        topic.setPageDescription(fullTopicDTO.getPageDescription());
-                    if (fullTopicDTO.getExternalResources() != null)
-                        mapExternalResourcesToTopic(topic, fullTopicDTO.getExternalResources());
-                    if (fullTopicDTO.getCodeSnippet() != null)
-                        mapCodeSnippetToPageEntity(topic, fullTopicDTO.getCodeSnippet());
-                    if (fullTopicDTO.getTags() != null)
-                        tagService.mapTagToPageId(topic.getPageEntityId(), fullTopicDTO.getTags());
-                    topicRepository.save(topic);
-                }
-                , () ->
-                        log.error(MessageFormat.format("Topic with {0} could not be found", fullTopicDTO.getPageId())));
+    public TopicInformation getTopicPage(String pageTitle) {
+        return topicRepository
+                .findByTitle(pageTitle, TopicInformation.class)
+                .orElseGet(() -> getTopicPage(UUID.fromString(pageTitle)));
+    }
 
+
+    @Override
+    public String updateTopicPage(FullTopicDTO fullTopicDTO) {
+
+        Topic topicToUpdate = topicRepository.findById(fullTopicDTO.getPageId()).orElseThrow(() ->
+                new NoSuchElementException(
+                        MessageFormat
+                                .format("Page not found for id {0}",
+                                        fullTopicDTO.getPageId()))
+        );
+        topicMapper.updateTopicFromFullTopicDto(fullTopicDTO, topicToUpdate);
+        topicToUpdate.setPageDescription(fullTopicDTO.getPageDescription());
+        log.info("topic new page desc " + Json.pretty(topicToUpdate.getPageDescription()));
+        if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getExternalResources())) {
+            mapExternalResourcesToTopic(topicToUpdate, fullTopicDTO.getExternalResources());
+        }
+        if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getCodeSnippets())) {
+            mapCodeSnippetToPageEntity(topicToUpdate, fullTopicDTO.getCodeSnippets());
+        }
+        if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getWikiInfo())) {
+            WikiTopicPageId wikiTopicPageId = WikiTopicPageId.builder()
+                    .pageId(topicToUpdate.getPageId())
+                    .wikiId(fullTopicDTO.getWikiInfo().wikiId())
+                    .build();
+            if (!wikiTopicPageRepository.existsById(wikiTopicPageId)) {
+                WikiTopicPage wikiTopicPage = WikiTopicPage.builder()
+                        .wikiTopicPageId(wikiTopicPageId)
+                        .topicPage(topicToUpdate)
+                        .wikiCategory(wikiRepository.getReferenceById(fullTopicDTO.getWikiInfo().wikiId()))
+                        .build();
+                topicToUpdate.addWikiToTopicPage(wikiTopicPage);
+            }
+            wikiTopicPageRepository.deleteByWikiTopicPageIdNotInAndTopicPage(Set.of(wikiTopicPageId), topicToUpdate);
+            topicToUpdate.setUrlPath(fullTopicDTO.getWikiInfo().wikiName() + "/" + topicToUpdate.getTitle());
+            log.info("Wiki info updated for topic: {}", topicToUpdate.getUrlPath());
+        }
+        return topicRepository.saveAndFlush(topicToUpdate).getUrlPath();
     }
 
     @Override
     public UUID reportPage(PageReportDTO pageReportDTO) {
         return pageReportService.createReport(pageReportDTO, pageEntityService.getPageEntity(pageReportDTO.getPageId()));
-
     }
 
-    @Transactional
     @Override
-    public void createPage(FullTopicDTO fullTopicDTO) {
-        Topic createdTopic = topicRepository.saveAndFlush(
-                Topic.builder()
-                        .pageId(UUID.randomUUID())
-                        .title(fullTopicDTO.getTitle())
-                        .pageDescription(fullTopicDTO.getPageDescription())
-                        .video(fullTopicDTO.getVideo())
-                        .build()
+    public String createPage(FullTopicDTO fullTopicDTO) {
+        Topic createdTopic = topicMapper.fullTopicDTOToTopic(fullTopicDTO);
+        createdTopic.setPageId(UUID.randomUUID());
+        log.debug(MessageFormat.format("Created topic: {0}", Json.pretty(fullTopicDTO)));
+        if (fullTopicDTO.getCodeSnippets() != null) {
+            createdTopic.setCodeSnippets(fullTopicDTO.getCodeSnippets().stream().map(
+                    codeSnippetDTO -> CodeSnippet.builder()
+                            .codeSnippetId(
+                                    CodeSnippetId.builder()
+                                            .pageId(createdTopic.getPageId())
+                                            .languageTitle(codeSnippetDTO.getLanguageTitle())
+                                            .build()
+                            )
+                            .topicPage(createdTopic)
+                            .codeText(codeSnippetDTO.getCodeText())
+                            .build()
+
+            ).collect(Collectors.toSet()));
+        }
+        if (fullTopicDTO.getExternalResources() != null) {
+            createdTopic.setTopicExternalResources(fullTopicDTO.getExternalResources().stream().map(
+                    externalResourceDTO -> TopicExternalResource.builder()
+                            .topicExternalResourceId(
+                                    TopicExternalResourceId.builder()
+                                            .pageId(createdTopic.getPageId())
+                                            .externalResourceLink(externalResourceDTO.getExternalResourceLink())
+                                            .build()
+                            )
+                            .topicPage(createdTopic)
+                            .title(externalResourceDTO.getTitle())
+                            .build()
+            ).collect(Collectors.toSet()));
+        }
+        if (fullTopicDTO.getWikiInfo() != null) {
+            wikiRepository.findById(fullTopicDTO.getWikiInfo().wikiId()).ifPresentOrElse(
+                    (wiki) -> createdTopic.setParentTopicIds(List.of(WikiTopicPage.builder().wikiTopicPageId(
+                                    WikiTopicPageId
+                                            .builder()
+                                            .wikiId(wiki.getWikiId())
+                                            .pageId(createdTopic.getPageId()).build())
+                            .topicPage(createdTopic).wikiCategory(wiki).build())),
+                    () -> {
+                        throw new NoSuchElementException(MessageFormat.format("Wiki not found for id {0}",
+                                fullTopicDTO.getWikiInfo().wikiId()));
+                    }
+            );
+            createdTopic.setUrlPath(fullTopicDTO.getWikiInfo().wikiName() + "/" + fullTopicDTO.getTitle());
+        }
+        if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getUserId())) {
+            log.debug(MessageFormat.format("user id is not null {0}", fullTopicDTO.getUserId()));
+            createdTopic.setCreatedBy(userService.getUser(fullTopicDTO.getUserId()));
+        }
+
+        return topicRepository.save(createdTopic).getUrlPath();
+    }
+
+
+    private void mapExternalResourcesToTopic(Topic topic, Set<TopicExternalResourcesDTO> externalResources) {
+        externalResources.forEach((externalResource) -> {
+                    TopicExternalResourceId topicExternalResourceId = TopicExternalResourceId.builder()
+                            .externalResourceLink(externalResource.getExternalResourceLink())
+                            .pageId(topic.getPageId())
+                            .build();
+                    // if it does not exist, add it
+                    if (!topicExternalResourceRepository.existsById(topicExternalResourceId)) {
+                        topic.addTopicExternalResource(TopicExternalResource.builder()
+                                .topicExternalResourceId(topicExternalResourceId)
+                                .topicPage(topic)
+                                .title(externalResource.getTitle())
+                                .build());
+                    }else {
+                        TopicExternalResource topicExternalResource = topicExternalResourceRepository.findById(topicExternalResourceId).orElseThrow();
+                        topicExternalResource.setTitle(externalResource.getTitle());
+                    }
+                }
         );
 
-        //get page entity to map the other attributes
-        PageEntity topicPageType = pageEntityService.getPageEntity(createdTopic.getPageId());
-
-        log.debug(MessageFormat.format("Page {0} exists", topicPageType.getPageId()));
-        tagService.mapTagToPageId(topicPageType, fullTopicDTO.getTags());
-        if (fullTopicDTO.getCodeSnippet() != null)
-            createdTopic.setCodeSnippets(mapCodeSnippetToPageEntity(createdTopic, fullTopicDTO.getCodeSnippet()));
-        if (fullTopicDTO.getExternalResources() != null)
-            createdTopic.setTopicExternalResources(mapExternalResourcesToTopic(createdTopic, fullTopicDTO.getExternalResources()));
-        if (fullTopicDTO.getSteps() != null)
-            createdTopic.setTopicSteps(mapStepsToTopic(createdTopic, fullTopicDTO.getSteps()));
-        //save changes
-        //topicRepository.save(createdTopic);
+        Set<TopicExternalResourceId> topicExternalResourceIds = externalResources.stream().map(externalResource -> TopicExternalResourceId.builder()
+                .externalResourceLink(externalResource.getExternalResourceLink())
+                .pageId(topic.getPageId())
+                .build()).collect(Collectors.toSet());
+        // delete the ones that are not in the list
+        topicExternalResourceRepository
+                .removeByTopicExternalResourceIdNotInAndTopicPage(topicExternalResourceIds, topic);
     }
 
-
-    //future --  improve logic
-    private List<TopicSteps> mapStepsToTopic(Topic createdTopic, Set<TopicStepsDTO> stepsDTOS) {
-        return stepsDTOS.stream().map(stepDTO -> {
-                    if (stepDTO.getStepId() != null) {
-                        Optional<TopicSteps> topicStepsOptional = topicStepRepository.findById(stepDTO.getStepId());
-                        if (topicStepsOptional.isPresent()) {
-                            topicStepsOptional.get().setStep(stepDTO.getStep());
-                            topicStepsOptional.get().setStepNumber(stepDTO.getStepNumber());
-                            return topicStepRepository.save(topicStepsOptional.get());
-                        }
-                    }
-                    return topicStepRepository.save(
-                            TopicSteps
-                                    .builder().
-                                    step(stepDTO.getStep())
-                                    .stepNumber(stepDTO.getStepNumber())
-                                    .topicPage(createdTopic)
-                                    .build());
-                }
-        ).toList();
-    }
-
-    //TODO fix removing the topics from pages if the user removes them
-    @Transactional
-    protected void removeResourceTopicFromPage(Topic topic, Set<TopicExternalResourcesDTO> topicExternalResource) {
-
-        List<TopicExternalResource> topicExternalResources = topicExternalResourceRepository
-                .findAllByTopicExternalResourceIdIsNotInAndTopicExternalResourceId_PageId(
-                        topicExternalResource.stream().map(topicExternalR -> TopicExternalResourceId
-                                        .builder()
-                                        .externalResourceLink(topicExternalR.getExternalResourceLink())
-                                        .pageId(topic.getPageId())
-                                        .build())
-                                .collect(Collectors.toSet()), topic.getPageId()
-                );
-        log.debug(MessageFormat.format("objects to remove should be one 1 {0}", topicExternalResources.size()));
-        topicExternalResourceRepository.deleteAll(topicExternalResources);
-    }
-
-    private List<TopicExternalResource> mapExternalResourcesToTopic(Topic topic, Set<TopicExternalResourcesDTO> externalResources) {
-        //needs some work redone
-        //removeResourceTopicFromPage(topic, externalResources);
-        //if external resource exists retrieve, don't update created ones, you can only delete them, but if the object exits update it
-        return externalResources
-                .stream()
-                .map(
-                        externalResource -> {
-                            Optional<TopicExternalResource> optionalResource = topicExternalResourceRepository.findById(
-                                    TopicExternalResourceId.builder()
-                                            .pageId(topic.getPageId())
-                                            .externalResourceLink(externalResource.getExternalResourceLink())
-                                            .build());
-                            return optionalResource.orElseGet(() -> topicExternalResourceRepository.save(
-                                    TopicExternalResource
-                                            .builder()
-                                            .topicExternalResourceId(
-                                                    TopicExternalResourceId
-                                                            .builder()
-                                                            .externalResourceLink(externalResource.getExternalResourceLink())
-                                                            .pageId(topic.getPageId())
-                                                            .build()
-                                            )
-                                            .build()));
-                        }
-                ).toList();
-    }
-
-    private List<CodeSnippet> mapCodeSnippetToPageEntity(Topic page, Set<CodeSnippetDTO> codeSnippets) {
-        return codeSnippets.stream().map(codeSnippetDTO -> {
-            Optional<CodeSnippet> optionalCodeSnippet = codeSnippetRepository.findById(
-                    CodeSnippetId
-                            .builder()
-                            .pageId(page.getPageId())
-                            .languageTitle(codeSnippetDTO.getLanguageTitle())
-                            .build()
-            );
-            if (optionalCodeSnippet.isPresent()) {
-                CodeSnippet currentCodeSnippet = optionalCodeSnippet.get();
-                //just update the code text, no need to update the rest
-                log.debug(MessageFormat.format("check if the information exists {0}", currentCodeSnippet.getCodeText()));
-                currentCodeSnippet.setCodeText(codeSnippetDTO.getCodeText());
-                return codeSnippetRepository.save(currentCodeSnippet);
-            } else {
-                log.debug(MessageFormat.format("could the error be here? {0}", codeSnippetDTO.getLanguageTitle()));
-                return codeSnippetRepository.save(
-                        CodeSnippet.builder()
-                                .codeSnippetId(CodeSnippetId
-                                        .builder()
-                                        .pageId(page.getPageId())
-                                        .languageTitle(codeSnippetDTO.getLanguageTitle())
-                                        .build())
-                                .codeText(codeSnippetDTO.getCodeText()).
-                                build()
-                );
+    private void mapCodeSnippetToPageEntity(Topic page, Set<CodeSnippetDTO> codeSnippets) {
+        codeSnippets.forEach((codeSnippetDTO -> {
+            CodeSnippetId codeSnippetId = CodeSnippetId
+                    .builder()
+                    .pageId(page.getPageId())
+                    .languageTitle(codeSnippetDTO.getLanguageTitle())
+                    .build();
+            if (!codeSnippetRepository.existsById(codeSnippetId)) {
+                page.addCodeSnippet(CodeSnippet.builder()
+                        .codeSnippetId(codeSnippetId)
+                        .topicPage(page)
+                        .codeText(codeSnippetDTO.getCodeText())
+                        .build());
+            }else {
+                CodeSnippet codeSnippet = codeSnippetRepository.findById(codeSnippetId).orElseThrow();
+                codeSnippet.setCodeText(codeSnippetDTO.getCodeText());
             }
+        }));
 
-        }).toList();
+        Set<CodeSnippetId> codeSnippetIds = codeSnippets.stream().map(codeSnippetDTO -> CodeSnippetId
+                .builder()
+                .pageId(page.getPageId())
+                .languageTitle(codeSnippetDTO.getLanguageTitle())
+                .build()).collect(Collectors.toSet());
+        // remove the ones not present in the list
+        codeSnippetRepository.removeByCodeSnippetIdNotInAndTopicPage(codeSnippetIds, page);
     }
 
 
     @Transactional
     @Override
     public LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike) {
-        if (topicRepository.existsById(pageId)) {
+        if (!topicRepository.existsById(pageId)) {
             throw new NoSuchElementException(
                     MessageFormat.format("page with Id {0} does not exits", pageId));
         }
@@ -302,6 +315,11 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public Object listVotesByPageAndUserId(UUID pageId, UUID userId) {
+        return pageVoteService.listVoteByPageAndUserId(pageId, userId);
+    }
+
+    @Override
     public Set<PageWikiInfo> getWikiInfo(Set<UUID> pageIds) {
         return topicRepository.findAllByPageIdNotIn(pageIds, PageWikiInfo.class);
     }
@@ -309,5 +327,14 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public boolean isPageNameUnique(String pageName) {
         return !topicRepository.existsByTitle(pageName);
+    }
+
+    @Override
+    public void updateUrlPath(UUID pageId, String urlPath) {
+        TopicNameAndIDOnly topicNameAndIDOnly = topicRepository.findByPageId(pageId, TopicNameAndIDOnly.class)
+                .orElseThrow(() -> new NoSuchElementException(MessageFormat.format("Topic with id {0} does not exist", pageId)));
+        if (!StringUtils.isNotNullAndEmptyOrBlank(urlPath)) topicRepository.updateUrlPath(pageId, "");
+
+        topicRepository.updateUrlPath(pageId, topicNameAndIDOnly.getTitle() + "/" + urlPath);
     }
 }

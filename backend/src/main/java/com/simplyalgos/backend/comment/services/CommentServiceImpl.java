@@ -4,35 +4,37 @@ package com.simplyalgos.backend.comment.services;
 import com.simplyalgos.backend.comment.domains.Comment;
 import com.simplyalgos.backend.comment.domains.CommentVoteId;
 import com.simplyalgos.backend.comment.domains.ParentChildComment;
-import com.simplyalgos.backend.comment.dto.*;
+import com.simplyalgos.backend.comment.dto.ChildCommentDTO;
+import com.simplyalgos.backend.comment.dto.CommentDTO;
+import com.simplyalgos.backend.comment.dto.CommentLikeDislikeDTO;
+import com.simplyalgos.backend.comment.dto.CommentToSendDTO;
 import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.comment.mappers.CommentMapper;
 import com.simplyalgos.backend.comment.repositories.CommentRepository;
+import com.simplyalgos.backend.comment.repositories.projections.CommentParent;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.PageEntity;
-import com.simplyalgos.backend.page.dtos.FullForumDTO;
-import com.simplyalgos.backend.page.dtos.FullTopicDTO;
+import com.simplyalgos.backend.page.domains.Topic;
+import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
 import com.simplyalgos.backend.page.services.ForumService;
 import com.simplyalgos.backend.page.services.PageEntityService;
 import com.simplyalgos.backend.page.services.TopicService;
-import com.simplyalgos.backend.report.services.CommentReportService;
 import com.simplyalgos.backend.report.dtos.CommentReportDTO;
+import com.simplyalgos.backend.report.services.CommentReportService;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.services.DashboardService;
 import com.simplyalgos.backend.user.services.UserService;
-
 import com.simplyalgos.backend.utils.StringUtils;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+import org.hibernate.Internal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
 
 import java.text.MessageFormat;
 import java.util.NoSuchElementException;
@@ -56,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
     private final TopicService topicService;
     private final DashboardService dashboardService;
 
-    @Override
+    @Override @Internal
     public ObjectPagedList<?> listComments(Pageable pageable) {
         Page<Comment> commentPage = commentRepository.findAll(pageable);
         return new ObjectPagedList<>(
@@ -69,6 +71,36 @@ public class CommentServiceImpl implements CommentService {
                 commentPage.getTotalElements()
         );
     }
+    @Override
+    public ObjectPagedList<?> getChildrenComments(UUID parentComment, Pageable pageable) {
+        Page<ParentChildComment> childComments = parentChildCommentService.getChildrenCommentList(parentComment, pageable);
+        log.info(MessageFormat.format("found {0}  child comment which is ", childComments.getTotalElements()));
+        return new ObjectPagedList<>(
+                childComments
+                        .stream().map(commentMapper::commentToChildCommentDTO)
+                        .collect(Collectors.toList()),
+                PageRequest.of(
+                        childComments.getPageable().getPageNumber(),
+                        childComments.getPageable().getPageSize()
+                ), childComments.getTotalElements());
+    }
+
+    @Override
+    public ObjectPagedList<?> listParentCommentsByPageId(UUID pageId, Pageable pageable) {
+        Page<CommentParent> parentComments = commentRepository
+                .findAllByIsParentChildAndPageComment_pageId(
+                        CommentType.PARENT.label,
+                        pageId,
+                        pageable,
+                        CommentParent.class
+                );
+        return new ObjectPagedList<>(
+                parentComments.stream().toList(),
+                PageRequest.of(
+                        parentComments.getPageable().getPageNumber(),
+                        parentComments.getPageable().getPageSize()
+                ), parentComments.getTotalElements());
+    }
 
     @Override
     public CommentToSendDTO createParentComment(CommentDTO commentDTO) {
@@ -76,7 +108,7 @@ public class CommentServiceImpl implements CommentService {
         PageEntity page = pageEntityService.getPageEntity(commentDTO.pageId());
 
         if (page.getIsForumTopicPage().equals("forum")) {
-            FullForumDTO forumDTO = forumService.getForumPage(String.valueOf(page.getPageId()));
+            ForumInformation forumDTO = forumService.getForumPage(String.valueOf(page.getPageId()));
             dashboardService.addForumNotification(forumDTO, userService.getUser(forumDTO.getUserDto().getUserId()));
         }
 
@@ -98,10 +130,10 @@ public class CommentServiceImpl implements CommentService {
         PageEntity page = pageEntityService.getPageEntity(commentDTO.getChildComment().pageId());
 
         if (page.getIsForumTopicPage().equals("topic")) {
-            FullTopicDTO fullTopicDTO = topicService.getTopicPage(page.getPageId());
+            Topic fullTopicDTO = topicService.getTopic(page.getPageId());
             dashboardService.addTopicNotification(fullTopicDTO, userToNotified);
         } else if (page.getIsForumTopicPage().equals("forum")) {
-            FullForumDTO forumDTO = forumService.getForumPage(String.valueOf(page.getPageId()));
+            ForumInformation forumDTO = forumService.getForumPage(String.valueOf(page.getPageId()));
             dashboardService.addForumNotification(forumDTO, userToNotified);
         }
 
@@ -154,7 +186,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private UUID findCommentIdParent(Comment commentToUpdate) {
-        return commentToUpdate.getParentComments().get(0).getParentChildCommentId().getParentComment().getCommentId();
+        return commentToUpdate.getParentComments().get(0).getParentChildCommentId().getParentCommentId();
     }
 
     @Override
@@ -165,19 +197,6 @@ public class CommentServiceImpl implements CommentService {
         return commentId;
     }
 
-    @Override
-    public ObjectPagedList<?> getChildrenComments(UUID parentComment, Pageable pageable) {
-        Page<ParentChildComment> childComments = parentChildCommentService.getChildrenCommentList(parentComment, pageable);
-        log.info(MessageFormat.format("found {0}  child comment which is ", childComments.getTotalElements()));
-        return new ObjectPagedList<>(
-                childComments
-                        .stream().map(commentMapper::commentToChildCommentDTO)
-                        .collect(Collectors.toList()),
-                PageRequest.of(
-                        childComments.getPageable().getPageNumber(),
-                        childComments.getPageable().getPageSize()
-                ), childComments.getTotalElements());
-    }
 
     @Override
     public CommentVoteId deleteVote(UUID userId, UUID commentId) {

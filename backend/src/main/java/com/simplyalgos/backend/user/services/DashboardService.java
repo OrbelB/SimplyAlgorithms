@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.user.services;
 
-import com.simplyalgos.backend.page.dtos.FullForumDTO;
-import com.simplyalgos.backend.page.dtos.FullTopicDTO;
+import com.simplyalgos.backend.page.domains.Topic;
+import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.DashboardDTO;
 
@@ -11,9 +11,9 @@ public interface DashboardService {
 
     DashboardDTO displayNotifications(UUID userId);
 
-    void addTopicNotification(FullTopicDTO fullTopicDTO, User userToNotified);
+    void addTopicNotification(Topic fullTopicDTO, User userToNotified);
 
-    void addForumNotification(FullForumDTO forumDTO, User userToNotified);
+    void addForumNotification(ForumInformation forumDTO, User userToNotified);
 
     void addPasswordResetNotification(User userToNotified);
 

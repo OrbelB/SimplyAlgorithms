@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.user.services;
 
-import com.simplyalgos.backend.page.dtos.FullForumDTO;
-import com.simplyalgos.backend.page.dtos.FullTopicDTO;
+import com.simplyalgos.backend.page.domains.Topic;
+import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.DashboardDTO;
 import com.simplyalgos.backend.user.enums.NotificationMessage;
@@ -36,7 +36,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public void addForumNotification(FullForumDTO forumDTO, User userToNotified) {
+    public void addForumNotification(ForumInformation forumDTO, User userToNotified) {
         if (userPreferenceService
                 .isNotificationEnableForType(NotificationType.POST_REPLIES, userToNotified.getUserId())) {
             userNotificationService
@@ -74,7 +74,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public void addTopicNotification(FullTopicDTO fullTopicDTO, User userToNotified) {
+    public void addTopicNotification(Topic fullTopicDTO, User userToNotified) {
         if (userPreferenceService.isNotificationEnableForType(NotificationType.REPLIES_NOTIFICATION, userToNotified.getUserId())) {
             userNotificationService.addNotification(
                     fullTopicDTO.getPageId(),

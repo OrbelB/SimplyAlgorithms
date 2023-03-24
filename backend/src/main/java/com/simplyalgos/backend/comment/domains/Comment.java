@@ -7,17 +7,16 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.page.domains.PageEntity;
 import com.simplyalgos.backend.report.domains.CommentReport;
 import com.simplyalgos.backend.user.domains.User;
+import jakarta.persistence.*;
 import lombok.*;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
-
-import jakarta.persistence.*;
-
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 
 @Getter
@@ -63,10 +62,9 @@ public class Comment {
     @OneToMany(mappedBy = "childComment", orphanRemoval = true)
     private List<ParentChildComment> parentComments;
 
-
+    @JsonIncludeProperties({"childComment"})
     @OneToMany(mappedBy = "parentComment", orphanRemoval = true)
     private List<ParentChildComment> childrenComments;
-
 
     @OneToMany(mappedBy = "commentVoteReference")
     private Set<CommentVote> commentVotes;

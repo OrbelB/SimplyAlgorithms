@@ -14,6 +14,8 @@ public interface CommentService {
 
     ObjectPagedList<?> listComments(Pageable pageable);
 
+    ObjectPagedList<?> listParentCommentsByPageId(UUID pageId, Pageable pageable);
+
     CommentToSendDTO createParentComment(CommentDTO commentDTO);
 
     CommentToSendDTO createChildComment(ChildCommentDTO commentDTO);

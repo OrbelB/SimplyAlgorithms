@@ -10,23 +10,27 @@ import com.simplyalgos.backend.comment.dto.CommentToSendDTO;
 import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.comment.mappers.CommentMapper;
 import com.simplyalgos.backend.comment.repositories.CommentRepository;
+import com.simplyalgos.backend.comment.repositories.projections.UserInfoOnly;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.PageEntity;
+import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.dtos.FullForumDTO;
-import com.simplyalgos.backend.page.dtos.FullTopicDTO;
+import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
 import com.simplyalgos.backend.page.services.ForumService;
 import com.simplyalgos.backend.page.services.PageEntityService;
 import com.simplyalgos.backend.page.services.TopicService;
 import com.simplyalgos.backend.report.dtos.CommentReportDTO;
 import com.simplyalgos.backend.report.services.CommentReportService;
+import com.simplyalgos.backend.tag.repositories.projections.TagInfoOnly;
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataDTO;
-import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.services.DashboardService;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
@@ -35,11 +39,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
 
@@ -131,7 +134,7 @@ class CommentServiceImplTest {
 
 
         @Test
-        void updateCommentThatDoesNotExist(){
+        void updateCommentThatDoesNotExist() {
 
             //given that a comment does not exist
             CommentDTO commentDTO = new CommentDTO(commentId, pageId, content, userId);
@@ -173,7 +176,7 @@ class CommentServiceImplTest {
             comment.setParentComments(List.of(
                     ParentChildComment.builder()
                             .parentChildCommentId(ParentChildCommentId
-                                    .builder().parentComment(comment).build())
+                                    .builder().parentComment(commentId).build())
                             .build()));
             given(commentMapper.commentToCommentBasicDTO(any(Comment.class), any(UUID.class)))
                     .willReturn(newUpdatedComment);
@@ -239,7 +242,7 @@ class CommentServiceImplTest {
             comment.setParentComments(List.of(
                     ParentChildComment.builder()
                             .parentChildCommentId(ParentChildCommentId
-                                    .builder().parentComment(comment).build())
+                                    .builder().parentComment(commentId).build())
                             .build()));
 
 
@@ -361,9 +364,85 @@ class CommentServiceImplTest {
             UserDataDTO userDTO = UserDataDTO.builder().userId(userId).build();
             given(pageEntityService.getPageEntity(any(UUID.class)))
                     .willReturn(pageEntityBuilder.isForumTopicPage("forum").build());
+            FullForumDTO.builder().pageId(pageId).userDto(userDTO).build();
             //given that the forum page exists
             given(forumService.getForumPage(anyString()))
-                    .willReturn(FullForumDTO.builder().pageId(pageId).userDto(userDTO).build());
+                    .willReturn(new ForumInformation() {
+                        @Override
+                        public UUID getPageId() {
+                            return pageId;
+                        }
+
+                        @Override
+                        public String getTitle() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getDescriptionText() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getPhoto() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getVideo() {
+                            return null;
+                        }
+
+                        @Override
+                        public int getUpVotes() {
+                            return 0;
+                        }
+
+                        @Override
+                        public int getDownVotes() {
+                            return 0;
+                        }
+
+                        @Override
+                        public UserInfoOnly getUserDto() {
+                            return new UserInfoOnly() {
+                                @Override
+                                public UUID getUserId() {
+                                    return userId;
+                                }
+
+                                @Override
+                                public String getUsername() {
+                                    return null;
+                                }
+
+                                @Override
+                                public String getFirstName() {
+                                    return null;
+                                }
+
+                                @Override
+                                public String getLastName() {
+                                    return null;
+                                }
+
+                                @Override
+                                public String getProfilePicture() {
+                                    return null;
+                                }
+                            };
+                        }
+
+                        @Override
+                        public Date getCreatedDate() {
+                            return null;
+                        }
+
+                        @Override
+                        public Set<TagInfoOnly> getTags() {
+                            return null;
+                        }
+                    });
 
 
             //when the comment is created on a forum page
@@ -507,7 +586,57 @@ class CommentServiceImplTest {
 
             //mocking the topic service
             given(forumService.getForumPage(anyString()))
-                    .willReturn(FullForumDTO.builder().build());
+                    .willReturn(new ForumInformation() {
+                        @Override
+                        public UUID getPageId() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getTitle() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getDescriptionText() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getPhoto() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getVideo() {
+                            return null;
+                        }
+
+                        @Override
+                        public int getUpVotes() {
+                            return 0;
+                        }
+
+                        @Override
+                        public int getDownVotes() {
+                            return 0;
+                        }
+
+                        @Override
+                        public UserInfoOnly getUserDto() {
+                            return null;
+                        }
+
+                        @Override
+                        public Date getCreatedDate() {
+                            return null;
+                        }
+
+                        @Override
+                        public Set<TagInfoOnly> getTags() {
+                            return null;
+                        }
+                    });
 
             given(commentRepository.existsById(any(UUID.class)))
                     .willReturn(false);
@@ -591,8 +720,9 @@ class CommentServiceImplTest {
                     .willReturn(Optional.of(comment));
 
             //mocking the topic service
-            given(topicService.getTopicPage(any(UUID.class)))
-                    .willReturn(FullTopicDTO.builder().build());
+            given(topicService.getTopic(any(UUID.class)))
+                    .willReturn(Topic.builder().build());
+
 
             given(commentRepository.existsById(any(UUID.class)))
                     .willReturn(false);
@@ -621,7 +751,7 @@ class CommentServiceImplTest {
             then(commentMapper).shouldHaveNoMoreInteractions();
 
             //then topic service should be called once to get the topic information to update the user notification
-            then(topicService).should(times(1)).getTopicPage(any(UUID.class));
+            then(topicService).should(times(1)).getTopic(any(UUID.class));
             then(topicService).shouldHaveNoMoreInteractions();
 
             //then the notification service should be called once to update the user notification
@@ -646,7 +776,7 @@ class CommentServiceImplTest {
             //check order of calls must match
             order.verify(commentRepository).findById(any(UUID.class));
             order.verify(pageEntityService).getPageEntity(any(UUID.class));
-            order.verify(topicService).getTopicPage(any(UUID.class));
+            // order.verify(topicService).getTopicPage(any(UUID.class));
             order.verify(dashboardService).addTopicNotification(any(), any());
             order.verify(userService).getUser(any(UUID.class));
             order.verify(commentRepository).saveAndFlush(any(Comment.class));

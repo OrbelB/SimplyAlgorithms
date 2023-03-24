@@ -29,13 +29,11 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final TopicRepository topicRepository;
 
     @Transactional
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-
         if (userRepository.findByUsername("admin").isEmpty()) {
             loadDefaultUsers();
         }
@@ -43,7 +41,6 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         if(topicRepository.findById(UUID.fromString("54e9d8be-f123-4360-9c76-0c4c2ccd99eb")).isEmpty()){
             loadDefaultTopicPages();
         }
-
     }
 
     private void loadDefaultTopicPages() {

@@ -12,7 +12,6 @@ import java.util.UUID;
 @Data
 @Builder
 public class UserDataDTO {
-
     UUID userId;
     String username;
     String firstName;

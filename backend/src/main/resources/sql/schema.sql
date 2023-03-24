@@ -173,6 +173,8 @@ CREATE TABLE topic_page (
     video VARCHAR(500) NOT NULL,
     page_description JSON NOT NULL,
     source VARCHAR(260) NOT NULL,
+    visualizer VARCHAR(260) NOT NULL,
+    url_path VARCHAR(260) NOT NULL,
     title  VARCHAR(60) NOT NULL,
     user_id VARCHAR(36) NOT NULL,
     up_votes INT NOT NULL,

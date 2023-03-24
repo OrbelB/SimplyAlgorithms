@@ -23,13 +23,39 @@ import java.util.stream.Collectors;
 public class CommentMapper {
     private final UserRepository userRepository;
 
+    public CommentBasicDTO commentToCommentBasicDTO(Comment comment) {
+        return CommentBasicDTO
+                .builder()
+                .commentId(comment.getCommentId())
+                .commentText(comment.getCommentText())
+                .createdDate(comment.getCreatedDate())
+                .createdBy(UserDataDTO.builder()
+                        .userId(comment.getCreatedBy().getUserId())
+                        .firstName(comment.getCreatedBy().getFirstName())
+                        .lastName(comment.getCreatedBy().getLastName())
+                        .profilePicture(comment.getCreatedBy().getProfilePicture())
+                        .username(comment.getCreatedBy().getUsername())
+                        .build())
+                .likes(comment.getLikes())
+                .dislikes(comment.getDislikes())
+                .replyCount(countReplies(comment.getChildrenComments())).build();
+    }
+
+    private CommentToSendDTO getCommentToSendDTO(Comment comment, UUID pageId) {
+        return CommentToSendDTO
+                .builder()
+                .rootId(pageId)
+                .comment(commentToCommentBasicDTO(comment))
+                .build();
+    }
+
     public CommentToSendDTO commentToChildCommentDTO(ParentChildComment parentChildComment) {
         CommentToSendDTO.CommentToSendDTOBuilder commentBasicDTOBuilder = CommentToSendDTO.builder();
-        if (parentChildComment.getParentChildCommentId().getChildComment() != null) {
-            if(parentChildComment.getParentComment() != null){
+        if (parentChildComment.getParentChildCommentId().getChildCommentId() != null) {
+            if (parentChildComment.getParentComment() != null) {
                 commentBasicDTOBuilder.rootId(parentChildComment.getParentComment().getCommentId());
             }
-            Comment currentComment = parentChildComment.getParentChildCommentId().getChildComment();
+            Comment currentComment = parentChildComment.getChildComment();
             commentBasicDTOBuilder
                     .comment(CommentBasicDTO.builder().createdBy(mapUserToUserDataDTO(currentComment.getCreatedBy()))
                             .createdDate(currentComment.getCreatedDate())
@@ -44,23 +70,7 @@ public class CommentMapper {
     }
 
     public CommentToSendDTO commentToCommentBasicDTO(Comment comment, UUID pageId) {
-        return CommentToSendDTO
-                .builder()
-                .rootId(pageId)
-                .comment(CommentBasicDTO.builder().commentId(comment.getCommentId())
-                        .commentText(comment.getCommentText())
-                        .createdDate(comment.getCreatedDate())
-                        .createdBy(UserDataDTO.builder()
-                                .userId(comment.getCreatedBy().getUserId())
-                                .firstName(comment.getCreatedBy().getFirstName())
-                                .lastName(comment.getCreatedBy().getLastName())
-                                .profilePicture(comment.getCreatedBy().getProfilePicture())
-                                .username(comment.getCreatedBy().getUsername())
-                                .build())
-                        .likes(comment.getLikes())
-                        .dislikes(comment.getDislikes())
-                        .replyCount(countReplies(comment.getChildrenComments())).build())
-                .build();
+        return getCommentToSendDTO(comment, pageId);
     }
 
     public Integer countReplies(List<ParentChildComment> comments) {
@@ -72,13 +82,11 @@ public class CommentMapper {
     public ChildrenCommentRetrieval ParentChildCommentToChildrenCommentList(ParentChildComment parentChildComment) {
         ChildrenCommentRetrieval.ChildrenCommentRetrievalBuilder childrenComments = ChildrenCommentRetrieval.builder();
         List<CommentBasicDTO> commentBasicDTOS = new ArrayList<>();
-        if (parentChildComment.getParentChildCommentId().getParentComment().getChildrenComments() != null) {
-            List<ParentChildComment> currentChildren = parentChildComment.getParentChildCommentId().getParentComment().getChildrenComments();
+        if (parentChildComment.getParentChildCommentId().getParentCommentId() != null) {
+            List<ParentChildComment> currentChildren = parentChildComment.getParentComment().getChildrenComments();
             List<Comment> comments = currentChildren
                     .stream()
-                    .map(currentChild -> currentChild
-                            .getParentChildCommentId()
-                            .getChildComment()).toList();
+                    .map(ParentChildComment::getChildComment).toList();
             commentBasicDTOS = comments.stream().map(comment -> CommentBasicDTO.builder()
                     .commentId(comment.getCommentId())
                     .commentText(comment.getCommentText())
@@ -97,10 +105,12 @@ public class CommentMapper {
         if (createdBy != null) {
             if (createdBy.getUserId() != null) {
                 userToBuild.userId(createdBy.getUserId());
-                if (StringUtils.isNotNullAndEmptyOrBlank(createdBy.getUsername())) userToBuild.username(createdBy.getUsername());
+                if (StringUtils.isNotNullAndEmptyOrBlank(createdBy.getUsername()))
+                    userToBuild.username(createdBy.getUsername());
                 if (StringUtils.isNotNullAndEmptyOrBlank(createdBy.getFirstName()))
                     userToBuild.firstName(createdBy.getFirstName());
-                if (StringUtils.isNotNullAndEmptyOrBlank(createdBy.getLastName())) userToBuild.lastName(createdBy.getLastName());
+                if (StringUtils.isNotNullAndEmptyOrBlank(createdBy.getLastName()))
+                    userToBuild.lastName(createdBy.getLastName());
                 if (StringUtils.isNotNullAndEmptyOrBlank((createdBy.getProfilePicture())))
                     userToBuild.profilePicture(createdBy.getProfilePicture());
             } else {

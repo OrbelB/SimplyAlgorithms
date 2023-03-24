@@ -32,4 +32,6 @@ public interface WikiService {
     String updateWiki(WikiDTO wiki);
 
     Wiki getWiki(String wikiName);
+
+    Set<WikiInfo> getAllWikiSubCategoriesBasicInfo();
 }

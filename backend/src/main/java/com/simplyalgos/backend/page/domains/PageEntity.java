@@ -68,6 +68,7 @@ public class PageEntity {
     @OneToMany(mappedBy = "reportedPage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PageReport> pageReports = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pageComment",fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
     private Set<Comment> pageComments = new HashSet<>();
 

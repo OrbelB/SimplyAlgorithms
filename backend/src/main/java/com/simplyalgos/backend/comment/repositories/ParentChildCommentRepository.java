@@ -20,6 +20,6 @@ public interface ParentChildCommentRepository extends JpaRepository<ParentChildC
     void createChildParentMapping(@Param("parent_comment_id") String parentCommentId,
                                   @Param("child_comment_id") String childCommentId);
 
-    Page<ParentChildComment> findAllByParentChildCommentId_ParentComment_CommentId(UUID parentCommentId,
+    Page<ParentChildComment> findAllByParentChildCommentId_ParentCommentId(UUID parentCommentId,
                                                           Pageable pageable);
 }

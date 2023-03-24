@@ -34,16 +34,23 @@ public class CommentController {
     private final CommentVoteService commentVoteService;
 
     @GetMapping(path = "/list")
-    public ResponseEntity<?> listComments(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
-                                          @RequestParam(name = "size", required = true, defaultValue = "5") Integer size) {
+    public ResponseEntity<?> listComments(@RequestParam(name = "page",  defaultValue = "0") Integer page,
+                                          @RequestParam(name = "size",  defaultValue = "5") Integer size) {
         return ResponseEntity.ok(commentService.listComments(PageRequest.of(page, size)));
     }
 
-    @GetMapping(path = "/list-child-comments")
-    public ResponseEntity<?> listChildComments(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
-                                               @RequestParam(name = "size", required = true, defaultValue = "5") Integer size,
+    @GetMapping(path = "/list-children")
+    public ResponseEntity<?> listChildComments(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                               @RequestParam(name = "size",  defaultValue = "5") Integer size,
                                                @RequestParam(name = "parentCommentId", required = false) UUID parentComment) {
         return ResponseEntity.ok(commentService.getChildrenComments(parentComment, PageRequest.of(page, size)));
+    }
+
+    @GetMapping(path = "/list-parent")
+    public ResponseEntity<?> listParentComments(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                                @RequestParam(name = "pageId") UUID pageId) {
+        return ResponseEntity.ok(commentService.listParentCommentsByPageId(pageId, PageRequest.of(page, size)));
     }
 
 
@@ -98,8 +105,9 @@ public class CommentController {
     }
 
 
-    @GetMapping(path = "/list/votes")
-    public ResponseEntity<?> listVotesByPageIdAndUserId(@RequestParam(name = "pageId") UUID pageId, @RequestParam(name = "userId") UUID userId) {
+    @GetMapping(path = "/list-votes")
+    public ResponseEntity<?> listVotesByPageIdAndUserId(@RequestParam(name = "pageId") UUID pageId,
+                                                        @RequestParam(name = "userId") UUID userId) {
         return ResponseEntity.ok(commentVoteService.listVotesByPageAndUserId(pageId,userId));
     }
 

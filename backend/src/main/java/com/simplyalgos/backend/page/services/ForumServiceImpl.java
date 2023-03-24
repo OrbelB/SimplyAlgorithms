@@ -9,12 +9,14 @@ import com.simplyalgos.backend.page.dtos.FullForumDTO;
 import com.simplyalgos.backend.page.dtos.LikeDislikeDTO;
 import com.simplyalgos.backend.page.mappers.ForumMapper;
 import com.simplyalgos.backend.page.repositories.ForumRepository;
-import com.simplyalgos.backend.report.services.PageReportService;
+import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
+import com.simplyalgos.backend.report.services.PageReportService;
 import com.simplyalgos.backend.tag.services.TagService;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,8 +24,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -42,17 +42,15 @@ public class ForumServiceImpl implements ForumService {
     private final TagService tagService;
     private final PageEntityService pageEntityService;
     private final PageReportService pageReportService;
-
     private final UserService userService;
 
     private final ViewsService viewsService;
 
     @Override
     public ObjectPagedList<?> listForumPages(Pageable pageable) {
-        Page<Forum> forumPage = forumRepository.findAll(pageable);
+        Page<ForumInformation> forumPage = forumRepository.findAllProjectBy(pageable, ForumInformation.class);
         return new ObjectPagedList<>(
                 forumPage.stream()
-                        .map(forumMapper::forumToFullForumDto)
                         .collect(Collectors.toList()),
                 PageRequest.of(
                         forumPage.getPageable().getPageNumber(),
@@ -136,10 +134,9 @@ public class ForumServiceImpl implements ForumService {
     }
 
     @Override
-    public FullForumDTO getForumPage(String pageId) {
-        return forumMapper.forumToFullForumDto(forumRepository.findById(UUID.fromString(pageId)).orElseThrow(() ->
-                new NoSuchElementException(MessageFormat.format("Element {0} not found", UUID.fromString(pageId)))
-        ));
+    public ForumInformation getForumPage(String pageId) {
+        return forumRepository.findByPageId(UUID.fromString(pageId), ForumInformation.class)
+                .orElseThrow(() -> new NoSuchElementException(MessageFormat.format("Element {0} not found", UUID.fromString(pageId))));
     }
 
 
@@ -152,7 +149,7 @@ public class ForumServiceImpl implements ForumService {
                 )
         );
 
-        if (Objects.equals(forum.getCreatedBy().getUserId(),forumDTO.getUserDto().getUserId())) {
+        if (Objects.equals(forum.getCreatedBy().getUserId(), forumDTO.getUserDto().getUserId())) {
             forumMapper.updateForumFromForumDto(forumDTO, forum);
             forum.getPageEntityId().setTags(new HashSet<>(tagService.mapTagToPageId(forum.getPageEntityId(), forumDTO.getTags())));
         }
@@ -162,7 +159,6 @@ public class ForumServiceImpl implements ForumService {
     @Override
     public UUID reportForum(PageReportDTO forumReport) {
         return pageReportService.createReport(forumReport, pageEntityService.getPageEntity(forumReport.getPageId()));
-
     }
 
     @Override
@@ -204,7 +200,7 @@ public class ForumServiceImpl implements ForumService {
     }
 
     @Override
-    public FullForumDTO addForumUserView(UUID userId, UUID pageId) {
+    public ForumInformation addForumUserView(UUID userId, UUID pageId) {
         viewsService.addUserView(userId, pageId);
         removedViewedForumsPerUser(userId);
         return getForumPage(pageId.toString());

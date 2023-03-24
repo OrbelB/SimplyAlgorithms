@@ -37,23 +37,27 @@ public class TopicDecorator implements TopicMapper {
     public FullTopicDTO topicToFullTopicDTO(Topic topic) {
         FullTopicDTO fullTopicDTO = topicMapper.topicToFullTopicDTO(topic);
         if (topic.getCodeSnippets() != null)
-            fullTopicDTO.setCodeSnippet(
+            fullTopicDTO.setCodeSnippets(
                     mapCodeSnippetToCodeSnippetDTO(topic.getCodeSnippets())
             );
 
-        if (topic.getTopicSteps() != null)
-            fullTopicDTO.setSteps(mapTopicStepsToStepsDTO(topic.getTopicSteps()));
 
         if (topic.getTopicExternalResources() != null)
             fullTopicDTO.setExternalResources(mapExternalResourcesToExternalResourcesDTO(topic.getTopicExternalResources()));
-
-        if (topic.getPageEntityId().getPageComments() != null) {
-            fullTopicDTO.setComments(mapCommentsToCommentsDTO(topic.getPageEntityId().getPageComments()));
-        }
-        if (topic.getPageEntityId().getTags() != null) {
-            fullTopicDTO.setTags(mapTagToTagDTO(topic.getPageEntityId().getTags()));
+        if (topic.getPageEntity().getTags() != null) {
+            fullTopicDTO.setTags(mapTagToTagDTO(topic.getPageEntity().getTags()));
         }
         return fullTopicDTO;
+    }
+
+    @Override
+    public Topic fullTopicDTOToTopic(FullTopicDTO fullTopicDTO) {
+        return topicMapper.fullTopicDTOToTopic(fullTopicDTO);
+    }
+
+    @Override
+    public void updateTopicFromFullTopicDto(FullTopicDTO fullTopicDTO, Topic topic) {
+        topicMapper.updateTopicFromFullTopicDto(fullTopicDTO, topic);
     }
 
     private Set<TagDTO> mapTagToTagDTO(Set<Tag> tags) {
@@ -87,7 +91,7 @@ public class TopicDecorator implements TopicMapper {
                         .build()).collect(Collectors.toSet());
     }
 
-    private Set<TopicExternalResourcesDTO> mapExternalResourcesToExternalResourcesDTO(List<TopicExternalResource> topicExternalResources) {
+    private Set<TopicExternalResourcesDTO> mapExternalResourcesToExternalResourcesDTO(Set<TopicExternalResource> topicExternalResources) {
         return topicExternalResources.stream().map(topicExternalResource ->
                         TopicExternalResourcesDTO
                                 .builder()
@@ -107,7 +111,7 @@ public class TopicDecorator implements TopicMapper {
                 .collect(Collectors.toSet());
     }
 
-    private Set<CodeSnippetDTO> mapCodeSnippetToCodeSnippetDTO(List<CodeSnippet> codeSnippets) {
+    private Set<CodeSnippetDTO> mapCodeSnippetToCodeSnippetDTO(Set<CodeSnippet> codeSnippets) {
         return codeSnippets.stream().map(codeSnippet ->
                         CodeSnippetDTO
                                 .builder()

@@ -4,7 +4,6 @@ import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import lombok.Builder;
 import lombok.Data;
 
-
 import java.util.Date;
 import java.util.UUID;
 
