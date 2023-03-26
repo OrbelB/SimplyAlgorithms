@@ -19,6 +19,8 @@ h5 {
     width: 25em;
     display: flex;
     flex-direction: column;
+    padding: 1em 1em 1em 1em;
+    text-align: center;
 }
 
 .label2 {
