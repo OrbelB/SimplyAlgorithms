@@ -1,8 +1,7 @@
 package com.simplyalgos.backend.notes.mappers;
 
-import com.simplyalgos.backend.notes.domains.NoteShare;
-import com.simplyalgos.backend.notes.domains.PublicNotes;
-import com.simplyalgos.backend.notes.domains.UserNotes;
+import com.simplyalgos.backend.notes.domains.*;
+import com.simplyalgos.backend.notes.dtos.FullShareNoteDTO;
 import com.simplyalgos.backend.notes.dtos.NoteShareDTO;
 import com.simplyalgos.backend.notes.dtos.PublicNoteDTO;
 import com.simplyalgos.backend.notes.dtos.UserNoteDTO;
@@ -15,7 +14,8 @@ public interface NoteMapper {
 
     // need to write out
 
-    UserNoteDTO userNoteToUserNoteDTO(UserNotes userNotes);
+    @Mapping(source = "title", target = "noteTitle")
+    UserNoteDTO userNotesToUserNoteDTO(UserNotes userNotes);
 
     @Mapping(target = "canEdit", ignore = true)
     NoteShareDTO noteShareToNoteShareDTO(NoteShare noteShare);
@@ -24,14 +24,16 @@ public interface NoteMapper {
     NoteShare noteShareDTOToNoteShare(NoteShareDTO noteShareDTO);
 
     @Mapping(source = "publicNote.noteId", target = "userNoteDTO.noteId")
+    @Mapping(source = "publicNote.title", target = "userNoteDTO.noteTitle")
     PublicNoteDTO publicNoteToPublicNoteDTO(PublicNotes publicNotes);
 
+//    issue with noteshare -> noteshare dto since dto is weird. But manually imp and works
+    @Mapping(source = "note.noteId", target = "userNoteDTO.noteId")
+    @Mapping(source = "note.title", target = "userNoteDTO.noteTitle")
+    @Mapping(source = "noteShare.shareId", target = "noteShareDTO.shareId")
+    FullShareNoteDTO noteShareToFullShareNoteDTO(NoteShare noteShare);
 
-//    UserNotes userNoteDtoToUserNote(UserNoteDTO userNoteDTO);
-//
-//    NoteShareDTO shareNoteToShareNoteDTO(NoteShare noteShare);
-//
-//    PublicNoteDTO publicNoteToPublicNoteDTO(PublicNotes publicNotes);
+
 
 
 }

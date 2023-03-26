@@ -21,6 +21,8 @@ public interface UserMapper {
 
     UserDataDTO userTOUserDataDTO(User user);
 
+
+
     @Mapping(target = "UserPreferencesDTO.userId", ignore = true)
     @Mapping(target = "userId", source = "user.userId")
     @Mapping(target = "role", ignore = true)

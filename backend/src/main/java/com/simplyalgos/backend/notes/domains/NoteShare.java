@@ -49,6 +49,7 @@ public class NoteShare {
             "tinyint default 0")
     private short canEdit;
 
+//  person being shared too
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")

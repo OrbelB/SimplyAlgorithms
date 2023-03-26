@@ -75,7 +75,7 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
     public boolean recordAverage(TakeQuizDTO takeQuizDTO) {
         Optional<TakeQuizAverage> takeQuizAverage = takeQuizAverageRepository
                 .findByReferenceQuizForAvgScore_QuizIdAndUser_UserId(takeQuizDTO.getQuizId(), takeQuizDTO.getUserId());
-        if(takeQuizAverage.isPresent()){
+        if(!takeQuizAverage.isPresent()){
             throw new NoSuchElementException(MessageFormat.format("Take quiz record for user id {0} not found",
                     takeQuizDTO.getUserId()));
         }

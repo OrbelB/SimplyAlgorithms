@@ -19,8 +19,8 @@ public class NoteShareDTO {
     UUID shareId;
 
     //person it is being shared too
-    String ShareToUserName;
-    UUID ShareToUserId;
+    String shareToUserName;
+    UUID shareToUserId;
 
     // cannot set / update from front end
     Timestamp shareDate;

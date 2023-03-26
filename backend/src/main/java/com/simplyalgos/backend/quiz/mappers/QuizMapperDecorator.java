@@ -44,9 +44,9 @@ public class QuizMapperDecorator implements QuizMapper{
         List<QuizQuestion> quizQuestionList = quizMapper.quizQuestionDTOToQuizQuestion(quizQuestionDTO);
         for(int i = 0; i < quizQuestionList.size(); i++){
             quizQuestionList.get(i).setAnswerChoices(
-            quizMapper.quizQuestionAnswerDTOToQuestionAnswer(
-                    quizQuestionDTO.get(i).getAnswers()
-            ));
+                    quizMapper.quizQuestionAnswerDTOToQuestionAnswer(
+                            quizQuestionDTO.get(i).getAnswers()
+                    ));
         }
         return quizQuestionList;
     }

@@ -9,12 +9,10 @@ import java.util.UUID;
 
 public interface UserNoteRepository extends JpaRepository<UserNotes, UUID> {
 
-//    Page<UserNotes> findAllByLastUpdated(Pageable pageable);
-//
-//    Page<UserNotes> findAllByCreatedDate(Pageable pageable);
-//
     Page<UserNotes> findAllByIsPublic(Pageable pageable, short isPublic);
 //
 ////    Don't know if this will work
     Page<UserNotes> findAllBySharedToExists(Pageable pageable);
+
+    Page<UserNotes> findAllByCreatedBy_UserId(UUID userId, Pageable pageable);
 }

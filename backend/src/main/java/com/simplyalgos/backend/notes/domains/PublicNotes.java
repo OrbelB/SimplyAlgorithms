@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.notes.domains;
 
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,10 +38,11 @@ public class PublicNotes {
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    @Column(name = "share_date")
+    @Column(name = "shared_date")
     private Timestamp shareDate;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIncludeProperties({"noteId"})
     @JoinColumn(name = "note_id", referencedColumnName = "note_id")
     private UserNotes publicNote;
 
