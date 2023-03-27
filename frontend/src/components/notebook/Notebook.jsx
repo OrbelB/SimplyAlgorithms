@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   Box,
   Drawer,
@@ -8,9 +10,12 @@ import {
   FormControl,
 } from '@mui/material';
 import { useState } from 'react';
-import NoteBookNav from './NoteBookNav/NoteBookNav';
+import NoteBookNav from './PrivateTab/NoteBookNav/NoteBookNav';
+import PubNoteNav from './PublicTab/PubNoteNav/PubNoteNav';
+import SharedTab from './SharedTab/SharedTabNav/SharedTabNav';
 
 export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
+  const [NoteTab, setNoteTab] = useState(1);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const [drawerWidth, setDrawerWidth] = useState(isSmallScreen ? 450 : '100%');
@@ -44,7 +49,38 @@ export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
             </Select>
           </FormControl>
         </Box>
-        <NoteBookNav />
+        <div className="btn-group d-flex flex-row flex-wrap justify-content-center">
+          <button
+            type="button"
+            className="btn btn-danger d-inline-flex flex-grow-0"
+            onClick={() => setNoteTab(1)}
+          >
+            Private
+          </button>
+          <button
+            type="button"
+            className="btn btn-success d-inline-flex flex-grow-0"
+            onClick={() => setNoteTab(2)}
+          >
+            Public
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary d-inline-flex flex-grow-0"
+            onClick={() => setNoteTab(3)}
+          >
+            Shared
+          </button>
+        </div>
+        {NoteTab === 1 ? (
+          <NoteBookNav />
+        ) : NoteTab === 2 ? (
+          <PubNoteNav />
+        ) : NoteTab === 3 ? (
+          <SharedTab />
+        ) : (
+          ''
+        )}
       </Box>
     </Drawer>
   );
