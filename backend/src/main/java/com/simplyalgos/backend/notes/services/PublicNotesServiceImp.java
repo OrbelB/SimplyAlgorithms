@@ -104,7 +104,7 @@ public class PublicNotesServiceImp implements PublicNotesService{
 
     @Override
     public PublicNoteDTO updatePublicNoteDescriptionUsingNoteId(PublicNoteDTO publicNoteDTO) {
-        log.debug("INSIDE UPDATE" + Json.pretty(publicNoteDTO));
+//        log.debug("INSIDE UPDATE" + Json.pretty(publicNoteDTO));
         Optional<PublicNotes> publicNotes = publicNoteRepository.findByPublicNote_NoteId (publicNoteDTO
                 .getUserNoteDTO().getNoteId());
         if(!publicNotes.isPresent()){

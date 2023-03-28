@@ -2,6 +2,7 @@ package com.simplyalgos.backend.notes.controllers;
 
 import com.simplyalgos.backend.notes.domains.UserNotes;
 import com.simplyalgos.backend.notes.dtos.FullShareNoteDTO;
+import com.simplyalgos.backend.notes.dtos.NoteShareDTO;
 import com.simplyalgos.backend.notes.dtos.PublicNoteDTO;
 import com.simplyalgos.backend.notes.dtos.UserNoteDTO;
 import com.simplyalgos.backend.notes.security.*;
@@ -9,7 +10,6 @@ import com.simplyalgos.backend.notes.services.NoteShareService;
 import com.simplyalgos.backend.notes.services.PublicNotesService;
 import com.simplyalgos.backend.notes.services.UserNotesService;
 import io.swagger.v3.core.util.Json;
-import jakarta.validation.Path;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -135,7 +135,7 @@ public class NoteController {
 //    PASSED AND TEST
     //Create note
     @CreateNotePermission
-    @PostMapping(path = "/create", consumes = "application/json")
+    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createUserNote(@RequestBody UserNoteDTO userNoteDTO){
         log.debug("Now creating the user Note");
         log.debug(Json.pretty(userNoteDTO));
@@ -166,7 +166,7 @@ public class NoteController {
 
     //share Note will create a new entry in note_share
 //    TESTED AND PASSED
-    @ShareNotePermission
+//    @ShareNotePermission
     @PostMapping(path = "/shareNote", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> shareNote(@RequestBody FullShareNoteDTO fullShareNoteDTO){
         log.debug("Sharing note");
@@ -198,7 +198,7 @@ public class NoteController {
 //    TESTED AND PASSED
     @NotePermission
     @PutMapping(path = "/updateEditPermission", produces = "application/json")
-    public ResponseEntity<?> grantEditPermission(@RequestParam(name = "userId") @NotNull UUID userId,
+    public ResponseEntity<?> updateEditPermission(@RequestParam(name = "userId") @NotNull UUID userId,
                                                  @RequestParam(name = "shareId") @NotNull UUID shareId){
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.updateEditPermission(shareId));
     }
@@ -207,11 +207,11 @@ public class NoteController {
 //    TESTED AND PASSED
 //    Can pass in a negative for numberOfDaysToShare to reduce the number of days to share
 //    Pass a positive value for numberOfDaysToShare to extend the number of days to share
-    @ShareNotePermission
+//    @ShareNotePermission
     @PutMapping(path = "/updateExpireDate", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> updateExpireDateOnSharedNotes(@RequestBody FullShareNoteDTO fullShareNoteDTO){
+    public ResponseEntity<?> updateExpireDateOnSharedNotes(@RequestBody NoteShareDTO noteShareDTO){
         log.debug("updating the expire date");
-        return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.updateExpireDate(fullShareNoteDTO.getNoteShareDTO()));
+        return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.updateExpireDate(noteShareDTO));
     }
 
     //update public note description
@@ -241,11 +241,12 @@ public class NoteController {
 //    admin make note private
 //    admin delete public note
 //    TESTED AND PASSED
-    @PublicNotePermission
+    @AdminNotePermission
     @DeleteMapping(path = "/deletePublicNoteAdmin", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> deletePublicNoteByAdmin(@RequestBody PublicNoteDTO publicNoteDTO){
         return ResponseEntity.status((HttpStatus.ACCEPTED))
-                .body("Public note perma deleted: " + userNotesService.deleteNotePage(publicNoteDTO.getUserNoteDTO().getNoteId()));
+                .body("Public note perma deleted: " + userNotesService.
+                        deleteNotePage(publicNoteDTO.getUserNoteDTO().getNoteId()));
     }
 
     //delete note --> delete the specified note
@@ -260,11 +261,11 @@ public class NoteController {
 
     //unshare Note
 //    TESTED AND PASSED
-    @ShareNotePermission
+//    @ShareNotePermission
     @DeleteMapping(path = "/UnShareNote", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> unShareNote(@RequestBody FullShareNoteDTO fullShareNoteDTO){
-        log.debug("Sharing note");
-        return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.unShareNote(fullShareNoteDTO.getNoteShareDTO()));
+    public ResponseEntity<?> unShareNote(@RequestBody NoteShareDTO noteShareDTO){
+        log.debug("UN Sharing note");
+        return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.unShareNote(noteShareDTO));
     }
 
 }

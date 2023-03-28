@@ -6,8 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.lang.annotation.Retention;
 
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-@PreAuthorize("(@customAuthManager.userIdMatches(authentication,#publicNoteDTO.userNoteDTO.createdBy.userId) AND " +
-        "hasRole(T(com.simplyalgos.backend.user.enums.UserRoles).TEACHER.name())) OR " +
+@PreAuthorize("hasRole(T(com.simplyalgos.backend.user.enums.UserRoles).TEACHER.name()) OR " +
         "hasRole(T(com.simplyalgos.backend.user.enums.UserRoles).ADMIN.name())")
 public @interface PublicNotePermission {
 }

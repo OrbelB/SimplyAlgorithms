@@ -130,7 +130,7 @@ public class NoteShareServiceImp implements NoteShareService{
         if(!noteShareRepository.existsById(noteShareDTO.getShareId())){
             throw new AlreadyUnSharedNoteWithUserException(
                     MessageFormat
-                            .format("Note is note shared with user specified", noteShareDTO.getShareToUserName()));
+                            .format("ERROR UNSHARING: noteShare info not found", noteShareDTO.getShareToUserName()));
         }
         noteShareRepository.deleteById(noteShareDTO.getShareId());
         return true;

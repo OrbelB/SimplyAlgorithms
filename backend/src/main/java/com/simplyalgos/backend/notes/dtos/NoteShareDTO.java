@@ -19,8 +19,8 @@ public class NoteShareDTO {
     UUID shareId;
 
     //person it is being shared too
-    String shareToUserName;
-    UUID shareToUserId;
+    String shareToUserName; //the username
+    UUID shareToUserId; //the userId
 
     // cannot set / update from front end
     Timestamp shareDate;
@@ -31,10 +31,7 @@ public class NoteShareDTO {
     boolean canEdit = false;
 
 //  ------------------------------------------------------ //
-//    if the owner of the note unshared, deletes, or share length expires
-//    then sharedTo user will receive a message.
-    String errorSharedNoteMessage = "";
-    boolean hasError = false;
+// NEED TO PUT THIS IN
 
     int numberOfDaysToShare = 15;
 }

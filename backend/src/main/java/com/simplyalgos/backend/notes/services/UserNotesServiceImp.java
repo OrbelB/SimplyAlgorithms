@@ -85,7 +85,7 @@ public class UserNotesServiceImp implements UserNotesService{
                         .createdBy(userMapper.userDtoToUser(userNoteDTO.getCreatedBy()))
                         .noteBody( userNoteDTO.getNoteBody())
                         .title(userNoteDTO.getNoteTitle())
-                        .isPublic(userNoteDTO.getIsPublic())
+                        .isPublic((short)0)
                         .createdDate(currentTimeStamp)
                         .lastUpdated(currentTimeStamp)
                         .build()
@@ -117,21 +117,31 @@ public class UserNotesServiceImp implements UserNotesService{
     public FullShareNoteDTO updateSharedUserNote(FullShareNoteDTO fullShareNoteDTO) {
         Optional<UserNotes> OriginalUserNotes = userNoteRepository.findById(fullShareNoteDTO.getUserNoteDTO().getNoteId());
         if(!OriginalUserNotes.isPresent()){
-            throw new NoSuchElementException(MessageFormat.format("User Note ith noteId {0} does not exists", fullShareNoteDTO.getUserNoteDTO().getNoteId()));
+            throw new NoSuchElementException(MessageFormat.format("User Note ith noteId {0} does not exists"
+                    , fullShareNoteDTO.getUserNoteDTO().getNoteId()));
         }
         NoteShareDTO noteShareDTO = noteShareService.getNoteShareInformation(fullShareNoteDTO.getNoteShareDTO().getShareId());
 
-        if(!noteShareDTO.isCanEdit() && !noteShareService.canAccessSharedNote(noteShareDTO.getShareId())){
+        if(!noteShareDTO.isCanEdit()){
             throw new UserNotAuthorizedException(MessageFormat
-                    .format("User with user Id {0} does not have permission to update shared notes ", noteShareDTO.getShareToUserId()));
+                    .format("Share Info with share Id {0} does not have permission to update the note " +
+                                    "please contact the owner of the note "
+                            , noteShareDTO.getShareToUserId()));
         }
-//        OriginalUserNotes.get().setNoteBody(fullShareNoteDTO.getUserNoteDTO().getNoteBody());
-//        OriginalUserNotes.get().setTitle(fullShareNoteDTO.getUserNoteDTO().getNoteTitle());
-//
-//
-//        userNoteRepository.saveAndFlush(
-//                OriginalUserNotes.get()
-//        );
+//        if true then this will delete the tuple from share note table
+        if(!noteShareService.canAccessSharedNote(noteShareDTO.getShareId())){
+            throw new UserNotAuthorizedException(MessageFormat
+                    .format("share info with share Id {0} has expired "
+                            , noteShareDTO.getShareToUserId()));
+        }
+
+        OriginalUserNotes.get().setNoteBody(fullShareNoteDTO.getUserNoteDTO().getNoteBody());
+        OriginalUserNotes.get().setTitle(fullShareNoteDTO.getUserNoteDTO().getNoteTitle());
+
+
+        userNoteRepository.saveAndFlush(
+                OriginalUserNotes.get()
+        );
 
         return FullShareNoteDTO.builder()
                 .userNoteDTO(updateUserNote(fullShareNoteDTO.getUserNoteDTO()))
