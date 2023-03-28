@@ -7,6 +7,9 @@ import com.simplyalgos.backend.page.domains.ids.ParentChildPagesId;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 
 @Setter
@@ -27,11 +30,13 @@ public class ParentChildPages {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "parent_page_id")
+    @OnDelete(action = CASCADE)
     @MapsId("parentPageId")
     private PageEntity parentPageId;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "child_page_id")
+    @OnDelete(action = CASCADE)
     @MapsId("childPageId")
     private PageEntity childPageId;
 

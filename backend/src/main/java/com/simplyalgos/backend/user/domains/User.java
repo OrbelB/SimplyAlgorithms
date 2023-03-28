@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.user.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.simplyalgos.backend.comment.domains.Comment;
 import com.simplyalgos.backend.comment.domains.CommentVote;
 import com.simplyalgos.backend.notes.domains.NoteShare;
@@ -14,11 +15,10 @@ import com.simplyalgos.backend.quiz.domains.TakeQuizAverage;
 import com.simplyalgos.backend.report.domains.CommentReport;
 import com.simplyalgos.backend.report.domains.PageReport;
 import com.simplyalgos.backend.user.security.Role;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ForeignKey;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
@@ -125,6 +125,7 @@ public class User implements UserDetails, CredentialsContainer {
 
     @Singular
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.JOIN)
     @JoinTable(name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "user_id"))},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id", foreignKey = @ForeignKey(name = "role_id"))})
@@ -142,46 +143,52 @@ public class User implements UserDetails, CredentialsContainer {
     }
 
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
     //maps user page votes
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<PageVote> pageVotes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userReferenceView", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToMany(mappedBy = "userReferenceView", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Views> views = new HashSet<>();
 
-    @OneToMany(mappedBy = "userVoteReference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToMany(mappedBy = "userVoteReference", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<CommentVote> commentVotes = new HashSet<>();
 
-    @OneToMany(mappedBy = "takenBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "takenBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<TakeQuiz> takenQuizzes = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<TakeQuizAverage> AvgUserScores = new HashSet<>();
 
-    @OneToMany(mappedBy = "commentReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "commentReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<CommentReport> commentReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "pageReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pageReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<PageReport> pageReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Forum> forumsCreated = new HashSet<>();
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Quiz> quizzesCreated = new HashSet<>();
 
-    @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<UserNotification> userNotifications = new HashSet<>();
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Topic> topicsCreated = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<UserNotes> notesCreated = new HashSet<>();
 
-    @OneToMany(mappedBy = "sharedTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sharedTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<NoteShare> sharedNotes = new HashSet<>();
 }

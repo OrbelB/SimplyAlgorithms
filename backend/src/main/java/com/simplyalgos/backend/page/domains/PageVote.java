@@ -8,7 +8,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
 
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 
 @NoArgsConstructor
@@ -38,10 +40,12 @@ public class PageVote {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false,
             referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "user_id"))
+    @OnDelete(action = CASCADE)
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "page_id", nullable = false,insertable = false, updatable = false,
             referencedColumnName = "page_id", foreignKey = @ForeignKey(name = "page_id"))
+    @OnDelete(action = CASCADE)
     private PageEntity pageEntity;
 }

@@ -26,7 +26,6 @@ public interface QuizMapper {
 
     Set<QuestionAnswer> quizQuestionAnswerDTOToQuestionAnswer(Set<QuizQuestionAnswerDTO> quizQuestionAnswerDTOList);
 
-    @Mapping(source="quizQuestionDTO.answers", target="answersChoices")
     List<QuizQuestion> quizQuestionDTOToQuizQuestion(List<QuizQuestionDTO> quizQuestionDTO);
 
     List<TakeQuizDTO> takeQuizToTakeQuizDTO(List<TakeQuiz> takeQuizList);

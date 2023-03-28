@@ -1,7 +1,7 @@
 package com.simplyalgos.backend.comment.services;
 
 import com.simplyalgos.backend.comment.domains.Comment;
-import com.simplyalgos.backend.comment.domains.ParentChildComment;
+import com.simplyalgos.backend.comment.repositories.projections.CommentChild;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,5 +11,5 @@ public interface ParentChildCommentService {
 
     void createParentChildMapping(Comment comment, UUID parentCommentId);
 
-    Page<ParentChildComment> getChildrenCommentList(UUID parentComment, Pageable pageable);
+    Page<CommentChild> getChildrenCommentList(UUID parentComment, Pageable pageable);
 }

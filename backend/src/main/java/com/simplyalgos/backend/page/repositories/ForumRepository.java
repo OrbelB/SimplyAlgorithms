@@ -34,8 +34,9 @@ public interface ForumRepository extends JpaRepository<Forum, UUID> {
     @Query(value = "DELETE FROM forum_page WHERE page_id = :page_id", nativeQuery = true)
     void deleteByPageID(@Param("page_id") String pageId);
 
-
-    Page<Forum> findAllByPageEntityId_Tags_TagId(UUID tag_id,Pageable pageable);
+    <T> Page<T> findAllByPageEntityId_Tags_TagId(UUID tag_id,Pageable pageable, Class<T> type);
 
     Page<Forum> findAllByPageEntityId_Tags_Tag(String tag, Pageable pageable);
+
+    <T> Page<T> findAllByTitleIgnoreCaseStartingWith(String title, Pageable pageable, Class<T> type);
 }

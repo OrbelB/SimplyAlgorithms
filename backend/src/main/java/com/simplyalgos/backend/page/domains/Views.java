@@ -6,7 +6,11 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+
 import java.sql.Timestamp;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @NoArgsConstructor
 @Setter
@@ -16,17 +20,19 @@ public class Views {
 
     @EmbeddedId
     private ViewsId viewsId;
-
     @CreationTimestamp
     @Column(name = "visited_date")
     private Timestamp visitedDate;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id", referencedColumnName = "page_id")
+    @OnDelete(action = CASCADE)
     @MapsId("pageId")
     private PageEntity pageViewed;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",referencedColumnName = "user_id")
+    @OnDelete(action = CASCADE)
     @MapsId("userId")
     private User userReferenceView;
 

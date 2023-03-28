@@ -7,6 +7,11 @@ import lombok.*;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Setter
 @Getter
@@ -18,14 +23,18 @@ public class ParentChildComment {
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "parent_comment_id", referencedColumnName = "comment_id")
     @MapsId("parentCommentId")
+    @OnDelete(action = CASCADE)
     private Comment parentComment;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "child_comment_id", referencedColumnName = "comment_id")
     @MapsId("childCommentId")
+    @OnDelete(action = CASCADE)
     private Comment childComment;
 
     @Builder

@@ -9,14 +9,14 @@ import com.simplyalgos.backend.report.domains.CommentReport;
 import com.simplyalgos.backend.user.domains.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 
 @Getter
@@ -41,7 +41,9 @@ public class Comment {
 
     @JsonIncludeProperties({"userId", "username", "profilePicture","firstName", "lastName"})
     @ManyToOne(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @OnDelete(action = CASCADE)
     private User createdBy;
 
     @Column(name = "comment_text")

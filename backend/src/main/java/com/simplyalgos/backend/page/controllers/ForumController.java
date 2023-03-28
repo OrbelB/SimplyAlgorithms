@@ -10,6 +10,7 @@ import com.simplyalgos.backend.page.security.perms.DeleteForumPermission;
 import com.simplyalgos.backend.page.security.perms.UpdateForumPermission;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.security.perms.CreateReportPermission;
+import com.simplyalgos.backend.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -30,12 +31,19 @@ public class ForumController {
     private final ForumService forumService;
 
     @GetMapping("/list")
-    public ResponseEntity<?> getPageList(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                                     @RequestParam(name = "sortBy", required = false) String sortBy,
-                                                     @RequestParam(name = "filterBy", required = false) String filterBy) {
-        if(filterBy != null && !filterBy.isBlank() && !filterBy.isEmpty()) {
-            return ResponseEntity.ok(forumService.filterForumsByTag(PageRequest.of(page, size), filterBy));
+    public ResponseEntity<?> getPageList(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "5") Integer size,
+            @RequestParam(name = "sortBy", required = false) String sortBy,
+            @RequestParam(name = "filterBy", required = false) String filterBy,
+            @RequestParam(name = "tagId", required = false) String tagId,
+            @RequestParam(name = "title", required = false) String title
+    ) {
+        if (StringUtils.isNotNullAndEmptyOrBlank(title)) {
+            return ResponseEntity.ok(forumService.filterForumsByTitle(PageRequest.of(page, size), title));
+        }
+        if (StringUtils.isNotNullAndEmptyOrBlank(tagId)) {
+            return ResponseEntity.ok(forumService.listForumsByTagId(UUID.fromString(tagId), PageRequest.of(page, size)));
         }
         if (sortBy != null && !sortBy.isEmpty()) {
             if (sortBy.equals("upVotes") || sortBy.equals("createdDate")) {
@@ -92,7 +100,7 @@ public class ForumController {
                                               @RequestParam Integer size,
                                               @RequestParam(name = "tagId") String tagId
     ) {
-        return ResponseEntity.ok(forumService.listForumPagesByTags(UUID.fromString(tagId), PageRequest.of(page, size)));
+        return ResponseEntity.ok(forumService.listForumsByTagId(UUID.fromString(tagId), PageRequest.of(page, size)));
     }
 
     @DeleteVotePermission

@@ -23,10 +23,9 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class ForumDecorator implements ForumMapper {
-
+    @Autowired
     private ForumMapper forumMapper;
 
-    @Autowired
     @Qualifier("delegate")
     public void setForumDecorator(ForumMapper forumMapper) {
         this.forumMapper = forumMapper;

@@ -100,6 +100,22 @@ public class ForumServiceImpl implements ForumService {
     }
 
     @Override
+    public ObjectPagedList<ForumInformation> filterForumsByTitle(Pageable pageable, String title) {
+        Page<ForumInformation> forumPage = forumRepository
+                .findAllByTitleIgnoreCaseStartingWith(title, pageable, ForumInformation.class);
+        return new ObjectPagedList<>(
+                forumPage
+                        .stream()
+                        .collect(Collectors.toList()),
+                PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize(),
+                        pageable.getSort()),
+                forumPage.getTotalElements()
+        );
+    }
+
+    @Override
     public LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike) {
         if (!forumRepository.existsById(pageId)) {
             throw new ElementNotFoundException(
@@ -175,12 +191,10 @@ public class ForumServiceImpl implements ForumService {
     }
 
     @Override
-    public ObjectPagedList<ForumDTO> listForumPagesByTags(UUID tagId, Pageable pageable) {
-        Page<Forum> forumPage = forumRepository.findAllByPageEntityId_Tags_TagId(tagId, pageable);
+    public ObjectPagedList<ForumInformation> listForumsByTagId(UUID tagId, Pageable pageable) {
+        Page<ForumInformation> forumPage = forumRepository.findAllByPageEntityId_Tags_TagId(tagId, pageable, ForumInformation.class);
         return new ObjectPagedList<>(
-                forumPage.stream()
-                        .map(forumMapper::forumToForumDTO)
-                        .collect(Collectors.toList()),
+               forumPage.stream().toList(),
                 PageRequest.of(
                         forumPage.getPageable().getPageNumber(),
                         forumPage.getPageable().getPageSize(),

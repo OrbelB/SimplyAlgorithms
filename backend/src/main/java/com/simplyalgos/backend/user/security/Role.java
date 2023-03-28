@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.user.domains.User;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
@@ -43,6 +45,7 @@ public class Role {
     //hibernate creates just a single sql statement rather than a separate statement for each entity
     @Singular
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "role_authority",
             joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "authority_id")})

@@ -1,8 +1,8 @@
 package com.simplyalgos.backend.comment.services;
 
-import com.simplyalgos.backend.comment.repositories.ParentChildCommentRepository;
 import com.simplyalgos.backend.comment.domains.Comment;
-import com.simplyalgos.backend.comment.domains.ParentChildComment;
+import com.simplyalgos.backend.comment.repositories.ParentChildCommentRepository;
+import com.simplyalgos.backend.comment.repositories.projections.CommentChild;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,9 +23,9 @@ public class ParentChildCommentServiceImpl implements ParentChildCommentService 
     }
 
     @Override
-    public Page<ParentChildComment> getChildrenCommentList(UUID parentComment, Pageable pageable) {
+    public Page<CommentChild> getChildrenCommentList(UUID parentComment, Pageable pageable) {
         log.debug("parentComment: " + parentComment);
         return parentChildCommentRepository
-                .findAllByParentChildCommentId_ParentCommentId(parentComment, pageable);
+                .findAllByParentChildCommentId_ParentCommentId(parentComment, pageable, CommentChild.class);
     }
 }

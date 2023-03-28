@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.page.domains.ids.WikiParentChildId;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Setter
 @Getter
@@ -21,6 +24,7 @@ public class WikiParentChild {
     @ManyToOne
     @JoinColumn(name = "wiki_parent_id", referencedColumnName = "wiki_id")
     @MapsId("wikiParentId")
+    @OnDelete(action = CASCADE)
     @JsonIgnore
     private Wiki wikiParent;
 
@@ -28,6 +32,7 @@ public class WikiParentChild {
     @JoinColumn(name = "wiki_child_id", referencedColumnName = "wiki_id")
     @MapsId("wikiChildId")
     @JsonIncludeProperties({"wikiId","wikiName"})
+    @OnDelete(action = CASCADE)
     private Wiki wikiChild;
 
 

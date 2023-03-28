@@ -4,12 +4,11 @@ import com.simplyalgos.backend.quiz.domains.Quiz;
 import com.simplyalgos.backend.quiz.domains.TakeQuiz;
 import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
 import com.simplyalgos.backend.quiz.dtos.TakenQuizAverageScore;
+import com.simplyalgos.backend.quiz.dtos.TakenQuizzesDashboardDTO;
 import com.simplyalgos.backend.quiz.mappers.QuizMapper;
 import com.simplyalgos.backend.quiz.repositories.QuizRepository;
 import com.simplyalgos.backend.quiz.repositories.TakeQuizRepository;
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.quiz.dtos.TakenQuizzesDashboardDTO;
-import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
@@ -19,12 +18,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import org.springframework.data.domain.Pageable;
-
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -80,7 +81,7 @@ public class TakeQuizServiceImp implements TakeQuizService {
     }
 
     @Override
-    public ObjectPagedList getAllUserTakenQuiz(Pageable pageable, String userId) {
+    public ObjectPagedList<?> getAllUserTakenQuiz(Pageable pageable, String userId) {
         Page<TakeQuiz> takeQuizPage = takeQuizRepository.findAllByTakenBy_UserId(UUID.fromString(userId), pageable);
         log.debug("attempting mapping for getAllUserTakenQuiz");
         List<TakenQuizzesDashboardDTO> takenQuizzesDashboardDTOList =
@@ -170,7 +171,7 @@ public class TakeQuizServiceImp implements TakeQuizService {
                             .build()
             );
             log.debug("Finishing the creation of a new take quiz");
-            takeQuizAverageService.recordFunctionSelector(takeQuizDTO);
+            takeQuizAverageService.recordFunctionSelector(takeQuiz);
             return takeQuiz.getTakeQuizId();
         }
         log.debug("Bad request");

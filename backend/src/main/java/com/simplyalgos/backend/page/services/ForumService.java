@@ -21,6 +21,8 @@ public interface ForumService {
 
     UUID createForum(ForumDTO forumDTO);
 
+    ObjectPagedList<ForumInformation> filterForumsByTitle(Pageable pageable, String title);
+
     LikeDislikeDTO userLikedOrDisliked(UUID userId, UUID pageId, boolean passedLikeDislike);
 
     UUID deleteForum(String pageId, String userId);
@@ -32,7 +34,7 @@ public interface ForumService {
 
     PageVoteId deleteVote(UUID userId, UUID pageId);
 
-    ObjectPagedList<ForumDTO> listForumPagesByTags(UUID tagId, Pageable pageable);
+    ObjectPagedList<ForumInformation> listForumsByTagId(UUID tagId, Pageable pageable);
 
     Object listVotesByPage(UUID pageId);
 

@@ -7,6 +7,9 @@ import com.simplyalgos.backend.user.domains.User;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 
 @Getter
@@ -27,10 +30,12 @@ public class CommentVote {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id", insertable = false, updatable = false)
+    @OnDelete(action = CASCADE)
     private Comment commentVoteReference=  new Comment();
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @OnDelete(action = CASCADE)
     private User userVoteReference = new User();
 
     @Builder

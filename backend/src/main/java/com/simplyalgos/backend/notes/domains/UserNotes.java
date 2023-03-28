@@ -4,16 +4,17 @@ package com.simplyalgos.backend.notes.domains;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.user.domains.User;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -55,12 +56,13 @@ public class UserNotes {
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @OnDelete(action = CASCADE)
     private User createdBy;
 
-    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NoteShare> sharedTo;
 
-    @OneToOne(mappedBy = "publicNote" ,cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "publicNote" ,cascade = CascadeType.ALL, orphanRemoval = true)
     private PublicNotes publicNote;
 
 }

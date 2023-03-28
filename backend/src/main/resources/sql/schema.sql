@@ -218,7 +218,7 @@ CREATE TABLE page_vote (
 CREATE TABLE views (
 	page_id  VARCHAR(36) NOT NULL,
     user_id  VARCHAR(36) NOT NULL,
-    visited_date TIMESTAMP DEFAULT(CURRENT_TIME()),
+    visited_date TIMESTAMP DEFAULT CURRENT_TIME(),
     FOREIGN KEY (page_id)  REFERENCES page_entity(page_id)
 		ON DELETE CASCADE,
 	FOREIGN KEY (user_id) REFERENCES users(user_id)

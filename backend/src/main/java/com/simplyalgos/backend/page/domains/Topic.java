@@ -9,8 +9,11 @@ import com.simplyalgos.backend.utils.JsonToStringConverter;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
 
 import java.util.*;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Setter
 @Getter
@@ -34,6 +37,7 @@ public class Topic extends BaseEntity {
     @JsonIncludeProperties({"userId", "username"})
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @OnDelete(action = CASCADE)
     private User createdBy;
 
     @Builder
@@ -66,7 +70,7 @@ public class Topic extends BaseEntity {
 
 
     @JsonIncludeProperties({"wikiCategory"})
-    @OneToMany(mappedBy = "topicPage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "topicPage", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WikiTopicPage> parentTopicIds = new ArrayList<>();
 
 

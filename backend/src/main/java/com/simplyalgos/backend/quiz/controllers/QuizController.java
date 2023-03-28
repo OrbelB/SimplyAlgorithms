@@ -1,12 +1,9 @@
 package com.simplyalgos.backend.quiz.controllers;
 
-import com.simplyalgos.backend.quiz.domains.TakeQuiz;
-import com.simplyalgos.backend.quiz.domains.TakeQuizAverage;
 import com.simplyalgos.backend.quiz.dtos.FullQuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
-import com.simplyalgos.backend.quiz.repositories.TakeQuizRepository;
 import com.simplyalgos.backend.quiz.security.CreateQuizPermission;
 import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
 import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
@@ -60,7 +57,6 @@ public class QuizController {
 
         if (StringUtils.isNotNullAndEmptyOrBlank(sortBy)) {
             log.debug("Sorted quiz " + sortBy);
-
             return ResponseEntity.ok(quizService.listQuizPages(PageRequest.of(page, size, Sort.by(sortBy).ascending())));
 
         }
@@ -77,7 +73,7 @@ public class QuizController {
     }
 
 //    new and improved
-    @GetMapping(value = "/user_history")
+    @GetMapping(value = "/user-history")
     public ResponseEntity<?> getUserQuizHistory(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "5", required = false) int size,

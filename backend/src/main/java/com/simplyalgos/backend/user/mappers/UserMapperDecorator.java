@@ -7,18 +7,15 @@ import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
 import com.simplyalgos.backend.user.security.Role;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
+
+@Setter
 public class UserMapperDecorator implements UserMapper {
 
-    private UserMapper userMapper;
-
     @Autowired
-    @Qualifier("delegate")
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+    private UserMapper userMapper;
 
     @Override
     public UserDTO userToUserDto(User user) {

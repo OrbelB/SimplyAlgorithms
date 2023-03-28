@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface TakeQuizAverageRepository
         extends JpaRepository<TakeQuizAverage, UUID> {
 
-    Page<TakeQuizAverage> findAllByUser_UserId(UUID userId, Pageable pageable);
+    <T> Page<T> findAllByUser_UserId(UUID userId, Pageable pageable, Class<T> type);
 
     boolean existsByUser_UserIdAndReferenceQuizForAvgScore_QuizId(UUID userId, UUID quizId);
 

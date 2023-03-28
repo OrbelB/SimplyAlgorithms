@@ -10,6 +10,7 @@ import com.simplyalgos.backend.comment.dto.CommentToSendDTO;
 import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.comment.mappers.CommentMapper;
 import com.simplyalgos.backend.comment.repositories.CommentRepository;
+import com.simplyalgos.backend.comment.repositories.projections.CommentChild;
 import com.simplyalgos.backend.comment.repositories.projections.UserInfoOnly;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.PageEntity;
@@ -871,7 +872,7 @@ class CommentServiceImplTest {
     void getChildrenComments() {
         //given a parent comment exists
         UUID parentCommentId = UUID.randomUUID();
-        Page<ParentChildComment> parentChildCommentPage = new ObjectPagedList<>(new ArrayList<>(), PageRequest.of(0, 10), 0);
+        Page<CommentChild> parentChildCommentPage = new ObjectPagedList<>(new ArrayList<>(), PageRequest.of(0, 10), 0);
         given(parentChildCommentService.getChildrenCommentList(parentCommentId, PageRequest.of(0, 10)))
                 .willReturn(parentChildCommentPage);
 

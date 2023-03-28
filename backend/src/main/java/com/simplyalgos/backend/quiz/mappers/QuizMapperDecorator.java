@@ -1,28 +1,32 @@
 package com.simplyalgos.backend.quiz.mappers;
 
 import com.simplyalgos.backend.quiz.domains.*;
-import com.simplyalgos.backend.quiz.dtos.QuizDTO;
-import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
-import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
-import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
-import com.simplyalgos.backend.quiz.dtos.TakenQuizzesDashboardDTO;
+import com.simplyalgos.backend.quiz.dtos.*;
 import com.simplyalgos.backend.user.mappers.UserMapper;
-import com.simplyalgos.backend.user.mappers.UserMapperDecorator;
 import io.swagger.v3.core.util.Json;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import java.util.Collections;
+import org.springframework.stereotype.Component;
+
 import java.util.*;
 
 @Slf4j
-@RequiredArgsConstructor
+@Component
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class QuizMapperDecorator implements QuizMapper{
 
+    @Autowired
+    @Qualifier("delegate")
     private QuizMapper quizMapper;
+    @Autowired
+    private UserMapper userMapper;
 
-    private UserMapper userMapper = new UserMapperDecorator();
     @Override
     public QuizDTO quizToQuizDTO(Quiz quiz) {
         return quizMapper.quizToQuizDTO(quiz);

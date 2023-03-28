@@ -3,7 +3,6 @@ package com.simplyalgos.backend.comment.services;
 
 import com.simplyalgos.backend.comment.domains.Comment;
 import com.simplyalgos.backend.comment.domains.CommentVoteId;
-import com.simplyalgos.backend.comment.domains.ParentChildComment;
 import com.simplyalgos.backend.comment.dto.ChildCommentDTO;
 import com.simplyalgos.backend.comment.dto.CommentDTO;
 import com.simplyalgos.backend.comment.dto.CommentLikeDislikeDTO;
@@ -11,6 +10,7 @@ import com.simplyalgos.backend.comment.dto.CommentToSendDTO;
 import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.comment.mappers.CommentMapper;
 import com.simplyalgos.backend.comment.repositories.CommentRepository;
+import com.simplyalgos.backend.comment.repositories.projections.CommentChild;
 import com.simplyalgos.backend.comment.repositories.projections.CommentParent;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.page.domains.PageEntity;
@@ -73,12 +73,12 @@ public class CommentServiceImpl implements CommentService {
     }
     @Override
     public ObjectPagedList<?> getChildrenComments(UUID parentComment, Pageable pageable) {
-        Page<ParentChildComment> childComments = parentChildCommentService.getChildrenCommentList(parentComment, pageable);
-        log.info(MessageFormat.format("found {0}  child comment which is ", childComments.getTotalElements()));
+        Page<CommentChild> childComments = parentChildCommentService.getChildrenCommentList(parentComment, pageable);
+        log.info(MessageFormat.format("found {0}  child comment", childComments.getTotalElements()));
         return new ObjectPagedList<>(
                 childComments
-                        .stream().map(commentMapper::commentToChildCommentDTO)
-                        .collect(Collectors.toList()),
+                        .stream()
+                        .toList(),
                 PageRequest.of(
                         childComments.getPageable().getPageNumber(),
                         childComments.getPageable().getPageSize()

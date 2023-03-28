@@ -1,6 +1,6 @@
 package com.simplyalgos.backend.quiz.services;
 
-import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
+import com.simplyalgos.backend.quiz.domains.TakeQuiz;
 import com.simplyalgos.backend.quiz.dtos.TakenQuizzesDashboardDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
@@ -9,13 +9,13 @@ import java.util.UUID;
 
 public interface TakeQuizAverageService {
 
-    boolean recordFunctionSelector(TakeQuizDTO takeQuizDTO);
+    boolean recordFunctionSelector(TakeQuiz takeQuizDTO);
 
 //  create
-    boolean createRecord(TakeQuizDTO takeQuizDTO);
+    boolean createRecord(TakeQuiz takeQuizDTO);
 
 //  Update
-    boolean recordAverage(TakeQuizDTO takeQuizDTO);
+    boolean recordAverage(TakeQuiz takeQuizDTO);
 
     boolean resetAverageQuizScore(UUID avgTakeQuizId);
 

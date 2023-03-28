@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Setter
 @Getter
@@ -29,6 +32,7 @@ public class CodeSnippet {
 
     @ManyToOne
     @JoinColumn(name = "page_id", referencedColumnName = "page_id")
+    @OnDelete(action = CASCADE)
     @MapsId("pageId")
     private Topic topicPage;
 

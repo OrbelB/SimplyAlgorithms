@@ -9,8 +9,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
 
 import java.sql.Timestamp;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 
 @Getter
@@ -32,6 +35,7 @@ public class TopicExternalResource {
     @ManyToOne
     @JoinColumn(name = "page_id", referencedColumnName = "page_id")
     @MapsId("pageId")
+    @OnDelete(action = CASCADE)
     private Topic topicPage;
 
     @Builder

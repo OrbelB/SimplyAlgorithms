@@ -4,14 +4,14 @@ package com.simplyalgos.backend.notes.domains;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import java.sql.Timestamp;
 import java.util.UUID;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,6 +44,7 @@ public class PublicNotes {
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIncludeProperties({"noteId"})
     @JoinColumn(name = "note_id", referencedColumnName = "note_id")
+    @OnDelete(action = CASCADE)
     private UserNotes publicNote;
 
 }

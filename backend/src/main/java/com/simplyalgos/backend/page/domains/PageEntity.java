@@ -62,7 +62,7 @@ public class PageEntity {
     @OneToMany(mappedBy = "childPageId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ParentChildPages> childrenTopicIds = new HashSet<>();
 
-    @OneToMany(mappedBy = "pageViewed",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pageViewed", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST} )
     private Set<Views> views = new HashSet<>();
 
     @OneToMany(mappedBy = "reportedPage", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

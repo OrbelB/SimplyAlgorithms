@@ -1,12 +1,13 @@
 package com.simplyalgos.backend.comment.repositories.projections;
 
+import jakarta.persistence.Column;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.UUID;
 
 public interface CommentParent {
 
-    @Value("#{target.commentId}")
+    @Column(name = "comment_id")
     UUID getCommentId();
 
 
@@ -27,7 +28,6 @@ public interface CommentParent {
 
     @Value("#{target.createdBy}")
     UserInfoOnly getCreatedBy();
-
     @Value("#{target.childrenComments.size()}")
     Integer getReplyCount();
 }

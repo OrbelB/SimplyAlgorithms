@@ -3,7 +3,6 @@ package com.simplyalgos.backend.quiz.services;
 
 import com.simplyalgos.backend.quiz.domains.TakeQuiz;
 import com.simplyalgos.backend.quiz.domains.TakeQuizAverage;
-import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
 import com.simplyalgos.backend.quiz.dtos.TakenQuizzesDashboardDTO;
 import com.simplyalgos.backend.quiz.mappers.QuizMapper;
 import com.simplyalgos.backend.quiz.repositories.TakeQuizAverageRepository;
@@ -17,9 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -39,8 +35,8 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
     private final QuizMapper quizMapper;
 
     @Override
-    public boolean recordFunctionSelector(TakeQuizDTO takeQuizDTO){
-        if(!takeQuizAverageRepository.existsByUser_UserIdAndReferenceQuizForAvgScore_QuizId(takeQuizDTO.getUserId(), takeQuizDTO.getQuizId())){
+    public boolean recordFunctionSelector(TakeQuiz takeQuizDTO) {
+        if (!takeQuizAverageRepository.existsByUser_UserIdAndReferenceQuizForAvgScore_QuizId(takeQuizDTO.getTakenBy().getUserId(), takeQuizDTO.getQuizReference().getQuizId())) {
             return createRecord(takeQuizDTO);
         }
         return recordAverage(takeQuizDTO);
@@ -48,9 +44,9 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
     }
 
     @Override
-    public boolean createRecord(TakeQuizDTO takeQuizDTO){
-        if(!takeQuizAverageRepository.existsByUser_UserIdAndReferenceQuizForAvgScore_QuizId
-                (takeQuizDTO.getUserId(), takeQuizDTO.getQuizId())){
+    public boolean createRecord(TakeQuiz takeQuizDTO) {
+        if(takeQuizAverageRepository.existsByUser_UserIdAndReferenceQuizForAvgScore_QuizId
+                (takeQuizDTO.getTakenBy().getUserId(), takeQuizDTO.getQuizReference().getQuizId())){
             throw new NoSuchElementException ("Record already exists for quiz ");
         }
         double runTime = getTimeDiff(takeQuizDTO);
@@ -64,50 +60,49 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
                         .worstTime(runTime)
                         .avgTime(runTime)
                         .attempts(1)
-                        .user(userService.getUser(takeQuizDTO.getUserId()))
-                        .referenceQuizForAvgScore(quizService.getQuiz(takeQuizDTO.getQuizId()))
+                        .user(userService.getUser(takeQuizDTO.getTakenBy().getUserId()))
+                        .referenceQuizForAvgScore(quizService.getQuiz(takeQuizDTO.getQuizReference().getQuizId()))
                         .build());
 
         return true;
     }
 
     @Override
-    public boolean recordAverage(TakeQuizDTO takeQuizDTO) {
-        Optional<TakeQuizAverage> takeQuizAverage = takeQuizAverageRepository
-                .findByReferenceQuizForAvgScore_QuizIdAndUser_UserId(takeQuizDTO.getQuizId(), takeQuizDTO.getUserId());
-        if(!takeQuizAverage.isPresent()){
-            throw new NoSuchElementException(MessageFormat.format("Take quiz record for user id {0} not found",
-                    takeQuizDTO.getUserId()));
-        }
-
+    public boolean recordAverage(TakeQuiz takeQuizDTO) {
+        TakeQuizAverage takeQuizAverage = takeQuizAverageRepository
+                .findByReferenceQuizForAvgScore_QuizIdAndUser_UserId(
+                        takeQuizDTO.getQuizReference().getQuizId(),
+                        takeQuizDTO.getTakenBy().getUserId()
+                ).orElseThrow(() -> new NoSuchElementException(
+                        MessageFormat
+                                .format("Take quiz record for user id {0} not found",
+                takeQuizDTO.getTakenBy().getUserId())));
         double runTime = getTimeDiff(takeQuizDTO);
 
-        double updatedScoreAverage = addToAverage(takeQuizAverage.get().getAvgScore()
-                , takeQuizAverage.get().getAttempts()
+        double updatedScoreAverage = addToAverage(takeQuizAverage.getAvgScore()
+                , takeQuizAverage.getAttempts()
                 , takeQuizDTO.getScore());
 
-        double updateTimeAvg = addToAverage(takeQuizAverage.get().getAvgTime()
-                , takeQuizAverage.get().getAttempts()
+        double updateTimeAvg = addToAverage(takeQuizAverage.getAvgTime()
+                , takeQuizAverage.getAttempts()
                 , runTime);
 
-        takeQuizAverage.get().setAvgScore(updatedScoreAverage);
-        takeQuizAverage.get().setAvgTime(updateTimeAvg);
+        takeQuizAverage.setAvgScore(updatedScoreAverage);
+        takeQuizAverage.setAvgTime(updateTimeAvg);
 
-        takeQuizAverage.get().setAttempts(takeQuizAverage.get().getAttempts() + 1);
+        takeQuizAverage.setAttempts(takeQuizAverage.getAttempts() + 1);
 
-        if(takeQuizAverage.get().getHighestScore() < takeQuizDTO.getScore()){
-            takeQuizAverage.get().setHighestScore(takeQuizDTO.getScore());
+        if (takeQuizAverage.getHighestScore() < takeQuizDTO.getScore()) {
+            takeQuizAverage.setHighestScore(takeQuizDTO.getScore());
+        } else if (takeQuizAverage.getLowestScore() > takeQuizDTO.getScore()) {
+            takeQuizAverage.setLowestScore(takeQuizDTO.getScore());
         }
-        else if(takeQuizAverage.get().getLowestScore() > takeQuizDTO.getScore()){
-            takeQuizAverage.get().setLowestScore(takeQuizDTO.getScore());
+        if (takeQuizAverage.getBestTime() < runTime) {
+            takeQuizAverage.setBestTime(runTime);
+        } else if (takeQuizAverage.getWorstTime() > runTime) {
+            takeQuizAverage.setWorstTime(runTime);
         }
-        if(takeQuizAverage.get().getBestTime() < runTime){
-            takeQuizAverage.get().setBestTime(runTime);
-        }
-        else if(takeQuizAverage.get().getWorstTime() > runTime){
-            takeQuizAverage.get().setWorstTime(runTime);
-        }
-        takeQuizAverageRepository.saveAndFlush(takeQuizAverage.get());
+        takeQuizAverageRepository.saveAndFlush(takeQuizAverage);
         return true;
     }
 
@@ -115,7 +110,7 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
     public boolean resetAverageQuizScore(UUID avgTakeQuizId) {
         Optional<TakeQuizAverage> takeQuizAverage =
                 takeQuizAverageRepository.findById(avgTakeQuizId);
-        if(!takeQuizAverage.isPresent()){
+        if (!takeQuizAverage.isPresent()) {
             throw new NoSuchElementException(MessageFormat.format("Take quiz record with avgTakeQuizId {0} not found",
                     avgTakeQuizId));
         }
@@ -137,14 +132,14 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
     @Override
     public TakenQuizzesDashboardDTO getAverageQuizScore(UUID avgTakeQuizId) {
         return quizMapper.takeQuizAverageToTakeQuizzesDashboardDTO(takeQuizAverageRepository.findById(avgTakeQuizId).orElseThrow(() ->
-                new NoSuchElementException(MessageFormat.format("Record with avgTakeQuizId {0} not found",avgTakeQuizId))
+                new NoSuchElementException(MessageFormat.format("Record with avgTakeQuizId {0} not found", avgTakeQuizId))
         ));
     }
 
     @Override
     public ObjectPagedList<?> getTakeQuizAverageList(UUID userId, Pageable pageable) {
         Page<TakeQuizAverage> takeQuizAverages = takeQuizAverageRepository
-                .findAllByUser_UserId(userId, pageable);
+                .findAllByUser_UserId(userId, pageable, TakeQuizAverage.class);
         return new ObjectPagedList<>(
                 takeQuizAverages.stream()
                         .map(quizMapper::takeQuizAverageToTakeQuizzesDashboardDTO)
@@ -154,28 +149,25 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
                         takeQuizAverages.getPageable().getPageSize(),
                         takeQuizAverages.getSort()),
                 takeQuizAverages.getTotalElements()
-                );
+        );
     }
 
     @Override
     public UUID getTakeQuizAverageId(UUID quizId, UUID userId) {
-        Optional<TakeQuizAverage> takeQuizAverage =  takeQuizAverageRepository.findByReferenceQuizForAvgScore_QuizIdAndUser_UserId(quizId,userId);
-        if(takeQuizAverage.isPresent()){
-            takeQuizAverage.get().getAvgTakeQuizId();
-        }
+        Optional<TakeQuizAverage> takeQuizAverage = takeQuizAverageRepository.findByReferenceQuizForAvgScore_QuizIdAndUser_UserId(quizId, userId);
+        takeQuizAverage.ifPresent(TakeQuizAverage::getAvgTakeQuizId);
         return null;
     }
 
 
-    private double addToAverage(double average, int size, double value)
-    {
+    private double addToAverage(double average, int size, double value) {
         return (size * average + value) / (size + 1);
     }
 
-    private double getTimeDiff(TakeQuizDTO takeQuiz){
+    private double getTimeDiff(TakeQuiz takeQuiz) {
         long mill = takeQuiz.getStartedAt().getTime() - takeQuiz.getFinishedAt().getTime();
         int min = (int) (mill / 60000);
-        return (min < 0) ? ((-1)*min) : min;
+        return (min < 0) ? ((-1) * min) : min;
     }
 
 }
