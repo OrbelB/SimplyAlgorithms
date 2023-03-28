@@ -29,7 +29,8 @@ import ShareIcon from '@mui/icons-material/Share';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
-// import TextEditor from '../../../text-editor/TextEditor';
+import TextEditor from '../../../text-editor/TextEditor';
+
 function createData(user, permissions) {
   return { user, permissions };
 }
@@ -284,7 +285,7 @@ export default function NoteBookList({ element, notes, setNotes }) {
                 </Button>
                 <div className="form-group m-3">
                   <label htmlFor="notedescription">Description: </label>
-                  <textarea
+                  <TextEditor
                     type="text"
                     className="form-control"
                     toolbar="editor-toolbar"
@@ -294,7 +295,7 @@ export default function NoteBookList({ element, notes, setNotes }) {
                     placeholder="Enter description"
                   >
                     {element.description}
-                  </textarea>
+                  </TextEditor>
                 </div>
                 <div className="form-group m-3">
                   <button
