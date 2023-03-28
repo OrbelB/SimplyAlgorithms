@@ -52,13 +52,14 @@ export default function NotebookAdd({
       </div>
       <div className="form-group m-3">
         <label htmlFor="note-description">Description: </label>
-        <TextEditor
+        <textarea
           className="form-control"
           toolbar="editor-toolbar"
           wrapper="editor-wrapper"
           editor="editor-title"
           id="note-description"
           placeholder="Enter description"
+          rows="8"
           value={description}
           onChange={inputHandlerDescription}
         />

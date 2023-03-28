@@ -196,6 +196,7 @@ export default function EditNote({ note, onGoBack }) {
               editor="editor-title"
               id="editdescription"
               placeholder="Enter description"
+              rows="8"
             >
               {note.description}
             </textarea>
