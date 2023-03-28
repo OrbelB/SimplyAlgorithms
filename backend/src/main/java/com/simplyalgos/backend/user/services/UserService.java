@@ -18,6 +18,9 @@ public interface UserService {
 
     UserDTO updateUser(UserDataPostDTO userToUpdate);
 
+    boolean emailIsAvailable(String email);
+    boolean usernameIsAvailable(String username);
+
     boolean userExists(UUID userId);
 
     UUID removeUser(UUID userId);

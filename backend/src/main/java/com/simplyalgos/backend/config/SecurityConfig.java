@@ -17,7 +17,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -82,23 +81,37 @@ public class SecurityConfig {
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.authorizeHttpRequests((auth) -> auth.requestMatchers("/h2-console/**", "/console/*").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**",
-                                "/webjars/**", "/*/*.html", "/*/*.css", "/*/*.js",
-                                "/favicon.ico").permitAll()
-                        .requestMatchers("/api/public/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/forums/list**", "/forums/*", "/forums/list/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/topics/list**", "/topics/*", "/topics/list/**").permitAll()
-                        .requestMatchers("/comments/list*").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/tags/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/wiki/**" , "/wiki/name/available").permitAll()
-                        .requestMatchers("/email/*").permitAll()
-                        .requestMatchers("/error*").permitAll()
-                        .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers("/swagger-ui.html**").permitAll()
-                        .requestMatchers("/v3/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/quiz/list").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/wiki/list/**, wiki/list").permitAll()
+        http.authorizeHttpRequests((auth) ->
+                                auth.requestMatchers("/h2-console/**", "/console/*").permitAll()
+                                        .requestMatchers("/css/**", "/js/**", "/images/**",
+                                                "/webjars/**", "/*/*.html", "/*/*.css", "/*/*.js",
+                                                "/favicon.ico").permitAll()
+                                        .requestMatchers("/api/public/**").permitAll()
+                                        .requestMatchers(HttpMethod.GET,
+                                                "/forums/list**", "/forums/*", "/forums/list/**").permitAll()
+                                        .requestMatchers(HttpMethod.GET,
+                                                "/topics/list**", "/topics/*", "/topics/list/**").permitAll()
+                                        .requestMatchers(HttpMethod.GET,
+                                                "/users/available*").permitAll()
+                                        .requestMatchers("/comments/list*").permitAll()
+                                        .requestMatchers(HttpMethod.GET,
+                                                "/tags/**").permitAll()
+                                        .requestMatchers(HttpMethod.GET,
+                                                "/wiki/**", "/wiki/name/available").permitAll()
+                                        .requestMatchers(
+                                                "/email/*").permitAll()
+                                        .requestMatchers(
+                                                "/error*").permitAll()
+                                        .requestMatchers(
+                                                "/actuator/**").permitAll()
+                                        .requestMatchers(
+                                                "/swagger-ui.html**").permitAll()
+                                        .requestMatchers(
+                                                "/v3/**").permitAll()
+                                        .requestMatchers(HttpMethod.GET,
+                                                "/quiz/list").permitAll()
+                                        .requestMatchers(HttpMethod.GET,
+                                                "/wiki/list/**, wiki/list").permitAll()
 //                        .requestMatchers(HttpMethod.GET,"/note/list**").permitAll()
                 )
                 .authorizeHttpRequests()

@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.security;
 
+import com.simplyalgos.backend.exceptions.ElementExistsException;
 import com.simplyalgos.backend.exceptions.PasswordsDontMatchException;
 import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.user.security.Role;
@@ -53,26 +54,22 @@ public class JpaUserDetailsServiceImpl implements JpaUserDetailsService {
 
     private final DashboardService dashboardService;
     @Override
-    public void createUser(SignupDTO userDto) throws Exception {
+    public void createUser(SignupDTO userDto)  {
         //assign user role by default : student
         if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
-            throw new Exception("username exists!");
+            throw new ElementExistsException("Username already exists");
         }
         User user = userRegisteredMapper.create(userDto);
         if (userDto.getProfilePicture() != null) {
             log.info(userDto.getProfilePicture() + "check if the correct method is call");
             user.setProfilePicture(storageService.uploadImageFile(userDto.getProfilePicture()));
         }
-
         user.setRoles(Set.of(assignRoleToNewUser("STUDENT")));
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-
         User createdUser = userRepository.saveAndFlush(user);
-
         // initialize user preferences
         userPreferenceService.defaultUserPreferences(createdUser.getUserId());
-
     }
 
     @Override
@@ -107,7 +104,7 @@ public class JpaUserDetailsServiceImpl implements JpaUserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String identifier)  {
         //find by username or email
         User currentUser = userRepository.findByUsername(identifier)
                 .orElseGet(

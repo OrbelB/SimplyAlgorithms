@@ -22,11 +22,11 @@ import java.util.UUID;
 public class PasswordResetToken {
 
     @Id
-//    @GeneratedValue(generator = "UUID")
-//    @GenericGenerator(
-//            name = "UUID",
-//            strategy = "org.hibernate.id.UUIDGenerator"
-//    )
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     @Type(value = UserTypeLegacyBridge.class,
             parameters = @org.hibernate.annotations.Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
                     value = "org.hibernate.type.UUIDCharType"))
@@ -41,11 +41,6 @@ public class PasswordResetToken {
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
 
-    public PasswordResetToken(User userID, UUID resetPasswordToken){
-        this.passwordResetTokenID = resetPasswordToken;
-        this.userId = userID;
-        this.expireDate = calculateExpiryDate( 60 * 24);
-    }
 
     private Date calculateExpiryDate(final int expiryTimeInMinutes) {
         final Calendar cal = Calendar.getInstance();

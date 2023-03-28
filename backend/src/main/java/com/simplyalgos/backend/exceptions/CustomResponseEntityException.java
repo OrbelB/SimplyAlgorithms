@@ -85,7 +85,7 @@ public class CustomResponseEntityException extends ResponseEntityExceptionHandle
     }
 
     @ExceptionHandler({ElementNotFoundException.class, PasswordsDontMatchException.class, TokenExpireException.class,
-            NotExpectedObjectException.class, UserNotAuthorizedException.class})
+            NotExpectedObjectException.class, UserNotAuthorizedException.class, ElementExistsException.class})
     public final ResponseEntity<?> handleCustomExceptions(WebRequest request, Exception ex) throws Exception{
         ErrorHandlerDetails.ErrorHandlerDetailsBuilder errorHandlerDetails = ErrorHandlerDetails
                 .builder()
@@ -108,6 +108,9 @@ public class CustomResponseEntityException extends ResponseEntityExceptionHandle
         }else if (ex instanceof UserNotAuthorizedException theEx) {
             errorHandlerDetails.status(HttpStatus.UNAUTHORIZED.value());
             return new ResponseEntity<>(errorHandlerDetails.build(), HttpStatus.UNAUTHORIZED);
+        }else if (ex instanceof ElementExistsException theEx) {
+            errorHandlerDetails.status(HttpStatus.CONFLICT.value());
+            return new ResponseEntity<>(errorHandlerDetails.build(), HttpStatus.CONFLICT);
         }else {
             throw ex;
         }

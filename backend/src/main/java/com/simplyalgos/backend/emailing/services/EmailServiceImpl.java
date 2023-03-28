@@ -16,6 +16,5 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendEmail(SimpleMailMessage simpleMailMessage) {
         mailSender.send(simpleMailMessage);
-
     }
 }

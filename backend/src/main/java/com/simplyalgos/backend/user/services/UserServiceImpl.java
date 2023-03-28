@@ -3,25 +3,23 @@ package com.simplyalgos.backend.user.services;
 import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.storage.StorageService;
-import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
-import com.simplyalgos.backend.user.enums.GetUsernameRequestEmailValues;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
 import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
+import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
+import com.simplyalgos.backend.user.enums.GetUsernameRequestEmailValues;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.repositories.UserRepository;
-import lombok.*;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
-
 import java.text.MessageFormat;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -51,16 +49,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDTO getUser(String userId) {
-
         // get user
         User user = userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new UsernameNotFoundException("Username: " + userId + " not found"));
-
-
         UserPreferencesDTO userPreferencesDTO = userPreferenceService.getUserPreferences(UUID.fromString(userId));
-
         return userMapper.userToUserDto(user, userPreferencesDTO);
-
     }
 
     public User getUser(UUID userId) {
@@ -72,27 +65,32 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDTO updateUser(UserDataPostDTO userToUpdate) {
-        Optional<User> optionalUser = userRepository.findById(userToUpdate.getUserId());
+        User user = userRepository.findById(userToUpdate.getUserId()).orElseThrow(() ->
+                new ElementNotFoundException(
+                        MessageFormat
+                                .format("user with id {0} not found", userToUpdate.getUserId())
+                )
+        );
         log.info(MessageFormat.format("this is the passed profiledPicture {0}", userToUpdate.getProfilePicture()));
-        if (optionalUser.isEmpty()) {
-            throw new ElementNotFoundException(
-                    MessageFormat
-                            .format("user with id {0} not found", userToUpdate.getUserId())
-            );
-        }
-        User user = optionalUser.get();
         userMapper.updateUser(userToUpdate, user);
         if (userToUpdate.getProfilePicture() != null) {
             user.setProfilePicture(storageService
                     .updateProfilePicture(userToUpdate.getProfilePicture(),
                             user.getProfilePicture()));
         }
-
         // notified user
         dashboardService.addAccountChangesNotification(user);
-
         return userMapper.userToUserDto(user);
+    }
 
+    @Override
+    public boolean emailIsAvailable(String email) {
+        return !userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean usernameIsAvailable(String username) {
+        return !userRepository.existsByUsername(username);
     }
 
     @Override

@@ -17,6 +17,7 @@ public class SimplyAlgoPasswordEncoderFactories {
         String encodingId = "bcrypt12";
         Map<String, PasswordEncoder> encoders = new HashMap<>();
         encoders.put(encodingId, new BCryptPasswordEncoder(12));
+        encoders.put("bcrypt15", new BCryptPasswordEncoder(15));
         encoders.put("bcrypt", new BCryptPasswordEncoder());
         encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8());
         encoders.put("scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());

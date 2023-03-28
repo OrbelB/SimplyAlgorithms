@@ -8,10 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
-import java.util.Optional;
 
 @EnableScheduling
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, UUID> {
@@ -19,7 +16,7 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
 
     boolean existsByUserId(User userid);
 
-    boolean deleteByUserId(User userid);
+    void deleteByUserId(User userid);
 
     PasswordResetToken getPasswordResetTokenByUserId(User userid);
 

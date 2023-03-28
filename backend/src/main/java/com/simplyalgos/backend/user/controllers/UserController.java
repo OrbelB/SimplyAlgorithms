@@ -2,12 +2,16 @@ package com.simplyalgos.backend.user.controllers;
 
 
 import com.simplyalgos.backend.security.JpaUserDetailsService;
-import com.simplyalgos.backend.user.dtos.*;
+import com.simplyalgos.backend.user.dtos.NotificationRemoval;
+import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
+import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
 import com.simplyalgos.backend.user.security.perms.*;
 import com.simplyalgos.backend.user.services.DashboardService;
 import com.simplyalgos.backend.user.services.UserNotificationService;
 import com.simplyalgos.backend.user.services.UserPreferenceService;
 import com.simplyalgos.backend.user.services.UserService;
+import com.simplyalgos.backend.utils.StringUtils;
 import com.simplyalgos.backend.web.dtos.UpdatePassword;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +20,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.MessageFormat;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 @RequiredArgsConstructor
-@CrossOrigin()
+@CrossOrigin
 @RequestMapping("/users")
 @Slf4j
 @RestController
@@ -87,6 +90,19 @@ public class UserController {
     @DeleteMapping(path = "/delete-notification", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> deleteNotification(@RequestBody NotificationRemoval  notificationRemoval) {
         return ResponseEntity.ok().body(userNotificationService.removeNotification(notificationRemoval.notificationId()));
+    }
+
+    @GetMapping(path = "available", produces = "application/json")
+    public ResponseEntity<Map<String, Boolean>> availableUsername(@RequestParam(name = "username", required = false) String username,
+                                               @RequestParam(name = "email", required = false ) String email) {
+        Map<String, Boolean> map = new HashMap<>();
+        if(StringUtils.isNotNullAndEmptyOrBlank(email))
+            map.put("email", userService.emailIsAvailable(email));
+        else if(StringUtils.isNotNullAndEmptyOrBlank(username))
+           map.put("username" , userService.usernameIsAvailable(username));
+        else
+            throw new NoSuchElementException("No username or email provided");
+        return ResponseEntity.ok().body(map);
     }
 
 }

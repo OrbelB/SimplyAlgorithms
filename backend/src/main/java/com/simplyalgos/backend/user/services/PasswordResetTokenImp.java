@@ -7,18 +7,15 @@ import com.simplyalgos.backend.user.domains.PasswordResetToken;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.ChangePasswordDTO;
 import com.simplyalgos.backend.user.repositories.PasswordResetTokenRepository;
-import jakarta.persistence.TemporalType;
 import jakarta.transaction.Transactional;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Temporal;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -32,19 +29,16 @@ public class PasswordResetTokenImp implements PasswordResetTokenService {
 
     @Transactional
     public PasswordResetToken createPasswordResetToken(User user) {
-        UUID userID = user.getUserId();
         if(passwordResetTokenRepository.existsByUserId(user)){
-            log.info("PASSWORD RESET TOKEN FOR USER: " + user.getUsername() + " PRESENT, DELETING AND CREATING A NEW TOKEN");
-
-            PasswordResetToken passwordResetTokenold = passwordResetTokenRepository.getPasswordResetTokenByUserId(user);
-            passwordResetTokenRepository.deleteById(passwordResetTokenold.getPasswordResetTokenID());
-
+            passwordResetTokenRepository.deleteByUserId(user);
         }
         log.info("NOW CREATING THE NEW PASSWORD");
-        UUID resetPasswordToken = UUID.randomUUID();
-        PasswordResetToken passwordResetToken = new PasswordResetToken(user, resetPasswordToken);
-        passwordResetTokenRepository.saveAndFlush(passwordResetToken);
-        return passwordResetToken;
+        // create expire date of 15 minutes from now
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.MINUTE, 30);
+        Date expireDate = cal.getTime();
+        return passwordResetTokenRepository.save(PasswordResetToken.builder().userId(user).expireDate(expireDate).build());
     }
 
     @Override
@@ -64,6 +58,7 @@ public class PasswordResetTokenImp implements PasswordResetTokenService {
             log.info("RESETTING PASSWORD");
             jpaUserDetailsService.resetUserPassword(passToken.getUserId().getUserId(),changePasswordDTO.getNewPassword());
             passwordResetTokenRepository.deleteById(UUID.fromString(changePasswordDTO.getPasswordToken()));
+            return;
         }
         passwordResetTokenRepository.deleteById(passToken.getPasswordResetTokenID());
         throw new TokenExpireException("RESET PASSWORD TOKEN HAS EXPIRED");
