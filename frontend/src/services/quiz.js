@@ -23,11 +23,13 @@ export const fetchQuizList = createAsyncThunk(
 );
 
 export const fetchUserHistory = createAsyncThunk(
-  'quiz/user_history',
+  'quiz/user-history',
   async (passedParams) => {
-    const { userInfo, jwtAccessToken } = passedParams;
+    const { page, size, userId, jwtAccessToken } = passedParams;
     const response = await quizEndpoints.listUserHistory(
-      userInfo,
+      page,
+      size,
+      userId,
       jwtAccessToken
     );
     return response.data;

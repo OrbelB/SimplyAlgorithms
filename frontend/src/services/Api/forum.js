@@ -10,12 +10,15 @@ export const forumEndpoints = {
         'Content-Type': 'application/json',
       },
     }),
-  list: (page, size, sortBy) =>
+  list: (page, size, sortBy, title, filterBy, tagId) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/list`, {
       params: {
         page,
         size,
         sortBy,
+        title,
+        filterBy,
+        tagId,
       },
     }),
   listByCategory: (pageId, size, tagId) =>

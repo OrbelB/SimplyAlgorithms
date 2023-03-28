@@ -29,30 +29,36 @@ export default function CreateQuiz() {
   };
   const navigate = useNavigate();
 
-  const handleSubmitQuiz = () => {
-    dispatch(
-      createQuiz({
-        quizQuestionDTO,
-        quizDTO,
-        userDto: { userId },
-        jwtAccessToken,
-      })
-    );
-    dispatch(quizActions.resetData());
-    navigate('/quiz', { replace: true });
+  const handleSubmitQuiz = async () => {
+    try {
+      await dispatch(
+        createQuiz({
+          quizQuestionDTO,
+          quizDTO,
+          userDto: { userId },
+          jwtAccessToken,
+        })
+      ).unwrap();
+    } finally {
+      dispatch(quizActions.resetData());
+      navigate('/quiz', { replace: true });
+    }
   };
 
-  const handleUpdateQuiz = () => {
-    dispatch(
-      updateQuiz({
-        userDto: userDTO,
-        quizDTO,
-        quizQuestionDTO,
-        jwtAccessToken,
-      })
-    );
-    dispatch(quizActions.resetData());
-    navigate('/quiz', { replace: true });
+  const handleUpdateQuiz = async () => {
+    try {
+      await dispatch(
+        updateQuiz({
+          userDto: userDTO,
+          quizDTO,
+          quizQuestionDTO,
+          jwtAccessToken,
+        })
+      ).unwrap();
+    } finally {
+      dispatch(quizActions.resetData());
+      navigate('/quiz', { replace: true });
+    }
   };
 
   useEffect(() => {

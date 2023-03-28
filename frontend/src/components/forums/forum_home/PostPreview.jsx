@@ -5,13 +5,10 @@ import { forumActions } from '../../../store/reducers/forum-reducer';
 import { fetchForumList } from '../../../services/forum';
 import ForumQuickView from './ForumQuickView';
 import AlertSnackBar from '../../alert-messages-snackbar/AlertSnackBar';
-import {
-  forumsActions,
-  selectSortedForums,
-} from '../../../store/reducers/forums-reducer';
+import { forumsActions } from '../../../store/reducers/forums-reducer';
 import usePaginationWithInfiniteScroll from '../../../hooks/use-pagination';
 
-export default function PostPreview() {
+export default function PostPreview({ forums }) {
   const {
     totalPages,
     currentPage,
@@ -30,7 +27,6 @@ export default function PostPreview() {
   });
   const { reportId } = useSelector((state) => state.forum);
   const dispatch = useDispatch();
-  const forums = useSelector(selectSortedForums);
   const showedForums = useMemo(() => {
     if (filterForumBy !== '') {
       return forums.filter((forum) =>
@@ -53,7 +49,7 @@ export default function PostPreview() {
           removeData={removeReportId}
         />
       )}
-      <div>
+      <>
         {showedForums.map((forum, index) => {
           if (showedForums.length === index + 1) {
             return (
@@ -79,7 +75,7 @@ export default function PostPreview() {
             />
           );
         })}
-      </div>
+      </>
     </>
   );
 }

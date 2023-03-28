@@ -46,7 +46,7 @@
   "scripts": {
     "start:dev": "env-cmd -f .env.dev react-scripts start",
     "start:prod": "env-cmd -f .env.prod react-scripts start",
-    "build": "react-scripts build",
+    "build": "env-cmd -f .env.prod react-scripts build",
     "cloudfront-invalidation": "aws cloudfront create-invalidation --distribution-id E1MJQ8CO0SAJ13 --paths /* --profile simply-algo-web-dep",
     "s3-deploy": "aws s3 sync build/ s3://simplyalgoapp --profile simply-algo-web-dep",
     "deploy": "npm run build && npm run s3-deploy && npm run cloudfront-invalidation",

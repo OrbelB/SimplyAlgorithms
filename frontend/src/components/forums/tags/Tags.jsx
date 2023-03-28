@@ -7,14 +7,22 @@ import classes from './Tags.module.css';
 import { forumsActions } from '../../../store/reducers/forums-reducer';
 import { fetchTags } from '../../../services/tag';
 import useSearchBar from '../../../hooks/use-searchBar';
+import { fetchForumList } from '../../../services/forum';
 
 export default function Tags() {
   const tags = useSelector(selectAllTags);
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const { totalPages } = useSelector((state) => state.tags);
+  const { totalPages, status } = useSelector((state) => state.tags);
 
   const handleClick = (tagId) => {
+    dispatch(
+      fetchForumList({
+        page: 0,
+        size: 10,
+        tagId,
+      })
+    );
     dispatch(forumsActions.filterForums(`${tagId}`));
   };
 
@@ -24,6 +32,7 @@ export default function Tags() {
       valueSearched: 'tag',
       actionToDispatch: fetchTags,
       debounceTime: 500,
+      status,
     });
 
   const loadMoreTags = () => {

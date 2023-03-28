@@ -4,8 +4,15 @@ import { forumEndpoints } from './Api/forum';
 export const fetchForumList = createAsyncThunk(
   'forum/getList',
   async (pageParams) => {
-    const { page, size, sortBy } = pageParams;
-    const response = await forumEndpoints.list(page, size, sortBy);
+    const { page, size, sortBy, filterBy, tagId, title } = pageParams;
+    const response = await forumEndpoints.list(
+      page,
+      size,
+      sortBy,
+      filterBy,
+      title,
+      tagId
+    );
 
     return response.data;
   }

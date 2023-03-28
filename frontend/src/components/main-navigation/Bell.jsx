@@ -1,12 +1,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { Badge } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import cx from 'classnames';
 
 import { fetchUserDashboardInfo } from '../../services/user';
+import LoadingBackdrop from '../loading/LoadingBackdrop';
 
-import Notifications from '../dashboard/Notifications/Notifications';
+const Notifications = lazy(() =>
+  import('../dashboard/Notifications/Notifications')
+);
 
 export default function Bell() {
   const [clickedBell, setClickedBell] = useState(false);
@@ -39,7 +42,9 @@ export default function Bell() {
 
   return (
     <>
-      <Notifications setShow={setClickedBell} show={clickedBell} />
+      <Suspense fallback={<LoadingBackdrop />}>
+        <Notifications setShow={setClickedBell} show={clickedBell} />
+      </Suspense>
       <Badge
         badgeContent={dashboardInfo?.notifications?.length}
         color="info"

@@ -4,8 +4,6 @@ import { tagEndpoints } from './Api/tag';
 
 export const fetchTags = createAsyncThunk('tag/list', async (pageParams) => {
   const { page, size, filterBy } = pageParams;
-  const response = await tagEndpoints.list(page, size, filterBy).catch((e) => {
-    return e;
-  });
+  const response = await tagEndpoints.list(page, size, filterBy);
   return response.data;
 });

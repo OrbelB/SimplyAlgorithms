@@ -44,7 +44,7 @@ export const viewedForumsSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchUserForumsViewed.pending, (state) => {
-        state.status = 'loading';
+        state.status = 'pending';
       })
       .addCase(fetchUserForumsViewed.fulfilled, (state, action) => {
         const posts = action.payload?.map((forumQuickView) => {

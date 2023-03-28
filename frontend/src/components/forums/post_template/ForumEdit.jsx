@@ -102,7 +102,6 @@ export default function ForumEdit() {
           id="filled-multiline-flexible"
           label="Description"
           minRows={15}
-          multiline
           required
           value={description}
           onChange={descriptionChangeHandler}

@@ -1,4 +1,4 @@
-import { Avatar } from '@mui/material';
+import { Avatar, TextareaAutosize } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -44,13 +44,21 @@ export default function AddEditComment({
         />
       </div>
       <div className="col-auto col-md-10 m-0 p-0">
-        <input
+        <TextareaAutosize
+          className="form-control p-4 p-sm-auto mb-4"
+          placeholder="add a reply..."
+          required
+          rowsMin={1}
+          value={checkComment}
+          onChange={handleInputChildCommentUpdate}
+        />
+        {/* <input
           className="form-control"
           placeholder="add a reply.."
           value={checkComment}
           onInput={handleInputChildCommentUpdate}
           type="text"
-        />
+        /> */}
       </div>
       <div className="row justify-content-end g-0">
         <div className="col-auto col-sm-auto btn-group pe-md-2">

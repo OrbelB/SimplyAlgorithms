@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import RecentlyViewedPosts from './RecentlyViewPosts/RecentlyViewedPosts';
@@ -13,16 +13,40 @@ import Notifications from './Notifications/Notifications';
 import ShowMoreComments from './CommentsDB/ShowMoreComments/ShowMoreComments';
 import ShowMoreHighlights from './HighlightsDB/ShowMoreHighlights/ShowMoreHighlights';
 import useJwtPermssionExists from '../../hooks/use-jwtPermission';
+import { fetchUserHistory } from '../../services/quiz';
 
 export default function Dashboard() {
+  const { status: quizStatus, userHistory } = useSelector(
+    (state) => state.quiz
+  );
   const { username, dashboardInfo } = useSelector((state) => state.user);
+  const { jwtAccessToken, userId } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const [showNotifications, setShowNotifications] = useState(false);
   const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
   const isTeacher = useJwtPermssionExists({ permission: 'ROLE_TEACHER' });
   const navigate = useNavigate();
+  const [once, setOnce] = useState(true);
+  useEffect(() => {
+    if (
+      quizStatus === 'idle' ||
+      (quizStatus === 'success' && userHistory?.length === 0 && once)
+    ) {
+      setOnce(false);
+      dispatch(
+        fetchUserHistory({
+          page: 0,
+          size: 10,
+          userId,
+          jwtAccessToken,
+        })
+      );
+    }
+  }, [dispatch, jwtAccessToken, once, quizStatus, userHistory?.length, userId]);
   const handleRedirect = () => {
     navigate('/topic/new/create');
   };
+
   return (
     <div className="container-fluid">
       <div className="row ps-2 justify-content-between mt-4">
@@ -36,9 +60,8 @@ export default function Dashboard() {
           <div className="col-auto align-self-center 0">
             <Button
               variant="contained"
-              color="primary"
+              color="success"
               onClick={handleRedirect}
-              className="bts"
             >
               create topic
             </Button>
@@ -69,7 +92,7 @@ export default function Dashboard() {
       <div className="row mt-4 ps-3">
         <div className="card border-dark quizzes">
           <h4 className="card-header text-center">Quizzes</h4>
-          <QuizProgress />
+          <QuizProgress userHistory={userHistory} />
         </div>
       </div>
       <div className="row mt-3 mb-3">

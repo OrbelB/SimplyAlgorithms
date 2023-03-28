@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import draftToHtml from 'draftjs-to-html';
@@ -296,27 +294,25 @@ export default function CreateTopic() {
     <div className="createtopic">
       <br />
       <br />
-      <h3>Topic Page Creation Form</h3>
+      <h2 className="text-center mb-5">Topic Page Creation Form</h2>
       <h5>Instructions: Fill out the fields with the correct formats.</h5>
       <h5>Preview the topic page below before submitting.</h5>
       <br />
       <form className="topic-form">
         <h2>Algorithm Title</h2>
         <h5>Note: Once set, title cannot be changed</h5>
-        <label>
-          <TextField
-            disabled={topicName?.topicName !== undefined}
-            error={topicNameAvailable !== null && !topicNameAvailable}
-            id="outlined-basic"
-            onChange={handleTitleChange}
-            label="Title"
-            className="label"
-            variant="outlined"
-            margin="dense"
-            required
-            helperText={helperText}
-          />
-        </label>
+        <TextField
+          disabled={topicName?.topicName !== undefined}
+          error={topicNameAvailable !== null && !topicNameAvailable}
+          id="outlined-basic"
+          onChange={handleTitleChange}
+          label="Title"
+          className="label"
+          variant="outlined"
+          margin="dense"
+          required
+          helperText={helperText}
+        />
         <br />
         <br />
         <h2>Category Selection</h2>
@@ -352,8 +348,9 @@ export default function CreateTopic() {
         <br />
         <br />
         <h2>Embedded Visualizer or Video Source</h2>
-        <label>
+        <label htmlFor="vis-input">
           <input
+            id="vis-input"
             className="label"
             type="url"
             value={visualizer}
@@ -363,8 +360,9 @@ export default function CreateTopic() {
         <br />
         <br />
         <h2>Source Attribution</h2>
-        <label>
+        <label htmlFor="vis-source">
           <input
+            id="vis-source"
             className="label"
             type="text"
             required

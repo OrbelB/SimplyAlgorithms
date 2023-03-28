@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Avatar } from '@mui/material';
@@ -84,7 +83,9 @@ export default function CommentBox({
                 cancelReplyElement={handleIsEditCommentOpen}
               />
             ) : (
-              <p className="text-wrap">{commentText}</p>
+              <p className="text" style={{ whiteSpace: 'pre-line' }}>
+                {commentText}
+              </p>
             )}
           </div>
         </div>
