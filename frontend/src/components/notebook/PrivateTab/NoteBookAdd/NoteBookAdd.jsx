@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-shorthand */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-// import TextEditor from '../../../text-editor/TextEditor';
+import TextEditor from '../../../text-editor/TextEditor';
 
 export default function NotebookAdd({
   title,
@@ -59,7 +59,8 @@ export default function NotebookAdd({
           editor="editor-title"
           id="note-description"
           placeholder="Enter description"
-          value={description} // value will not be registered, either way it would be submitted through markup
+          rows="8"
+          value={description}
           onChange={inputHandlerDescription}
         />
       </div>

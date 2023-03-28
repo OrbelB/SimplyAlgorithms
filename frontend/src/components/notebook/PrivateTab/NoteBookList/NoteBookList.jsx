@@ -30,6 +30,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
 // import TextEditor from '../../../text-editor/TextEditor';
+
 function createData(user, permissions) {
   return { user, permissions };
 }
@@ -292,6 +293,7 @@ export default function NoteBookList({ element, notes, setNotes }) {
                     editor="editor-title"
                     id="editdescription"
                     placeholder="Enter description"
+                    rows="8"
                   >
                     {element.description}
                   </textarea>
