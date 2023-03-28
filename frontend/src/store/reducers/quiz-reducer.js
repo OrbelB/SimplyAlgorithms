@@ -8,6 +8,7 @@ import {
   fetchSingleQuiz,
   updateQuiz,
   deleteQuiz,
+  fetchUserHistory,
 } from '../../services/quiz';
 
 const firstId = crypto.randomUUID();
@@ -38,6 +39,11 @@ const initialState = {
     },
   ],
   userDTO: {},
+  userHistory: [],
+  userHistoryCurrPage: undefined,
+  userHistoryTotalPages: undefined,
+  quizListCurrPage: undefined,
+  quizListTotalPages: undefined,
   status: 'idle',
   error: '',
   reportId: '',
@@ -49,6 +55,7 @@ export const quizSlice = createSlice({
   initialState,
   reducers: {
     resetData: (state) => {
+      state.userHistory = [];
       state.quizDTO = {};
       state.quizQuestionDTO = [
         {
@@ -79,6 +86,13 @@ export const quizSlice = createSlice({
       state.status = 'idle';
       state.error = '';
       state.reportId = '';
+      state.userHistoryCurrPage = undefined;
+      state.userHistoryTotalPages = undefined;
+      state.quizListCurrPage = undefined;
+      state.quizListTotalPages = undefined;
+    },
+    updateQuizListCurrPage: (state) => {
+      state.quizListCurrPage += 1;
     },
     removeQuestionAnswer: (state, action) => {
       const { questionId, answerId } = action.payload;
@@ -190,7 +204,17 @@ export const quizSlice = createSlice({
       })
       .addCase(fetchQuizList.fulfilled, (state, action) => {
         state.status = 'success';
-        state.quizList = action.payload.content;
+
+        // add the previous state to the new state if it is not a duplicate
+        state.quizList = action.payload.content.concat(
+          state.quizList.filter((quiz) => {
+            return !action.payload.content.find(
+              (quiz2) => quiz2.quizId === quiz.quizId
+            );
+          })
+        );
+        state.quizListCurrPage = action.payload.pageNumber;
+        state.quizListTotalPages = action.payload.totalPages;
         state.totalElements = action.payload.totalElements;
       })
       .addCase(fetchQuizList.rejected, (state, action) => {
@@ -239,6 +263,16 @@ export const quizSlice = createSlice({
       .addCase(deleteQuiz.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+      })
+      .addCase(fetchUserHistory.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUserHistory.fulfilled, (state, action) => {
+        if (!action.payload.content) return;
+        state.status = 'success';
+        state.userHistory = state.userHistory.concat(action.payload.content);
+        state.userHistoryCurrPage = action.payload.pageNumber;
+        state.userHistoryTotalPages = action.payload.totalPages;
       });
   },
 });

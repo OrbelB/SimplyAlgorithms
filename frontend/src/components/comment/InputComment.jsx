@@ -1,4 +1,4 @@
-import { Avatar } from '@mui/material';
+import { Avatar, TextareaAutosize } from '@mui/material';
 import cx from 'classnames';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,12 +53,14 @@ export default function InputComment({ pageId }) {
               loading="lazy"
             />
           </div>
-          <div className="col-auto col-md-9 col-sm-auto m-auto align-self-center">
-            <input
-              className="form-control  m-1 p-3 p-sm-auto"
-              onInput={handleInputText}
-              value={text}
+          <div className="col-auto col-md-9 col-sm-auto mt-4">
+            <TextareaAutosize
+              className="form-control p-4 p-sm-auto mb-4 w-100"
               placeholder="add a comment..."
+              required
+              rowsMin={2}
+              value={text}
+              onChange={handleInputText}
             />
           </div>
           <div className="col-auto col-sm-auto  align-self-center m-auto">

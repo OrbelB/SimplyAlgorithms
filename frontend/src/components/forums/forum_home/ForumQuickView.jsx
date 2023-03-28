@@ -40,9 +40,9 @@ export default function ForumQuickView({
     <Card
       ref={innerRef}
       key={pageId}
-      sx={{ maxWidth: 1200 }}
+      sx={{ minWidth: 400, width: '100%' }}
       raised
-      className="preview-section m-3 m-md-5"
+      className="preview-section mt-4 mb-4 me-4"
     >
       <CardActionArea
         onClick={removeData}

@@ -176,7 +176,7 @@ export default function ForumPost() {
                 </div>
               </div>
             </div>
-            <h3 className={cx(fp.title)}>{forum?.title}</h3>
+            <h2 className={cx(fp.title)}>{forum?.title}</h2>
             <div className="row d-flex justify-content-center">
               {forum?.tags.map((tag) => (
                 <Chip
@@ -187,8 +187,10 @@ export default function ForumPost() {
                 />
               ))}
             </div>
-            <div className={cx(fp.quetion, 'overflow-auto fw-normal lh-base')}>
-              {forum?.descriptionText}
+            <div className={cx('row justify-content-center')}>
+              <p className={cx(fp.quetion, 'overflow-auto fw-normal lh-base')}>
+                {forum?.descriptionText}
+              </p>
             </div>
             <Vote
               status={forumVoteStatus}

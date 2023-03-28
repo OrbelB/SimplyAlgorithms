@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 // eslint-disable-next-line no-unused-vars
 import { get, post, put, destroy } from './base';
 
@@ -15,23 +16,18 @@ export const quizEndpoints = {
     get(`${PUBLIC_ENDPOINT_ROUTE}/list`, {
       params: { page, size, filterBy, sortBy },
     }),
-  // CHECK
-  listUserHistory: (userInfo, jwtAccessToken) =>
-    get(
-      `${PUBLIC_ENDPOINT_ROUTE}/user_history`,
-      {
-        page: userInfo?.page,
-        size: userInfo?.size,
-        userId: userInfo?.userId,
-        byQuiz: userInfo?.byQiz,
+  listUserHistory: (page, size, userId, jwtAccessToken) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/user-history`, {
+      params: {
+        page,
+        size,
+        userId,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
-        },
-      }
-    ),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
+      },
+    }),
   deleteALLUserTakenQuizzes: (takeQuiz, jwtAccessToken) =>
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/deleteALLUserTakenQuizzes`,

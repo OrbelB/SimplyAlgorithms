@@ -8,12 +8,13 @@ export default function useSearchBar({
   valueSearched,
   actionToDispatch,
   debounceTime = 350,
+  status,
 }) {
   const dispatch = useDispatch();
   const [searchParam, setSearchParam] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const searchResults = useMemo(() => {
-    return searchFrom.filter((item) => {
+    return searchFrom?.filter((item) => {
       let searchValue;
       // if the valueSearched is a nested object, we need to use reduce to get the value
       if (valueSearched.includes('.')) {
@@ -32,6 +33,7 @@ export default function useSearchBar({
 
   const handleSearch = debounce((e) => {
     searchParam.set('filterBy', e.target.value);
+    if (status === 'loading' || status === 'pending') return;
     setSearchParam(searchParam, {
       replace: true,
     });
@@ -40,6 +42,7 @@ export default function useSearchBar({
         page: 0,
         size: 20,
         filterBy: searchParam.get('filterBy'),
+        [valueSearched]: valueSearched,
       })
     );
     setSearchTerm(e.target.value);

@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default-member */
+/* eslint-disable import/no-named-as-default */
 import { useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,7 +15,7 @@ import { fetchQuizList } from '../../services/quiz';
 // import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 
 const SORTING_OPTIONS = ['Created Date', 'Alphabetical'];
-const SELECTED_TOPIC_QUIZ = [{ index: 1, topic: 'Topic 1' }];
+// const SELECTED_TOPIC_QUIZ = [{ index: 1, topic: 'Topic 1' }];
 
 export default function Quizhome() {
   const dispatch = useDispatch();
@@ -22,19 +24,16 @@ export default function Quizhome() {
   );
   const [selection, setSelection] = useState('');
   const { handleSortBy } = useSortBy({ actionToDispatch: fetchQuizList });
-  // const navigate = useNavigate();
-  // const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
-  // const isTeacher = useJwtPermssionExists({ permission: 'ROLE_TEACHER' });
 
   // handles search bar logic
   const { handleSearch: handleSearchQuiz, searchResults: searchQuizzes } =
     useSearchBar({
+      status,
       searchFrom: quizList,
       valueSearched: 'title',
       actionToDispatch: fetchQuizList,
       debounceTime: 500,
     });
-
   useEffect(() => {
     if (
       status === 'idle' ||
@@ -45,7 +44,7 @@ export default function Quizhome() {
       dispatch(
         fetchQuizList({
           page: 0,
-          size: 20,
+          size: 10,
         })
       );
     }
@@ -70,16 +69,7 @@ export default function Quizhome() {
       </div>
       <div className="p-5 bottom-quizhome">
         <div className="row justify-content-between align-items-center">
-          <div className="col-auto p-0 m-0">
-            {SELECTED_TOPIC_QUIZ.map(({ index, topic }) => {
-              return (
-                <div key={`${topic} ${index}`}>
-                  <h5>Topic: {topic}</h5>
-                </div>
-              );
-            })}
-          </div>
-          <div className="col-4 p-0 m-0 text-end">
+          <div className="col-4 p-0 m-0">
             <SelectionList
               label="Sort By"
               options={SORTING_OPTIONS}
@@ -88,20 +78,6 @@ export default function Quizhome() {
               handleAction={handleSortBy}
             />
           </div>
-          {/* {(isAdmin || isTeacher) && (
-            <div className="col-4 text-end">
-              <button
-                type="button"
-                className="quizstart"
-                onClick={() => {
-                  navigate('createquiz');
-                  dispatch(quizActions.resetData());
-                }}
-              >
-                create quiz
-              </button>
-            </div>
-          )} */}
         </div>
 
         <QuizPreview quizList={searchQuizzes} status={status} />

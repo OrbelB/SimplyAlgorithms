@@ -43,9 +43,7 @@ export default function AlgoFrame({
     navigate(`/topic/${topicName}/edit`);
   };
 
-  function disableLoader() {
-    console.log(' Item loaded');
-  }
+  function disableLoader() {}
   return (
     <div className={cx(styles['container-style'])}>
       <div className="row">

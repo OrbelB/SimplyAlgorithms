@@ -12,6 +12,9 @@ import {
 import { fetchUserForumsViewed } from '../../../services/forum';
 import { forumActions } from '../../../store/reducers/forum-reducer';
 import useUpdateStore from '../../../hooks/use-updateStore';
+import { forumVoteActions } from '../../../store/reducers/forum-vote-reducer';
+import { commentActions } from '../../../store/reducers/comment-reducer';
+import { commentVoteActions } from '../../../store/reducers/comment-vote-reducer';
 
 export default function RelatedRecentPosts() {
   const dispatch = useDispatch();
@@ -36,6 +39,9 @@ export default function RelatedRecentPosts() {
 
   const resetData = (pageId) => {
     dispatch(forumActions.resetData());
+    dispatch(forumVoteActions.resetData());
+    dispatch(commentActions.resetData());
+    dispatch(commentVoteActions.resetData());
     dispatch(viewForumsActions.resetData({}));
     navigate(`/forums/${pageId}`);
   };

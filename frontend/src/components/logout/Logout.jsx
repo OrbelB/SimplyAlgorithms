@@ -10,6 +10,9 @@ import { viewForumsActions } from '../../store/reducers/viewed-forums-reducer';
 import { forumVoteActions } from '../../store/reducers/forum-vote-reducer';
 import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
 import { forumActions } from '../../store/reducers/forum-reducer';
+import { quizActions } from '../../store/reducers/quiz-reducer';
+import { topicVoteActions } from '../../store/reducers/topic-votes-reducer';
+import { commentActions } from '../../store/reducers/comment-reducer';
 
 export default function Logout({ handleLogout }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -19,17 +22,19 @@ export default function Logout({ handleLogout }) {
   const dispatch = useDispatch();
 
   const handleClose = () => {
-    // eslint-disable-next-line no-return-assign, no-param-reassign
     setShowModal((prevState) => (prevState = !prevState));
     handleLogout(showModal);
   };
   const handleUserLogoutRequest = () => {
+    dispatch(quizActions.resetData());
+    dispatch(topicVoteActions.resetData());
     dispatch(authActions.resetData());
     dispatch(userActions.onUserLogout());
     dispatch(viewForumsActions.resetData());
     dispatch(forumVoteActions.resetData());
     dispatch(commentVoteActions.resetData());
     dispatch(forumActions.resetData());
+    dispatch(commentActions.resetData());
     // remove refresh token cookie
     Cookies.remove('refresh-token');
     handleLogout(!showModal);
@@ -54,10 +59,10 @@ export default function Logout({ handleLogout }) {
           <h2 className="text-uppercase text-center">Logout</h2>
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body className="text-center">
+      <Modal.Body className="text-center  p-5">
         <h4>Are you sure you want to logout?</h4>
       </Modal.Body>
-      <Modal.Footer className=" justify-content-evenly">
+      <Modal.Footer className="justify-content-evenly">
         <div className="col-4">
           <button
             className="btn btn-danger"

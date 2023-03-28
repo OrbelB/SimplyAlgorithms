@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import './QuizProgress.css';
 import { nanoid } from '@reduxjs/toolkit';
 import Chart from 'react-apexcharts';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Button } from '@mui/material';
 import { currentUserInfo } from '../../../pages/UserProfilePage';
 import QuizDB from './QuizDB/QuizDB';
 import useJwtPermssionExists from '../../../hooks/use-jwtPermission';
@@ -15,9 +17,15 @@ const linechar = [
   },
 ];
 
-export default function QuizProgress() {
+export default function QuizProgress({ userHistory }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // add teh average score to get the overall average by divbing by the length of the array
+  const averageScore =
+    userHistory.reduce((acc, quiz) => {
+      return acc + quiz.averageScore;
+    }, 0) / userHistory.map((quiz) => quiz.averageScore).length;
   const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
   const isTeacher = useJwtPermssionExists({ permission: 'ROLE_TEACHER' });
   return (
@@ -39,34 +47,20 @@ export default function QuizProgress() {
                         series={[
                           {
                             name: 'Quiz Score',
-                            data: [
-                              dtachart[0],
-                              dtachart[1],
-                              dtachart[2],
-                              dtachart[3],
-                              dtachart[4],
-                              dtachart[5],
-                            ],
+                            data: userHistory.map((quiz) => quiz.averageScore),
                           },
                         ]}
                         options={{
                           xaxis: {
-                            categories: [
-                              qname[0],
-                              qname[1],
-                              qname[2],
-                              qname[3],
-                              qname[4],
-                              qname[5],
-                            ],
+                            categories: userHistory.map(
+                              (quiz) => quiz.quizDTO.title
+                            ),
                           },
                           title: {
                             text: 'Quiz Scores',
                           },
                         }}
-                      >
-                        {' '}
-                      </Chart>
+                      />
                     ))}
                   </div>
                   <div className="col-12 col-sm-12 col-md-12 col-lg-4 align-self-center text-center">
@@ -76,15 +70,7 @@ export default function QuizProgress() {
                         type="radialBar"
                         width={300}
                         height={300}
-                        series={[
-                          (dtachart[0] +
-                            dtachart[1] +
-                            dtachart[2] +
-                            dtachart[3] +
-                            dtachart[4] +
-                            dtachart[5]) /
-                            dtachart.length,
-                        ]}
+                        series={[averageScore]}
                         options={{
                           labels: ['Score'],
                           title: {
@@ -98,16 +84,17 @@ export default function QuizProgress() {
                   </div>
                   {(isAdmin || isTeacher) && (
                     <div className="col-12 cold-sm-12 col-md-12 col-lg-4 text-none text-lg-end">
-                      <button
+                      <Button
                         type="button"
-                        className="quizstart"
+                        variant="contained"
+                        color="secondary"
                         onClick={() => {
                           navigate('/quiz/createquiz');
                           dispatch(quizActions.resetData());
                         }}
                       >
                         create quiz
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>
@@ -115,11 +102,7 @@ export default function QuizProgress() {
             </div>
             <div className="row">
               <h5 className="m-4 text-center">Recently Taken Quizzes</h5>
-              <QuizDB />
-            </div>
-            <div className="row">
-              <h5 className=" m-4 text-center">Assigned Quizzes</h5>
-              <QuizDB />
+              <QuizDB userHistory={userHistory} />
             </div>
             <div className="mb-5"> </div>
           </div>

@@ -22,7 +22,7 @@ export default function DropdownMenu({
         {dropdownTitle}
       </Button>
       <ul className="dropdown-menu dropdown-center text-center">
-        {nestedDropdownSelections.map(({ links, wikiName, wikiId }) => (
+        {nestedDropdownSelections?.map(({ links, wikiName, wikiId }) => (
           <NestedDropdownMenu
             key={wikiId}
             title={wikiName}
