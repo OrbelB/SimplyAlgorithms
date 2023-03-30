@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import draftToHtml from 'draftjs-to-html';
@@ -293,7 +294,6 @@ export default function CreateTopic() {
   return (
     <div className="createtopic">
       <br />
-      <br />
       <h2 className="text-center mb-5">Topic Page Creation Form</h2>
       <h5>Instructions: Fill out the fields with the correct formats.</h5>
       <h5>Preview the topic page below before submitting.</h5>
@@ -348,6 +348,15 @@ export default function CreateTopic() {
         <br />
         <br />
         <h2>Embedded Visualizer or Video Source</h2>
+        <h5>
+          Note: If embedding YouTube videos, please use specific embed link or
+          the video will not display
+        </h5>
+        <h5>
+          From video page, click on "Share" and then on "Embed". Copy the link
+          from "src" in the given HTML code.
+        </h5>
+        <br />
         <label htmlFor="vis-input">
           <input
             id="vis-input"

@@ -1,16 +1,27 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable object-shorthand */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import { useState } from 'react';
 import TextEditor from '../../../text-editor/TextEditor';
 
-export default function NotebookAdd({
-  title,
-  setTitle,
-  description,
-  setDescription,
-  notes,
-  setNotes,
-}) {
+const content = {
+  blocks: [
+    {
+      key: '637gr',
+      text: '',
+      type: 'unstyled',
+      depth: 0,
+      inlineStyleRanges: [],
+      entityRanges: [],
+      data: {},
+    },
+  ],
+  entityMap: {},
+};
+
+export default function NotebookAdd({ title, setTitle, notes, setNotes }) {
+  const [description, setDescription] = useState(content);
+
   const inputHandlerTitle = (e) => {
     setTitle(e.target.value);
   };
@@ -52,16 +63,14 @@ export default function NotebookAdd({
       </div>
       <div className="form-group m-3">
         <label htmlFor="note-description">Description: </label>
-        <textarea
+        <TextEditor
           className="form-control"
           toolbar="editor-toolbar"
           wrapper="editor-wrapper"
           editor="editor-title"
           id="note-description"
-          placeholder="Enter description"
-          rows="8"
-          value={description}
-          onChange={inputHandlerDescription}
+          value={content}
+          setter={inputHandlerDescription}
         />
       </div>
       <div className="form-group m-3">
