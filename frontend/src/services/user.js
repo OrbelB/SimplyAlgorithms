@@ -86,3 +86,12 @@ export const removeSingleNotification = createAsyncThunk(
     return response.data;
   }
 );
+
+export const checkAvailability = createAsyncThunk(
+  'user/availability',
+  async (passedParams) => {
+    const { username, email } = passedParams;
+    const response = await userEndpoints.available(username, email);
+    return response.data;
+  }
+);

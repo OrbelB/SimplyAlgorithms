@@ -9,6 +9,7 @@ export default function usePaginationWithInfiniteScroll({
   itemName,
   fetchFunction,
   status,
+  jwtAccessToken,
 }) {
   // use to get the last element of the comment list
   const lastElementRef = useRef();
@@ -19,7 +20,14 @@ export default function usePaginationWithInfiniteScroll({
   // fetches the next page of comments when the user scrolls to the bottom of the comment list
   useEffect(() => {
     if (totalPages && totalPages >= currPage && loadMore) {
-      dispatch(fetchFunction({ [itemName]: itemId, size: 10, page: currPage }));
+      dispatch(
+        fetchFunction({
+          [itemName]: itemId,
+          size: 10,
+          page: currPage,
+          jwtAccessToken,
+        })
+      );
     }
   }, [
     currPage,
@@ -27,6 +35,7 @@ export default function usePaginationWithInfiniteScroll({
     fetchFunction,
     itemId,
     itemName,
+    jwtAccessToken,
     loadMore,
     totalPages,
   ]);

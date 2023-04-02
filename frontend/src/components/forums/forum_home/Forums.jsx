@@ -10,7 +10,7 @@ import { fetchForumList } from '../../../services/forum';
 import {
   forumsActions,
   selectSortedForums,
-} from '../../../store/reducers/forums-reducer';
+} from '../../../store/reducers/forums-slice';
 import useSearchBar from '../../../hooks/use-searchBar';
 
 export default function Forums() {

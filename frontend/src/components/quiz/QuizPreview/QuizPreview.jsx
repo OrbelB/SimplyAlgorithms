@@ -4,7 +4,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { quizActions } from '../../../store/reducers/quiz-reducer';
+import { quizActions } from '../../../store/reducers/quiz-slice';
 import usePaginationWithInfiniteScroll from '../../../hooks/use-pagination';
 import { fetchQuizList } from '../../../services/quiz';
 

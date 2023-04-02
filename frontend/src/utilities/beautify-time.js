@@ -1,6 +1,6 @@
-import { parseISO, formatDistanceToNow } from 'date-fns';
+import { parseISO, formatDistanceToNow, differenceInDays } from 'date-fns';
 
-export default function beautifyTime({ createdDate }) {
+export function beautifyTime({ createdDate }) {
   if (createdDate) {
     const date = parseISO(createdDate);
     // use format distance to now and add minutes
@@ -11,4 +11,12 @@ export default function beautifyTime({ createdDate }) {
     return `${timePassed}`;
   }
   throw new Error('this is an error ');
+}
+
+export function timeToExpire(date) {
+  const now = new Date();
+  const expireDate = new Date(date).toISOString();
+  const expirationDate = parseISO(expireDate);
+  const daysToExpire = differenceInDays(expirationDate, now);
+  return daysToExpire;
 }

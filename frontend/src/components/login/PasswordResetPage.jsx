@@ -1,13 +1,14 @@
 import React from 'react';
 import validator from 'validator';
 import { useDispatch } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import useValidateInput from '../../hooks/use-ValidateInput';
 import { changePassword } from '../../services/auth';
 
 export default function PasswordResetPage() {
   const [token] = useSearchParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     value: password,
     hasError: passwordHasError,
@@ -40,17 +41,19 @@ export default function PasswordResetPage() {
     }
     return false;
   };
-  const resetPassword = () => {
-    validate(password);
-    console.log(token.get('token'));
-    dispatch(
-      changePassword({
-        newPassword: password,
-        passwordToken: token.get('token'),
-      })
-    );
-    rePasswordReset();
-    passwordReset();
+  const resetPassword = async () => {
+    try {
+      await dispatch(
+        changePassword({
+          newPassword: password,
+          passwordToken: token.get('token'),
+        })
+      ).unwrap();
+    } finally {
+      rePasswordReset();
+      passwordReset();
+      navigate('/login', { replace: true });
+    }
   };
 
   const strongPass = validate(password);

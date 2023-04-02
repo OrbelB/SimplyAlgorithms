@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import Modal from 'react-bootstrap/Modal';
 import { Container, Row } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import validator from 'validator';
 import useValidateInput from '../../hooks/use-ValidateInput';
 import { register } from '../../services/auth';
 import imageToStringBase64 from '../../utilities/image-to-data-url';
+import { checkAvailability } from '../../services/user';
 
 export default function SignUp({ showSignUp, handleOnClose }) {
   const { status } = useSelector((state) => state.auth);
@@ -18,12 +19,15 @@ export default function SignUp({ showSignUp, handleOnClose }) {
   const [submitPostRegister, setSubmitPostRegister] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-
+  const showImage = useMemo(() => {
+    return image ? URL.createObjectURL(image) : null;
+  }, [image]);
   useEffect(() => {
     if (status === 'success') {
       handleOnClose(!showSignUp);
     }
   }, [status, handleOnClose, showSignUp]);
+  const { nameAvailable, emailAvailable } = useSelector((state) => state.user);
 
   const {
     value: username,
@@ -92,7 +96,8 @@ export default function SignUp({ showSignUp, handleOnClose }) {
     rePasswordIsValid &&
     emailIsValid &&
     passwordMatches &&
-    strongPass
+    strongPass &&
+    nameAvailable
   )
     isFormValid = true;
 
@@ -138,6 +143,23 @@ export default function SignUp({ showSignUp, handleOnClose }) {
   const handleLastName = (e) => {
     setLastName(e.target.value);
   };
+
+  const handleNameExists = async (e) => {
+    e.preventDefault();
+    const name = e.target.value;
+    if (!name || name.trim().length === 0) return;
+    dispatch(checkAvailability({ username: name }));
+    usernameBlurHandler(name);
+  };
+
+  const handleEmailExists = async (e) => {
+    e.preventDefault();
+    const checkEmail = e.target.value;
+    if (!checkEmail || checkEmail.trim().length === 0) return;
+    dispatch(checkAvailability({ email: checkEmail }));
+    emailBlurHandler(checkEmail);
+  };
+
   return (
     <Modal
       show={showSignUp}
@@ -180,7 +202,6 @@ export default function SignUp({ showSignUp, handleOnClose }) {
                   autoComplete="lastname"
                   required
                   onChange={handleLastName}
-                  onBlur={usernameBlurHandler}
                 />
                 <label className="form-label" htmlFor="formLastName">
                   last name
@@ -196,19 +217,21 @@ export default function SignUp({ showSignUp, handleOnClose }) {
                   value={username}
                   required
                   onChange={usernameChangeHandler}
-                  onBlur={usernameBlurHandler}
+                  onBlur={handleNameExists}
                 />
                 <label className="form-label" htmlFor="form3Example1cg">
                   username
                 </label>
               </div>
-              {usernameHasError && (
+              {usernameHasError || nameAvailable === false ? (
                 <div className="col col-sm-auto small m-2 p-0">
                   <span className="alert alert-danger small p-2">
-                    Username is empty{' '}
+                    {nameAvailable === false
+                      ? 'Username already exists'
+                      : 'Username is blank'}
                   </span>
                 </div>
-              )}
+              ) : null}
             </div>
             <div className="row">
               <div className="col form-outline mb-4">
@@ -218,7 +241,7 @@ export default function SignUp({ showSignUp, handleOnClose }) {
                   className="form-control form-control-lg"
                   autoComplete="email"
                   value={email}
-                  onBlur={emailBlurHandler}
+                  onBlur={handleEmailExists}
                   onChange={emailChangeHandler}
                   required
                 />
@@ -226,13 +249,15 @@ export default function SignUp({ showSignUp, handleOnClose }) {
                   Email
                 </label>
               </div>
-              {emailHasError && (
+              {emailHasError || emailAvailable === false ? (
                 <div className="col col-sm-auto small m-2 p-0">
                   <span className="alert alert-danger small p-2">
-                    Email must be valid
+                    {emailAvailable === false
+                      ? 'Email Is Taken'
+                      : 'Email must be valid'}
                   </span>
                 </div>
-              )}
+              ) : null}
             </div>
             <div className="row">
               <div className="col form-outline mb-4">
@@ -319,9 +344,7 @@ export default function SignUp({ showSignUp, handleOnClose }) {
               </div>
             </div>
             <div className="row">
-              {image && (
-                <img alt="user's profile" src={URL.createObjectURL(image)} />
-              )}
+              {image && <img alt="user's profile" src={showImage} />}
               <div className="col form-outline mb-4">
                 <input
                   type="file"

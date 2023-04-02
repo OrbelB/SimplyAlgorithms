@@ -10,9 +10,7 @@ import './QuizHome.css';
 import SelectionList from '../selector';
 import useSearchBar from '../../hooks/use-searchBar';
 import useSortBy from '../../hooks/use-sortBy';
-// import { quizActions } from '../../store/reducers/quiz-reducer';
 import { fetchQuizList } from '../../services/quiz';
-// import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 
 const SORTING_OPTIONS = ['Created Date', 'Alphabetical'];
 // const SELECTED_TOPIC_QUIZ = [{ index: 1, topic: 'Topic 1' }];

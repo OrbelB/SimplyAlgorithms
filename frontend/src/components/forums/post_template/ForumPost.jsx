@@ -4,9 +4,9 @@ import cx from 'classnames';
 import { Chip } from '@mui/material';
 import { useSelector } from 'react-redux';
 import fp from './ForumPost.module.css';
-import { forumsActions } from '../../../store/reducers/forums-reducer';
+import { forumsActions } from '../../../store/reducers/forums-slice';
 import CommentFrame from '../../comment/CommentFrame';
-import { selectByForumVoteId } from '../../../store/reducers/forum-vote-reducer';
+import { selectByForumVoteId } from '../../../store/reducers/forum-vote-slice';
 import {
   fetchSingleForum,
   addUserView,
@@ -15,7 +15,7 @@ import {
   deleteForumVote,
 } from '../../../services/forum';
 
-import beautifyTime from '../../../utilities/beautify-time';
+import { beautifyTime } from '../../../utilities/beautify-time';
 import Vote from '../../vote_comp/Vote';
 import ForumOptionMenu from './ForumOptionMenu';
 import LoadingBackdrop from '../../loading/LoadingBackdrop';
@@ -24,7 +24,7 @@ import {
   fetchParentComments,
 } from '../../../services/comment';
 import useUpdateStore from '../../../hooks/use-updateStore';
-import { viewForumsActions } from '../../../store/reducers/viewed-forums-reducer';
+import { viewForumsActions } from '../../../store/reducers/viewed-forums-slice';
 
 export default function ForumPost() {
   const { pageId } = useParams();

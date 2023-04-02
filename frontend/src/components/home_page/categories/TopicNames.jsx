@@ -3,7 +3,7 @@ import './Categories.css';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
-import { forumActions } from '../../../store/reducers/forum-reducer';
+import { forumActions } from '../../../store/reducers/forum-slice';
 
 export default function TopicNames({ topicNames, topicLink }) {
   const dispatch = useDispatch();

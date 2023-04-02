@@ -1,17 +1,18 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { authSlice } from './auth-reducer';
-import { userSlice } from './user-reducer';
-import { forumsSlice } from './forums-reducer';
-import { forumSlice } from './forum-reducer';
-import { tagSlice } from './tags-reducer';
-import { commentSlice } from './comment-reducer';
-import { commentVotesSlice } from './comment-vote-reducer';
-import { viewedForumsSlice } from './viewed-forums-reducer';
-import { topicSlice } from './topic-reducer';
-import { topicVotesSlice } from './topic-votes-reducer';
-import { forumVotesSlice } from './forum-vote-reducer';
-import { quizSlice } from './quiz-reducer';
-import { wikiSlice } from './wiki-reducer';
+import { authSlice } from './auth-slice';
+import { userSlice } from './user-slice';
+import { forumsSlice } from './forums-slice';
+import { forumSlice } from './forum-slice';
+import { tagSlice } from './tags-slice';
+import { commentSlice } from './comment-slice';
+import { commentVotesSlice } from './comment-vote-slice';
+import { viewedForumsSlice } from './viewed-forums-slice';
+import { topicSlice } from './topic-slice';
+import { topicVotesSlice } from './topic-votes-slice';
+import { forumVotesSlice } from './forum-vote-slice';
+import { quizSlice } from './quiz-slice';
+import { wikiSlice } from './wiki-slice';
+import { noteSlice } from './note-slice';
 
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   forumVotes: forumVotesSlice.reducer,
   quiz: quizSlice.reducer,
   wiki: wikiSlice.reducer,
+  note: noteSlice.reducer,
 });
 
 export default rootReducer;

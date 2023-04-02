@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import OptionsMenu from '../../options-menu';
 import { deleteQuiz } from '../../../services/quiz';
-import { quizActions } from '../../../store/reducers/quiz-reducer';
+import { quizActions } from '../../../store/reducers/quiz-slice';
 
 export default function JoinQuiz({
   start,

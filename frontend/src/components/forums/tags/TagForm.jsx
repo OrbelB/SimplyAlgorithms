@@ -12,7 +12,7 @@ import { useState, useEffect } from 'react';
 import {
   selectAllTags,
   selectAllTagsById,
-} from '../../../store/reducers/tags-reducer';
+} from '../../../store/reducers/tags-slice';
 import { fetchTags } from '../../../services/tag';
 
 export default function TagForm({ currentTags, setCurrentTags }) {

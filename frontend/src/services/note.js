@@ -6,14 +6,14 @@ import { noteEndpoints } from './Api/note';
 export const listSharedToo = createAsyncThunk(
   'note/listSharedToo',
   async (pageParams) => {
-    const { userId, noteId, page, size, sortBy, accessToken } = pageParams;
+    const { userId, noteId, page, size, sortBy, jwtAccessToken } = pageParams;
     const response = await noteEndpoints.listSharedToo(
       userId,
       noteId,
       page,
       size,
       sortBy,
-      accessToken
+      jwtAccessToken
     );
     return response.data;
   }
@@ -22,14 +22,12 @@ export const listSharedToo = createAsyncThunk(
 export const listSharedNotes = createAsyncThunk(
   'note/listSharedNotes',
   async (pageParams) => {
-    const { page, size, sortBy, userId, accessToken } = pageParams;
-    const response = await noteEndpoints.listSharedNotes(
-      page,
-      size,
-      sortBy,
-      userId,
-      accessToken
-    );
+    const { page, size, sortBy, userId, jwtAccessToken } = pageParams;
+    const response = await noteEndpoints
+      .listSharedNotes(page, size, sortBy, userId, jwtAccessToken)
+      .catch((error) => {
+        return error;
+      });
     return response.data;
   }
 );
@@ -37,14 +35,12 @@ export const listSharedNotes = createAsyncThunk(
 export const listPublicNotes = createAsyncThunk(
   'note/listPublicNote',
   async (pageParams) => {
-    const { page, size, sortBy, userId, accessToken } = pageParams;
-    const response = await noteEndpoints.listPublicNotes(
-      page,
-      size,
-      sortBy,
-      userId,
-      accessToken
-    );
+    const { page, size, sortBy, userId, jwtAccessToken } = pageParams;
+    const response = await noteEndpoints
+      .listPublicNotes(page, size, sortBy, userId, jwtAccessToken)
+      .catch((error) => {
+        return error;
+      });
     return response.data;
   }
 );
@@ -77,23 +73,36 @@ export const getSharedNote = createAsyncThunk(
 
 export const getUserNote = createAsyncThunk('note/userNote', async (parm) => {
   const { userId, noteId, accessToken } = parm;
-  const res = await noteEndpoints
-    .getUserNote(userId, noteId, accessToken)
-    .catch((error) => {
-      return error;
-    });
+  const res = await noteEndpoints.getUserNote(userId, noteId, accessToken);
+
   return res.data;
 });
 
 export const createUserNote = createAsyncThunk('note/create', async (parm) => {
-  const { userNoteDTO, accessToken } = parm;
-  const res = await noteEndpoints
-    .createUserNote(userNoteDTO, accessToken)
-    .catch((error) => {
-      return error;
-    });
+  const { noteTitle, noteBody, userId, accessToken } = parm;
+  const res = await noteEndpoints.createUserNote(
+    noteTitle,
+    noteBody,
+    userId,
+    accessToken
+  );
   return res.data;
 });
+
+export const listUserNotes = createAsyncThunk(
+  'note/listUserNotes',
+  async (pageParams) => {
+    const { page, size, sortBy, userId, jwtAccessToken } = pageParams;
+    const response = await noteEndpoints.listUserNotes(
+      page,
+      size,
+      sortBy,
+      userId,
+      jwtAccessToken
+    );
+    return response.data;
+  }
+);
 
 export const savePublicNote = createAsyncThunk(
   'note/savePublicNote',
@@ -111,32 +120,34 @@ export const savePublicNote = createAsyncThunk(
 export const publicizeNote = createAsyncThunk(
   'note/publicizeNote',
   async (parm) => {
-    const { description, userNoteDTO, accessToken } = parm;
-    const res = await noteEndpoints
-      .publicizeNote(description, userNoteDTO, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const { description, userNoteDTO, jwtAccessToken } = parm;
+    const res = await noteEndpoints.publicizeNote(
+      description,
+      userNoteDTO,
+      jwtAccessToken
+    );
+
     return res.data;
   }
 );
 
 export const shareNote = createAsyncThunk('note/shareNote', async (parm) => {
-  const { noteShareDTO, userNoteDTO, accessToken } = parm;
-  const res = await noteEndpoints
-    .shareNote(noteShareDTO, userNoteDTO, accessToken)
-    .catch((error) => {
-      return error;
-    });
+  const { noteShareDTO, userNoteDTO, jwtAccessToken } = parm;
+  const res = await noteEndpoints.shareNote(
+    noteShareDTO,
+    userNoteDTO,
+    jwtAccessToken
+  );
+
   return res.data;
 });
 
 export const updateUserNote = createAsyncThunk(
   'note/update',
   async (parmesan) => {
-    const { userNoteDTO, accessToken } = parmesan;
+    const { userNoteDTO, jwtAccessToken } = parmesan;
     const res = await noteEndpoints
-      .updateUserNote(userNoteDTO, accessToken)
+      .updateUserNote(userNoteDTO, jwtAccessToken)
       .catch((error) => {
         return error;
       });
@@ -147,9 +158,9 @@ export const updateUserNote = createAsyncThunk(
 export const updateSharedUserNote = createAsyncThunk(
   'note/updateShareNote',
   async (par) => {
-    const { fullShareNoteDTO, accessToken } = par;
+    const { fullShareNoteDTO, jwtAccessToken } = par;
     const res = await noteEndpoints
-      .updateSharedUserNote(fullShareNoteDTO, accessToken)
+      .updateSharedUserNote(fullShareNoteDTO, jwtAccessToken)
       .catch((error) => {
         return error;
       });
@@ -160,9 +171,9 @@ export const updateSharedUserNote = createAsyncThunk(
 export const updateEditPermission = createAsyncThunk(
   'note/updateEditPermission',
   async (par) => {
-    const { userId, shareId, accessToken } = par;
+    const { userId, shareId, jwtAccessToken } = par;
     const res = await noteEndpoints
-      .updateEditPermission(userId, shareId, accessToken)
+      .updateEditPermission(userId, shareId, jwtAccessToken)
       .catch((error) => {
         return error;
       });
@@ -197,12 +208,9 @@ export const exportPublicNote = createAsyncThunk(
 );
 
 export const privateNote = createAsyncThunk('note/privateNote', async (par) => {
-  const { publicNoteDTO, accessToken } = par;
-  const res = await noteEndpoints
-    .privateNote(publicNoteDTO, accessToken)
-    .catch((error) => {
-      return error;
-    });
+  const { userNoteDTO, jwtAccessToken } = par;
+  const res = await noteEndpoints.privateNote(userNoteDTO, jwtAccessToken);
+
   return res.data;
 });
 
@@ -211,29 +219,25 @@ export const deletePublicNoteByAdmin = createAsyncThunk(
   'note/deletePublicNoteAdmin',
   async (par) => {
     const { publicNoteDTO, accessToken } = par;
-    const res = await noteEndpoints
-      .deletePublicNoteByAdmin(publicNoteDTO, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const res = await noteEndpoints.deletePublicNoteByAdmin(
+      publicNoteDTO,
+      accessToken
+    );
+
     return res.data;
   }
 );
 
 export const deleteNote = createAsyncThunk('note/delete', async (par) => {
-  const { userId, noteId, accessToken } = par;
-  const res = await publicizeNote
-    .deleteNote(userId, noteId, accessToken)
-    .catch((error) => {
-      return error;
-    });
+  const { userId, noteId, jwtAccessToken } = par;
+  const res = await noteEndpoints.deleteNote(userId, noteId, jwtAccessToken);
   return res.data;
 });
 
 export const unShareNote = createAsyncThunk('note/unShareNote', async (par) => {
-  const { shareId, accessToken } = par;
+  const { shareId, jwtAccessToken } = par;
   const res = await noteEndpoints
-    .unShareNote(shareId, accessToken)
+    .unShareNote(shareId, jwtAccessToken)
     .catch((error) => {
       return error;
     });

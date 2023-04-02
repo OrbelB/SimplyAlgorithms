@@ -1,6 +1,6 @@
 import { TextareaAutosize, Radio } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { quizActions } from '../../../../store/reducers/quiz-reducer';
+import { quizActions } from '../../../../store/reducers/quiz-slice';
 
 export default function QuizAnswersModule({
   answer,

@@ -267,21 +267,25 @@ export default function MainNavigation() {
                       <Typography textAlign="center">Login</Typography>
                     </MenuItem>
                   )}
-                  <Divider />
-                  <MenuItem
-                    onClick={() => {
-                      if (!isDrawerOpen) {
-                        setIsDrawerOpen(true);
-                      }
-                      handleCloseUserMenu();
-                    }}
-                  >
-                    <Typography textAlign="center">Notebook</Typography>
-                    <Notebook
-                      isDrawerOpen={isDrawerOpen}
-                      setIsDrawerOpen={setIsDrawerOpen}
-                    />
-                  </MenuItem>
+                  {isLoggedIn && (
+                    <>
+                      <Divider />
+                      <MenuItem
+                        onClick={() => {
+                          if (!isDrawerOpen) {
+                            setIsDrawerOpen(true);
+                          }
+                          handleCloseUserMenu();
+                        }}
+                      >
+                        <Typography textAlign="center">Notebook</Typography>
+                        <Notebook
+                          isDrawerOpen={isDrawerOpen}
+                          setIsDrawerOpen={setIsDrawerOpen}
+                        />
+                      </MenuItem>{' '}
+                    </>
+                  )}
                 </Menu>
               </Box>
             </Toolbar>

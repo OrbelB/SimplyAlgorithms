@@ -4,15 +4,16 @@ import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { authActions } from '../../store/reducers/auth-reducer';
-import { userActions } from '../../store/reducers/user-reducer';
-import { viewForumsActions } from '../../store/reducers/viewed-forums-reducer';
-import { forumVoteActions } from '../../store/reducers/forum-vote-reducer';
-import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
-import { forumActions } from '../../store/reducers/forum-reducer';
-import { quizActions } from '../../store/reducers/quiz-reducer';
-import { topicVoteActions } from '../../store/reducers/topic-votes-reducer';
-import { commentActions } from '../../store/reducers/comment-reducer';
+import { authActions } from '../../store/reducers/auth-slice';
+import { userActions } from '../../store/reducers/user-slice';
+import { viewForumsActions } from '../../store/reducers/viewed-forums-slice';
+import { forumVoteActions } from '../../store/reducers/forum-vote-slice';
+import { commentVoteActions } from '../../store/reducers/comment-vote-slice';
+import { forumActions } from '../../store/reducers/forum-slice';
+import { quizActions } from '../../store/reducers/quiz-slice';
+import { topicVoteActions } from '../../store/reducers/topic-votes-slice';
+import { commentActions } from '../../store/reducers/comment-slice';
+import { resetData } from '../../store/reducers/note-slice';
 
 export default function Logout({ handleLogout }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -35,6 +36,7 @@ export default function Logout({ handleLogout }) {
     dispatch(commentVoteActions.resetData());
     dispatch(forumActions.resetData());
     dispatch(commentActions.resetData());
+    dispatch(resetData());
     // remove refresh token cookie
     Cookies.remove('refresh-token');
     handleLogout(!showModal);

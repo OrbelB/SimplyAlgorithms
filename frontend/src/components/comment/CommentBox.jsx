@@ -4,9 +4,9 @@ import { Avatar } from '@mui/material';
 import Votes from './Votes';
 import AddEditComment from './AddEditComment';
 import OptionMenu from './OptionsMenu';
-import beautifyTime from '../../utilities/beautify-time';
+import { beautifyTime } from '../../utilities/beautify-time';
 import './CommentBox.css';
-import { selectAllCommentVotes } from '../../store/reducers/comment-vote-reducer';
+import { selectAllCommentVotes } from '../../store/reducers/comment-vote-slice';
 
 // displays the frame for any comment
 export default function CommentBox({

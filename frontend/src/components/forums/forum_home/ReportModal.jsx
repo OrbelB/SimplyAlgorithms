@@ -1,7 +1,7 @@
 import { Snackbar, Alert } from '@mui/material';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { forumActions } from '../../../store/reducers/forum-reducer';
+import { forumActions } from '../../../store/reducers/forum-slice';
 
 export default function ReportModal() {
   const { reportId } = useSelector((state) => state.forum);

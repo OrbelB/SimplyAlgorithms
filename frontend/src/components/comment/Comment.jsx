@@ -14,7 +14,7 @@ import {
 import {
   commentActions,
   selectChildrenCommentsByParentCommentId,
-} from '../../store/reducers/comment-reducer';
+} from '../../store/reducers/comment-slice';
 import AlertSnackBar from '../alert-messages-snackbar/AlertSnackBar';
 
 // main comment section; shows all the parent comments

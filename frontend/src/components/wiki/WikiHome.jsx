@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 import { deleteWiki } from '../../services/wiki';
-import { topicActions } from '../../store/reducers/topic-reducer';
-import { wikiActions } from '../../store/reducers/wiki-reducer';
+import { topicActions } from '../../store/reducers/topic-slice';
+import { wikiActions } from '../../store/reducers/wiki-slice';
 import OptionsMenu from '../options-menu';
 import './WikiHome.css';
 

@@ -6,10 +6,10 @@ import { TextareaAutosize, TextField } from '@mui/material';
 import UnderConstruction from '../../underconstruction/UnderConstruction';
 import useValidateInput from '../../../hooks/use-ValidateInput';
 
-import { forumActions } from '../../../store/reducers/forum-reducer';
+import { forumActions } from '../../../store/reducers/forum-slice';
 import { updateForum } from '../../../services/forum';
 import TagForm from '../tags/TagForm';
-import { tagsActions } from '../../../store/reducers/tags-reducer';
+import { tagsActions } from '../../../store/reducers/tags-slice';
 
 // // experiment
 // // eslint-disable-next-line import/order

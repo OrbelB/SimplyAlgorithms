@@ -5,7 +5,7 @@ import {
   removeSingleNotification,
   fetchUserDashboardInfo,
 } from '../../../../services/user';
-import { forumActions } from '../../../../store/reducers/forum-reducer';
+import { forumActions } from '../../../../store/reducers/forum-slice';
 import './NotificationsPreview.css';
 
 const NOTIFICATION_PREVIEWS = [

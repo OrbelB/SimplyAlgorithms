@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { TextareaAutosize } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import QuizAnswersModule from '../QuestionAnswersModule/QuizAnswersModule';
-import { quizActions } from '../../../../store/reducers/quiz-reducer';
+import { quizActions } from '../../../../store/reducers/quiz-slice';
 import imageToStringBase64 from '../../../../utilities/image-to-data-url';
 
 export default function QuizQuestionModule({

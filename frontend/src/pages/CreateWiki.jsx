@@ -20,20 +20,7 @@ import {
   fetchSubCategories,
 } from '../services/wiki';
 import AlertSnackBar from '../components/alert-messages-snackbar/AlertSnackBar';
-import { wikiActions } from '../store/reducers/wiki-reducer';
-
-const options = [
-  'inline',
-  'blockType',
-  'fontSize',
-  'fontFamily',
-  'textAlign',
-  'colorPicker',
-  'emoji',
-  'image',
-  'remove',
-  'history',
-];
+import { wikiActions } from '../store/reducers/wiki-slice';
 
 const initialContent = {
   blocks: [
@@ -252,7 +239,6 @@ export default function CreateWiki() {
             toolbar="editor-toolbar"
             wrapper="editor-wrapper"
             editor="editor-title"
-            editorOptions={options}
             value={wiki?.description ?? initialContent}
             setter={setContent}
           />

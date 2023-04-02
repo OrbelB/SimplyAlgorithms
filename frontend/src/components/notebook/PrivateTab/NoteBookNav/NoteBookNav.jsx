@@ -1,27 +1,59 @@
-/* eslint-disable no-else-return */
-/* eslint-disable no-nested-ternary */
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import NotebookAdd from '../NoteBookAdd/NoteBookAdd';
 import NotebookHome from '../NoteBookHome/NoteBookHome';
+import { listUserNotes } from '../../../../services/note';
 
 export default function NoteBookNav() {
-  function getNotesFromLS() {
-    const note = JSON.parse(localStorage.getItem('notes'));
-    if (note) {
-      return note;
-    } else {
-      return [];
+  const { jwtAccessToken, userId } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { privateNotes, status, sharedToo } = useSelector(
+    (state) => state.note
+  );
+
+  useEffect(() => {
+    if (status === 'idle' && jwtAccessToken && userId) {
+      dispatch(listUserNotes({ jwtAccessToken, userId, page: 0, size: 10 }));
     }
-  }
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [notes, setNotes] = useState(getNotesFromLS);
-  localStorage.setItem('notes', JSON.stringify(notes));
+  }, [dispatch, jwtAccessToken, userId, status]);
+
+  const handleAddNote = useCallback((e) => {
+    if (e) e.preventDefault();
+  }, []);
 
   const [NotePage, setNotePage] = useState(1);
 
+  const displayNotes = useMemo(() => {
+    if (NotePage === 1) {
+      return (
+        <NotebookHome
+          notes={privateNotes}
+          setNotes={handleAddNote}
+          sharedToo={sharedToo}
+        />
+      );
+    }
+    if (NotePage === 2) {
+      return (
+        <NotebookAdd
+          userId={userId}
+          setNotePage={setNotePage}
+          jwtAccessToken={jwtAccessToken}
+        />
+      );
+    }
+    return null;
+  }, [
+    NotePage,
+    privateNotes,
+    handleAddNote,
+    sharedToo,
+    userId,
+    jwtAccessToken,
+  ]);
+
   return (
-    <div>
+    <div className="container-fluid">
       <button
         type="button"
         className="btn btn-primary m-3"
@@ -48,21 +80,7 @@ export default function NoteBookNav() {
           />
         </svg>
       </button>
-
-      {NotePage === 1 ? (
-        <NotebookHome notes={notes} setNotes={setNotes} />
-      ) : NotePage === 2 ? (
-        <NotebookAdd
-          title={title}
-          setTitle={setTitle}
-          description={description}
-          setDescription={setDescription}
-          notes={notes}
-          setNotes={setNotes}
-        />
-      ) : (
-        ''
-      )}
+      {displayNotes}
     </div>
   );
 }

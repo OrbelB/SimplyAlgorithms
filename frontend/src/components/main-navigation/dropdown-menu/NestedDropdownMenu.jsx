@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { topicActions } from '../../../store/reducers/topic-reducer';
-import { commentActions } from '../../../store/reducers/comment-reducer';
+import { topicActions } from '../../../store/reducers/topic-slice';
+import { commentActions } from '../../../store/reducers/comment-slice';
 
 export default function NestedDropdownMenu({ title, links }) {
   const dispatch = useDispatch();

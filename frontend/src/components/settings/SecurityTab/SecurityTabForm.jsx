@@ -1,8 +1,9 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updatePassword } from '../../../services/user';
-import { authActions } from '../../../store/reducers/auth-reducer';
+import { authActions } from '../../../store/reducers/auth-slice';
+import { userActions } from '../../../store/reducers/user-slice';
 
 export default function SecurityTabForm() {
   const dispatch = useDispatch();
@@ -23,18 +24,23 @@ export default function SecurityTabForm() {
     oldPassword: '',
   });
 
-  const submitForm = () => {
-    dispatch(
-      updatePassword({
-        updatedPassword: {
-          userId: authUserId,
-          newPassword: input.password,
-          oldPassword: input.oldPassword,
-        },
-        accessToken: jwtAccessToken,
-      })
-    );
-    dispatch(authActions.resetData());
+  const submitForm = async () => {
+    try {
+      await dispatch(
+        updatePassword({
+          updatedPassword: {
+            userId: authUserId,
+            newPassword: input.password,
+            oldPassword: input.oldPassword,
+          },
+          accessToken: jwtAccessToken,
+        })
+      ).unwrap();
+    } finally {
+      Cookies.remove('refresh-token');
+      dispatch(userActions.onUserLogout());
+      dispatch(authActions.resetData());
+    }
   };
 
   const validateInput = (e) => {
@@ -85,16 +91,20 @@ export default function SecurityTabForm() {
     <div className="SecurityTab">
       <form>
         <div className="form-group">
-          <label className="d-block h5">Change Password</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter your old password"
-            name="oldPassword"
-            value={input.oldPassword}
-            onChange={onInputChange}
-            onBlur={validateInput}
-          />
+          <label className="d-block h5" htmlFor="password-change">
+            Change Password
+            <input
+              type="password"
+              id="password-change"
+              className="form-control"
+              placeholder="Enter your old password..."
+              name="oldPassword"
+              value={input.oldPassword}
+              onChange={onInputChange}
+              onBlur={validateInput}
+            />
+          </label>
+
           <input
             type="password"
             name="password"

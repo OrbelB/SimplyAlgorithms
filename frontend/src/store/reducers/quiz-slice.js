@@ -137,7 +137,6 @@ export const quizSlice = createSlice({
           answerId,
           isCorrect: false,
         });
-      // console.info(temp);
     },
     // what ever you are passing into the action their name should match
     updateQuestionProblem: (state, action) => {

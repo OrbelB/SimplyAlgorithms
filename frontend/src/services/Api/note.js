@@ -8,42 +8,50 @@ export const noteEndpoints = {
     get(`${PUBLIC_ENDPOINT_ROUTE}/listSharedToo`, {
       params: { userId, noteId, page, size, sortBy },
       headers: {
-        Authorization: `Bearer ${jwtAccessToken}`,
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   listSharedNotes: (page, size, sortBy, userId, jwtAccessToken) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/listSharedNotes`, {
       params: { page, size, sortBy, userId },
       headers: {
-        Authorization: `Bearer ${jwtAccessToken}`,
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   listPublicNotes: (page, size, sortBy, userId, jwtAccessToken) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/listPublicNotes`, {
       params: { page, size, sortBy, userId },
       headers: {
-        Authorization: `Bearer ${jwtAccessToken}`,
+        Authorization: 'Bearer ' + jwtAccessToken,
+      },
+    }),
+  listUserNotes: (page, size, sortBy, userId, jwtAccessToken) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/listUserNotes`, {
+      params: { page, size, sortBy, userId },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   getPublicNotes: (noteId, jwtAccessToken) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/getPublicNotes`, {
       params: { noteId },
       headers: {
-        Authorization: `Bearer ${jwtAccessToken}`,
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   getShareNotePage: (userId, noteId, shareId, jwtAccessToken) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/getShareNotePage`, {
       params: { userId, noteId, shareId },
       headers: {
-        Authorization: `Bearer ${jwtAccessToken}`,
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   getUserNote: (userId, noteId, jwtAccessToken) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/userNotes`, {
       params: { userId, noteId },
       headers: {
-        Authorization: `Bearer ${jwtAccessToken}`,
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   //  CANNOT MAKE NOTE PUBLIC WHEN CREATING.
@@ -51,18 +59,20 @@ export const noteEndpoints = {
   // END OF GET API
   //   START OF POST API
 
-  createUserNote: (userNoteDTO, jwtAccessToken) =>
+  createUserNote: (noteTitle, noteBody, userId, jwtAccessToken) =>
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/create`, // DONT NEED ANYTHING ELSE, THE DATES ARE SET IN BACKEND
       {
-        noteTitle: userNoteDTO.noteTitle,
-        noteBody: userNoteDTO.noteBody,
-        createdBy: userNoteDTO.createdBy,
+        noteTitle,
+        noteBody,
+        createdBy: {
+          userId,
+        },
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -71,12 +81,12 @@ export const noteEndpoints = {
       params: { userId, noteId },
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwtAccessToken}`,
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   publicizeNote: (description, userNoteDTO, jwtAccessToken) =>
     post(
-      `${jwtAccessToken}/publicizeNote`, // dont need anything else.
+      `${PUBLIC_ENDPOINT_ROUTE}/publicizeNote`, // dont need anything else.
       {
         description,
         userNoteDTO, // for userNoteDTO only need the noteId
@@ -84,7 +94,7 @@ export const noteEndpoints = {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -98,7 +108,7 @@ export const noteEndpoints = {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -116,12 +126,15 @@ export const noteEndpoints = {
         noteId: userNoteDTO.noteId,
         noteTitle: userNoteDTO.noteTitle,
         noteBody: userNoteDTO.noteBody,
+        createdBy: {
+          userId: userNoteDTO.createdBy.userId,
+        },
         // dont need createdBy
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -146,15 +159,16 @@ export const noteEndpoints = {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
   updateEditPermission: (userId, shareId, jwtAccessToken) =>
-    put(`${PUBLIC_ENDPOINT_ROUTE}/updateEditPermission`, {
+    put(`${PUBLIC_ENDPOINT_ROUTE}/updateEditPermission`, null, {
       params: { userId, shareId },
       headers: {
-        Authorization: `Bearer ${jwtAccessToken}`,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   updateExpireDateOnSharedNotes: (noteShareDTO, jwtAccessToken) =>
@@ -167,7 +181,7 @@ export const noteEndpoints = {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -185,7 +199,7 @@ export const noteEndpoints = {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -193,18 +207,16 @@ export const noteEndpoints = {
   // END OF PUT API
   // START OF DELETE (DESTROY) API
 
-  privateNote: (publicNoteDTO, jwtAccessToken) =>
-    destroy(
+  privateNote: (userNoteDTO, jwtAccessToken) =>
+    put(
       `${PUBLIC_ENDPOINT_ROUTE}/privateNote`,
       {
-        userNoteDTO: {
-          noteId: publicNoteDTO?.userNoteDTO.noteId,
-        },
+        userNoteDTO,
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -219,7 +231,7 @@ export const noteEndpoints = {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
+          Authorization: 'Bearer ' + jwtAccessToken,
         },
       }
     ),
@@ -227,20 +239,15 @@ export const noteEndpoints = {
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
       params: { userId, noteId },
       headers: {
-        Authorization: `Bearer ${jwtAccessToken}`,
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   unShareNote: (shareId, jwtAccessToken) =>
-    destroy(
-      `${PUBLIC_ENDPOINT_ROUTE}/UnShareNote`,
-      {
-        shareId,
+    destroy(`${PUBLIC_ENDPOINT_ROUTE}/UnShareNote`, {
+      params: { shareId },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtAccessToken}`,
-        },
-      }
-    ),
+    }),
 };

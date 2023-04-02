@@ -20,14 +20,14 @@ import {
 } from '../../services/topic';
 import { fetchWikiSubCategoriesNames } from '../../services/wiki';
 import TransferList from '../transferlist';
-import { topicActions } from '../../store/reducers/topic-reducer';
+import { topicActions } from '../../store/reducers/topic-slice';
 
 const content = {
   blocks: [
     {
       key: '637gr',
       text: '',
-      type: 'unstyled',
+      type: '',
       depth: 0,
       inlineStyleRanges: [],
       entityRanges: [],
@@ -37,19 +37,19 @@ const content = {
   entityMap: {},
 };
 
-const options = [
-  'inline',
-  'blockType',
-  'fontSize',
-  'fontFamily',
-  'textAlign',
-  'colorPicker',
-  'link',
-  'emoji',
-  'image',
-  'remove',
-  'history',
-];
+// const options = [
+//   'inline',
+//   'blockType',
+//   'fontSize',
+//   'fontFamily',
+//   'textAlign',
+//   'colorPicker',
+//   'link',
+//   'emoji',
+//   'image',
+//   'remove',
+//   'history',
+// ];
 
 function getIds(searchBar, names, prop, title) {
   return searchBar.pages
@@ -291,6 +291,10 @@ export default function CreateTopic() {
     helperText = 'Enter a title for your topic page';
   }
 
+  const handleTextEditorChange = (e) => {
+    setProcess(e);
+  };
+
   return (
     <div className="createtopic">
       <br />
@@ -307,7 +311,7 @@ export default function CreateTopic() {
           id="outlined-basic"
           onChange={handleTitleChange}
           label="Title"
-          className="label"
+          className="w-50"
           variant="outlined"
           margin="dense"
           required
@@ -383,16 +387,17 @@ export default function CreateTopic() {
         <br />
         <h2>Algorithm Steps, Process, Running Time/Space Complexity</h2>
         <h5>Please manually include section titles</h5>
-
-        <TextEditor
-          key={topic?.title}
-          toolbar="editor-toolbar"
-          wrapper="editor-wrapper"
-          editor="editor-title"
-          value={topic.pageDescription ?? process}
-          editorOptions={options}
-          setter={setProcess}
-        />
+        <div className="form-group m-3">
+          <TextEditor
+            key={topic?.title}
+            className="form-control"
+            toolbar="editor-toolbar"
+            wrapper="editor-wrapper"
+            editor="editor-title"
+            value={topic.pageDescription ?? process}
+            setter={handleTextEditorChange}
+          />
+        </div>
         <br />
         <br />
         <h2>Further References - Links</h2>

@@ -91,3 +91,21 @@ body {
 i {
     font-style: normal;
 }
+
+.editor-name {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .editor-wrapper {
+    height: auto;
+    border: 1px solid black;
+  }
+  
+  .editor-toolbar {
+    background-color: #9df7ff;
+  }
+  
+  .json-display {
+    width: 50vh;
+  }

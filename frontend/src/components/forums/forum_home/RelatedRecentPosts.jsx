@@ -8,13 +8,13 @@ import debounce from 'lodash.debounce';
 import {
   selectAllViewedForums,
   viewForumsActions,
-} from '../../../store/reducers/viewed-forums-reducer';
+} from '../../../store/reducers/viewed-forums-slice';
 import { fetchUserForumsViewed } from '../../../services/forum';
-import { forumActions } from '../../../store/reducers/forum-reducer';
+import { forumActions } from '../../../store/reducers/forum-slice';
 import useUpdateStore from '../../../hooks/use-updateStore';
-import { forumVoteActions } from '../../../store/reducers/forum-vote-reducer';
-import { commentActions } from '../../../store/reducers/comment-reducer';
-import { commentVoteActions } from '../../../store/reducers/comment-vote-reducer';
+import { forumVoteActions } from '../../../store/reducers/forum-vote-slice';
+import { commentActions } from '../../../store/reducers/comment-slice';
+import { commentVoteActions } from '../../../store/reducers/comment-vote-slice';
 
 export default function RelatedRecentPosts() {
   const dispatch = useDispatch();

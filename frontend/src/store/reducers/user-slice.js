@@ -9,6 +9,7 @@ import {
   updatePreferences,
   fetchUserDashboardInfo,
   removeSingleNotification,
+  checkAvailability,
 } from '../../services/user';
 
 const initialState = {
@@ -27,6 +28,8 @@ const initialState = {
   error: '',
   userPreferences: {},
   dashboardInfo: {},
+  nameAvailable: undefined,
+  emailAvailable: undefined,
 };
 
 export const userSlice = createSlice({
@@ -57,6 +60,8 @@ export const userSlice = createSlice({
       state.userPreferences = '';
       state.dashboardInfo = {};
       state.userPreferences = {};
+      state.nameAvailable = undefined;
+      state.emailAvailable = undefined;
     },
   },
   extraReducers(builder) {
@@ -199,6 +204,21 @@ export const userSlice = createSlice({
       .addCase(fetchUserDashboardInfo.rejected, (state, action) => {
         state.error = action.payload.message;
         state.status = 'failed';
+      })
+      .addCase(checkAvailability.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(checkAvailability.fulfilled, (state, action) => {
+        if (!action.payload) return;
+        state.status = 'success';
+        const { username, email } = action.payload;
+        if (username !== undefined || username !== undefined)
+          state.nameAvailable = username;
+        if (email !== undefined || email !== null) state.emailAvailable = email;
+      })
+      .addCase(checkAvailability.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
       });
   },
 });

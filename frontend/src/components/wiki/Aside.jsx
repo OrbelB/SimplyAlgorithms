@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { wikiActions } from '../../store/reducers/wiki-reducer';
+import { wikiActions } from '../../store/reducers/wiki-slice';
 
 export default function Aside({ links = {}, disabled = false, path = 'wiki' }) {
   const dispatch = useDispatch();

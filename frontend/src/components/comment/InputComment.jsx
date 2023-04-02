@@ -55,10 +55,10 @@ export default function InputComment({ pageId }) {
           </div>
           <div className="col-auto col-md-9 col-sm-auto mt-4">
             <TextareaAutosize
-              className="form-control p-4 p-sm-auto mb-4 w-100"
+              className="form-control pt-3 mb-4 w-100"
               placeholder="add a comment..."
               required
-              rowsMin={2}
+              minRows={2}
               value={text}
               onChange={handleInputText}
             />

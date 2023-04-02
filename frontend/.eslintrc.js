@@ -21,5 +21,6 @@ module.exports = {
     'no-param-reassign': 0,
     'no-return-assign': 0,
     'no-void': 0,
+    'prefer-template': 0,
   },
 };

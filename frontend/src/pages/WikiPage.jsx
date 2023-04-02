@@ -6,7 +6,7 @@ import parse from 'html-react-parser';
 import WikiHome from '../components/wiki/WikiHome';
 import Aside from '../components/wiki/Aside';
 import { fetchSingleWiki, getNameAvailability } from '../services/wiki';
-import { wikiActions } from '../store/reducers/wiki-reducer';
+import { wikiActions } from '../store/reducers/wiki-slice';
 
 export default function WikiPage() {
   const { wikiName } = useParams();

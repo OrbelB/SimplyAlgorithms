@@ -10,11 +10,11 @@ import {
 } from '@mui/material';
 import Report from '../report/Report';
 import './PostPreview.css';
-import { forumActions } from '../../../store/reducers/forum-reducer';
-import { forumVoteActions } from '../../../store/reducers/forum-vote-reducer';
-import { commentVoteActions } from '../../../store/reducers/comment-vote-reducer';
-import { commentActions } from '../../../store/reducers/comment-reducer';
-import { forumsActions } from '../../../store/reducers/forums-reducer';
+import { forumActions } from '../../../store/reducers/forum-slice';
+import { forumVoteActions } from '../../../store/reducers/forum-vote-slice';
+import { commentVoteActions } from '../../../store/reducers/comment-vote-slice';
+import { commentActions } from '../../../store/reducers/comment-slice';
+import { forumsActions } from '../../../store/reducers/forums-slice';
 
 export default function ForumQuickView({
   pageId,

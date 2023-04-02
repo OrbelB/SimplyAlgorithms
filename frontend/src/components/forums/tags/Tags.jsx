@@ -2,9 +2,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { Input, Button } from '@mui/material';
 
-import { selectAllTags } from '../../../store/reducers/tags-reducer';
+import { selectAllTags } from '../../../store/reducers/tags-slice';
 import classes from './Tags.module.css';
-import { forumsActions } from '../../../store/reducers/forums-reducer';
+import { forumsActions } from '../../../store/reducers/forums-slice';
 import { fetchTags } from '../../../services/tag';
 import useSearchBar from '../../../hooks/use-searchBar';
 import { fetchForumList } from '../../../services/forum';

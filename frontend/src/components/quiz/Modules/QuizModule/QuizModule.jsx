@@ -5,7 +5,7 @@ import { TextareaAutosize, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
-import { quizActions } from '../../../../store/reducers/quiz-reducer';
+import { quizActions } from '../../../../store/reducers/quiz-slice';
 import TagForm from '../../../forums/tags/TagForm';
 // import { tagsActions } from '../../../store/reducers/tags-reducer';
 

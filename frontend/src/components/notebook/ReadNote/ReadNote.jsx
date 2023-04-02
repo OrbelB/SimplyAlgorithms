@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/self-closing-comp */
 import {
   Box,
@@ -18,62 +19,71 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import ShareIcon from '@mui/icons-material/Share';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import parse from 'html-react-parser';
+import draftToHtml from 'draftjs-to-html';
+import { timeToExpire } from '../../../utilities/beautify-time';
+import TextEditor from '../../text-editor/TextEditor';
 
-function createData(user, permissions) {
-  return { user, permissions };
-}
-const rows = [
-  createData('Frozeyoghurt', 'Edit'),
-  createData('Something', 'Read'),
-  createData('Something#2', 'Read'),
-];
+// import ShareIcon from '@mui/icons-material/Share';
+// import DeleteIcon from '@mui/icons-material/Delete';
+// import AccountCircle from '@mui/icons-material/AccountCircle';
+
+// function createData(user, permissions) {
+//   return { user, permissions };
+// }
+// const rows = [
+//   createData('Frozeyoghurt', 'Edit'),
+//   createData('Something', 'Read'),
+//   createData('Something#2', 'Read'),
+// ];
 export default function ReadNote({ note, onGoBack }) {
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 500,
-    bgcolor: 'background.paper',
-    border: '1px solid black',
-    boxShadow: 24,
-    p: 4,
-  };
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const permissions = [
-    {
-      value: 'Read',
-      label: 'Read',
-    },
-    {
-      value: 'Edit',
-      label: 'Edit',
-    },
-  ];
-  const handleRemoveClick = (user) => {
-    // Implement remove logic here
-    console.log(`Remove user ${user}`);
-  };
-  const handlePermissionChange = (user, event) => {
-    // Implement permission change logic here
-    console.log(`Change permission for user ${user} to ${event.target.value}`);
-  };
+  const [body, setBody] = useState(note?.userNoteDTO?.noteBody);
+  const [title, setTitle] = useState(note?.userNoteDTO?.noteTitle ?? '');
+  // const style = {
+  //   position: 'absolute',
+  //   top: '50%',
+  //   left: '50%',
+  //   transform: 'translate(-50%, -50%)',
+  //   width: 500,
+  //   bgcolor: 'background.paper',
+  //   border: '1px solid black',
+  //   boxShadow: 24,
+  //   p: 4,
+  // };
+  // const [open, setOpen] = useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
+  // const permissions = [
+  //   {
+  //     value: 'Read',
+  //     label: 'Read',
+  //   },
+  //   {
+  //     value: 'Edit',
+  //     label: 'Edit',
+  //   },
+  // ];
+  // const handleRemoveClick = (user) => {
+  //   // Implement remove logic here
+  //   console.log(`Remove user ${user}`);
+  // };
+  // const handlePermissionChange = (user, event) => {
+  //   // Implement permission change logic here
+  //   console.log(`Change permission for user ${user} to ${event.target.value}`);
+  // };
   return (
     <div className="card m-3 mb-4">
       <div className="card-header">
-        Expires: <strong>{note.expires} days</strong> &emsp; Permissions:{' '}
-        <strong>{note.permissions}</strong>
+        Expires:{' '}
+        <strong>{timeToExpire(note?.noteShareDTO?.expireDate)} days</strong>{' '}
+        &emsp; Permissions:{' '}
+        <strong>{note?.noteShareDTO?.canEdit ? 'Edit' : 'Read'}</strong>
       </div>
       <div className="card-body">
-        <h4 className="card-title m-2">{note.title}</h4>
-        <p className="card-text m-2">{note.description}</p>
+        <h4 className="card-title m-2">{title}</h4>
+        <div className="card-text m-2">{parse(draftToHtml(body))}</div>
         <div className="d-flex m-0 mb-0">
-          <Button
+          {/* <Button
             variant="contained"
             className="m-3"
             startIcon={<ShareIcon />}
@@ -175,7 +185,7 @@ export default function ReadNote({ note, onGoBack }) {
                 </Table>
               </TableContainer>
             </Box>
-          </Modal>
+          </Modal> */}
           <Button onClick={onGoBack}>Go Back</Button>
         </div>
       </div>

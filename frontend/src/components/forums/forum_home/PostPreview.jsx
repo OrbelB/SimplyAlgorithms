@@ -1,11 +1,11 @@
 import './PostPreview.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMemo } from 'react';
-import { forumActions } from '../../../store/reducers/forum-reducer';
+import { forumActions } from '../../../store/reducers/forum-slice';
 import { fetchForumList } from '../../../services/forum';
 import ForumQuickView from './ForumQuickView';
 import AlertSnackBar from '../../alert-messages-snackbar/AlertSnackBar';
-import { forumsActions } from '../../../store/reducers/forums-reducer';
+import { forumsActions } from '../../../store/reducers/forums-slice';
 import usePaginationWithInfiniteScroll from '../../../hooks/use-pagination';
 
 export default function PostPreview({ forums }) {

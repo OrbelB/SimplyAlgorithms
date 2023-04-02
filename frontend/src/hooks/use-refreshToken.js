@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser, fetchUserDashboardInfo } from '../services/user';
 import { refreshAccessToken } from '../services/auth';
-import { authActions } from '../store/reducers/auth-reducer';
+import { authActions } from '../store/reducers/auth-slice';
 import image from '../assets/person-fill.png';
 
 export default function useRefreshToken() {

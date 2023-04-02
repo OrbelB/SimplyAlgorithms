@@ -1,7 +1,7 @@
 // import { useCallback, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { wikiActions } from '../../../store/reducers/wiki-reducer';
+import { wikiActions } from '../../../store/reducers/wiki-slice';
 import './Categories.css';
 
 export default function Categories() {

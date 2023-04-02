@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { deleteForum } from '../../../services/forum';
-import { forumsActions } from '../../../store/reducers/forums-reducer';
+import { forumsActions } from '../../../store/reducers/forums-slice';
 import useJwtPermssionExists from '../../../hooks/use-jwtPermission';
 
 export default function ForumOptionMenu({ pageId, userId }) {

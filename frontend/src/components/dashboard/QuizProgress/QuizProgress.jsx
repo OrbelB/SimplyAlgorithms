@@ -8,7 +8,7 @@ import { Button } from '@mui/material';
 import { currentUserInfo } from '../../../pages/UserProfilePage';
 import QuizDB from './QuizDB/QuizDB';
 import useJwtPermssionExists from '../../../hooks/use-jwtPermission';
-import { quizActions } from '../../../store/reducers/quiz-reducer';
+import { quizActions } from '../../../store/reducers/quiz-slice';
 
 const linechar = [
   {

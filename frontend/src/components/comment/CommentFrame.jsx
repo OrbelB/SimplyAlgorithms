@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import InputComment from './InputComment';
 import Comment from './Comment';
-import { commentActions } from '../../store/reducers/comment-reducer';
+import { commentActions } from '../../store/reducers/comment-slice';
 import { fetchParentComments } from '../../services/comment';
 import usePaginationWithInfiniteScroll from '../../hooks/use-pagination';
 

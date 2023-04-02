@@ -7,8 +7,8 @@ import {
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { forumActions } from '../../../store/reducers/forum-reducer';
-import { selectAllViewedForums } from '../../../store/reducers/viewed-forums-reducer';
+import { forumActions } from '../../../store/reducers/forum-slice';
+import { selectAllViewedForums } from '../../../store/reducers/viewed-forums-slice';
 
 export default function RecentlyViewedPosts() {
   const dispatch = useDispatch();

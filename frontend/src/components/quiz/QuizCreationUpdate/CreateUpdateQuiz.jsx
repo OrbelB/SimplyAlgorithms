@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import QuizQuestionModule from '../Modules/QuizQuestionsModule/QuizQuestionsModule';
-import { quizActions } from '../../../store/reducers/quiz-reducer';
+import { quizActions } from '../../../store/reducers/quiz-slice';
 import QuizModule from '../Modules/QuizModule/QuizModule';
 import {
   createQuiz,

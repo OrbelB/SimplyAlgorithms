@@ -21,6 +21,16 @@ export const userEndpoints = {
         userId,
       },
     }),
+  available: (username, email) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/available`, {
+      params: {
+        username,
+        email,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
   update: (updatedUser, accessToken) =>
     put(
       `${PUBLIC_ENDPOINT_ROUTE}/update`,

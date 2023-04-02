@@ -45,10 +45,10 @@ export default function AddEditComment({
       </div>
       <div className="col-auto col-md-10 m-0 p-0">
         <TextareaAutosize
-          className="form-control p-4 p-sm-auto mb-4"
+          className="form-control p-4 mb-3 p-sm-auto"
           placeholder="add a reply..."
           required
-          rowsMin={1}
+          minRows={1}
           value={checkComment}
           onChange={handleInputChildCommentUpdate}
         />

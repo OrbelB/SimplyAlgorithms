@@ -16,12 +16,12 @@ import CommentFrame from '../components/comment/CommentFrame';
 import ForumPreview from '../components/forums-preview/ForumPreview';
 import Detail from '../components/topic_page/detail/Detail';
 import CodeSnippet from '../components/topic_page/code-snippet/CodeSnippet';
-import { commentActions } from '../store/reducers/comment-reducer';
+import { commentActions } from '../store/reducers/comment-slice';
 import {
   topicVoteActions,
   selectByTopicVoteId,
-} from '../store/reducers/topic-votes-reducer';
-import { commentVoteActions } from '../store/reducers/comment-vote-reducer';
+} from '../store/reducers/topic-votes-slice';
+import { commentVoteActions } from '../store/reducers/comment-vote-slice';
 
 export default function TopicPage() {
   const { topicName } = useParams();

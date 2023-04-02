@@ -10,7 +10,7 @@ import Arrays from './pages/t_pages/Arrays';
 import ScrollToTop from './hooks/ScrollToTop';
 import useRefreshToken from './hooks/use-refreshToken';
 import Layout from './components/layout/Layout';
-import { wikiActions } from './store/reducers/wiki-reducer';
+import { wikiActions } from './store/reducers/wiki-slice';
 import LoadingBackdrop from './components/loading/LoadingBackdrop';
 
 const AccountTab = lazy(() =>

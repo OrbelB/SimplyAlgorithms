@@ -10,10 +10,10 @@ import CodeSnippet from '../../components/topic_page_samples/bubble_sort/code-sn
 // import TopicQuiz from "../../components/topic_page_samples/bubble_sort/topic_quiz/TopicQuiz"
 import CommentFrame from '../../components/comment/CommentFrame';
 import { fetchSingleTopic } from '../../services/topic';
-import { forumActions } from '../../store/reducers/forum-reducer';
+import { forumActions } from '../../store/reducers/forum-slice';
 import { listVotesByPage } from '../../services/comment';
-import { commentActions } from '../../store/reducers/comment-reducer';
-import { commentVoteActions } from '../../store/reducers/comment-vote-reducer';
+import { commentActions } from '../../store/reducers/comment-slice';
+import { commentVoteActions } from '../../store/reducers/comment-vote-slice';
 import NavbarTopic from '../../components/navbarFortopic/NavbarTopic';
 import Vote from '../../components/vote_comp/Vote';
 import ForumPreview from '../../components/forums-preview/ForumPreview';

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
@@ -19,60 +20,94 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import ShareIcon from '@mui/icons-material/Share';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { timeToExpire } from '../../../utilities/beautify-time';
+import TextEditor from '../../text-editor/TextEditor';
+import { updateSharedUserNote } from '../../../services/note';
 // import TextEditor from '../../../text-editor/TextEditor';
 
-function createData(user, permissions) {
-  return { user, permissions };
-}
-const rows = [
-  createData('Frozeyoghurt', 'Edit'),
-  createData('Something', 'Read'),
-  createData('Something#2', 'Read'),
-];
+// function createData(user, permissions) {
+//   return { user, permissions };
+// }
+// const rows = [
+//   createData('Frozeyoghurt', 'Edit'),
+//   createData('Something', 'Read'),
+//   createData('Something#2', 'Read'),
+// ];
 export default function EditNote({ note, onGoBack }) {
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 500,
-    bgcolor: 'background.paper',
-    border: '1px solid black',
-    boxShadow: 24,
-    p: 4,
+  const dispatch = useDispatch();
+  const { jwtAccessToken } = useSelector((state) => state.auth);
+  const [body, setBody] = useState(note?.userNoteDTO?.noteBody);
+  const [title, setTitle] = useState(note?.userNoteDTO?.noteTitle ?? '');
+  const inputHandlerDescription = (e) => {
+    setBody(e);
   };
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const permissions = [
-    {
-      value: 'Read',
-      label: 'Read',
-    },
-    {
-      value: 'Edit',
-      label: 'Edit',
-    },
-  ];
-  const handleRemoveClick = (user) => {
-    // Implement remove logic here
-    console.log(`Remove user ${user}`);
-  };
-  const handlePermissionChange = (user, event) => {
-    // Implement permission change logic here
-    console.log(`Change permission for user ${user} to ${event.target.value}`);
+  // const style = {
+  //   position: 'absolute',
+  //   top: '50%',
+  //   left: '50%',
+  //   transform: 'translate(-50%, -50%)',
+  //   width: 500,
+  //   bgcolor: 'background.paper',
+  //   border: '1px solid black',
+  //   boxShadow: 24,
+  //   p: 4,
+  // };
+  // const [open, setOpen] = useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
+  // const permissions = [
+  //   {
+  //     value: 'Read',
+  //     label: 'Read',
+  //   },
+  //   {
+  //     value: 'Edit',
+  //     label: 'Edit',
+  //   },
+  // ];
+  // const handleRemoveClick = (user) => {
+  //   // Implement remove logic here
+  //   console.log(`Remove user ${user}`);
+  // };
+  // const handlePermissionChange = (user, event) => {
+  //   // Implement permission change logic here
+  //   console.log(`Change permission for user ${user} to ${event.target.value}`);
+  // };
+
+  const handleUpdateSharedNote = (e) => {
+    e.preventDefault();
+    // Implement update logic here
+    const fullShareNoteDTO = {
+      noteShareDTO: {
+        ...note.noteShareDTO,
+      },
+      userNoteDTO: {
+        ...note.userNoteDTO,
+        noteBody: body,
+        noteTitle: title,
+      },
+    };
+
+    try {
+      dispatch(updateSharedUserNote({ fullShareNoteDTO, jwtAccessToken }));
+    } finally {
+      onGoBack();
+    }
   };
   return (
     <div className="card m-3 mb-4">
       <div className="card-header">
-        Expires: <strong>{note.expires} days</strong> &emsp; Permissions:{' '}
-        <strong>{note.permissions}</strong>
+        Expires:{' '}
+        <strong>{timeToExpire(note?.noteShareDTO?.expireDate)} days</strong>{' '}
+        &emsp; Permissions:{' '}
+        <strong>{note?.noteShareDTO?.canEdit ? 'Edit' : 'Read'}</strong>
       </div>
       <div className="card-body">
-        <form>
+        <form onSubmit={handleUpdateSharedNote}>
           <div className="form-group m-3">
             <label htmlFor="notetitle">Title: </label>
             <input
@@ -80,10 +115,11 @@ export default function EditNote({ note, onGoBack }) {
               className="form-control"
               id="edittitle"
               placeholder="Enter title"
-              value={note.title}
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
             />
           </div>
-          <Button
+          {/* <Button
             variant="contained"
             className="m-3"
             startIcon={<ShareIcon />}
@@ -185,28 +221,34 @@ export default function EditNote({ note, onGoBack }) {
                 </Table>
               </TableContainer>
             </Box>
-          </Modal>
+          </Modal> */}
           <div className="form-group m-3">
             <label htmlFor="notedescription">Description: </label>
-            <textarea
+            <TextEditor
               type="text"
               className="form-control"
               toolbar="editor-toolbar"
               wrapper="editor-wrapper"
               editor="editor-title"
-              id="editdescription"
-              placeholder="Enter description"
-              rows="8"
+              id="note-description"
+              value={body}
+              setter={inputHandlerDescription}
+            />
+          </div>
+          <div className="d-flex justify-content-between m-2 mb-0">
+            <Button className="m-1" onClick={onGoBack} variant="contained">
+              Go Back
+            </Button>
+            <Button
+              className="m-1"
+              variant="contained"
+              color="success"
+              type="submit"
             >
-              {note.description}
-            </textarea>
+              Save
+            </Button>
           </div>
         </form>
-        <div className="d-flex m-2 mb-0">
-          <Button className="m-1" onClick={onGoBack}>
-            Go Back
-          </Button>
-        </div>
       </div>
     </div>
   );

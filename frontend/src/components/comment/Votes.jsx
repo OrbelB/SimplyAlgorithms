@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { voteComment, deleteCommentVote } from '../../services/comment';
 import styles from './Upvotes.module.css';
-import { selectAllCommentVotes } from '../../store/reducers/comment-vote-reducer';
+import { selectAllCommentVotes } from '../../store/reducers/comment-vote-slice';
 import AlertSnackBar from '../alert-messages-snackbar/AlertSnackBar';
 
 export default function Votes({ commentId, upVotes, downVotes }) {
