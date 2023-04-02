@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class UserNoteDTO {
     //cannot set / update from front end
     Timestamp lastUpdated;
     short isPublic;
-    String noteBody;
+    Map<String, Object> noteBody;
 
     UserDTO createdBy;
 

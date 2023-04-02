@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE, RequestMethod.OPTIONS, RequestMethod.HEAD,
+        RequestMethod.PATCH, RequestMethod.TRACE}, origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RequestMapping("note")
 @Slf4j
 @RestController
@@ -34,18 +36,18 @@ public class NoteController {
 
 //    GET MAPPINGS
 
-//  Hit this too see who YOU HAVE SHARED TOO
+    //  Hit this too see who YOU HAVE SHARED TOO
 //    @NotePermission
 //    TESTED ANS PASSED
-    @GetMapping(path = "/listSharedToo",  produces = "application/json")
+    @GetMapping(path = "/listSharedToo", produces = "application/json")
     public ResponseEntity<?> listSharedToo(@RequestParam(name = "userId") @NotNull UUID userId,
                                            @RequestParam(name = "noteId") @NotNull UUID noteId,
                                            @RequestParam(name = "page", defaultValue = "0") Integer page,
                                            @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                           @RequestParam(name = "sortBy", defaultValue = "shareLength") String sortBy){
+                                           @RequestParam(name = "sortBy", defaultValue = "shareLength", required = false) String sortBy) {
 
         log.debug("INSIDE THE FUNCTION");
-        if(sortBy.equals("shareLength") || sortBy.equals("shareDate")){
+        if (sortBy.equals("shareLength") || sortBy.equals("shareDate")) {
             return ResponseEntity.ok(noteShareService
                     .listSharedTooUsers(noteId, PageRequest.of(page, size, Sort.by(sortBy).descending())));
         }
@@ -53,17 +55,17 @@ public class NoteController {
                 .listSharedTooUsers(noteId, PageRequest.of(page, size, Sort.by(sortBy))));
     }
 
-//    hit too see the notes people have shared TOO YOU
+    //    hit too see the notes people have shared TOO YOU
 //    @NotePermission
 //    TESTED AND PASSED
     @GetMapping(path = "/listSharedNotes", produces = "application/json")
     public ResponseEntity<?> listSharedNotes(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                              @RequestParam(name = "size", defaultValue = "5") Integer size,
                                              @RequestParam(name = "sortBy", defaultValue = "shareLength") String sortBy,
-                                             @RequestParam(name = "userId") @NotNull UUID userId){
+                                             @RequestParam(name = "userId") @NotNull UUID userId) {
 
         log.debug("INSIDE THE FUNCTION");
-        if(sortBy.equals("shareLength") || sortBy.equals("shareDate")){
+        if (sortBy.equals("shareLength") || sortBy.equals("shareDate")) {
             return ResponseEntity.ok(noteShareService
                     .listSharedNotes(userId, PageRequest.of(page, size, Sort.by(sortBy).descending())));
         }
@@ -72,24 +74,24 @@ public class NoteController {
 
     }
 
-//    TESTED AND PASSED
+    //    TESTED AND PASSED
 //    @NotePermission
     @GetMapping(path = "/listPublicNotes", produces = "application/json")
     public ResponseEntity<?> listPublicNotes(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                              @RequestParam(name = "size", defaultValue = "5") Integer size,
                                              @RequestParam(name = "sortBy", defaultValue = "publicNote") String sortBy,
-                                             @RequestParam(name = "userId") @NotNull UUID userId){
+                                             @RequestParam(name = "userId") @NotNull UUID userId) {
         return ResponseEntity.ok(publicNotesService.listPublicNotes(PageRequest.of(page, size, Sort.by(sortBy))));
     }
 
-//    TESTED AND FINISHED
+    //    TESTED AND FINISHED
 //    @NotePermission
     @GetMapping("/listUserNotes")
     public ResponseEntity<?> getUserNotes(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                           @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                           @RequestParam(name = "sortBy", defaultValue = "lastUpdated") String sortBy,
-                                           @RequestParam(name = "userId") UUID userID){
-        if(sortBy.equals("lastUpdated") || sortBy.equals("createdDate")){
+                                          @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                          @RequestParam(name = "sortBy", defaultValue = "lastUpdated") String sortBy,
+                                          @RequestParam(name = "userId") UUID userID) {
+        if (sortBy.equals("lastUpdated") || sortBy.equals("createdDate")) {
             return ResponseEntity.ok(userNotesService.listUserNotes(userID,
                     PageRequest.of(page, size, Sort.by(sortBy).descending())));
         }
@@ -99,20 +101,20 @@ public class NoteController {
 
 //    END OF LISTS
 
-//  GET MAPPING
+    //  GET MAPPING
 //    TESTED AND PASSED
-    @GetMapping(path = "/getPublicNotes" , produces = "application/json")
-    public ResponseEntity<?> getPublicNote(@RequestParam(name = "noteId") @NotNull UUID noteId){
-        return ResponseEntity.ok(publicNotesService.getPublicNoteDTOUsingNoteId (noteId));
+    @GetMapping(path = "/getPublicNotes", produces = "application/json")
+    public ResponseEntity<?> getPublicNote(@RequestParam(name = "noteId") @NotNull UUID noteId) {
+        return ResponseEntity.ok(publicNotesService.getPublicNoteDTOUsingNoteId(noteId));
     }
 
-//    TESTED AND PASSED
+    //    TESTED AND PASSED
 //    Made it so only the correct notes can be accesed
     @NotePermission
     @GetMapping(path = "/getShareNotePage", produces = "application/json")
     public ResponseEntity<?> getSharedNote(@RequestParam(name = "userId") @NotNull UUID userId,
                                            @RequestParam(name = "noteId") @NotNull UUID noteId,
-                                           @RequestParam(name = "shareId") @NotNull UUID shareId){
+                                           @RequestParam(name = "shareId") @NotNull UUID shareId) {
         return ResponseEntity.ok(userNotesService.getSharedNote(shareId, noteId));
     }
 
@@ -122,7 +124,7 @@ public class NoteController {
     @NotePermission
     @GetMapping(path = "/UserNotes", produces = "application/json")
     public ResponseEntity<?> getUserNote(@RequestParam(name = "userId", required = false) UUID userId,
-                                         @RequestParam(name = "noteId") @NotNull UUID noteId){
+                                         @RequestParam(name = "noteId") @NotNull UUID noteId) {
         log.debug("Getting user note with userId: " + userId + " for noteId " + noteId);
         return ResponseEntity.ok(userNotesService.getUserNoteDTO(noteId));
     }
@@ -132,11 +134,11 @@ public class NoteController {
 
 //    POST MAPPINGS
 
-//    PASSED AND TEST
+    //    PASSED AND TEST
     //Create note
     @CreateNotePermission
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> createUserNote(@RequestBody UserNoteDTO userNoteDTO){
+    public ResponseEntity<?> createUserNote(@RequestBody UserNoteDTO userNoteDTO) {
         log.debug("Now creating the user Note");
         log.debug(Json.pretty(userNoteDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(userNotesService.createNotePage(userNoteDTO));
@@ -148,17 +150,16 @@ public class NoteController {
     @NotePermission
     @PostMapping(path = "/savePublicNote", produces = "application/json")
     public ResponseEntity<?> savePublicNote(@RequestParam(name = "userId") @NotNull UUID userId,
-                                            @RequestParam(name = "noteId") @NotNull UUID noteId){
-        return ResponseEntity.ok(userNotesService.savePublicNote(userId,noteId));
+                                            @RequestParam(name = "noteId") @NotNull UUID noteId) {
+        return ResponseEntity.ok(userNotesService.savePublicNote(userId, noteId));
     }
-
 
 
     //Publish Note to user base
 //    TESTED AND PASSED
     @PublicNotePermission
     @PostMapping(path = "/publicizeNote", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> makeNotePublic(@RequestBody PublicNoteDTO publicNoteDTO){
+    public ResponseEntity<?> makeNotePublic(@RequestBody PublicNoteDTO publicNoteDTO) {
         UserNotes userNotes = userNotesService.makeNotePublic(publicNoteDTO.getUserNoteDTO().getNoteId());
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(publicNotesService.makeNotePublic(publicNoteDTO, userNotes));
     }
@@ -168,7 +169,7 @@ public class NoteController {
 //    TESTED AND PASSED
 //    @ShareNotePermission
     @PostMapping(path = "/shareNote", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> shareNote(@RequestBody FullShareNoteDTO fullShareNoteDTO){
+    public ResponseEntity<?> shareNote(@RequestBody FullShareNoteDTO fullShareNoteDTO) {
         log.debug("Sharing note");
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.shareNoteToUser(fullShareNoteDTO));
     }
@@ -181,7 +182,7 @@ public class NoteController {
 //    TESTED AND PASSED
     @UpdateNotePermission
     @PutMapping(path = "/update", consumes = "application/json")
-    public ResponseEntity<?> updateUserNotes(@RequestBody UserNoteDTO userNoteDTO){
+    public ResponseEntity<?> updateUserNotes(@RequestBody UserNoteDTO userNoteDTO) {
         log.debug("updating personal user notes");
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(userNotesService.updateUserNote(userNoteDTO));
     }
@@ -189,7 +190,7 @@ public class NoteController {
     //update shared Note --> called when the shared note is updated by the receiver
 //    TESTED AND PASSED
     @PutMapping(path = "/updateShareNote", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> updateSharedUserNote(@RequestBody FullShareNoteDTO fullShareNoteDTO){
+    public ResponseEntity<?> updateSharedUserNote(@RequestBody FullShareNoteDTO fullShareNoteDTO) {
         log.debug("updating shared note");
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(userNotesService.updateSharedUserNote(fullShareNoteDTO));
     }
@@ -198,8 +199,8 @@ public class NoteController {
 //    TESTED AND PASSED
     @NotePermission
     @PutMapping(path = "/updateEditPermission", produces = "application/json")
-    public ResponseEntity<?> updateEditPermission(@RequestParam(name = "userId") @NotNull UUID userId,
-                                                 @RequestParam(name = "shareId") @NotNull UUID shareId){
+    public ResponseEntity<?> updateEditPermission(@RequestParam(name = "userId") UUID userId,
+                                                  @RequestParam(name = "shareId")  UUID shareId) {
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.updateEditPermission(shareId));
     }
 
@@ -209,7 +210,7 @@ public class NoteController {
 //    Pass a positive value for numberOfDaysToShare to extend the number of days to share
 //    @ShareNotePermission
     @PutMapping(path = "/updateExpireDate", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> updateExpireDateOnSharedNotes(@RequestBody NoteShareDTO noteShareDTO){
+    public ResponseEntity<?> updateExpireDateOnSharedNotes(@RequestBody NoteShareDTO noteShareDTO) {
         log.debug("updating the expire date");
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.updateExpireDate(noteShareDTO));
     }
@@ -218,7 +219,7 @@ public class NoteController {
 //    TESTED AND PASSED
     @PublicNotePermission
     @PutMapping(path = "/updatePublicNote", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> updatePublicNote(@RequestBody PublicNoteDTO publicNoteDTO){
+    public ResponseEntity<?> updatePublicNote(@RequestBody PublicNoteDTO publicNoteDTO) {
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(publicNotesService
                 .updatePublicNoteDescriptionUsingNoteId(publicNoteDTO));
     }
@@ -229,11 +230,12 @@ public class NoteController {
     //private public note
 //  TESTED AND PASSED
     @PublicNotePermission
-    @DeleteMapping(path = "/privateNote", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> makeNotePrivate(@RequestBody PublicNoteDTO publicNoteDTO){
+    @PutMapping(path = "/privateNote", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> makeNotePrivate(@RequestBody PublicNoteDTO publicNoteDTO) {
+        log.info("Making note private" + publicNoteDTO.getUserNoteDTO().getNoteId());
         publicNotesService
                 .makeNotePrivateUsingNoteId(publicNoteDTO.getUserNoteDTO().getNoteId());
-        return ResponseEntity.status((HttpStatus.ACCEPTED)).body("UserNote has been set private:" + userNotesService
+        return ResponseEntity.status((HttpStatus.ACCEPTED)).body(userNotesService
                 .makeNotePrivate(publicNoteDTO.getUserNoteDTO().getNoteId()));
     }
 
@@ -243,9 +245,9 @@ public class NoteController {
 //    TESTED AND PASSED
     @AdminNotePermission
     @DeleteMapping(path = "/deletePublicNoteAdmin", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> deletePublicNoteByAdmin(@RequestBody PublicNoteDTO publicNoteDTO){
+    public ResponseEntity<?> deletePublicNoteByAdmin(@RequestBody PublicNoteDTO publicNoteDTO) {
         return ResponseEntity.status((HttpStatus.ACCEPTED))
-                .body("Public note perma deleted: " + userNotesService.
+                .body(userNotesService.
                         deleteNotePage(publicNoteDTO.getUserNoteDTO().getNoteId()));
     }
 
@@ -254,7 +256,7 @@ public class NoteController {
     @NotePermission
     @DeleteMapping(path = "/delete", produces = "application/json")
     public ResponseEntity<?> deleteNote(@RequestParam(name = "userId") @NotNull UUID userId,
-                                        @RequestParam(name = "noteId") @NotNull UUID noteId){
+                                        @RequestParam(name = "noteId") @NotNull UUID noteId) {
         return ResponseEntity.ok().body(userNotesService.deleteNotePage(noteId));
     }
 
@@ -262,10 +264,11 @@ public class NoteController {
     //unshare Note
 //    TESTED AND PASSED
 //    @ShareNotePermission
-    @DeleteMapping(path = "/UnShareNote", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> unShareNote(@RequestBody NoteShareDTO noteShareDTO){
+    @DeleteMapping(path = "/UnShareNote", produces = "application/json")
+    public ResponseEntity<?> unShareNote(@RequestParam(name = "shareId") UUID shareId,
+                                         @RequestParam(name = "userId" , required = false) UUID userId) {
         log.debug("UN Sharing note");
-        return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.unShareNote(noteShareDTO));
+        return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.unShareNote(shareId));
     }
 
 }

@@ -20,7 +20,7 @@ public interface UserNotesService {
 
     FullShareNoteDTO updateSharedUserNote(FullShareNoteDTO fullShareNoteDTO);
 
-    boolean deleteNotePage(UUID noteId);
+    UUID deleteNotePage(UUID noteId);
 
     UserNoteDTO getUserNoteDTO(UUID noteId);
 
@@ -31,6 +31,6 @@ public interface UserNotesService {
 
     //  will update the is_public column on sql
     UserNotes makeNotePublic(UUID noteId);
-    boolean makeNotePrivate(UUID noteId);
+    UserNoteDTO makeNotePrivate(UUID noteId);
 
 }

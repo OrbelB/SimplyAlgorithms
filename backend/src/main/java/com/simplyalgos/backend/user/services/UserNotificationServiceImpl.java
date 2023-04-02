@@ -36,9 +36,9 @@ public class UserNotificationServiceImpl implements UserNotificationService {
     @Override
     public void addNotification(UUID referenceId, String title, User user, NotificationMessage notificationMessage) {
 
+        log.info("adding notification for user " + referenceId.toString() + " " + user.getUserId().toString());
         Optional<UserNotification> optionalUserNotification = userNotificationRepository
                 .findByReferenceIdAndUserNotification_UserId(referenceId, user.getUserId());
-
         if (optionalUserNotification.isPresent()) {
             UserNotification userNotification = optionalUserNotification.get();
             short updatedNotificationQuantity = (short) (userNotification.getNotificationQuantity() + 1);

@@ -5,7 +5,6 @@ import com.simplyalgos.backend.notes.dtos.NoteShareDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface NoteShareService {
@@ -19,14 +18,14 @@ public interface NoteShareService {
     NoteShareDTO shareNoteToUser(FullShareNoteDTO fullShareNoteDTO);
 
     //    will basically delete the tuple from table
-    boolean unShareNote(NoteShareDTO noteShareDTO);
+    UUID unShareNote(UUID shareId);
 
     //will update the share length
     NoteShareDTO updateExpireDate(NoteShareDTO noteShareDTO);
 
 //    boolean removeEditPermission(UUID shareId);
 
-    boolean updateEditPermission(UUID shareId);
+    UUID updateEditPermission(UUID shareId);
 
 //    if expired then it will return a message in
 //    errorSharedNoteMessage & flag hasError

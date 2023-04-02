@@ -4,13 +4,12 @@ import com.simplyalgos.backend.exceptions.NoteErrorException;
 import com.simplyalgos.backend.exceptions.UserNotAuthorizedException;
 import com.simplyalgos.backend.exceptions.UserNoteIsAlreadyPrivateException;
 import com.simplyalgos.backend.exceptions.UserNoteIsAlreadyPublicException;
-import com.simplyalgos.backend.notes.domains.NoteShare;
-import com.simplyalgos.backend.notes.domains.PublicNotes;
 import com.simplyalgos.backend.notes.domains.UserNotes;
-import com.simplyalgos.backend.notes.dtos.*;
+import com.simplyalgos.backend.notes.dtos.FullShareNoteDTO;
+import com.simplyalgos.backend.notes.dtos.NoteShareDTO;
+import com.simplyalgos.backend.notes.dtos.UserNoteDTO;
 import com.simplyalgos.backend.notes.mappers.NoteMapper;
 import com.simplyalgos.backend.notes.repositories.UserNoteRepository;
-import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
@@ -24,16 +23,19 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
 @Transactional
-public class UserNotesServiceImp implements UserNotesService{
+public class UserNotesServiceImp implements UserNotesService {
 
-    private  final NoteShareService noteShareService;
+    private final NoteShareService noteShareService;
     private final PublicNotesService publicNotesService;
     private final UserNoteRepository userNoteRepository;
 
@@ -57,7 +59,7 @@ public class UserNotesServiceImp implements UserNotesService{
     }
 
 
-//    Implemented && note tested
+    //    Implemented && note tested
     @Override
     public UserNoteDTO savePublicNote(UUID userId, UUID noteId) {
         UserNotes userNotes = getUserNotes(noteId);
@@ -67,7 +69,7 @@ public class UserNotesServiceImp implements UserNotesService{
                         .title(userNotes.getTitle() + " Created by " + userNotes.getCreatedBy().getUsername())
                         .createdDate(userNotes.getCreatedDate())
                         .lastUpdated(userNotes.getLastUpdated())
-                        .isPublic((short)0)
+                        .isPublic((short) 0)
                         .noteBody(userNotes.getNoteBody())
                         .createdBy(userService.getUser(userId))
                         .build()
@@ -80,12 +82,12 @@ public class UserNotesServiceImp implements UserNotesService{
     public UserNoteDTO createNotePage(UserNoteDTO userNoteDTO) {
         log.debug("In creatingNotePage");
         Timestamp currentTimeStamp = new Timestamp(new Date().getTime());
-        UserNotes userNotes =  userNoteRepository.saveAndFlush(
+        UserNotes userNotes = userNoteRepository.saveAndFlush(
                 UserNotes.builder()
                         .createdBy(userMapper.userDtoToUser(userNoteDTO.getCreatedBy()))
-                        .noteBody( userNoteDTO.getNoteBody())
+                        .noteBody(userNoteDTO.getNoteBody())
                         .title(userNoteDTO.getNoteTitle())
-                        .isPublic((short)0)
+                        .isPublic((short) 0)
                         .createdDate(currentTimeStamp)
                         .lastUpdated(currentTimeStamp)
                         .build()
@@ -96,40 +98,39 @@ public class UserNotesServiceImp implements UserNotesService{
     }
 
 
-//    This function will not make note public or private or deal with the sharing functionality
+    //    This function will not make note public or private or deal with the sharing functionality
     @Override
     public UserNoteDTO updateUserNote(UserNoteDTO userNoteDTO) {
-        Optional<UserNotes> userNotesOptional = userNoteRepository.findById(userNoteDTO.getNoteId());
-        if(!userNotesOptional.isPresent()){
-            throw new NoSuchElementException(
-                    MessageFormat.format("note with Id {0} not found ", userNoteDTO.getNoteId()));
-        }
+        UserNotes userNotes = userNoteRepository.findById(userNoteDTO.getNoteId())
+                .orElseThrow(
+                        () -> new NoSuchElementException(
+                                MessageFormat.format("note with Id {0} not found ", userNoteDTO.getNoteId())
+                        ));
         Timestamp currentTimeStamp = new Timestamp(new Date().getTime());
-
-        userNotesOptional.get().setNoteBody(userNoteDTO.getNoteBody());
-        userNotesOptional.get().setTitle(userNoteDTO.getNoteTitle());
-        userNotesOptional.get().setLastUpdated(currentTimeStamp);
-        userNoteRepository.saveAndFlush(userNotesOptional.get());
-        return noteMapper.userNotesToUserNoteDTO(userNotesOptional.get());
+        userNotes.setNoteBody(userNoteDTO.getNoteBody());
+        userNotes.setTitle(userNoteDTO.getNoteTitle());
+        userNotes.setLastUpdated(currentTimeStamp);
+        userNoteRepository.saveAndFlush(userNotes);
+        return noteMapper.userNotesToUserNoteDTO(userNotes);
     }
 
     @Override
     public FullShareNoteDTO updateSharedUserNote(FullShareNoteDTO fullShareNoteDTO) {
         Optional<UserNotes> OriginalUserNotes = userNoteRepository.findById(fullShareNoteDTO.getUserNoteDTO().getNoteId());
-        if(!OriginalUserNotes.isPresent()){
+        if (!OriginalUserNotes.isPresent()) {
             throw new NoSuchElementException(MessageFormat.format("User Note ith noteId {0} does not exists"
                     , fullShareNoteDTO.getUserNoteDTO().getNoteId()));
         }
         NoteShareDTO noteShareDTO = noteShareService.getNoteShareInformation(fullShareNoteDTO.getNoteShareDTO().getShareId());
 
-        if(!noteShareDTO.isCanEdit()){
+        if (!noteShareDTO.isCanEdit()) {
             throw new UserNotAuthorizedException(MessageFormat
                     .format("Share Info with share Id {0} does not have permission to update the note " +
                                     "please contact the owner of the note "
                             , noteShareDTO.getShareToUserId()));
         }
 //        if true then this will delete the tuple from share note table
-        if(!noteShareService.canAccessSharedNote(noteShareDTO.getShareId())){
+        if (!noteShareService.canAccessSharedNote(noteShareDTO.getShareId())) {
             throw new UserNotAuthorizedException(MessageFormat
                     .format("share info with share Id {0} has expired "
                             , noteShareDTO.getShareToUserId()));
@@ -150,13 +151,13 @@ public class UserNotesServiceImp implements UserNotesService{
     }
 
     @Override
-    public boolean deleteNotePage(UUID noteId) {
-        if(!userNoteRepository.existsById(noteId)){
+    public UUID deleteNotePage(UUID noteId) {
+        if (!userNoteRepository.existsById(noteId)) {
             throw new NoSuchElementException(
                     MessageFormat.format("note with Id {0} not found ", noteId));
         }
         userNoteRepository.deleteById(noteId);
-        return true;
+        return noteId;
     }
 
     @Override
@@ -176,15 +177,15 @@ public class UserNotesServiceImp implements UserNotesService{
     //    use this to get notes that are shared
     @Override
     public FullShareNoteDTO getSharedNote(UUID shareId, UUID noteId) {
-        if(!noteShareService.canAccessSharedNote(shareId)){
+        if (!noteShareService.canAccessSharedNote(shareId)) {
             throw new NoteErrorException(MessageFormat.format("share note with Id {0} cannot be accecced", shareId));
         }
-        if(!noteId.equals(noteShareService.getNoteID(shareId))){
-            throw  new NoteErrorException(MessageFormat.format("Wrong NoteId {0} passed in", noteId));
+        if (!noteId.equals(noteShareService.getNoteID(shareId))) {
+            throw new NoteErrorException(MessageFormat.format("Wrong NoteId {0} passed in", noteId));
         }
         Optional<UserNotes> userNotesOptional =
                 userNoteRepository.findById(noteId);
-        if(!userNotesOptional.isPresent()){
+        if (!userNotesOptional.isPresent()) {
             throw new NoSuchElementException(
                     MessageFormat.format("note with Id {0} not found ", noteId));
         }
@@ -199,36 +200,31 @@ public class UserNotesServiceImp implements UserNotesService{
 
     @Override
     public UserNotes makeNotePublic(UUID noteId) {
-        Optional<UserNotes> userNotesOptional = userNoteRepository
-                .findById(noteId);
-        if(!userNotesOptional.isPresent()){
-            throw new NoSuchElementException(
-                    MessageFormat.format("note with Id {0} not found", noteId));
-        }
-        if(userNotesOptional.get().getIsPublic() == 1){
+        UserNotes userNotes = userNoteRepository
+                .findById(noteId).orElseThrow(() ->
+                        new NoSuchElementException(
+                                MessageFormat.format("note with Id {0} not found", noteId)));
+        if (userNotes.getIsPublic() == 1) {
             throw new UserNoteIsAlreadyPublicException(
                     MessageFormat.format("note with Id {0} is already public", noteId));
         }
-        userNotesOptional.get().setIsPublic((short)1);
-        userNoteRepository.saveAndFlush(userNotesOptional.get());
-        return userNotesOptional.get();
+        userNotes.setIsPublic((short) 1);
+
+        return userNoteRepository.saveAndFlush(userNotes);
     }
 
     @Override
-    public boolean makeNotePrivate(UUID noteId) {
-        Optional<UserNotes> userNotesOptional = userNoteRepository
-                .findById(noteId);
-        if(!userNotesOptional.isPresent()){
-            throw new NoSuchElementException(
-                    MessageFormat.format("note with Id {0} not found", noteId));
-        }
-        if(userNotesOptional.get().getIsPublic() == 0){
+    public UserNoteDTO makeNotePrivate(UUID noteId) {
+        UserNotes userNotesOptional = userNoteRepository
+                .findById(noteId).orElseThrow(() ->
+                        new NoSuchElementException(
+                                MessageFormat.format("note with Id {0} not found", noteId)));
+        if (userNotesOptional.getIsPublic() == 0) {
             throw new UserNoteIsAlreadyPrivateException(
                     MessageFormat.format("note with Id {0} is already private", noteId));
         }
-        userNotesOptional.get().setIsPublic((short)0);
-        userNoteRepository.saveAndFlush(userNotesOptional.get());
-        return true;
+        userNotesOptional.setIsPublic((short) 0);
+        return noteMapper.userNotesToUserNoteDTO(userNoteRepository.saveAndFlush(userNotesOptional));
     }
 
 }

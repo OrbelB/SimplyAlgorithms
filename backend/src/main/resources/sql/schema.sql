@@ -64,7 +64,7 @@ DROP TABLE IF EXISTS user_notification;
 
 CREATE TABLE IF NOT EXISTS user_notification (
 	notification_id VARCHAR(36) PRIMARY KEY DEFAULT(uuid())NOT NULL,
-    reference_id VARCHAR(36) UNIQUE NOT NULL, 
+    reference_id VARCHAR(36) NOT NULL,
     user_id VARCHAR(36) NOT NULL,
     title  VARCHAR(200) NOT NULL,
     message VARCHAR(1000) NOT NULL,

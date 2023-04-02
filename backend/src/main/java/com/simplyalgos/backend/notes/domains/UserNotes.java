@@ -3,15 +3,17 @@ package com.simplyalgos.backend.notes.domains;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.user.domains.User;
-import jakarta.persistence.*;
+import com.simplyalgos.backend.utils.JsonToStringConverter;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.*;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.hibernate.annotations.OnDeleteAction.CASCADE;
@@ -50,8 +52,10 @@ public class UserNotes {
     @Column(name = "is_public")
     private short isPublic;
 
+
+    @Convert(converter = JsonToStringConverter.class)
     @Column(columnDefinition = "json", name = "note_body")
-    private String noteBody;
+    private Map<String, Object> noteBody;
 
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
     @ManyToOne(fetch = FetchType.EAGER)
