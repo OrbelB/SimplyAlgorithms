@@ -72,6 +72,22 @@ public class NoteShareServiceImp implements NoteShareService {
         );
     }
 
+    @Override
+    public ObjectPagedList<?> listSharedNotesByTitle(UUID userId, String title, Pageable pageable) {
+        Page<NoteShare> noteShares = noteShareRepository
+                .findAllBySharedTo_UserIdAndNote_TitleStartingWith(userId, title, pageable, NoteShare.class);
+        return new ObjectPagedList<>(
+                noteShares.stream()
+                        .map(noteMapper::noteShareToFullShareNoteDTO)
+                        .collect(Collectors.toList()),
+                PageRequest.of(
+                        noteShares.getPageable().getPageNumber(),
+                        noteShares.getPageable().getPageSize(),
+                        noteShares.getSort()),
+                noteShares.getTotalElements()
+        );
+    }
+
     //    will check if note is public.
 //    cannot share public notes
     @Override

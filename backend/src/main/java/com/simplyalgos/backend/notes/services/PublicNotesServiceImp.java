@@ -1,6 +1,5 @@
 package com.simplyalgos.backend.notes.services;
 
-import com.simplyalgos.backend.notes.domains.NoteShare;
 import com.simplyalgos.backend.notes.domains.PublicNotes;
 import com.simplyalgos.backend.notes.domains.UserNotes;
 import com.simplyalgos.backend.notes.dtos.PublicNoteDTO;
@@ -9,7 +8,6 @@ import com.simplyalgos.backend.notes.repositories.NoteShareRepository;
 import com.simplyalgos.backend.notes.repositories.PublicNoteRepository;
 import com.simplyalgos.backend.notes.repositories.UserNoteRepository;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
-import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +37,22 @@ public class PublicNotesServiceImp implements PublicNotesService{
     @Override
     public ObjectPagedList<?> listPublicNotes(Pageable pageable) {
         Page<PublicNotes> publicNotesPage = publicNoteRepository.findAll(pageable);
+        return new ObjectPagedList<>(
+                publicNotesPage.stream()
+                        .map(noteMapper::publicNoteToPublicNoteDTO)
+                        .collect(Collectors.toList()),
+                PageRequest.of(
+                        publicNotesPage.getPageable().getPageNumber(),
+                        publicNotesPage.getPageable().getPageSize(),
+                        publicNotesPage.getSort()),
+                publicNotesPage.getTotalElements()
+        );
+    }
+
+    @Override
+    public ObjectPagedList<PublicNoteDTO> listPublicNotesByTitle(String title, Pageable pageable) {
+        Page<PublicNotes> publicNotesPage = publicNoteRepository
+                .findAllByPublicNote_TitleStartingWith(title, pageable, PublicNotes.class);
         return new ObjectPagedList<>(
                 publicNotesPage.stream()
                         .map(noteMapper::publicNoteToPublicNoteDTO)

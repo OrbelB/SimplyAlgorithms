@@ -16,5 +16,5 @@ public interface TagService {
 
     ObjectPagedList<?> listTags(Pageable pageable);
 
-    Object filterByName(String filterBy);
+    ObjectPagedList<Tag> filterByName(String filterBy, Pageable pageable);
 }

@@ -9,6 +9,7 @@ import com.simplyalgos.backend.notes.security.*;
 import com.simplyalgos.backend.notes.services.NoteShareService;
 import com.simplyalgos.backend.notes.services.PublicNotesService;
 import com.simplyalgos.backend.notes.services.UserNotesService;
+import com.simplyalgos.backend.utils.StringUtils;
 import io.swagger.v3.core.util.Json;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -62,15 +64,28 @@ public class NoteController {
     public ResponseEntity<?> listSharedNotes(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                              @RequestParam(name = "size", defaultValue = "5") Integer size,
                                              @RequestParam(name = "sortBy", defaultValue = "shareLength") String sortBy,
-                                             @RequestParam(name = "userId") @NotNull UUID userId) {
+                                             @RequestParam(name = "userId") @NotNull UUID userId,
+                                             @RequestParam(name = "title", required = false) String title) {
 
+        if(StringUtils.isNotNullAndEmptyOrBlank(title)){
+            return ResponseEntity.ok(noteShareService
+                    .listSharedNotesByTitle(userId, title, PageRequest.of(page, size)));
+        }
         log.debug("INSIDE THE FUNCTION");
         if (sortBy.equals("shareLength") || sortBy.equals("shareDate")) {
             return ResponseEntity.ok(noteShareService
                     .listSharedNotes(userId, PageRequest.of(page, size, Sort.by(sortBy).descending())));
         }
+        if (Objects.equals(sortBy, "title")) {
+            return ResponseEntity.ok(noteShareService
+                    .listSharedNotes(userId, PageRequest.of(page, size, Sort.by("note.".concat(sortBy)).ascending())));
+        }
+        if (Objects.equals(sortBy, "createdDate")) {
+            return ResponseEntity.ok(noteShareService
+                    .listSharedNotes(userId, PageRequest.of(page, size, Sort.by("note.".concat(sortBy)).descending())));
+        }
         return ResponseEntity.ok(noteShareService
-                .listSharedNotes(userId, PageRequest.of(page, size, Sort.by(sortBy))));
+                .listSharedNotes(userId, PageRequest.of(page, size)));
 
     }
 
@@ -80,7 +95,21 @@ public class NoteController {
     public ResponseEntity<?> listPublicNotes(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                              @RequestParam(name = "size", defaultValue = "5") Integer size,
                                              @RequestParam(name = "sortBy", defaultValue = "publicNote") String sortBy,
-                                             @RequestParam(name = "userId") @NotNull UUID userId) {
+                                             @RequestParam(name = "userId") @NotNull UUID userId,
+                                             @RequestParam(name = "title", required = false) String title) {
+
+        if (StringUtils.isNotNullAndEmptyOrBlank(title)) {
+            return ResponseEntity.ok(publicNotesService
+                    .listPublicNotesByTitle(title, PageRequest.of(page, size)));
+        }
+        if (Objects.equals(sortBy, "createdDate")) {
+            return ResponseEntity.ok(publicNotesService
+                    .listPublicNotes(PageRequest.of(page, size, Sort.by("publicNote.".concat(sortBy)).descending())));
+        }
+        if(Objects.equals(sortBy, "title")){
+            return ResponseEntity.ok(publicNotesService
+                    .listPublicNotes(PageRequest.of(page, size, Sort.by("publicNote.".concat(sortBy)).ascending())));
+        }
         return ResponseEntity.ok(publicNotesService.listPublicNotes(PageRequest.of(page, size, Sort.by(sortBy))));
     }
 
@@ -90,7 +119,12 @@ public class NoteController {
     public ResponseEntity<?> getUserNotes(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                           @RequestParam(name = "size", defaultValue = "5") Integer size,
                                           @RequestParam(name = "sortBy", defaultValue = "lastUpdated") String sortBy,
-                                          @RequestParam(name = "userId") UUID userID) {
+                                          @RequestParam(name = "userId") UUID userID,
+                                          @RequestParam(name = "title", required = false) String title) {
+        if(StringUtils.isNotNullAndEmptyOrBlank(title)){
+            return ResponseEntity.ok(userNotesService.listUserNotesByTitle(userID, title,
+                    PageRequest.of(page, size)));
+        }
         if (sortBy.equals("lastUpdated") || sortBy.equals("createdDate")) {
             return ResponseEntity.ok(userNotesService.listUserNotes(userID,
                     PageRequest.of(page, size, Sort.by(sortBy).descending())));
@@ -200,7 +234,7 @@ public class NoteController {
     @NotePermission
     @PutMapping(path = "/updateEditPermission", produces = "application/json")
     public ResponseEntity<?> updateEditPermission(@RequestParam(name = "userId") UUID userId,
-                                                  @RequestParam(name = "shareId")  UUID shareId) {
+                                                  @RequestParam(name = "shareId") UUID shareId) {
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.updateEditPermission(shareId));
     }
 
@@ -266,7 +300,7 @@ public class NoteController {
 //    @ShareNotePermission
     @DeleteMapping(path = "/UnShareNote", produces = "application/json")
     public ResponseEntity<?> unShareNote(@RequestParam(name = "shareId") UUID shareId,
-                                         @RequestParam(name = "userId" , required = false) UUID userId) {
+                                         @RequestParam(name = "userId", required = false) UUID userId) {
         log.debug("UN Sharing note");
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(noteShareService.unShareNote(shareId));
     }

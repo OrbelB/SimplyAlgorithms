@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder
 public class UserNoteDTO {
     UUID noteId;
-    String noteTitle;
+    String title;
     //cannot set / update from front end
     Timestamp createdDate;
     //cannot set / update from front end

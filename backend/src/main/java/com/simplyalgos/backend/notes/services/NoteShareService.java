@@ -14,6 +14,9 @@ public interface NoteShareService {
 
     ObjectPagedList<?> listSharedNotes(UUID userId, Pageable pageable);
 
+    ObjectPagedList<?> listSharedNotesByTitle(UUID userId, String title, Pageable pageable);
+
+
 //    share a note with another user
     NoteShareDTO shareNoteToUser(FullShareNoteDTO fullShareNoteDTO);
 

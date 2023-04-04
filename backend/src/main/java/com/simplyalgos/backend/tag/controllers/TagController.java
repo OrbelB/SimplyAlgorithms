@@ -21,7 +21,7 @@ public class TagController {
                                       @RequestParam(name = "filterBy", required = false, defaultValue = "") String filterBy) {
 
         if(filterBy != null && !filterBy.isEmpty() && !filterBy.isBlank()){
-            return ResponseEntity.ok(tagService.filterByName(filterBy));
+            return ResponseEntity.ok(tagService.filterByName(filterBy, PageRequest.of(page, size)));
         }
         return ResponseEntity.ok(tagService.listTags(PageRequest.of(page, size)));
     }

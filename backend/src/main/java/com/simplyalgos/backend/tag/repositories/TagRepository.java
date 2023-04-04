@@ -1,6 +1,8 @@
 package com.simplyalgos.backend.tag.repositories;
 
 import com.simplyalgos.backend.tag.domains.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,5 +23,5 @@ public interface TagRepository extends JpaRepository<Tag, UUID> {
 
     List<Tag> findAllByTagIdIsNotIn(Collection<UUID> tagId);
 
-    Set<Tag> findAllByTagStartingWith(String tag);
+    Page<Tag> findAllByTagStartingWith(String tag, Pageable pageable);
 }

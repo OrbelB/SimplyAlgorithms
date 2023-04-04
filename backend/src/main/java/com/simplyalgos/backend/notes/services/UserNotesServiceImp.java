@@ -44,6 +44,24 @@ public class UserNotesServiceImp implements UserNotesService {
     private final NoteMapper noteMapper;
 
     @Override
+    public ObjectPagedList<UserNoteDTO> listUserNotesByTitle(UUID userId, String title, Pageable pageable) {
+
+        Page<UserNotes> userNotesPage = userNoteRepository
+                .findAllByCreatedBy_UserIdAndTitleStartingWith(userId, title, pageable, UserNotes.class);
+        log.info("userNotesPage: {}", userNotesPage.getContent().size());
+        return new ObjectPagedList<>(
+                userNotesPage.stream()
+                        .map(noteMapper::userNotesToUserNoteDTO)
+                        .collect(Collectors.toList()),
+                PageRequest.of(
+                        userNotesPage.getPageable().getPageNumber(),
+                        userNotesPage.getPageable().getPageSize(),
+                        userNotesPage.getSort()),
+                userNotesPage.getTotalElements()
+        );
+    }
+
+    @Override
     public ObjectPagedList<?> listUserNotes(UUID userId, Pageable pageable) {
         Page<UserNotes> userNotesPage = userNoteRepository.findAllByCreatedBy_UserId(userId, pageable);
         return new ObjectPagedList<>(
@@ -86,7 +104,7 @@ public class UserNotesServiceImp implements UserNotesService {
                 UserNotes.builder()
                         .createdBy(userMapper.userDtoToUser(userNoteDTO.getCreatedBy()))
                         .noteBody(userNoteDTO.getNoteBody())
-                        .title(userNoteDTO.getNoteTitle())
+                        .title(userNoteDTO.getTitle())
                         .isPublic((short) 0)
                         .createdDate(currentTimeStamp)
                         .lastUpdated(currentTimeStamp)
@@ -108,7 +126,7 @@ public class UserNotesServiceImp implements UserNotesService {
                         ));
         Timestamp currentTimeStamp = new Timestamp(new Date().getTime());
         userNotes.setNoteBody(userNoteDTO.getNoteBody());
-        userNotes.setTitle(userNoteDTO.getNoteTitle());
+        userNotes.setTitle(userNoteDTO.getTitle());
         userNotes.setLastUpdated(currentTimeStamp);
         userNoteRepository.saveAndFlush(userNotes);
         return noteMapper.userNotesToUserNoteDTO(userNotes);
@@ -137,7 +155,7 @@ public class UserNotesServiceImp implements UserNotesService {
         }
 
         OriginalUserNotes.get().setNoteBody(fullShareNoteDTO.getUserNoteDTO().getNoteBody());
-        OriginalUserNotes.get().setTitle(fullShareNoteDTO.getUserNoteDTO().getNoteTitle());
+        OriginalUserNotes.get().setTitle(fullShareNoteDTO.getUserNoteDTO().getTitle());
 
 
         userNoteRepository.saveAndFlush(

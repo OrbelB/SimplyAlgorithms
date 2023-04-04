@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,9 +71,14 @@ public class TagServiceImpl implements TagService {
                         tagsPage.getPageable().getPageSize()
                 ), tagsPage.getTotalElements());
     }
-
     @Override
-    public Object filterByName(String filterBy) {
-        return tagRepository.findAllByTagStartingWith(filterBy);
+    public ObjectPagedList<Tag> filterByName(String filterBy, Pageable pageable) {
+        Page<Tag> tagsPage = tagRepository.findAllByTagStartingWith(filterBy, pageable);
+        return new ObjectPagedList<>(tagsPage.stream().toList(),
+                PageRequest.of(
+                        tagsPage.getPageable().getPageNumber(),
+                        tagsPage.getPageable().getPageSize()
+                ), tagsPage.getTotalElements()
+        );
     }
 }

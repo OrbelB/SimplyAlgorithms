@@ -10,6 +10,8 @@ import java.util.UUID;
 
 public interface UserNotesService {
 
+    ObjectPagedList<UserNoteDTO> listUserNotesByTitle(UUID userId, String title, Pageable pageable);
+
     ObjectPagedList<?> listUserNotes(UUID userId, Pageable pageable);
 
     UserNoteDTO savePublicNote(UUID userId, UUID noteId);

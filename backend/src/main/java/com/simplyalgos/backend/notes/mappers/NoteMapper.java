@@ -14,7 +14,7 @@ public interface NoteMapper {
 
     // need to write out
 
-    @Mapping(source = "title", target = "noteTitle")
+
     UserNoteDTO userNotesToUserNoteDTO(UserNotes userNotes);
 
     @Mapping(target = "canEdit", ignore = true)
@@ -24,12 +24,12 @@ public interface NoteMapper {
     NoteShare noteShareDTOToNoteShare(NoteShareDTO noteShareDTO);
 
     @Mapping(source = "publicNote.noteId", target = "userNoteDTO.noteId")
-    @Mapping(source = "publicNote.title", target = "userNoteDTO.noteTitle")
+    @Mapping(source = "publicNote.title", target = "userNoteDTO.title")
     PublicNoteDTO publicNoteToPublicNoteDTO(PublicNotes publicNotes);
 
 //    issue with noteshare -> noteshare dto since dto is weird. But manually imp and works
     @Mapping(source = "note.noteId", target = "userNoteDTO.noteId")
-    @Mapping(source = "note.title", target = "userNoteDTO.noteTitle")
+    @Mapping(source = "note.title", target = "userNoteDTO.title")
     @Mapping(source = "noteShare.shareId", target = "noteShareDTO.shareId")
     FullShareNoteDTO noteShareToFullShareNoteDTO(NoteShare noteShare);
 
