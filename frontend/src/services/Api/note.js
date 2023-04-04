@@ -11,23 +11,24 @@ export const noteEndpoints = {
         Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
-  listSharedNotes: (page, size, sortBy, userId, jwtAccessToken) =>
+  listSharedNotes: (page, size, sortBy, userId, jwtAccessToken, title) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/listSharedNotes`, {
-      params: { page, size, sortBy, userId },
+      params: { page, size, sortBy, userId, title },
       headers: {
+        'content-type': 'application/json',
         Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
-  listPublicNotes: (page, size, sortBy, userId, jwtAccessToken) =>
+  listPublicNotes: (page, size, sortBy, userId, jwtAccessToken, title) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/listPublicNotes`, {
-      params: { page, size, sortBy, userId },
+      params: { page, size, sortBy, userId, title },
       headers: {
         Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
-  listUserNotes: (page, size, sortBy, userId, jwtAccessToken) =>
+  listUserNotes: (page, size, sortBy, userId, jwtAccessToken, title) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/listUserNotes`, {
-      params: { page, size, sortBy, userId },
+      params: { page, size, sortBy, userId, title },
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + jwtAccessToken,
@@ -59,11 +60,11 @@ export const noteEndpoints = {
   // END OF GET API
   //   START OF POST API
 
-  createUserNote: (noteTitle, noteBody, userId, jwtAccessToken) =>
+  createUserNote: (title, noteBody, userId, jwtAccessToken) =>
     post(
       `${PUBLIC_ENDPOINT_ROUTE}/create`, // DONT NEED ANYTHING ELSE, THE DATES ARE SET IN BACKEND
       {
-        noteTitle,
+        title,
         noteBody,
         createdBy: {
           userId,
@@ -124,7 +125,7 @@ export const noteEndpoints = {
       `${PUBLIC_ENDPOINT_ROUTE}/update`,
       {
         noteId: userNoteDTO.noteId,
-        noteTitle: userNoteDTO.noteTitle,
+        title: userNoteDTO.title,
         noteBody: userNoteDTO.noteBody,
         createdBy: {
           userId: userNoteDTO.createdBy.userId,
@@ -152,7 +153,7 @@ export const noteEndpoints = {
         },
         userNoteDTO: {
           noteId: fullShareNoteDTO?.userNoteDTO?.noteId,
-          noteTitle: fullShareNoteDTO?.userNoteDTO?.noteTitle,
+          title: fullShareNoteDTO?.userNoteDTO?.title,
           noteBody: fullShareNoteDTO?.userNoteDTO?.noteBody,
         },
       },

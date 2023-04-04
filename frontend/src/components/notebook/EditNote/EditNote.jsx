@@ -41,7 +41,7 @@ export default function EditNote({ note, onGoBack }) {
   const dispatch = useDispatch();
   const { jwtAccessToken } = useSelector((state) => state.auth);
   const [body, setBody] = useState(note?.userNoteDTO?.noteBody);
-  const [title, setTitle] = useState(note?.userNoteDTO?.noteTitle ?? '');
+  const [title, setTitle] = useState(note?.userNoteDTO?.title ?? '');
   const inputHandlerDescription = (e) => {
     setBody(e);
   };
@@ -88,7 +88,7 @@ export default function EditNote({ note, onGoBack }) {
       userNoteDTO: {
         ...note.userNoteDTO,
         noteBody: body,
-        noteTitle: title,
+        title,
       },
     };
 

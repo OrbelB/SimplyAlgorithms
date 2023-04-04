@@ -37,7 +37,7 @@ export default function NotebookAdd({ userId, jwtAccessToken, setNotePage }) {
       try {
         dispatch(
           createUserNote({
-            noteTitle: title,
+            title,
             noteBody: description,
             jwtAccessToken,
             userId,

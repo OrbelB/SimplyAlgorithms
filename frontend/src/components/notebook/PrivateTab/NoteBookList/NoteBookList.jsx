@@ -65,7 +65,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
 
   const [shareTo, setShareTo] = useState('');
   const [sharePermission, setSharePermission] = useState('Read');
-  const [noteTitle, setNoteTitle] = useState(element?.noteTitle ?? '');
+  const [noteTitle, setNoteTitle] = useState(element?.title ?? '');
   const [noteBody, setNoteBody] = useState(element?.noteBody ?? content);
   const [isPublic, setIsPublic] = useState(element?.isPublic === 1);
   const removeHandler = () => {
@@ -146,7 +146,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
       handleFunction = async () => {
         const userNoteDTO = {
           noteId: element.noteId,
-          noteTitle,
+          title: noteTitle,
           noteBody,
           isPublic: isPublic ? 1 : 0,
           createdBy: {
@@ -201,7 +201,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     e.preventDefault();
     const userNoteDTO = {
       noteId: element.noteId,
-      noteTitle,
+      title: noteTitle,
       noteBody,
       isPublic: isPublic ? 1 : 0,
       createdBy: {

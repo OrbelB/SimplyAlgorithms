@@ -38,7 +38,7 @@ import TextEditor from '../../text-editor/TextEditor';
 // ];
 export default function ReadNote({ note, onGoBack }) {
   const [body, setBody] = useState(note?.userNoteDTO?.noteBody);
-  const [title, setTitle] = useState(note?.userNoteDTO?.noteTitle ?? '');
+  const [title, setTitle] = useState(note?.userNoteDTO?.title ?? '');
   // const style = {
   //   position: 'absolute',
   //   top: '50%',

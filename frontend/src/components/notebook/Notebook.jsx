@@ -126,9 +126,7 @@ export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
           <PubNoteNav />
         ) : NoteTab === 3 ? (
           <SharedTab />
-        ) : (
-          ''
-        )}
+        ) : null}
       </Box>
     </Drawer>
   );

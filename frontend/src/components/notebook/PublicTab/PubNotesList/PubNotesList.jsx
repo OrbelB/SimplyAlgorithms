@@ -10,10 +10,11 @@ import { listPublicNotes } from '../../../../services/note';
 
 const label = { inputProps: { 'aria-label': 'Filter Save' } };
 
-export default function PubNoteList() {
+export default function PubNoteList({ notes }) {
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
-  const { publicNotes, currentPublicNotePage, totalPublicNotePages, status } =
-    useSelector((state) => state.note);
+  const { currentPublicNotePage, totalPublicNotePages, status } = useSelector(
+    (state) => state.note
+  );
   const { lastElementChild: lastPublicNote } = usePaginationWithInfiniteScroll({
     totalPages: totalPublicNotePages,
     currentPage: currentPublicNotePage,
@@ -25,8 +26,8 @@ export default function PubNoteList() {
     status,
   });
 
-  return publicNotes?.map(({ userNoteDTO }, index) => {
-    if (index + 1 === publicNotes.length) {
+  return notes?.map(({ userNoteDTO }, index) => {
+    if (index + 1 === notes.length) {
       return (
         <div
           key={userNoteDTO.noteId}
@@ -34,7 +35,7 @@ export default function PubNoteList() {
           className="card m-3 mb-4"
         >
           <div className="card-body">
-            <h4 className="card-title m-2">{userNoteDTO?.noteTitle}</h4>
+            <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
             <div className="card-text m-2">
               {parse(draftToHtml(userNoteDTO?.noteBody))}
             </div>
@@ -51,7 +52,7 @@ export default function PubNoteList() {
     return (
       <div key={userNoteDTO.noteId} className="card m-3 mb-4">
         <div className="card-body">
-          <h4 className="card-title m-2">{userNoteDTO?.noteTitle}</h4>
+          <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
           <div className="card-text m-2">
             {parse(draftToHtml(userNoteDTO?.noteBody))}
           </div>
