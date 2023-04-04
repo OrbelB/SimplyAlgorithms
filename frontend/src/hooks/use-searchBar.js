@@ -9,6 +9,8 @@ export default function useSearchBar({
   actionToDispatch,
   debounceTime = 350,
   status,
+  userId,
+  jwtAccessToken,
 }) {
   const dispatch = useDispatch();
   const [searchParam, setSearchParam] = useSearchParams();
@@ -26,7 +28,7 @@ export default function useSearchBar({
         searchValue = item[valueSearched];
       }
       return new RegExp(
-        `^${searchTerm.concat('*').toLowerCase().replace(/\*/g, '.*')}$`
+        `^${searchTerm.concat('*')?.toLowerCase().replace(/\*/g, '.*')}$`
       ).test(searchValue.toLowerCase());
     });
   }, [searchFrom, searchTerm, valueSearched]);
@@ -42,7 +44,9 @@ export default function useSearchBar({
         page: 0,
         size: 20,
         filterBy: searchParam.get('filterBy'),
-        [valueSearched]: valueSearched,
+        jwtAccessToken,
+        userId,
+        [valueSearched]: searchParam.get('filterBy'),
       })
     );
     setSearchTerm(e.target.value);

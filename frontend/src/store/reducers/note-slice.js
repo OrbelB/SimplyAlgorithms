@@ -81,22 +81,15 @@ export const noteSlice = createSlice({
       })
       .addCase(listPublicNotes.fulfilled, (state, action) => {
         state.status = 'success';
-        const existingIds = new Set(
-          state.publicNotes.map((note) => note.publicShareId)
+        const { content, number, totalPages } = action.payload;
+        state.publicNotes = content.concat(
+          state.publicNotes.filter(
+            (note) =>
+              !content.find((n) => n.publicShareId === note.publicShareId)
+          )
         );
-        state.publicNotes = [
-          ...state.publicNotes.map((note) => {
-            const updateNote = action.payload.content.find(
-              (n) => n.publicShareId === note.publicShareId
-            );
-            return updateNote ?? note;
-          }),
-          ...action.payload.content.filter(
-            (note) => !existingIds.has(note.publicShareId)
-          ),
-        ];
-        state.currentPublicNotePage = action.payload.number;
-        state.totalPublicNotePages = action.payload.totalPages;
+        state.currentPublicNotePage = number;
+        state.totalPublicNotePages = totalPages;
       })
       .addCase(listPublicNotes.rejected, (state, action) => {
         state.status = 'failed';
@@ -107,22 +100,17 @@ export const noteSlice = createSlice({
       })
       .addCase(listSharedNotes.fulfilled, (state, action) => {
         state.status = 'success';
-        const existingIds = new Set(
-          state.sharedNotes.map((note) => note.noteShareDTO.shareId)
+        const { content, number, totalPages } = action.payload;
+        state.sharedNotes = content.concat(
+          state.sharedNotes.filter(
+            (note) =>
+              !content.find(
+                (n) => n.noteShareDTO.shareId === note.noteShareDTO.shareId
+              )
+          )
         );
-        state.sharedNotes = [
-          ...state.sharedNotes.map((note) => {
-            const updateNote = action.payload.content.find(
-              (n) => n.noteShareDTO.shareId === note.noteShareDTO.shareId
-            );
-            return updateNote ?? note;
-          }),
-          ...action.payload.content.filter(
-            (note) => !existingIds.has(note.noteShareDTO.shareId)
-          ),
-        ];
-        state.currentSharedNotePage = action.payload.number;
-        state.totalSharedNotePages = action.payload.totalPages;
+        state.currentSharedNotePage = number;
+        state.totalSharedNotePages = totalPages;
       })
       .addCase(listSharedNotes.rejected, (state, action) => {
         state.status = 'failed';
@@ -186,25 +174,15 @@ export const noteSlice = createSlice({
       })
       .addCase(listUserNotes.fulfilled, (state, action) => {
         state.status = 'success';
-        // create a Set of existing note IDs to iterate over later
-        const existingNoteIds = new Set(
-          state.privateNotes.map((note) => note.noteId)
+        const { content, number, totalPages } = action.payload;
+        state.privateNotes = content.concat(
+          state.privateNotes.filter(
+            (note) => !content.find((n) => n.noteId === note.noteId)
+          )
         );
 
-        // update existing notes and add new notes
-        state.privateNotes = [
-          ...state.privateNotes.map((note) => {
-            const newNote = action.payload.content.find(
-              (n) => n.noteId === note.noteId
-            );
-            return newNote || note;
-          }),
-          ...action.payload.content.filter(
-            (note) => !existingNoteIds.has(note.noteId)
-          ),
-        ];
-        state.currentPrivateNotePage = action.payload.number;
-        state.totalPrivateNotePages = action.payload.totalPages;
+        state.currentPrivateNotePage = number;
+        state.totalPrivateNotePages = totalPages;
       })
       .addCase(listUserNotes.rejected, (state, action) => {
         state.status = 'failed';

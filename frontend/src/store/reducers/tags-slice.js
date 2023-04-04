@@ -33,7 +33,7 @@ export const tagSlice = createSlice({
         state.totalElements = action.payload?.totalElements ?? 0;
         state.totalPages = action.payload?.totalPages ?? 0;
         // add tags
-        tagAdapter.upsertMany(state, action.payload?.content ?? action.payload);
+        tagAdapter.upsertMany(state, action.payload?.content);
       })
       .addCase(fetchTags.rejected, (state, action) => {
         state.status = 'failed';

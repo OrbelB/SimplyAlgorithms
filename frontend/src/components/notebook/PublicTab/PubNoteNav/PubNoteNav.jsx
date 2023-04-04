@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   TextField,
   FormControl,
@@ -12,11 +13,32 @@ import {
   IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import useSortBy from '../../../../hooks/use-sortBy';
+import { listPublicNotes } from '../../../../services/note';
 import PubNoteList from '../PubNotesList/PubNotesList';
+import useSearchBar from '../../../../hooks/use-searchBar';
 
 export default function PubNoteNav() {
   const [open, setOpen] = useState(true);
+  const { status, publicNotes } = useSelector((state) => state.note);
+  const { userId, jwtAccessToken } = useSelector((state) => state.auth);
+  const { handleSearch, searchResults: notes } = useSearchBar({
+    status,
+    userId,
+    jwtAccessToken,
+    searchFrom: publicNotes,
+    actionToDispatch: listPublicNotes,
+    valueSearched: 'userNoteDTO.title',
+    debounceTime: 500,
+  });
+  const { sortBy, handleSortBy } = useSortBy({
+    actionToDispatch: listPublicNotes,
+    jwtAccessToken,
+    status,
+    userId,
+  });
+
   return (
     <>
       <div
@@ -29,6 +51,7 @@ export default function PubNoteNav() {
             varient="standard"
             margin="normal"
             size="small"
+            onChange={handleSearch}
             sx={{ marginLeft: '10px', width: '170px' }}
           />
           <FormControl sx={{ m: 2, minWidth: 120 }} size="small">
@@ -39,9 +62,11 @@ export default function PubNoteNav() {
               sx={{
                 backgroundColor: 'lightblue',
               }}
+              value={sortBy.get('sortBy') ?? ''}
+              onChange={(e) => handleSortBy(e.target.value)}
             >
               <MenuItem value="">None</MenuItem>
-              <MenuItem value="Date">Date</MenuItem>
+              <MenuItem value="createdDate">Date</MenuItem>
               <MenuItem value="Alphabetical">Alphabetically</MenuItem>
             </Select>
           </FormControl>
@@ -76,7 +101,7 @@ export default function PubNoteNav() {
         </div>
       </div>
       <div className="m-2" sx={{ maxWidth: '100%' }}>
-        <PubNoteList />
+        <PubNoteList notes={notes} />
       </div>
     </>
   );

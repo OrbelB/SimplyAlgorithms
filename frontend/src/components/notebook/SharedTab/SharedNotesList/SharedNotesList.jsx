@@ -14,10 +14,11 @@ import usePaginationWithInfiniteScroll from '../../../../hooks/use-pagination';
 import { updateCurrentSharedNotePage } from '../../../../store/reducers/note-slice';
 import { listSharedNotes } from '../../../../services/note';
 
-export default function SharedNotesList() {
+export default function SharedNotesList({ notes }) {
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
-  const { sharedNotes, currentSharedNotePage, totalSharedNotePages, status } =
-    useSelector((state) => state.note);
+  const { currentSharedNotePage, totalSharedNotePages, status } = useSelector(
+    (state) => state.note
+  );
 
   const { lastElementChild: lastSharedNote } = usePaginationWithInfiniteScroll({
     totalPages: totalSharedNotePages,
@@ -65,8 +66,8 @@ export default function SharedNotesList() {
         <EditNote note={selectedNote} onGoBack={handleGoBackEdit} />
       ) : (
         <div>
-          {sharedNotes?.map(({ userNoteDTO, noteShareDTO }, index) => {
-            if (sharedNotes.length === index + 1) {
+          {notes?.map(({ userNoteDTO, noteShareDTO }, index) => {
+            if (notes.length === index + 1) {
               return (
                 <div
                   key={noteShareDTO.shareId}
@@ -82,10 +83,10 @@ export default function SharedNotesList() {
                     <strong>{noteShareDTO.canEdit ? 'Edit' : 'Read'}</strong>
                   </div>
                   <div className="card-body">
-                    <h4 className="card-title m-2">{userNoteDTO?.noteTitle}</h4>
-                    <p className="card-text m-2">
+                    <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
+                    <div className="card-text m-2">
                       {parse(draftToHtml(userNoteDTO?.noteBody))}
-                    </p>
+                    </div>
                     <div className="d-flex m-2 mb-0">
                       <Report />
                       <Button
@@ -107,10 +108,10 @@ export default function SharedNotesList() {
                   <strong>{noteShareDTO.canEdit ? 'Edit' : 'Read'}</strong>
                 </div>
                 <div className="card-body">
-                  <h4 className="card-title m-2">{userNoteDTO?.noteTitle}</h4>
-                  <p className="card-text m-2">
+                  <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
+                  <div className="card-text m-2">
                     {parse(draftToHtml(userNoteDTO?.noteBody))}
-                  </p>
+                  </div>
                   <div className="d-flex m-2 mb-0">
                     <Report />
                     <Button

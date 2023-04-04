@@ -22,9 +22,9 @@ export const listSharedToo = createAsyncThunk(
 export const listSharedNotes = createAsyncThunk(
   'note/listSharedNotes',
   async (pageParams) => {
-    const { page, size, sortBy, userId, jwtAccessToken } = pageParams;
+    const { page, size, sortBy, userId, jwtAccessToken, title } = pageParams;
     const response = await noteEndpoints
-      .listSharedNotes(page, size, sortBy, userId, jwtAccessToken)
+      .listSharedNotes(page, size, sortBy, userId, jwtAccessToken, title)
       .catch((error) => {
         return error;
       });
@@ -35,9 +35,9 @@ export const listSharedNotes = createAsyncThunk(
 export const listPublicNotes = createAsyncThunk(
   'note/listPublicNote',
   async (pageParams) => {
-    const { page, size, sortBy, userId, jwtAccessToken } = pageParams;
+    const { page, size, sortBy, userId, jwtAccessToken, title } = pageParams;
     const response = await noteEndpoints
-      .listPublicNotes(page, size, sortBy, userId, jwtAccessToken)
+      .listPublicNotes(page, size, sortBy, userId, jwtAccessToken, title)
       .catch((error) => {
         return error;
       });
@@ -79,12 +79,12 @@ export const getUserNote = createAsyncThunk('note/userNote', async (parm) => {
 });
 
 export const createUserNote = createAsyncThunk('note/create', async (parm) => {
-  const { noteTitle, noteBody, userId, accessToken } = parm;
+  const { title, noteBody, userId, jwtAccessToken } = parm;
   const res = await noteEndpoints.createUserNote(
-    noteTitle,
+    title,
     noteBody,
     userId,
-    accessToken
+    jwtAccessToken
   );
   return res.data;
 });
@@ -92,13 +92,14 @@ export const createUserNote = createAsyncThunk('note/create', async (parm) => {
 export const listUserNotes = createAsyncThunk(
   'note/listUserNotes',
   async (pageParams) => {
-    const { page, size, sortBy, userId, jwtAccessToken } = pageParams;
+    const { page, size, sortBy, userId, jwtAccessToken, title } = pageParams;
     const response = await noteEndpoints.listUserNotes(
       page,
       size,
       sortBy,
       userId,
-      jwtAccessToken
+      jwtAccessToken,
+      title
     );
     return response.data;
   }
