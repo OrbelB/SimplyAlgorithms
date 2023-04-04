@@ -82,7 +82,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 500,
+    width: 600,
     bgcolor: 'background.paper',
     border: '1px solid black',
     boxShadow: 24,
@@ -333,7 +333,15 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 Share
               </Typography>
-              <form className="mt-2" onSubmit={handleShareNote}>
+              <form
+                className="mt-2"
+                onSubmit={handleShareNote}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
                 <TextField
                   id="input-with-icon-textfield"
                   label="Username"
@@ -357,7 +365,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                   defaultValue={sharePermission}
                   variant="standard"
                   margin="normal"
-                  sx={{ width: '100px' }}
+                  sx={{ marginRight: '20px', width: '100px' }}
                   required
                   onChange={(e) => setSharePermission(e.target.value)}
                 >
@@ -368,11 +376,11 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                   ))}
                 </TextField>
                 <TextField
-                  label="Share Expire"
+                  label="Set Days to Share"
                   variant="standard"
                   type="number"
                   margin="normal"
-                  sx={{ width: '100px' }}
+                  sx={{ marginRight: '20px', width: '150px' }}
                   inputProps={{
                     min: 0,
                     max: 365,
@@ -380,12 +388,12 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                 >
                   {/* set number of days left to expire here */}
                 </TextField>
-                <br />
                 <Button
                   className="mt-2"
                   type="submit"
                   variant="contained"
                   color="primary"
+                  style={{ display: 'block', marginTop: '20px' }}
                 >
                   Add User
                 </Button>
@@ -397,7 +405,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                     <TableRow>
                       <TableCell>User</TableCell>
                       <TableCell>Permissions</TableCell>
-                      <TableCell>Expire</TableCell>
+                      <TableCell>Expires (Days)</TableCell>
                       <TableCell />
                     </TableRow>
                   </TableHead>
@@ -433,7 +441,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                               max: 365,
                             }}
                           >
-                            {/* Number of days left to expire here */}
+                            {}
                           </TextField>
                         </TableCell>
                         <TableCell>
