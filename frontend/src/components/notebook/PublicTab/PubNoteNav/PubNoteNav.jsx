@@ -72,9 +72,9 @@ export default function PubNoteNav() {
           </FormControl>
           <br />
         </div>
-        <div className="mt-3" sx={{ width: '100%' }}>
+        <div sx={{ width: '100%' }}>
           <FormGroup sx={{ maxWidth: '100%', marginLeft: '10px' }}>
-            <FormControlLabel control={<Checkbox />} label="Filter" />
+            <FormControlLabel control={<Checkbox />} label="Saved Notes" />
           </FormGroup>
         </div>
         <div sx={{ width: '100%' }}>
