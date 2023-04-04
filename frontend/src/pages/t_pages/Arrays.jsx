@@ -76,7 +76,7 @@ export default function Arrays() {
       setIsScrolling(true);
       setTimeout(() => {
         setIsScrolling(false);
-      }, 2500);
+      }, 1500);
     }
   }, [trigger]);
 
@@ -91,7 +91,7 @@ export default function Arrays() {
 
       timeoutId = setTimeout(() => {
         setIsScrolling(false);
-      }, 2500);
+      }, 1500);
     };
 
     window.addEventListener('scroll', handleScroll, false);

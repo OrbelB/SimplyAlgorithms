@@ -77,7 +77,7 @@ export default function BreadthFirstSearch() {
       setIsScrolling(true);
       setTimeout(() => {
         setIsScrolling(false);
-      }, 2500);
+      }, 1500);
     }
   }, [trigger]);
 
@@ -92,7 +92,7 @@ export default function BreadthFirstSearch() {
 
       timeoutId = setTimeout(() => {
         setIsScrolling(false);
-      }, 2500);
+      }, 1500);
     };
 
     window.addEventListener('scroll', handleScroll, false);

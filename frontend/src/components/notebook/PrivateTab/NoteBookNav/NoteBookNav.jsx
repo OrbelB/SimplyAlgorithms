@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Button } from '@mui/material';
 import NotebookAdd from '../NoteBookAdd/NoteBookAdd';
 import NotebookHome from '../NoteBookHome/NoteBookHome';
 import { listUserNotes } from '../../../../services/note';
@@ -54,16 +55,22 @@ export default function NoteBookNav() {
 
   return (
     <div className="container-fluid">
-      <button
+      <Button
         type="button"
-        className="btn btn-primary m-3"
+        className="m-3"
+        variant="contained"
+        color="primary"
+        style={{ fontSize: '17px', height: '35px', minWidth: '75px' }}
         onClick={() => setNotePage(1)}
       >
         Home
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         className="btn btn-secondary m-1"
+        variant="contained"
+        color="inherit"
+        style={{ fontSize: '17px', height: '35px', minWidth: '50px' }}
         onClick={() => setNotePage(2)}
       >
         <svg
@@ -79,7 +86,7 @@ export default function NoteBookNav() {
             d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
           />
         </svg>
-      </button>
+      </Button>
       {displayNotes}
     </div>
   );

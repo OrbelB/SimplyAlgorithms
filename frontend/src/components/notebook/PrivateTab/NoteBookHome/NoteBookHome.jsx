@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { TextField } from '@mui/material';
 import NoteBookList from '../NoteBookList/NoteBookList';
 import usePaginationWithInfiniteScroll from '../../../../hooks/use-pagination';
 import { updateCurrentPrivateNotePage } from '../../../../store/reducers/note-slice';
@@ -21,10 +22,11 @@ export default function NotebookHome({ notes, setNotes, sharedToo }) {
   });
   return (
     <div className="form-outline">
-      <input
-        type="search"
-        className="form-control w-75 m-3"
-        placeholder="Search for Note"
+      <TextField
+        label="Search..."
+        varient="standard"
+        size="small"
+        sx={{ marginLeft: '15px', width: '170px' }}
       />
       {notes.length === 0 ? (
         <div className="card m-3">

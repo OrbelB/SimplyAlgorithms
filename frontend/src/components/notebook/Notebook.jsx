@@ -1,16 +1,9 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Box,
-  Drawer,
-  useMediaQuery,
-  useTheme,
-  Select,
-  MenuItem,
-  FormControl,
-} from '@mui/material';
+import { Box, Drawer, Button, ButtonGroup } from '@mui/material';
 import { useState } from 'react';
+import image from '../../assets/escapebutton.jpg';
 import NoteBookNav from './PrivateTab/NoteBookNav/NoteBookNav';
 import PubNoteNav from './PublicTab/PubNoteNav/PubNoteNav';
 import SharedTab from './SharedTab/SharedTabNav/SharedTabNav';
@@ -23,13 +16,14 @@ import {
 export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
   const [NoteTab, setNoteTab] = useState(1);
   const { userId, jwtAccessToken } = useSelector((state) => state.auth);
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.up('sm'));
-  const [drawerWidth, setDrawerWidth] = useState(isSmallScreen ? 450 : '100%');
+  const [drawerWidth, setDrawerWidth] = useState(450);
   const dispatch = useDispatch();
-  const handleWidthChange = (event) => {
-    const newWidth = event.target.value;
-    setDrawerWidth(newWidth);
+  const handleToggle = () => {
+    if (drawerWidth === 450) {
+      setDrawerWidth('100vw');
+    } else {
+      setDrawerWidth(450);
+    }
   };
 
   const handleTabChange = async (newValue) => {
@@ -75,51 +69,58 @@ export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
   };
   return (
     <Drawer
-      anchor={isSmallScreen ? 'right' : 'bottom'}
+      anchor="right"
       open={isDrawerOpen}
       onClose={() => setIsDrawerOpen(() => false)}
     >
-      <Box height={isSmallScreen ? '' : '600px'} width={drawerWidth}>
-        <h1 className="text-center m-1">Notebook</h1>
-        <Box display="flex" alignItems="center" justifyContent="center" mt={2}>
-          <h5 className="m-2">Drawer Width:</h5>
-          <FormControl>
-            <Select
-              style={{ fontSize: '20px', height: '40px', minWidth: '120px' }}
-              value={drawerWidth}
-              onChange={handleWidthChange}
-              variant="standard"
-              className="m-2"
-              label="Width"
-            >
-              <MenuItem value={450}>Default</MenuItem>
-              <MenuItem value="100vw">Full Screen</MenuItem>
-            </Select>
-          </FormControl>
+      <Box width={drawerWidth}>
+        <Box display="flex" justifyContent="space-between" className="m-1">
+          <h6 className="text-left m-2">
+            To close the notebook, use the
+            <img src={image} alt="escape button" height="50" width="50" />
+          </h6>
+          <Button
+            style={{ fontSize: '18px', height: '35px', minWidth: '100px' }}
+            variant="contained"
+            className="m-3"
+            onClick={handleToggle}
+          >
+            {drawerWidth === 450 ? 'Default' : 'Full Screen'}
+          </Button>
         </Box>
-        <div className="btn-group d-flex flex-row flex-wrap justify-content-center">
-          <button
+        <h1 className="text-center">Notebook</h1>
+        <ButtonGroup className="btn-group d-flex flex-row flex-wrap justify-content-center">
+          <Button
             type="button"
             className="btn btn-danger d-inline-flex flex-grow-0"
+            variant="contained"
+            color="error"
+            style={{ fontSize: '17px', height: '35px', minWidth: '100px' }}
             onClick={() => handleTabChange(1)}
           >
             Private
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             className="btn btn-success d-inline-flex flex-grow-0"
+            variant="contained"
+            color="success"
+            style={{ fontSize: '17px', height: '35px', minWidth: '100px' }}
             onClick={() => handleTabChange(2)}
           >
             Public
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             className="btn btn-secondary d-inline-flex flex-grow-0"
+            variant="contained"
+            color="secondary"
+            style={{ fontSize: '17px', height: '35px', minWidth: '100px' }}
             onClick={() => handleTabChange(3)}
           >
             Shared
-          </button>
-        </div>
+          </Button>
+        </ButtonGroup>
         {NoteTab === 1 ? (
           <NoteBookNav />
         ) : NoteTab === 2 ? (

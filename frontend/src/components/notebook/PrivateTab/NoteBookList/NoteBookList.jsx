@@ -367,6 +367,19 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                     </MenuItem>
                   ))}
                 </TextField>
+                <TextField
+                  label="Share Expire"
+                  variant="standard"
+                  type="number"
+                  margin="normal"
+                  sx={{ width: '100px' }}
+                  inputProps={{
+                    min: 0,
+                    max: 365,
+                  }}
+                >
+                  {/* set number of days left to expire here */}
+                </TextField>
                 <br />
                 <Button
                   className="mt-2"
@@ -384,6 +397,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                     <TableRow>
                       <TableCell>User</TableCell>
                       <TableCell>Permissions</TableCell>
+                      <TableCell>Expire</TableCell>
                       <TableCell />
                     </TableRow>
                   </TableHead>
@@ -411,6 +425,17 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                           ))}
                         </Select>
 
+                        <TableCell>
+                          <TextField
+                            type="number"
+                            inputProps={{
+                              min: 0,
+                              max: 365,
+                            }}
+                          >
+                            {/* Number of days left to expire here */}
+                          </TextField>
+                        </TableCell>
                         <TableCell>
                           <IconButton
                             type="button"

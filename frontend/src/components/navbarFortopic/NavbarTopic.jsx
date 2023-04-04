@@ -8,7 +8,7 @@ export default function NavbarTopic() {
         sx={{
           border: 3,
           borderColor: 'grey.500',
-          height: 50,
+          height: 55,
           width: 550,
         }}
         className="rounded-pill"
@@ -21,67 +21,92 @@ export default function NavbarTopic() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            borderRight: '3px solid grey',
           }}
           label={
-            <h4 sx={{ margin: 0, padding: 0, verticalAlign: 'middle' }}>
-              <HashLink smooth to="#visualizer">
-                Visualizer
-              </HashLink>
-            </h4>
-          }
-        />
-        <BottomNavigationAction
-          sx={{
-            height: 50,
-            width: 40,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-          label={
-            <h4 sx={{ margin: 0, padding: 0, verticalAlign: 'middle' }}>
-              <HashLink smooth to="#content">
-                Content
-              </HashLink>
-            </h4>
-          }
-        />
-        <BottomNavigationAction
-          sx={{
-            height: 50,
-            width: 40,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-          label={
-            <h4 sx={{ margin: 0, padding: 0, verticalAlign: 'middle' }}>
-              <HashLink smooth to="#code">
-                Code
-              </HashLink>
-            </h4>
-          }
-        />
-        <BottomNavigationAction
-          sx={{
-            height: 50,
-            width: 40,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-          label={
-            <h4
-              sx={{
+            <span
+              style={{
                 margin: 0,
                 padding: 0,
                 verticalAlign: 'middle',
+                fontSize: '20px',
+              }}
+            >
+              <HashLink smooth to="#visualizer">
+                Visualizer
+              </HashLink>
+            </span>
+          }
+        />
+        <BottomNavigationAction
+          sx={{
+            height: 50,
+            width: 40,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            borderRight: '3px solid grey',
+          }}
+          label={
+            <span
+              style={{
+                margin: 0,
+                padding: 0,
+                verticalAlign: 'middle',
+                fontSize: '20px',
+              }}
+            >
+              <HashLink smooth to="#content">
+                Content
+              </HashLink>
+            </span>
+          }
+        />
+        <BottomNavigationAction
+          sx={{
+            height: 50,
+            width: 40,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            borderRight: '3px solid grey',
+          }}
+          label={
+            <span
+              style={{
+                margin: 0,
+                padding: 0,
+                verticalAlign: 'middle',
+                fontSize: '20px',
+              }}
+            >
+              <HashLink smooth to="#code">
+                Code
+              </HashLink>
+            </span>
+          }
+        />
+        <BottomNavigationAction
+          sx={{
+            height: 50,
+            width: 40,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+          label={
+            <span
+              style={{
+                margin: 0,
+                padding: 0,
+                verticalAlign: 'middle',
+                fontSize: '20px',
               }}
             >
               <HashLink smooth to="#comments">
                 Comments
               </HashLink>
-            </h4>
+            </span>
           }
         />
       </BottomNavigation>

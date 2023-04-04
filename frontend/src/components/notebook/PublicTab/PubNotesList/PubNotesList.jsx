@@ -1,14 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useSelector } from 'react-redux';
-import { Checkbox } from '@mui/material';
+import { Button } from '@mui/material';
 import parse from 'html-react-parser';
 import draftToHtml from 'draftjs-to-html';
+import { useState } from 'react';
 import Report from '../../../report/Report';
 import usePaginationWithInfiniteScroll from '../../../../hooks/use-pagination';
 import { updateCurrentPublicNotePage } from '../../../../store/reducers/note-slice';
 import { listPublicNotes } from '../../../../services/note';
-
-const label = { inputProps: { 'aria-label': 'Filter Save' } };
 
 export default function PubNoteList() {
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
@@ -24,6 +23,15 @@ export default function PubNoteList() {
     jwtAccessToken,
     status,
   });
+
+  const [saved, setSaved] = useState(false);
+
+  const handleClick = () => {
+    setSaved(true);
+    setTimeout(() => {
+      setSaved(false);
+    }, 2000);
+  };
 
   return publicNotes?.map(({ userNoteDTO }, index) => {
     if (index + 1 === publicNotes.length) {
@@ -42,7 +50,14 @@ export default function PubNoteList() {
               <Report />
             </div>
             <div className="position-absolute top-0 end-0 m-3">
-              <Checkbox {...label} />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleClick}
+                disabled={saved}
+              >
+                {saved ? 'Note Saved' : 'Save Note'}
+              </Button>
             </div>
           </div>
         </div>
@@ -59,7 +74,7 @@ export default function PubNoteList() {
             <Report />
           </div>
           <div className="position-absolute top-0 end-0 m-3">
-            <Checkbox {...label} />
+            <Button>Save Note</Button>
           </div>
         </div>
       </div>
