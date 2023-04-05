@@ -1,10 +1,7 @@
 package com.simplyalgos.backend.user.mappers;
 
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.dtos.UserDTO;
-import com.simplyalgos.backend.user.dtos.UserDataDTO;
-import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
-import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
+import com.simplyalgos.backend.user.dtos.*;
 import com.simplyalgos.backend.utils.StringUtils;
 import org.mapstruct.*;
 
@@ -19,8 +16,13 @@ public interface UserMapper {
     UserDTO userToUserDto(User user);
 
 
-    UserDataDTO userTOUserDataDTO(User user);
 
+    @Mapping(target = "role" ,
+            expression = "java(user.getRoles().stream()" +
+                    ".findFirst().orElseThrow()" +
+                    ".getRoleName())")
+    UserInformation userToUserInformation(User user);
+    UserDataDTO userTOUserDataDTO(User user);
 
 
     @Mapping(target = "UserPreferencesDTO.userId", ignore = true)

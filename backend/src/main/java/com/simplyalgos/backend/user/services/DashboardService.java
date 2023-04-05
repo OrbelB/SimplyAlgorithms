@@ -15,6 +15,8 @@ public interface DashboardService {
 
     void addForumNotification(ForumInformation forumDTO, User userToNotified);
 
+    void addAdminNotification(User userToNotified, String username);
+
     void addPasswordResetNotification(User userToNotified);
 
     void addAccountChangesNotification(User userToNotified);

@@ -4,7 +4,7 @@ import com.simplyalgos.backend.exceptions.ElementExistsException;
 import com.simplyalgos.backend.exceptions.PasswordsDontMatchException;
 import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.user.security.Role;
-import com.simplyalgos.backend.user.security.RoleRepository;
+import com.simplyalgos.backend.user.repositories.RoleRepository;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.mappers.UserRegisteredMapper;

@@ -48,6 +48,14 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
+    public void addAdminNotification(User userToNotified, String requester) {
+        if (userPreferenceService.isNotificationEnableForType(NotificationType.ADMIN_NOTIFICATION, userToNotified.getUserId())) {
+            userNotificationService.addNotification(UUID.randomUUID(), requester.concat(" Requested role change"),
+                    userToNotified, NotificationMessage.ROLE_REQUEST);
+        }
+    }
+
+    @Override
     public void addPasswordResetNotification(User userToNotified) {
         if (userPreferenceService.isNotificationEnableForType(NotificationType.ACCOUNT_CHANGES, userToNotified.getUserId())) {
             userNotificationService.addNotification(UUID.randomUUID(), "Password Reset",

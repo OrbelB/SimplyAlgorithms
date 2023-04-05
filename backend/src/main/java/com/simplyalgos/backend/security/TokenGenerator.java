@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
@@ -30,7 +27,6 @@ import static java.util.stream.Collectors.joining;
 public class TokenGenerator {
 
     private final JwtEncoder accessTokenEncoder;
-
     private JwtEncoder refreshTokenEncoder;
 
     @Autowired
@@ -73,9 +69,7 @@ public class TokenGenerator {
         String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(joining(" "));
-
         JwtClaimsSet claimsSet = createJwtClaimSet(authentication.getName(), scope, ChronoUnit.DAYS, 1);
-
         return accessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
 

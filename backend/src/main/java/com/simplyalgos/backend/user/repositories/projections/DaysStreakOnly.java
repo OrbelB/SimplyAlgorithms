@@ -1,4 +1,4 @@
-package com.simplyalgos.backend.user.repositories;
+package com.simplyalgos.backend.user.repositories.projections;
 
 public interface DaysStreakOnly {
 

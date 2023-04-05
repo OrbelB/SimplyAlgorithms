@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.web.services;
 
 import com.simplyalgos.backend.emailing.services.EmailService;
+import com.simplyalgos.backend.exceptions.CustomAccountLockedException;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.exceptions.UserNotAuthorizedException;
 import com.simplyalgos.backend.security.JpaUserDetailsService;
@@ -69,9 +70,14 @@ public class AuthServiceImpl implements AuthService {
             );
             return tokenGenerator.createToken(authentication);
         } catch (Exception exception) {
-            String message = "Username or password is incorrect";
-            log.error("username not authorized " + exception);
-            throw new UserNotAuthorizedException(message);
+            if(exception instanceof org.springframework.security.authentication.LockedException){
+                String message = "The account is locked, please contact the administrator!";
+                throw new CustomAccountLockedException(message);
+            }else {
+                String message = "Username or password is incorrect";
+                log.error("username not authorized " + exception);
+                throw new UserNotAuthorizedException(message);
+            }
         }
     }
 

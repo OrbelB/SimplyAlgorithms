@@ -24,6 +24,7 @@ public class UserNoteDTO {
     short isPublic;
     Map<String, Object> noteBody;
 
+
     UserDTO createdBy;
 
 

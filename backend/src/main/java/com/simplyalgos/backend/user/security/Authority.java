@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import jakarta.persistence.*;
+
 import java.util.Set;
 import java.util.UUID;
 

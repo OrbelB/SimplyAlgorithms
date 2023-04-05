@@ -3,9 +3,9 @@ package com.simplyalgos.backend.user.controllers;
 
 import com.simplyalgos.backend.security.JpaUserDetailsService;
 import com.simplyalgos.backend.user.dtos.NotificationRemoval;
-import com.simplyalgos.backend.user.dtos.UserDTO;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
+import com.simplyalgos.backend.user.repositories.projections.UserInformationOnly;
 import com.simplyalgos.backend.user.security.perms.*;
 import com.simplyalgos.backend.user.services.DashboardService;
 import com.simplyalgos.backend.user.services.UserNotificationService;
@@ -13,14 +13,19 @@ import com.simplyalgos.backend.user.services.UserPreferenceService;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.utils.StringUtils;
 import com.simplyalgos.backend.web.dtos.UpdatePassword;
+import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 
 @RequiredArgsConstructor
@@ -40,8 +45,11 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('users.crud')")
-    public ResponseEntity<Set<UserDTO>> getUserList() {
-        return ResponseEntity.ok(userService.parseUsers());
+    public ResponseEntity<ObjectPagedList<UserInformationOnly>> getUserList(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(userService.listAllUsers(PageRequest.of(page, size)));
     }
 
     @UserReadPermission
@@ -86,23 +94,49 @@ public class UserController {
         return ResponseEntity.ok(dashboardService.displayNotifications(userId));
     }
 
+
+
+    @PutMapping(path = "/update-role", produces = "application/json")
+    @PreAuthorize("hasAuthority('users.crud')")
+    public ResponseEntity<?> updateRole(@RequestParam(name = "username") String username,
+                                        @RequestParam(name = "role") String role) {
+        return ResponseEntity.accepted().body(userService.changeUserRole(username, role));
+    }
+
     @UserRemoveNotification
     @DeleteMapping(path = "/delete-notification", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> deleteNotification(@RequestBody NotificationRemoval  notificationRemoval) {
+    public ResponseEntity<?> deleteNotification(@RequestBody NotificationRemoval notificationRemoval) {
         return ResponseEntity.ok().body(userNotificationService.removeNotification(notificationRemoval.notificationId()));
     }
 
     @GetMapping(path = "available", produces = "application/json")
     public ResponseEntity<Map<String, Boolean>> availableUsername(@RequestParam(name = "username", required = false) String username,
-                                               @RequestParam(name = "email", required = false ) String email) {
+                                                                  @RequestParam(name = "email", required = false) String email) {
         Map<String, Boolean> map = new HashMap<>();
-        if(StringUtils.isNotNullAndEmptyOrBlank(email))
+        if (StringUtils.isNotNullAndEmptyOrBlank(email))
             map.put("email", userService.emailIsAvailable(email));
-        else if(StringUtils.isNotNullAndEmptyOrBlank(username))
-           map.put("username" , userService.usernameIsAvailable(username));
+        else if (StringUtils.isNotNullAndEmptyOrBlank(username))
+            map.put("username", userService.usernameIsAvailable(username));
         else
             throw new NoSuchElementException("No username or email provided");
         return ResponseEntity.ok().body(map);
+    }
+
+
+    @PutMapping(path="/lock-account", produces = "application/json")
+    @PreAuthorize("hasAuthority('users.crud')")
+    public ResponseEntity<?> lockAccount(@RequestParam(name = "username") String username,
+                                         @RequestParam(name = "userId") UUID userId,
+                                         @RequestParam(name = "accountNonLocked") boolean accountNonLocked) {
+        return ResponseEntity.accepted().body(userService.LockUserAccount(username, accountNonLocked));
+    }
+
+    @PutMapping(path="/request-role")
+    @PreAuthorize("@customAuthManager.userIdMatches(authentication,#userId)")
+    public ResponseEntity<?> requestRole(@RequestParam(name = "username") String username,
+                                         @RequestParam(name = "role") String role) {
+        userService.requestRoleChange(username, role);
+        return ResponseEntity.noContent().build();
     }
 
 }

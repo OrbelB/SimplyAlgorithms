@@ -35,7 +35,7 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
             case REPLIES_NOTIFICATION -> userPreferences.isRepliesNotification();
             case POST_LIKES -> userPreferences.isPostLikes();
             case POST_REPLIES -> userPreferences.isPostReplies();
-            case SPECIAL_UPDATES -> userPreferences.isSpecialUpdates();
+            case SPECIAL_UPDATES, ADMIN_NOTIFICATION -> userPreferences.isSpecialUpdates();
         };
     }
 

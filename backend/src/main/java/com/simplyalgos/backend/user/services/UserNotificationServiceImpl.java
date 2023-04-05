@@ -42,12 +42,26 @@ public class UserNotificationServiceImpl implements UserNotificationService {
         if (optionalUserNotification.isPresent()) {
             UserNotification userNotification = optionalUserNotification.get();
             short updatedNotificationQuantity = (short) (userNotification.getNotificationQuantity() + 1);
-            userNotification.setMessage(notificationMessage.message(updatedNotificationQuantity));
-            userNotification.setNotificationQuantity(updatedNotificationQuantity);
+            if (notificationMessage == NotificationMessage.ROLE_REQUEST) {
+                userNotification.setMessage(notificationMessage.message(title.substring(0, title.indexOf(" "))));
+                userNotification.setNotificationQuantity(updatedNotificationQuantity);
+            } else {
+                userNotification.setMessage(notificationMessage.message(updatedNotificationQuantity));
+                userNotification.setNotificationQuantity(updatedNotificationQuantity);
+            }
             log.debug("updating new notification for user " + referenceId.toString());
             return;
         }
-
+        if (notificationMessage == NotificationMessage.ROLE_REQUEST) {
+            log.debug("adding new notification for user " + referenceId.toString());
+            userNotificationRepository.save(
+                    userNotificationMapper
+                            .createUserNotification(
+                                    title,
+                                    notificationMessage.message(title.substring(0, title.indexOf(" "))),
+                                    (short) 1, referenceId, user));
+            return;
+        }
         log.debug("adding new notification for user " + referenceId.toString());
         userNotificationRepository.save(
                 userNotificationMapper
@@ -65,13 +79,13 @@ public class UserNotificationServiceImpl implements UserNotificationService {
                 userNotifications.getTotalElements());
     }
 
-    public Set<NotificationDTO> getNotifications(UUID userId){
+    public Set<NotificationDTO> getNotifications(UUID userId) {
         return userNotificationMapper.notificationToNotificationDTO(userNotificationRepository.findAllByUserNotification_UserId(userId));
     }
 
     @Override
     public UUID removeNotification(UUID notificationId) {
-        if(userNotificationRepository.existsById(notificationId)) {
+        if (userNotificationRepository.existsById(notificationId)) {
             userNotificationRepository.deleteById(notificationId);
             return notificationId;
         }

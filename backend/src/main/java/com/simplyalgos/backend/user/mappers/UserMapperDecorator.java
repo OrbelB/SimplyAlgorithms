@@ -2,10 +2,7 @@ package com.simplyalgos.backend.user.mappers;
 
 
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.dtos.UserDTO;
-import com.simplyalgos.backend.user.dtos.UserDataDTO;
-import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
-import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
+import com.simplyalgos.backend.user.dtos.*;
 import com.simplyalgos.backend.user.security.Role;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +24,16 @@ public class UserMapperDecorator implements UserMapper {
     }
 
     @Override
+    public UserInformation userToUserInformation(User user) {
+        return userMapper.userToUserInformation(user);
+    }
+
+    @Override
     public UserDataDTO userTOUserDataDTO(User user) {
         return userMapper.userTOUserDataDTO(user);
     }
+
+
 
     @Override
     public UserDTO userToUserDto(User user, UserPreferencesDTO userPreferencesDTO) {

@@ -131,6 +131,14 @@ public class User implements UserDetails, CredentialsContainer {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id", foreignKey = @ForeignKey(name = "role_id"))})
     private Set<Role> roles;
 
+    public void addRole(Role role) {
+        // remove previous role
+        this.roles.clear();
+        // add new one
+        this.roles.add(role);
+        role.getUsers().add(this);
+    }
+
     //Transient annotation is used to exclude this field from the object
     //property is calculated and not stored in the database or persisted
     @Transient

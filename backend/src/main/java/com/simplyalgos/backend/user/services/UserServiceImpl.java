@@ -4,16 +4,21 @@ import com.simplyalgos.backend.emailing.services.EmailService;
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
-import com.simplyalgos.backend.user.dtos.UserDTO;
-import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
-import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
+import com.simplyalgos.backend.user.dtos.*;
 import com.simplyalgos.backend.user.enums.GetUsernameRequestEmailValues;
+import com.simplyalgos.backend.user.enums.UserRoles;
 import com.simplyalgos.backend.user.mappers.UserMapper;
+import com.simplyalgos.backend.user.repositories.RoleRepository;
 import com.simplyalgos.backend.user.repositories.UserRepository;
+import com.simplyalgos.backend.user.repositories.projections.UserInformationOnly;
+import com.simplyalgos.backend.user.security.Role;
+import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,7 +27,6 @@ import java.text.MessageFormat;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -36,16 +40,43 @@ public class UserServiceImpl implements UserService {
 
     private final EmailService emailService;
 
+    private final RoleRepository roleRepository;
+
     private final UserPreferenceService userPreferenceService;
 
     private final DashboardService dashboardService;
 
-    public Set<UserDTO> parseUsers() {
-        return userRepository
-                .findAll()
-                .stream()
-                .map(userMapper::userToUserDto)
-                .collect(Collectors.toSet());
+    @Override
+    public void requestRoleChange(String username, String role) {
+        Role admin = roleRepository.findRoleByRoleName(UserRoles.ADMIN.name()).orElseThrow(
+                () -> new NoSuchElementException("Role not found")
+        );
+        Set<User> users = userRepository.findAllByRolesIn(Set.of(admin));
+
+        // send notification to admins to approve role change
+        users.forEach(user -> {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Role Change Request");
+            mailMessage.setText(MessageFormat
+                    .format("User {0} requested to change role to {1}", username, role));
+            emailService.sendEmail(mailMessage);
+            // send internal notification
+            dashboardService.addAdminNotification(user, username);
+        });
+    }
+
+    public ObjectPagedList<UserInformationOnly> listAllUsers(Pageable pageable) {
+        Page<UserInformationOnly> users = userRepository.findAllProjectedBy(pageable, UserInformationOnly.class);
+        return new ObjectPagedList<>(
+                users.toList(),
+                PageRequest.of(
+                        users.getPageable().getPageNumber(),
+                        users.getPageable().getPageSize(),
+                        users.getSort()
+                ),
+                users.getTotalElements()
+        );
     }
 
     public UserDTO getUser(String userId) {
@@ -147,4 +178,34 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    /*
+     * This method will change the user role
+     */
+    @Override
+    public UserInformation changeUserRole(String username, String role) {
+        if (roleRepository.existsByRoleName(role)) {
+            User user = userRepository.findByUsername(username).orElseThrow(() ->
+                    new ElementNotFoundException("USERNAME: " + username + " NOT FOUND")
+            );
+            Role roleToAdd = roleRepository.findRoleByRoleName(role).orElseThrow(() ->
+                    new ElementNotFoundException("ROLE: " + role + " NOT FOUND")
+            );
+            user.addRole(roleToAdd);
+            log.info("USER: " + user.getUsername() + " ROLE CHANGED TO: " + role);
+            return userMapper.userToUserInformation(userRepository.save(user));
+        }
+        throw new ElementNotFoundException("ROLE: " + role + " NOT FOUND");
+    }
+
+    @Override
+    public UserInformation LockUserAccount(String username, boolean accountNonLocked) {
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new ElementNotFoundException("USERNAME: " + username + " NOT FOUND")
+        );
+        user.setAccountNonLocked(!user.getAccountNonLocked());
+        return userMapper.userToUserInformation(userRepository.save(user));
+    }
+
+
 }

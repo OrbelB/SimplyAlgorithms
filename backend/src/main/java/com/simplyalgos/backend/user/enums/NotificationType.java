@@ -5,7 +5,9 @@ public enum NotificationType {
     REPLIES_NOTIFICATION("replies_notification"),
     POST_LIKES("post_likes"),
     POST_REPLIES("post_replies"),
-    SPECIAL_UPDATES("special_updates");
+    SPECIAL_UPDATES("special_updates"),
+
+    ADMIN_NOTIFICATION("admin_notification");
 
     private final String type;
 
