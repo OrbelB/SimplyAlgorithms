@@ -183,7 +183,7 @@ public class NoteShareServiceImp implements NoteShareService {
 //    }
 
     @Override
-    public UUID updateEditPermission(UUID shareId) {
+    public NoteShareDTO updateEditPermission(UUID shareId) {
         NoteShare noteShare = noteShareRepository.findById(shareId)
                 .orElseThrow(() ->
                         new ElementNotFoundException(
@@ -195,7 +195,7 @@ public class NoteShareServiceImp implements NoteShareService {
         } else {
             noteShare.setCanEdit((short) 1);
         }
-        return noteShareRepository.saveAndFlush(noteShare).getShareId();
+        return noteMapper.noteShareToNoteShareDTO(noteShareRepository.saveAndFlush(noteShare));
     }
 
     @Override

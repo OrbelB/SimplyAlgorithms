@@ -28,7 +28,7 @@ public interface NoteShareService {
 
 //    boolean removeEditPermission(UUID shareId);
 
-    UUID updateEditPermission(UUID shareId);
+    NoteShareDTO updateEditPermission(UUID shareId);
 
 //    if expired then it will return a message in
 //    errorSharedNoteMessage & flag hasError

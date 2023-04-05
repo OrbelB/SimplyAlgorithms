@@ -67,7 +67,7 @@ public class NoteController {
                                              @RequestParam(name = "userId") @NotNull UUID userId,
                                              @RequestParam(name = "title", required = false) String title) {
 
-        if(StringUtils.isNotNullAndEmptyOrBlank(title)){
+        if (StringUtils.isNotNullAndEmptyOrBlank(title)) {
             return ResponseEntity.ok(noteShareService
                     .listSharedNotesByTitle(userId, title, PageRequest.of(page, size)));
         }
@@ -107,7 +107,7 @@ public class NoteController {
             return ResponseEntity.ok(publicNotesService
                     .listPublicNotes(PageRequest.of(page, size, Sort.by("publicNote.".concat(sortBy)).descending())));
         }
-        if(Objects.equals(sortBy, "title")){
+        if (Objects.equals(sortBy, "title")) {
             return ResponseEntity.ok(publicNotesService
                     .listPublicNotes(PageRequest.of(page, size, Sort.by("publicNote.".concat(sortBy)).ascending())));
         }
@@ -122,7 +122,7 @@ public class NoteController {
                                           @RequestParam(name = "sortBy", defaultValue = "lastUpdated") String sortBy,
                                           @RequestParam(name = "userId") UUID userID,
                                           @RequestParam(name = "title", required = false) String title) {
-        if(StringUtils.isNotNullAndEmptyOrBlank(title)){
+        if (StringUtils.isNotNullAndEmptyOrBlank(title)) {
             return ResponseEntity.ok(userNotesService.listUserNotesByTitle(userID, title,
                     PageRequest.of(page, size)));
         }
@@ -182,10 +182,10 @@ public class NoteController {
 
     //  will create a new UserNote
 //    TESTED AND PASSED
-    @NotePermission
+    // @NotePermission
     @PostMapping(path = "/savePublicNote", produces = "application/json")
-    public ResponseEntity<?> savePublicNote(@RequestParam(name = "userId") @NotNull UUID userId,
-                                            @RequestParam(name = "noteId") @NotNull UUID noteId) {
+    public ResponseEntity<?> savePublicNote(@RequestParam(name = "userId") UUID userId,
+                                            @RequestParam(name = "noteId") UUID noteId) {
         return ResponseEntity.ok(userNotesService.savePublicNote(userId, noteId));
     }
 

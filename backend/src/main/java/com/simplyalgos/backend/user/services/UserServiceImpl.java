@@ -192,6 +192,9 @@ public class UserServiceImpl implements UserService {
                     new ElementNotFoundException("ROLE: " + role + " NOT FOUND")
             );
             user.addRole(roleToAdd);
+
+            // notify user of role change
+            dashboardService.addRoleChangeNotification(user, roleToAdd.getRoleName());
             log.info("USER: " + user.getUsername() + " ROLE CHANGED TO: " + role);
             return userMapper.userToUserInformation(userRepository.save(user));
         }

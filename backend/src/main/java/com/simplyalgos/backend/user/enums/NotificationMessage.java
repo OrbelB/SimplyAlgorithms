@@ -2,13 +2,12 @@ package com.simplyalgos.backend.user.enums;
 
 public enum NotificationMessage {
     PASSWORD_UPDATE {
-
         public <T> String message(T quantity) {
             return "Your password has been updated!";
         }
 
     }, REPLY {
-        public <T>  String message(T quantity) {
+        public <T> String message(T quantity) {
             if (quantity instanceof Short && (Short) quantity == 1) {
                 return "You have 1 new reply";
             }
@@ -31,7 +30,7 @@ public enum NotificationMessage {
         }
     }, ROLE_CHANGE {
         public <T> String message(T role) {
-            return "You have been promoted to a new role.";
+            return "You have been promoted to " + role + ".";
         }
     }, ROLE_REQUEST {
         public <T> String message(T username) {
@@ -39,5 +38,5 @@ public enum NotificationMessage {
         }
     };
 
-    public abstract <T>  String message(T request);
+    public abstract <T> String message(T request);
 }

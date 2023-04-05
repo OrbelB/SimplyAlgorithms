@@ -25,7 +25,6 @@ public class DashboardServiceImpl implements DashboardService {
     private final UserHistoryService userHistoryService;
 
 
-
     @Override
     public DashboardDTO displayNotifications(UUID userId) {
         DashboardDTO.DashboardDTOBuilder dashboard = DashboardDTO.builder();
@@ -69,6 +68,15 @@ public class DashboardServiceImpl implements DashboardService {
         if (userPreferenceService.isNotificationEnableForType(NotificationType.ACCOUNT_CHANGES, userToNotified.getUserId())) {
             userNotificationService.addNotification(UUID.randomUUID(), "Changes on your account",
                     userToNotified, NotificationMessage.ACCOUNT_CHANGE);
+        }
+    }
+
+    @Override
+    public void addRoleChangeNotification(User userToNotified, String newRole) {
+        if (userPreferenceService.isNotificationEnableForType(NotificationType.ACCOUNT_CHANGES, userToNotified.getUserId())) {
+            userNotificationService.addNotification(
+                    UUID.randomUUID(),"Your role has been changed to: ".concat(newRole),
+                    userToNotified, NotificationMessage.ROLE_CHANGE);
         }
     }
 

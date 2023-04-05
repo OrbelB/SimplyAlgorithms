@@ -33,6 +33,7 @@ public class UserNotificationServiceImpl implements UserNotificationService {
 
     private final UserNotificationMapper userNotificationMapper;
 
+
     @Override
     public void addNotification(UUID referenceId, String title, User user, NotificationMessage notificationMessage) {
 
@@ -44,6 +45,9 @@ public class UserNotificationServiceImpl implements UserNotificationService {
             short updatedNotificationQuantity = (short) (userNotification.getNotificationQuantity() + 1);
             if (notificationMessage == NotificationMessage.ROLE_REQUEST) {
                 userNotification.setMessage(notificationMessage.message(title.substring(0, title.indexOf(" "))));
+                userNotification.setNotificationQuantity(updatedNotificationQuantity);
+            } else if (notificationMessage.equals(NotificationMessage.ROLE_CHANGE)) {
+                userNotification.setMessage(notificationMessage.message(title.split(":")[1].strip()));
                 userNotification.setNotificationQuantity(updatedNotificationQuantity);
             } else {
                 userNotification.setMessage(notificationMessage.message(updatedNotificationQuantity));
@@ -59,6 +63,15 @@ public class UserNotificationServiceImpl implements UserNotificationService {
                             .createUserNotification(
                                     title,
                                     notificationMessage.message(title.substring(0, title.indexOf(" "))),
+                                    (short) 1, referenceId, user));
+            return;
+        } else if (notificationMessage == NotificationMessage.ROLE_CHANGE) {
+            log.debug("adding new notification for user " + referenceId.toString());
+            userNotificationRepository.save(
+                    userNotificationMapper
+                            .createUserNotification(
+                                    title,
+                                    notificationMessage.message(title.split(":")[1].strip()),
                                     (short) 1, referenceId, user));
             return;
         }
