@@ -14,16 +14,14 @@ export default function Layout({ children }) {
   } = useSelector((state) => state.auth);
   return (
     <>
-      <header style={{ minHeight: '50px' }}>
-        <MainNavigation />
-      </header>
+      <MainNavigation />
       <main style={{ flex: 1 }}>
         {jwtAccessToken && authUserId && isLoggedIn && (
           <div className="position-relative">
             <Fab
               title="Notebook"
               color="secondary"
-              className="m-4 position-fixed bottom-0 end-0"
+              className="position-fixed bottom-0 end-0 m-4"
               onClick={() => {
                 if (!isDrawerOpen) {
                   setIsDrawerOpen(true);

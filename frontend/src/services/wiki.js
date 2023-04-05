@@ -5,11 +5,8 @@ export const fetchWikiList = createAsyncThunk(
   'wiki/getList',
   async (pageParams) => {
     const { page, size, sortBy } = pageParams;
-    const response = await wikiEndpoints
-      .list(page, size, sortBy)
-      .catch((error) => {
-        return error;
-      });
+    const response = await wikiEndpoints.list(page, size, sortBy);
+
     return response.data;
   }
 );

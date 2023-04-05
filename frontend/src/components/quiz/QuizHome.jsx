@@ -49,7 +49,7 @@ export default function Quizhome() {
   }, [status, quizList, dispatch, totalElements]);
 
   return (
-    <div>
+    <div className="">
       <div className="p-5 top-quizhome">
         <div className="row justify-content-center">
           <h1 className="quiz-logo">Quizzes</h1>
@@ -65,7 +65,7 @@ export default function Quizhome() {
           </div>
         </div>
       </div>
-      <div className="p-5 bottom-quizhome">
+      <div className="p-5 bottom-quizhome vh-100">
         <div className="row justify-content-between align-items-center">
           <div className="col-4 p-0 m-0">
             <SelectionList

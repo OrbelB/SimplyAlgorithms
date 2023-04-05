@@ -28,7 +28,7 @@ export default function useSearchBar({
         searchValue = item[valueSearched];
       }
       return new RegExp(
-        `^${searchTerm.concat('*')?.toLowerCase().replace(/\*/g, '.*')}$`
+        `^${searchTerm?.concat('*')?.toLowerCase().replace(/\*/g, '.*')}$`
       ).test(searchValue.toLowerCase());
     });
   }, [searchFrom, searchTerm, valueSearched]);

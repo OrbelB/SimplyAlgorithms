@@ -13,7 +13,9 @@ import {
   shareNote,
   unShareNote,
   updateEditPermission,
+  updateExpireDateOnSharedNotes,
   updateSharedUserNote,
+  savePublicNote,
 } from '../../services/note';
 
 const initialState = {
@@ -236,20 +238,8 @@ export const noteSlice = createSlice({
       })
       .addCase(listSharedToo.fulfilled, (state, action) => {
         state.status = 'success';
-        const existingIds = new Set(
-          state.sharedToo.map((note) => note.shareId)
-        );
-        state.sharedToo = [
-          ...state.sharedToo.map((note) => {
-            const sharedToo = action.payload.content.find(
-              (n) => n.shareId === note.shareId
-            );
-            return sharedToo ?? note;
-          }),
-          ...action.payload.content.filter(
-            (note) => !existingIds.has(note.shareId)
-          ),
-        ];
+        const { content } = action.payload;
+        state.sharedToo = content;
         state.currentSharedTooPage = action.payload.number;
         state.totalSharedTooPages = action.payload.totalPages;
       })
@@ -276,8 +266,11 @@ export const noteSlice = createSlice({
       .addCase(updateEditPermission.fulfilled, (state, action) => {
         state.status = 'success';
         state.sharedToo = state.sharedToo.map((note) => {
-          if (note.shareId === action.payload) {
-            // do something here
+          if (note.shareId === action.payload.shareId) {
+            return {
+              ...note,
+              canEdit: action.payload.canEdit,
+            };
           }
           return note;
         });
@@ -301,6 +294,37 @@ export const noteSlice = createSlice({
         });
       })
       .addCase(updateSharedUserNote.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(updateExpireDateOnSharedNotes.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(updateExpireDateOnSharedNotes.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.sharedToo = state.sharedToo.map((note) => {
+          if (note.shareId === action.payload.shareId) {
+            return {
+              ...note,
+              expireDate: action.payload.expireDate,
+            };
+          }
+          return note;
+        });
+      })
+      .addCase(updateExpireDateOnSharedNotes.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(savePublicNote.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(savePublicNote.fulfilled, (state, action) => {
+        if (action.payload.noteId) {
+          state.status = 'success';
+        }
+      })
+      .addCase(savePublicNote.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       });

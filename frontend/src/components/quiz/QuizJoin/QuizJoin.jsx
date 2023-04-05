@@ -30,7 +30,7 @@ export default function JoinQuiz({
     navigate(`/quiz/${quiz.quizId}/edit`);
   };
   return (
-    <div className="join-screen containter w-100 p-5">
+    <div className="join-screen containter vh-100 p-5">
       <div key={quiz.quizId}>
         <div className="row">
           <div className="col-md-8">

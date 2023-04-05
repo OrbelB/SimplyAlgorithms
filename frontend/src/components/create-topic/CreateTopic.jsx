@@ -387,7 +387,7 @@ export default function CreateTopic() {
         <br />
         <h2>Algorithm Steps, Process, Running Time/Space Complexity</h2>
         <h5>Please manually include section titles</h5>
-        <div className="form-group m-3">
+        <div className="form-group m-3 col-10">
           <TextEditor
             key={topic?.title}
             className="form-control"

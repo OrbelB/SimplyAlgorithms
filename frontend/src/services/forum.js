@@ -39,11 +39,8 @@ export const createForum = createAsyncThunk(
   'forum/create',
   async (passedParams) => {
     const { createdForum, accessToken } = passedParams;
-    const response = await forumEndpoints
-      .create(createdForum, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const response = await forumEndpoints.create(createdForum, accessToken);
+
     return response.data;
   }
 );
@@ -65,11 +62,8 @@ export const deleteForum = createAsyncThunk(
   'forum/delete',
   async (passedParams) => {
     const { pageId, userId, accessToken } = passedParams;
-    const response = await forumEndpoints
-      .delete(userId, pageId, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const response = await forumEndpoints.delete(userId, pageId, accessToken);
+
     return response.data;
   }
 );
@@ -91,11 +85,8 @@ export const reportForum = createAsyncThunk(
   'forum/report',
   async (passedParams) => {
     const { reportedPage, accessToken } = passedParams;
-    const response = await forumEndpoints
-      .report(reportedPage, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const response = await forumEndpoints.report(reportedPage, accessToken);
+
     return response.data;
   }
 );

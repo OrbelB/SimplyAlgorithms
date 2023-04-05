@@ -5,7 +5,6 @@ import QuizScreen from '../../components/quiz/QuizScreen/QuizScreen';
 import JoinQuiz from '../../components/quiz/QuizJoin/QuizJoin';
 import { fetchSingleQuiz } from '../../services/quiz';
 import useTimer from '../../hooks/use-timer';
-// a timer that returns the time that has passed since it was started
 
 export default function QuizSample() {
   const {
@@ -45,7 +44,7 @@ export default function QuizSample() {
 
   if (quizDTO !== {} && quizQuestionDTO !== {} && status === 'success') {
     return (
-      <div className="quiz-container">
+      <div className="container-xxxl">
         {isQuizStarted ? (
           <QuizScreen
             stop={stop}

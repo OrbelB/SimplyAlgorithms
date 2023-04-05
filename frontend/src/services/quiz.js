@@ -120,11 +120,11 @@ export const submitQuiz = createAsyncThunk(
   'quiz/submitQuiz',
   async (passedParams) => {
     const { takeQuizDTO, jwtAccessToken } = passedParams;
-    const response = await quizEndpoints
-      .submitQuiz(takeQuizDTO, jwtAccessToken)
-      .catch((error) => {
-        return error;
-      });
+    const response = await quizEndpoints.submitQuiz(
+      takeQuizDTO,
+      jwtAccessToken
+    );
+
     return response.data;
   }
 );

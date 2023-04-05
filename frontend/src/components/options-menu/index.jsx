@@ -28,7 +28,7 @@ export default function OptionsMenu({
   const seeOptions = permission || canReply || isAdmin;
   return (
     seeOptions && (
-      <div className="btn-group dropup-center">
+      <div className="btn-group dropdown-center">
         <i
           role="button"
           className="dropdown-toggle-split bi bi-three-dots-vertical"

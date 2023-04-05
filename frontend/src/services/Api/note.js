@@ -78,10 +78,9 @@ export const noteEndpoints = {
       }
     ),
   savePublicNote: (userId, noteId, jwtAccessToken) =>
-    post(`${PUBLIC_ENDPOINT_ROUTE}/savePublicNote`, {
+    post(`${PUBLIC_ENDPOINT_ROUTE}/savePublicNote`, null, {
       params: { userId, noteId },
       headers: {
-        'Content-Type': 'application/json',
         Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),

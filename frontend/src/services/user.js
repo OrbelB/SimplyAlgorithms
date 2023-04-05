@@ -18,11 +18,8 @@ export const deleteUser = createAsyncThunk(
   'user/delete',
   async (passedParams) => {
     const { userId, accessToken } = passedParams;
-    const response = await userEndpoints
-      .delete(userId, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const response = await userEndpoints.delete(userId, accessToken);
+
     return response.data;
   }
 );

@@ -26,6 +26,7 @@ const pages = [
   { name: 'Home', path: 'home' },
   { name: 'Dashboard', path: 'dashboard' },
   { name: 'Forums', path: 'forums' },
+  { name: 'Quizzes', path: 'quiz' },
 ];
 
 function useAnchoEl() {
@@ -89,7 +90,12 @@ export default function MainNavigation() {
     <>
       {showModal && !anchorElUser && <Logout handleLogout={handleLogout} />}
       {!showNew && (
-        <AppBar position="static" color="default" component="nav">
+        <AppBar
+          position="sticky"
+          color="default"
+          component="header"
+          sx={{ zIndex: 1054 }}
+        >
           <Container maxWidth="xxl">
             <Toolbar disableGutters>
               <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -200,13 +206,13 @@ export default function MainNavigation() {
                 />
               </Box>
               {isLoggedIn && (
-                <Box component="div" className="me-3">
+                <Box component="div" className="me-2">
                   <Bell />
                 </Box>
               )}
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Setting">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <IconButton onClick={handleOpenUserMenu}>
                     <Avatar
                       sx={{ width: 45, height: 45 }}
                       alt="current profile"

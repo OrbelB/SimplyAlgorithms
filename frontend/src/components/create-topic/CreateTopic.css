@@ -18,7 +18,6 @@ h5 {
 }
 
 .editor-wrapper {
-  height: auto;
   border: 1px solid black;
 }
 
@@ -26,8 +25,15 @@ h5 {
   background-color: #9df7ff;
 }
 
+.editor-title {
+  font-size: 2em;
+  overflow-y: hidden;
+  overflow-x: auto;
+  min-height: 45vh;
+}
+
 .json-display {
-  width: 50vh;
+  min-width: 50vh;
 }
 
 .label {
@@ -72,11 +78,6 @@ h5 {
 .ws {
   white-space: pre-wrap;
   text-align: left;
-}
-
-.editor-wrapper {
-  height: 40vh;
-  font-size: 2.5em;
 }
 
 .Frame_algo_title__lDbbF {

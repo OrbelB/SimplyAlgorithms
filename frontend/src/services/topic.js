@@ -65,11 +65,8 @@ export const reportTopic = createAsyncThunk(
   'topic/report',
   async (passedParams) => {
     const { reportedPage, accessToken } = passedParams;
-    const response = await topicEndpoints
-      .report(reportedPage, accessToken)
-      .catch((error) => {
-        return error;
-      });
+    const response = await topicEndpoints.report(reportedPage, accessToken);
+
     return response.data;
   }
 );

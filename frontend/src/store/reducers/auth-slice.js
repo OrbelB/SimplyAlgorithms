@@ -16,7 +16,6 @@ const initialState = {
   jwtAccessToken: '',
   jwtRefreshToken: Cookies.get('refresh-token') ?? '',
   status: 'idle',
-  statusCode: 0,
   error: '',
 };
 
@@ -56,7 +55,9 @@ export const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message;
+        const { message } = action.payload ?? '';
+        state.error =
+          message ?? 'The server is temporarly down, please try again later!';
       })
       .addCase(register.pending, (state) => {
         state.status = 'loading';
@@ -79,15 +80,11 @@ export const authSlice = createSlice({
         state.jwtRefreshToken = action.payload?.refreshToken;
         state.status = 'success';
       })
-      // initial state
-      // action response from endpoint rout
       .addCase(resetPasswordRequest.rejected, (state) => {
         // state.error = action.payload;
         state.error = 'failed';
       })
-      .addCase(resetPasswordRequest.fulfilled, () => {
-        console.log('got the email');
-      })
+      .addCase(resetPasswordRequest.fulfilled, () => {})
       .addCase(changePassword.fulfilled, (state) => {
         state.passwordResetState = 'accepted';
       })

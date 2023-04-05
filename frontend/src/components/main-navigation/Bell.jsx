@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { Badge } from '@mui/material';
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import cx from 'classnames';
 
@@ -17,28 +17,32 @@ export default function Bell() {
     setClickedBell(!clickedBell);
   };
   const dispatch = useDispatch();
-  const { dashboardInfo, status } = useSelector((state) => state.user);
-  const { userId: authUserId, jwtAccessToken } = useSelector(
-    (state) => state.auth
-  );
+  const { dashboardInfo } = useSelector((state) => state.user);
+  const {
+    userId: authUserId,
+    jwtAccessToken,
+    isLoggedIn,
+  } = useSelector((state) => state.auth);
+
+  // to avoid recreating the function on every render
+  const fetchDashboardInfo = useCallback(() => {
+    if (!isLoggedIn) return;
+    dispatch(
+      fetchUserDashboardInfo({
+        userId: authUserId,
+        jwtAccessToken,
+      })
+    );
+  }, [isLoggedIn, dispatch, authUserId, jwtAccessToken]);
 
   useEffect(() => {
-    if (status === 'idle' && dashboardInfo?.notifications?.length === 0) {
-      dispatch(
-        fetchUserDashboardInfo({
-          userId: authUserId,
-          jwtAccessToken,
-        })
-      );
-    }
-    return () => {};
-  }, [
-    authUserId,
-    dashboardInfo?.notifications?.length,
-    dispatch,
-    jwtAccessToken,
-    status,
-  ]);
+    const interval = setInterval(() => {
+      fetchDashboardInfo();
+    }, 30000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [fetchDashboardInfo, isLoggedIn]);
 
   return (
     <>

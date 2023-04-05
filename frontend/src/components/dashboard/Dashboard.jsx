@@ -43,6 +43,7 @@ export default function Dashboard() {
       );
     }
   }, [dispatch, jwtAccessToken, once, quizStatus, userHistory?.length, userId]);
+
   const handleRedirect = () => {
     navigate('/topic/new/create');
   };

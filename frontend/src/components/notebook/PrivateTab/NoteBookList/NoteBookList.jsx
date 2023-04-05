@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Box,
   Button,
@@ -16,7 +16,6 @@ import {
   TableRow,
   Paper,
   IconButton,
-  Select,
   Chip,
 } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
@@ -35,9 +34,11 @@ import {
   shareNote,
   unShareNote,
   updateEditPermission,
+  updateExpireDateOnSharedNotes,
   updateUserNote,
 } from '../../../../services/note';
-import { updateSharedEditPermission } from '../../../../store/reducers/note-slice';
+// import { updateSharedEditPermission } from '../../../../store/reducers/note-slice';
+import { timeToExpire } from '../../../../utilities/beautify-time';
 
 const content = {
   blocks: [
@@ -56,8 +57,9 @@ const content = {
 
 export default function NoteBookList({ element, sharedToo, innerRef }) {
   const dispatch = useDispatch();
+  const [shareDays, setShareDays] = useState(15);
+  const { status } = useSelector((state) => state.note);
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
-  const [updateIsPublic, setUpdateIsPublic] = useState(false);
   const [editPage, setEditPage] = useState(false);
   const body = useMemo(() => {
     return parse(draftToHtml(element?.noteBody));
@@ -66,6 +68,19 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
   const [shareTo, setShareTo] = useState('');
   const [sharePermission, setSharePermission] = useState('Read');
   const [noteTitle, setNoteTitle] = useState(element?.title ?? '');
+  // eslint-disable-next-line no-unused-vars
+  const [sharePermissions, setSharePermissions] = useState(
+    () =>
+      new Map(
+        sharedToo?.map((item) => [
+          item.shareId,
+          item.canEdit ? 'Edit' : 'Read',
+        ]) ?? []
+      )
+  );
+  const [expireDays, setExpireDays] = useState(
+    () => new Map(sharedToo?.map((item) => [item.shareId, 0]) ?? [])
+  );
   const [noteBody, setNoteBody] = useState(element?.noteBody ?? content);
   const [isPublic, setIsPublic] = useState(element?.isPublic === 1);
   const removeHandler = () => {
@@ -97,7 +112,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
           jwtAccessToken,
           noteId: element.noteId,
           page: 0,
-          size: 20,
+          size: 40,
         })
       ).unwrap();
     } finally {
@@ -120,15 +135,50 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     // Implement remove logic here
     dispatch(unShareNote({ shareId, jwtAccessToken }));
   };
-  const handlePermissionChange = (shareId, user, event) => {
-    // Implement permission change logic here
-    dispatch(
-      updateSharedEditPermission({ shareId, canEdit: event.target.value })
-    );
-  };
 
-  const handleButtonClick = () => {
-    setIsPublic(!isPublic);
+  // const handlePermissionChange = (shareId, user, event) => {
+  //   // Implement permission change logic here
+  //   dispatch(
+  //     updateSharedEditPermission({ shareId, canEdit: event.target.value })
+  //   );
+  // };
+
+  // handles updating the note private/public status
+  const handleUpdatingIsPublic = async () => {
+    const userNoteDTO = {
+      noteId: element.noteId,
+      title: noteTitle,
+      noteBody,
+      isPublic: isPublic ? 1 : 0,
+      createdBy: {
+        userId,
+      },
+    };
+    const currentPublic = !isPublic;
+    if (currentPublic && element?.isPublic === 0) {
+      try {
+        await dispatch(
+          publicizeNote({
+            noteId: element.noteId,
+            userNoteDTO,
+            jwtAccessToken,
+          })
+        ).unwrap();
+      } finally {
+        setIsPublic((prev) => !prev);
+      }
+    } else if (!currentPublic && element?.isPublic === 1) {
+      try {
+        await dispatch(
+          privateNote({
+            userNoteDTO,
+            jwtAccessToken,
+          })
+        ).unwrap();
+      } finally {
+        setIsPublic((prev) => !prev);
+      }
+    }
   };
 
   const inputHandlerDescription = (e) => {
@@ -138,64 +188,6 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
   const handleTitleChange = (e) => {
     setNoteTitle(e.target.value);
   };
-
-  // handles updating the note private/public status
-  useEffect(() => {
-    let handleFunction;
-    if (updateIsPublic) {
-      handleFunction = async () => {
-        const userNoteDTO = {
-          noteId: element.noteId,
-          title: noteTitle,
-          noteBody,
-          isPublic: isPublic ? 1 : 0,
-          createdBy: {
-            userId,
-          },
-        };
-        if (isPublic && element?.isPublic === 0) {
-          try {
-            await dispatch(
-              publicizeNote({
-                noteId: element.noteId,
-                userNoteDTO,
-                jwtAccessToken,
-              })
-            ).unwrap();
-          } finally {
-            setEditPage(false);
-          }
-        } else if (!isPublic && element?.isPublic === 1) {
-          try {
-            await dispatch(
-              privateNote({
-                userNoteDTO,
-                jwtAccessToken,
-              })
-            ).unwrap();
-          } finally {
-            setEditPage(false);
-          }
-        } else {
-          setEditPage(false);
-        }
-        setUpdateIsPublic(false);
-      };
-    }
-    if (handleFunction) {
-      handleFunction();
-    }
-  }, [
-    updateIsPublic,
-    isPublic,
-    element?.isPublic,
-    dispatch,
-    element?.noteId,
-    jwtAccessToken,
-    noteTitle,
-    noteBody,
-    userId,
-  ]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -211,7 +203,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     try {
       await dispatch(updateUserNote({ userNoteDTO, jwtAccessToken })).unwrap();
     } finally {
-      setUpdateIsPublic(true);
+      setEditPage(false);
     }
   };
 
@@ -221,8 +213,8 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     const noteShareDTO = {
       shareToUserName: shareTo,
       canEdit: sharePermission === 'Edit',
+      numberOfDaysToShare: shareDays,
     };
-
     const userNoteDTO = {
       noteId: element.noteId,
     };
@@ -238,7 +230,22 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
 
   const handleSaveSharedChanges = async (shareId) => {
     // Implement save changes logic here
-    dispatch(updateEditPermission({ userId, shareId, jwtAccessToken }));
+    const canEdit = sharePermissions.get(shareId) === 'Edit';
+    const amountOfDays = expireDays.get(shareId);
+    const noteShareDTO = {
+      shareToUserName: shareTo,
+      shareId,
+      canEdit,
+      numberOfDaysToShare: amountOfDays,
+    };
+
+    if (
+      canEdit !== sharedToo.find((item) => item.shareId === shareId).canEdit
+    ) {
+      dispatch(updateEditPermission({ userId, shareId, jwtAccessToken }));
+    }
+    if (amountOfDays === undefined || amountOfDays === 0) return;
+    dispatch(updateExpireDateOnSharedNotes({ noteShareDTO, jwtAccessToken }));
   };
 
   return editPage === false ? (
@@ -318,6 +325,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
             type="button"
             variant="contained"
             className="m-3"
+            disabled={isPublic}
             startIcon={<ShareIcon />}
             onClick={handleOpen}
           >
@@ -380,9 +388,11 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                   variant="standard"
                   type="number"
                   margin="normal"
+                  value={shareDays}
+                  onChange={(e) => setShareDays(e.target.value)}
                   sx={{ marginRight: '20px', width: '150px' }}
                   inputProps={{
-                    min: 0,
+                    min: 1,
                     max: 365,
                   }}
                 >
@@ -407,42 +417,54 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                       <TableCell>Permissions</TableCell>
                       <TableCell>Expires (Days)</TableCell>
                       <TableCell />
+                      <TableCell />
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {sharedToo?.map((userShared) => (
-                      <TableRow key={userShared.shareToUserName}>
+                      <TableRow key={userShared.shareId}>
                         <TableCell component="th" scope="row">
                           {userShared.shareToUserName}
                         </TableCell>
-                        <Select
-                          className="m-3"
-                          value={userShared.canEdit ? 'Edit' : 'Read'}
-                          onChange={(event) =>
-                            handlePermissionChange(
-                              userShared.shareId,
-                              userShared.shareToUserName,
-                              event
-                            )
-                          }
-                        >
-                          {permissions.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-
+                        <TableCell>
+                          <TextField
+                            select
+                            className="m-3 w-100"
+                            label={userShared.canEdit ? 'Edit' : 'Read'}
+                            onChange={(event) => {
+                              setSharePermissions((prev) => {
+                                return prev.set(
+                                  userShared.shareId,
+                                  event.target.value
+                                );
+                              });
+                            }}
+                          >
+                            {permissions.map((option) => (
+                              <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        </TableCell>
                         <TableCell>
                           <TextField
                             type="number"
+                            label={timeToExpire(userShared.expireDate)}
                             inputProps={{
-                              min: 0,
+                              min:
+                                0 - Number(timeToExpire(userShared.expireDate)),
                               max: 365,
                             }}
-                          >
-                            {}
-                          </TextField>
+                            onChange={(e) =>
+                              setExpireDays((prev) => {
+                                return prev.set(
+                                  userShared.shareId,
+                                  e.target.value
+                                );
+                              })
+                            }
+                          />
                         </TableCell>
                         <TableCell>
                           <IconButton
@@ -477,8 +499,9 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
           <Button
             type="button"
             variant="contained"
+            disabled={status === 'pending'}
             color={isPublic ? 'success' : 'error'}
-            onClick={handleButtonClick}
+            onClick={handleUpdatingIsPublic}
           >
             {isPublic ? 'Public' : 'Private'}
           </Button>
@@ -495,10 +518,24 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
               setter={inputHandlerDescription}
             />
           </div>
-          <div className="form-group m-3">
-            <button type="submit" className="edit-form-control btn btn-primary">
+          <div className="form-group m-3 d-flex justify-content-between">
+            <Button
+              variant="contained"
+              color="info"
+              type="button"
+              className="edit-form-control"
+              onClick={() => setEditPage(false)}
+            >
+              Return
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="success"
+              className="edit-form-control btn btn-primary"
+            >
               Save Note
-            </button>
+            </Button>
           </div>
         </form>
       </div>
