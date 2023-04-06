@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
 
     private final DashboardService dashboardService;
 
+
     @Override
     public void requestRoleChange(String username, String role) {
         Role admin = roleRepository.findRoleByRoleName(UserRoles.ADMIN.name()).orElseThrow(

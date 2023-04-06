@@ -9,6 +9,7 @@ import com.simplyalgos.backend.notes.security.*;
 import com.simplyalgos.backend.notes.services.NoteShareService;
 import com.simplyalgos.backend.notes.services.PublicNotesService;
 import com.simplyalgos.backend.notes.services.UserNotesService;
+import com.simplyalgos.backend.user.security.perms.AdminPermission;
 import com.simplyalgos.backend.utils.StringUtils;
 import io.swagger.v3.core.util.Json;
 import jakarta.validation.constraints.NotNull;
@@ -278,7 +279,7 @@ public class NoteController {
 //    admin make note private
 //    admin delete public note
 //    TESTED AND PASSED
-    @AdminNotePermission
+    @AdminPermission
     @DeleteMapping(path = "/deletePublicNoteAdmin", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> deletePublicNoteByAdmin(@RequestBody PublicNoteDTO publicNoteDTO) {
         return ResponseEntity.status((HttpStatus.ACCEPTED))

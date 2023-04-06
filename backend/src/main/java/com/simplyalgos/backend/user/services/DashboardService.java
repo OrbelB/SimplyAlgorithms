@@ -2,6 +2,7 @@ package com.simplyalgos.backend.user.services;
 
 import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
+import com.simplyalgos.backend.universalReport.dto.UniversalReportDTO;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.DashboardDTO;
 
@@ -17,6 +18,13 @@ public interface DashboardService {
      */
     DashboardDTO displayNotifications(UUID userId);
 
+//    ----------------------------------------------------------
+    @Deprecated
+    void addReportResolvedNotification(User userToNotify, UniversalReportDTO universalReportDTO);
+
+//        Will notify to roles that have admins
+    @Deprecated
+    void addProfanityReportNotification(UniversalReportDTO universalReportDTO);
 
     /**
      * @param fullTopicDTO   the topic that the user has commented on
@@ -65,4 +73,12 @@ public interface DashboardService {
     void addSpecialSystemUpdateNotification(User userToNotified);
 
 
+    @Deprecated
+    void addIncorrectInformationReportNotification(UniversalReportDTO universalReportDTO);
+
+    @Deprecated
+    void addErrorReportNotification(UniversalReportDTO universalReportDTO);
+
+    @Deprecated
+    void addOtherReportNotification(UniversalReportDTO universalReportDTO);
 }

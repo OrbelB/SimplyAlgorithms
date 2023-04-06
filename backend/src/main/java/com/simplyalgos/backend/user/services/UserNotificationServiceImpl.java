@@ -4,7 +4,12 @@ import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.NotificationDTO;
 import com.simplyalgos.backend.user.enums.NotificationMessage;
+import com.simplyalgos.backend.user.enums.NotificationType;
+import com.simplyalgos.backend.user.enums.UserRoles;
 import com.simplyalgos.backend.user.mappers.UserNotificationMapper;
+import com.simplyalgos.backend.user.repositories.RoleRepository;
+import com.simplyalgos.backend.user.repositories.UserRepository;
+import com.simplyalgos.backend.user.security.Role;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import com.simplyalgos.backend.user.domains.UserNotification;
@@ -18,6 +23,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 
+import java.text.MessageFormat;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -29,9 +36,16 @@ import java.util.UUID;
 @Service
 public class UserNotificationServiceImpl implements UserNotificationService {
 
+    private final UserPreferenceService userPreferenceService;
+
     private final UserNotificationRepository userNotificationRepository;
 
     private final UserNotificationMapper userNotificationMapper;
+
+
+    private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
 
 
     @Override
@@ -80,6 +94,45 @@ public class UserNotificationServiceImpl implements UserNotificationService {
                 userNotificationMapper
                         .createUserNotification(title, notificationMessage.message((short) 1), (short) 1, referenceId, user));
     }
+
+    @Override
+    public void addUniversalReportNotification(User sendTo, UUID reportId,
+                                               String title, String message,
+                                               NotificationMessage notificationMessage) {
+        if(notificationMessage.equals(NotificationMessage.REPORT_RESOLVED)){
+            log.debug("Sending notification to victum (inside UserNotificationServiceImp)");
+            userNotificationRepository.save(
+                    userNotificationMapper.createUserNotification(
+                            title,
+                            message,
+                            (short) 0,
+                            reportId,
+                            sendTo
+                    ));
+        } else {
+            log.debug("Sending notification to all admins (inside UserNotificationServiceImp)");
+            Role admin = roleRepository.findRoleByRoleName(UserRoles.ADMIN.name()).orElseThrow(
+                    () -> new NoSuchElementException("Role not found")
+            );
+            Set<User> user = userRepository.findAllByRolesIn(Set.of(admin));
+            user.forEach(notify -> {
+                if(userPreferenceService.isNotificationEnableForType(NotificationType.ADMIN_NOTIFICATION, notify.getUserId())){
+                    log.debug("Sending Admin: " + notify.getUsername() + " notification about report " + title);
+                    userNotificationRepository.save(
+                            userNotificationMapper.createUserNotification(
+                                    title,
+                                    notificationMessage.message(message),
+                                    (short) 0,
+                                    reportId,
+                                    notify
+                            ));
+                }
+
+            });
+
+        }
+    }
+
 
     @Override
     public ObjectPagedList<?> getNotifications(Pageable pageable, UUID userId) {

@@ -8,6 +8,7 @@ import com.simplyalgos.backend.quiz.mappers.QuizMapper;
 import com.simplyalgos.backend.quiz.repositories.TakeQuizAverageRepository;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
+import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +38,10 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
     @Override
     public boolean recordFunctionSelector(TakeQuiz takeQuizDTO) {
         if (!takeQuizAverageRepository.existsByUser_UserIdAndReferenceQuizForAvgScore_QuizId(takeQuizDTO.getTakenBy().getUserId(), takeQuizDTO.getQuizReference().getQuizId())) {
+            log.debug("Creating a quiz record");
             return createRecord(takeQuizDTO);
         }
+        log.debug("updating thr quiz record");
         return recordAverage(takeQuizDTO);
 //        clunk
     }
@@ -49,11 +52,12 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
                 (takeQuizDTO.getTakenBy().getUserId(), takeQuizDTO.getQuizReference().getQuizId())){
             throw new NoSuchElementException ("Record already exists for quiz ");
         }
+        log.debug("Create record take quiz DTO " + Json.pretty(takeQuizDTO));
         double runTime = getTimeDiff(takeQuizDTO);
-        takeQuizAverageRepository.saveAndFlush(
+        TakeQuizAverage takeQuizAverage =  takeQuizAverageRepository.saveAndFlush(
                 TakeQuizAverage
                         .builder()
-                        .avgTime(takeQuizDTO.getScore())
+                        .avgScore(takeQuizDTO.getScore())
                         .lowestScore(takeQuizDTO.getScore())
                         .highestScore(takeQuizDTO.getScore())
                         .bestTime(runTime)
@@ -63,6 +67,8 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
                         .user(userService.getUser(takeQuizDTO.getTakenBy().getUserId()))
                         .referenceQuizForAvgScore(quizService.getQuiz(takeQuizDTO.getQuizReference().getQuizId()))
                         .build());
+
+        log.debug("Create record Saved object: " + Json.pretty(takeQuizAverage));
 
         return true;
     }

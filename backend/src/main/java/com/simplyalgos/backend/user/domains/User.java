@@ -14,6 +14,7 @@ import com.simplyalgos.backend.quiz.domains.TakeQuiz;
 import com.simplyalgos.backend.quiz.domains.TakeQuizAverage;
 import com.simplyalgos.backend.report.domains.CommentReport;
 import com.simplyalgos.backend.report.domains.PageReport;
+import com.simplyalgos.backend.universalReport.domain.UniversalReport;
 import com.simplyalgos.backend.user.security.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ForeignKey;
@@ -199,4 +200,15 @@ public class User implements UserDetails, CredentialsContainer {
 
     @OneToMany(mappedBy = "sharedTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<NoteShare> sharedNotes = new HashSet<>();
+
+//    universal report stuff
+
+    @OneToMany(mappedBy = "culpritUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<UniversalReport> culpritUser = new HashSet<>();
+
+    @OneToMany(mappedBy = "victimUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<UniversalReport> victimUser = new HashSet<>();
+
+    @OneToMany(mappedBy = "resolvedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<UniversalReport> resolvedBy = new HashSet<>();
 }

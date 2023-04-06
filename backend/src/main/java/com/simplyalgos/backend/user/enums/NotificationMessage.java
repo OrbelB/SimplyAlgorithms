@@ -36,7 +36,23 @@ public enum NotificationMessage {
         public <T> String message(T username) {
             return username + " requested to be promoted to Teacher";
         }
+    },
+//     ------------------------------
+    PROFANITY_REPORT {
+        public <T> String message(T message){return  "REPORT: " + message;}
+    }, INCORRECT_INFORMATION_REPORT {
+        public <T> String message(T message){return "REPORT: " + message;}
+    }, ERROR_REPORT {
+        public <T> String message(T message){return "REPORT:  " + message;}
+    }, OTHER_REPORT {
+        public <T> String message(T message) {return "REPORT RESPONSE" + message;}
+    }, REPORT_RESOLVED { //to send to the user
+        public <T> String message(T resolveNote){return resolveNote + " ";}
     };
-
+//    ,USER_HAS_RECEIVED_NOTE{
+//
+//    }, SHARED_USER_UPDATED_NOTE{
+//
+//    };
     public abstract <T> String message(T request);
 }

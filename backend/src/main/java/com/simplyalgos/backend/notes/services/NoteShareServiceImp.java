@@ -92,7 +92,7 @@ public class NoteShareServiceImp implements NoteShareService {
 //    cannot share public notes
     @Override
     public NoteShareDTO shareNoteToUser(FullShareNoteDTO fullShareNoteDTO) {
-        log.debug(Json.pretty(fullShareNoteDTO));
+//        log.debug(Json.pretty(fullShareNoteDTO));
         if (!StringUtils.isNotNullAndEmptyOrBlank(fullShareNoteDTO.getNoteShareDTO().getShareToUserName())) {
             throw new ElementNotFoundException(
                     MessageFormat
@@ -123,6 +123,11 @@ public class NoteShareServiceImp implements NoteShareService {
             throw new NoteErrorException(MessageFormat
                     .format("Cannot share note to self Check userName user {0}", fullShareNoteDTO
                             .getNoteShareDTO().getShareToUserName()));
+        }
+
+//        to avoid crashing the prog when a very large value is passed in
+        if(fullShareNoteDTO.getNoteShareDTO().getNumberOfDaysToShare() > 365 ){
+            fullShareNoteDTO.getNoteShareDTO().setNumberOfDaysToShare(365);
         }
 
         NoteShare noteShare = noteShareRepository.saveAndFlush(NoteShare

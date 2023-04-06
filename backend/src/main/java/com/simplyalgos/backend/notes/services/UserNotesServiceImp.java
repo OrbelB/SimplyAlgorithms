@@ -82,6 +82,7 @@ public class UserNotesServiceImp implements UserNotesService {
     public UserNoteDTO savePublicNote(UUID userId, UUID noteId) {
         UserNotes userNotes = getUserNotes(noteId);
 
+
         return noteMapper.userNotesToUserNoteDTO(userNoteRepository.saveAndFlush(
                 UserNotes.builder()
                         .title(userNotes.getTitle() + " Created by " + userNotes.getCreatedBy().getUsername())

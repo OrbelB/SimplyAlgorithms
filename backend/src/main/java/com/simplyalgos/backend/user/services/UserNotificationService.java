@@ -24,6 +24,8 @@ public interface UserNotificationService {
      */
     void addNotification(UUID referenceId, String title, User user, NotificationMessage notificationMessage);
 
+    void addUniversalReportNotification(User sendTo,UUID reportId, String title, String message, NotificationMessage notificationMessage);
+
     ObjectPagedList<?> getNotifications(Pageable pageable, UUID userId);
 
     Set<NotificationDTO> getNotifications(UUID userId);

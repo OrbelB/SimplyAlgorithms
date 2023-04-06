@@ -29,7 +29,6 @@ public class NoteShareDTO {
     Timestamp expireDate;
 
     boolean canEdit = false;
-
 //  ------------------------------------------------------ //
 // NEED TO PUT THIS IN
 

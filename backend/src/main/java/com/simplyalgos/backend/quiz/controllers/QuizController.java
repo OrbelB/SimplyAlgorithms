@@ -81,7 +81,7 @@ public class QuizController {
             return ResponseEntity.ok(takeQuizAverageService.getTakeQuizAverageList(UUID.fromString(userId), PageRequest.of(page, size)));
     }
 
-    @GetMapping(value = "/user_history/{avgTakeQuizId}")
+    @GetMapping(value = "/user-history/{avgTakeQuizId}")
     public ResponseEntity<?> getAverageQuizScore(@PathVariable String avgTakeQuizId) {
         return ResponseEntity.ok(takeQuizAverageService.getAverageQuizScore(UUID.fromString(avgTakeQuizId)));
     }

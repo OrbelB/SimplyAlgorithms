@@ -2,6 +2,8 @@ package com.simplyalgos.backend.user.services;
 
 import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
+import com.simplyalgos.backend.universalReport.domain.UniversalReport;
+import com.simplyalgos.backend.universalReport.dto.UniversalReportDTO;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.DashboardDTO;
 import com.simplyalgos.backend.user.enums.NotificationMessage;
@@ -23,6 +25,7 @@ public class DashboardServiceImpl implements DashboardService {
     private final UserNotificationService userNotificationService;
 
     private final UserHistoryService userHistoryService;
+
 
 
     @Override
@@ -89,6 +92,7 @@ public class DashboardServiceImpl implements DashboardService {
         }
     }
 
+
     @Override
     public void addTopicNotification(Topic fullTopicDTO, User userToNotified) {
         if (userPreferenceService.isNotificationEnableForType(NotificationType.REPLIES_NOTIFICATION, userToNotified.getUserId())) {
@@ -99,5 +103,79 @@ public class DashboardServiceImpl implements DashboardService {
                     NotificationMessage.REPLY
             );
         }
+    }
+
+//    Universal report notification
+
+    @Override
+    public void addReportResolvedNotification(User userToNotify, UniversalReportDTO universalReportDTO) {
+        if (userPreferenceService.isNotificationEnableForType(NotificationType.SPECIAL_UPDATES, userToNotify.getUserId())){
+            log.debug("Sending a resolved notification to user");
+            userNotificationService.addUniversalReportNotification(
+                    userToNotify,
+                    universalReportDTO.getReportId(),
+                    universalReportDTO.getCatagory() + " report has been resolved, thank you for being vigilant",
+                    universalReportDTO.getResolveNote(),
+                    NotificationMessage.REPORT_RESOLVED
+            );
+        }
+    }
+
+    @Override
+    public void addProfanityReportNotification(UniversalReportDTO universalReportDTO) {
+        log.debug("sending a Profanity report to all Admins");
+        userNotificationService.addUniversalReportNotification(
+                User.builder().build(),
+                universalReportDTO.getReportId(),
+                createTitle(universalReportDTO),
+                createMessage(universalReportDTO),
+                NotificationMessage.PROFANITY_REPORT
+        );
+    }
+
+    @Override
+    public void addIncorrectInformationReportNotification(UniversalReportDTO universalReportDTO) {
+        log.debug("sending a Incorrect information to all admins");
+        userNotificationService.addUniversalReportNotification(
+                User.builder().build(),
+                universalReportDTO.getReportId(),
+                createTitle(universalReportDTO),
+                createMessage(universalReportDTO),
+                NotificationMessage.INCORRECT_INFORMATION_REPORT
+        );
+
+    }
+
+    @Override
+    public void addErrorReportNotification(UniversalReportDTO universalReportDTO) {
+        log.debug("sending a Error report to all admins");
+        userNotificationService.addUniversalReportNotification(
+                User.builder().build(),
+                universalReportDTO.getReportId(),
+                createTitle(universalReportDTO),
+                createMessage(universalReportDTO),
+                NotificationMessage.ERROR_REPORT
+        );
+    }
+
+    @Override
+    public void addOtherReportNotification(UniversalReportDTO universalReportDTO) {
+        log.debug("sending Other report to all admins");
+        userNotificationService.addUniversalReportNotification(
+                User.builder().build(),
+                universalReportDTO.getReportId(),
+                createTitle(universalReportDTO),
+                createMessage(universalReportDTO),
+                NotificationMessage.OTHER_REPORT
+        );
+    }
+
+    private String createMessage(UniversalReportDTO universalReportDTO){
+        return "Report for " + universalReportDTO.getCatagory() + " on "
+                + universalReportDTO.getReportDate() + " reportId: " + universalReportDTO.getReportId();
+    }
+
+    private String createTitle(UniversalReportDTO universalReportDTO){
+        return "new report";
     }
 }
