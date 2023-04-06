@@ -2,7 +2,6 @@ package com.simplyalgos.backend.user.services;
 
 import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
-import com.simplyalgos.backend.universalReport.domain.UniversalReport;
 import com.simplyalgos.backend.universalReport.dto.UniversalReportDTO;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.DashboardDTO;
@@ -50,10 +49,10 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public void addAdminNotification(User userToNotified, String requester) {
+    public void addAdminNotification(User userToNotified, String message) {
         if (userPreferenceService.isNotificationEnableForType(NotificationType.ADMIN_NOTIFICATION, userToNotified.getUserId())) {
-            userNotificationService.addNotification(UUID.randomUUID(), requester.concat(" Requested role change"),
-                    userToNotified, NotificationMessage.ROLE_REQUEST);
+            userNotificationService.addRoleRequestChangeNotification(UUID.randomUUID(), "Role Change Request",
+                    userToNotified, NotificationMessage.ROLE_REQUEST, message);
         }
     }
 

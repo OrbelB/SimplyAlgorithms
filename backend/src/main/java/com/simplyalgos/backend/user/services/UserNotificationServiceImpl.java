@@ -2,28 +2,25 @@ package com.simplyalgos.backend.user.services;
 
 import com.simplyalgos.backend.exceptions.ElementNotFoundException;
 import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.domains.UserNotification;
 import com.simplyalgos.backend.user.dtos.NotificationDTO;
 import com.simplyalgos.backend.user.enums.NotificationMessage;
 import com.simplyalgos.backend.user.enums.NotificationType;
 import com.simplyalgos.backend.user.enums.UserRoles;
 import com.simplyalgos.backend.user.mappers.UserNotificationMapper;
 import com.simplyalgos.backend.user.repositories.RoleRepository;
+import com.simplyalgos.backend.user.repositories.UserNotificationRepository;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.security.Role;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-import com.simplyalgos.backend.user.domains.UserNotification;
-import com.simplyalgos.backend.user.repositories.UserNotificationRepository;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
-import java.text.MessageFormat;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -57,30 +54,18 @@ public class UserNotificationServiceImpl implements UserNotificationService {
         if (optionalUserNotification.isPresent()) {
             UserNotification userNotification = optionalUserNotification.get();
             short updatedNotificationQuantity = (short) (userNotification.getNotificationQuantity() + 1);
-            if (notificationMessage == NotificationMessage.ROLE_REQUEST) {
-                userNotification.setMessage(notificationMessage.message(title.substring(0, title.indexOf(" "))));
-                userNotification.setNotificationQuantity(updatedNotificationQuantity);
-            } else if (notificationMessage.equals(NotificationMessage.ROLE_CHANGE)) {
+            if (notificationMessage.equals(NotificationMessage.ROLE_CHANGE)) {
                 userNotification.setMessage(notificationMessage.message(title.split(":")[1].strip()));
                 userNotification.setNotificationQuantity(updatedNotificationQuantity);
             } else {
                 userNotification.setMessage(notificationMessage.message(updatedNotificationQuantity));
                 userNotification.setNotificationQuantity(updatedNotificationQuantity);
             }
-            log.debug("updating new notification for user " + referenceId.toString());
+            log.debug("updating new notification for user " + referenceId);
             return;
         }
-        if (notificationMessage == NotificationMessage.ROLE_REQUEST) {
-            log.debug("adding new notification for user " + referenceId.toString());
-            userNotificationRepository.save(
-                    userNotificationMapper
-                            .createUserNotification(
-                                    title,
-                                    notificationMessage.message(title.substring(0, title.indexOf(" "))),
-                                    (short) 1, referenceId, user));
-            return;
-        } else if (notificationMessage == NotificationMessage.ROLE_CHANGE) {
-            log.debug("adding new notification for user " + referenceId.toString());
+        if (notificationMessage == NotificationMessage.ROLE_CHANGE) {
+            log.debug("adding new notification for user " + referenceId);
             userNotificationRepository.save(
                     userNotificationMapper
                             .createUserNotification(
@@ -89,7 +74,7 @@ public class UserNotificationServiceImpl implements UserNotificationService {
                                     (short) 1, referenceId, user));
             return;
         }
-        log.debug("adding new notification for user " + referenceId.toString());
+        log.debug("adding new notification for user " + referenceId);
         userNotificationRepository.save(
                 userNotificationMapper
                         .createUserNotification(title, notificationMessage.message((short) 1), (short) 1, referenceId, user));
@@ -133,6 +118,17 @@ public class UserNotificationServiceImpl implements UserNotificationService {
         }
     }
 
+
+    @Override
+    public void addRoleRequestChangeNotification(UUID referenceId, String title, User user, NotificationMessage notificationMessage, String message) {
+        UserNotification userNotification = userNotificationRepository.findByReferenceIdAndUserNotification_UserId(referenceId, user.getUserId()).orElse(
+                userNotificationRepository.save(
+                        userNotificationMapper
+                                .createUserNotification(title, notificationMessage.message(message), (short) 1, referenceId, user)
+                ));
+        userNotification.setMessage(notificationMessage.message(message));
+        userNotification.setNotificationQuantity((short) 1);
+    }
 
     @Override
     public ObjectPagedList<?> getNotifications(Pageable pageable, UUID userId) {

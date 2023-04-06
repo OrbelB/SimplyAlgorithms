@@ -3,6 +3,7 @@ package com.simplyalgos.backend.user.controllers;
 
 import com.simplyalgos.backend.security.JpaUserDetailsService;
 import com.simplyalgos.backend.user.dtos.NotificationRemoval;
+import com.simplyalgos.backend.user.dtos.RoleChangeForm;
 import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
 import com.simplyalgos.backend.user.dtos.UserPreferencesDTO;
 import com.simplyalgos.backend.user.repositories.projections.UserInformationOnly;
@@ -61,7 +62,7 @@ public class UserController {
     @UserUpdatePermission
     @PutMapping(path = "/update", produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> update(@RequestBody UserDataPostDTO userDTO) {
-        log.info("user id is ", userDTO.getUserId());
+        log.info("user id is " + userDTO.getUserId());
         return ResponseEntity.accepted().body(userService.updateUser(userDTO));
     }
 
@@ -98,9 +99,9 @@ public class UserController {
 
     @PutMapping(path = "/update-role", produces = "application/json")
     @PreAuthorize("hasAuthority('users.crud')")
-    public ResponseEntity<?> updateRole(@RequestParam(name = "username") String username,
+    public ResponseEntity<?> updateRole(@RequestParam(name = "usernameOrId", required = false) String usernameOrId,
                                         @RequestParam(name = "role") String role) {
-        return ResponseEntity.accepted().body(userService.changeUserRole(username, role));
+        return ResponseEntity.accepted().body(userService.changeUserRole(usernameOrId, role));
     }
 
     @UserRemoveNotification
@@ -123,19 +124,17 @@ public class UserController {
     }
 
 
-    @PutMapping(path="/lock-account", produces = "application/json")
+    @PutMapping(path = "/lock-account", produces = "application/json")
     @PreAuthorize("hasAuthority('users.crud')")
-    public ResponseEntity<?> lockAccount(@RequestParam(name = "username") String username,
-                                         @RequestParam(name = "userId") UUID userId,
+    public ResponseEntity<?> lockAccount(@RequestParam(name = "usernameOrId") String usernameOrId,
                                          @RequestParam(name = "accountNonLocked") boolean accountNonLocked) {
-        return ResponseEntity.accepted().body(userService.LockUserAccount(username, accountNonLocked));
+        return ResponseEntity.accepted().body(userService.LockUserAccount(usernameOrId, accountNonLocked));
     }
 
-    @PutMapping(path="/request-role")
-    @PreAuthorize("@customAuthManager.userIdMatches(authentication,#userId)")
-    public ResponseEntity<?> requestRole(@RequestParam(name = "username") String username,
-                                         @RequestParam(name = "role") String role) {
-        userService.requestRoleChange(username, role);
+    @PutMapping(path = "/request-role")
+    @PreAuthorize("@customAuthManager.userIdMatches(authentication,#roleChangeForm.userId)")
+    public ResponseEntity<?> requestRole(@RequestBody RoleChangeForm roleChangeForm) {
+        userService.requestRoleChange(roleChangeForm);
         return ResponseEntity.noContent().build();
     }
 

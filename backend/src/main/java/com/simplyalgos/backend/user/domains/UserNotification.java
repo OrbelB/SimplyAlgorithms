@@ -34,7 +34,7 @@ public class UserNotification {
     @Type(value = UserTypeLegacyBridge.class,
             parameters = @org.hibernate.annotations.Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
                     value = "org.hibernate.type.UUIDCharType"))
-    @Column(length = 36, columnDefinition = "varchar", nullable = false, name = "reference_id")
+    @Column(length = 36, columnDefinition = "varchar", nullable = false, name = "reference_id", unique = false)
     private UUID referenceId;
     private String title;
     private String message;

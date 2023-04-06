@@ -48,22 +48,33 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void requestRoleChange(String username, String role) {
+    public void requestRoleChange(RoleChangeForm roleChangeForm) {
         Role admin = roleRepository.findRoleByRoleName(UserRoles.ADMIN.name()).orElseThrow(
                 () -> new NoSuchElementException("Role not found")
         );
         Set<User> users = userRepository.findAllByRolesIn(Set.of(admin));
+        log.debug("adding notification for role change request");
+        StringBuffer message = new StringBuffer();
+        message
+                .append("User ")
+                .append(roleChangeForm.username())
+                .append(" requested to change role to: ")
+                .append(roleChangeForm.role()).append(".\n")
+                .append("The following is the school he/she is associated with:\n\n")
+                .append(roleChangeForm.school()).append("\n\n")
+                .append("And the reason for the role change is:\n\n")
+                .append(roleChangeForm.reasoning()).append("\n\n")
+                .append("Please login to the admin dashboard to approve or reject the request.");
 
         // send notification to admins to approve role change
         users.forEach(user -> {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Role Change Request");
-            mailMessage.setText(MessageFormat
-                    .format("User {0} requested to change role to {1}", username, role));
+            mailMessage.setText(message.toString());
             emailService.sendEmail(mailMessage);
             // send internal notification
-            dashboardService.addAdminNotification(user, username);
+            dashboardService.addAdminNotification(user, message.toString());
         });
     }
 
@@ -184,16 +195,17 @@ public class UserServiceImpl implements UserService {
      * This method will change the user role
      */
     @Override
-    public UserInformation changeUserRole(String username, String role) {
+    public UserInformation changeUserRole(String usernameOrId, String role) {
         if (roleRepository.existsByRoleName(role)) {
-            User user = userRepository.findByUsername(username).orElseThrow(() ->
-                    new ElementNotFoundException("USERNAME: " + username + " NOT FOUND")
+            User user = userRepository.findByUsername(usernameOrId).orElseGet(() ->
+                    userRepository.findById(UUID.fromString(usernameOrId)).orElseThrow(() ->
+                            new ElementNotFoundException("USERNAME OR USERID: " + usernameOrId + " NOT FOUND")
+                    )
             );
             Role roleToAdd = roleRepository.findRoleByRoleName(role).orElseThrow(() ->
                     new ElementNotFoundException("ROLE: " + role + " NOT FOUND")
             );
             user.addRole(roleToAdd);
-
             // notify user of role change
             dashboardService.addRoleChangeNotification(user, roleToAdd.getRoleName());
             log.info("USER: " + user.getUsername() + " ROLE CHANGED TO: " + role);
@@ -203,9 +215,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInformation LockUserAccount(String username, boolean accountNonLocked) {
-        User user = userRepository.findByUsername(username).orElseThrow(() ->
-                new ElementNotFoundException("USERNAME: " + username + " NOT FOUND")
+    public UserInformation LockUserAccount(String usernameOrId, boolean accountNonLocked) {
+        User user = userRepository.findByUsername(usernameOrId).orElseGet(() ->
+                userRepository.findById(UUID.fromString(usernameOrId)).orElseThrow(() ->
+                        new ElementNotFoundException("USERNAME OR USERID : " + usernameOrId + " NOT FOUND")
+                )
         );
         user.setAccountNonLocked(!user.getAccountNonLocked());
         return userMapper.userToUserInformation(userRepository.save(user));

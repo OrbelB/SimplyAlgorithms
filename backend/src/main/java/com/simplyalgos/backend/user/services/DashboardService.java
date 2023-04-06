@@ -43,10 +43,10 @@ public interface DashboardService {
 
     /**
      * @param userToNotified user to be notified of the request
-     * @param username       of the user who requested the role change
+     * @param message     the message that the user has sent to the admin
      * @implSpec notifies the user that someone has requested a role change
      */
-    void addAdminNotification(User userToNotified, String username);
+    void addAdminNotification(User userToNotified, String message);
 
     /**
      * @param userToNotified user to be notified of the account change

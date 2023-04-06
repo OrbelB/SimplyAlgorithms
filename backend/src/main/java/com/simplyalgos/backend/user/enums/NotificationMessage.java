@@ -33,8 +33,8 @@ public enum NotificationMessage {
             return "You have been promoted to " + role + ".";
         }
     }, ROLE_REQUEST {
-        public <T> String message(T username) {
-            return username + " requested to be promoted to Teacher";
+        public <T> String message(T message) {
+            return message.toString();
         }
     },
 //     ------------------------------

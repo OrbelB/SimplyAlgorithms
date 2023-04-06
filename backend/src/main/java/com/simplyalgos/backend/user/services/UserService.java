@@ -1,10 +1,7 @@
 package com.simplyalgos.backend.user.services;
 
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
-import com.simplyalgos.backend.user.dtos.UserDTO;
-import com.simplyalgos.backend.user.dtos.UserDataPostDTO;
-import com.simplyalgos.backend.user.dtos.UserInformation;
+import com.simplyalgos.backend.user.dtos.*;
 import com.simplyalgos.backend.user.repositories.projections.UserInformationOnly;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +10,7 @@ import java.util.UUID;
 
 public interface UserService {
 
-    void requestRoleChange(String username, String role);
+    void requestRoleChange(RoleChangeForm roleChangeForm);
 
     ObjectPagedList<UserInformationOnly> listAllUsers(Pageable pageable);
 
@@ -38,7 +35,7 @@ public interface UserService {
 
     boolean getUsername(GetUsernameDTO getUsernameDTO);
 
-    UserInformation changeUserRole(String username, String role);
+    UserInformation changeUserRole(String usernameOrId, String role);
 
     UserInformation LockUserAccount(String username, boolean accountNonLocked);
 
