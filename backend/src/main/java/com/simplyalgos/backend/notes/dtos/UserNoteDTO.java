@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.notes.dtos;
 
 import com.simplyalgos.backend.user.dtos.UserDTO;
+import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,8 +25,7 @@ public class UserNoteDTO {
     short isPublic;
     Map<String, Object> noteBody;
 
-
-    UserDTO createdBy;
+    UserDataDTO createdBy;
 
 
 }

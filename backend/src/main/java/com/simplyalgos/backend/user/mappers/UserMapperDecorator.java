@@ -33,6 +33,10 @@ public class UserMapperDecorator implements UserMapper {
         return userMapper.userTOUserDataDTO(user);
     }
 
+    @Override
+    public User userDataDTOToUser(UserDataDTO userDataDTO) {
+        return userMapper.userDataDTOToUser(userDataDTO);
+    }
 
 
     @Override

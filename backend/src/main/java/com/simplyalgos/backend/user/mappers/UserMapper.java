@@ -17,12 +17,16 @@ public interface UserMapper {
 
 
 
+
+
     @Mapping(target = "role" ,
             expression = "java(user.getRoles().stream()" +
                     ".findFirst().orElseThrow()" +
                     ".getRoleName())")
     UserInformation userToUserInformation(User user);
     UserDataDTO userTOUserDataDTO(User user);
+
+    User userDataDTOToUser(UserDataDTO userDataDTO);
 
 
     @Mapping(target = "UserPreferencesDTO.userId", ignore = true)

@@ -103,7 +103,7 @@ public class UserNotesServiceImp implements UserNotesService {
         Timestamp currentTimeStamp = new Timestamp(new Date().getTime());
         UserNotes userNotes = userNoteRepository.saveAndFlush(
                 UserNotes.builder()
-                        .createdBy(userMapper.userDtoToUser(userNoteDTO.getCreatedBy()))
+                        .createdBy(userMapper.userDataDTOToUser(userNoteDTO.getCreatedBy()))
                         .noteBody(userNoteDTO.getNoteBody())
                         .title(userNoteDTO.getTitle())
                         .isPublic((short) 0)

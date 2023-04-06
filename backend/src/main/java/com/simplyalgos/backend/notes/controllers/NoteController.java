@@ -9,7 +9,10 @@ import com.simplyalgos.backend.notes.security.*;
 import com.simplyalgos.backend.notes.services.NoteShareService;
 import com.simplyalgos.backend.notes.services.PublicNotesService;
 import com.simplyalgos.backend.notes.services.UserNotesService;
+import com.simplyalgos.backend.user.enums.NotificationMessage;
 import com.simplyalgos.backend.user.security.perms.AdminPermission;
+import com.simplyalgos.backend.user.services.UserNotificationService;
+import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.utils.StringUtils;
 import io.swagger.v3.core.util.Json;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +39,10 @@ public class NoteController {
     private final UserNotesService userNotesService;
     private final NoteShareService noteShareService;
     private final PublicNotesService publicNotesService;
+
+    private final UserService userService;
+
+    private final UserNotificationService userNotificationService;
 
 //    GET MAPPINGS
 
@@ -282,6 +289,13 @@ public class NoteController {
     @AdminPermission
     @DeleteMapping(path = "/deletePublicNoteAdmin", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> deletePublicNoteByAdmin(@RequestBody PublicNoteDTO publicNoteDTO) {
+        userNotificationService.addNotification(
+                UUID.randomUUID(),
+                "Your public note has been deleted",
+                userService.getUser(publicNoteDTO.getUserNoteDTO().getCreatedBy().getUserId()),
+                NotificationMessage.SYSTEM_UPDATE
+        );
+
         return ResponseEntity.status((HttpStatus.ACCEPTED))
                 .body(userNotesService.
                         deleteNotePage(publicNoteDTO.getUserNoteDTO().getNoteId()));
