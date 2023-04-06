@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import RecentlyViewedPosts from './RecentlyViewPosts/RecentlyViewedPosts';
-import TopicsDB from './TopicsDB/TopicsDB';
+
 import './Dashboard.css';
 import DayStreak from './DayStreak/DayStreak';
 import QuizProgress from './QuizProgress/QuizProgress';
@@ -14,6 +14,7 @@ import ShowMoreComments from './CommentsDB/ShowMoreComments/ShowMoreComments';
 import ShowMoreHighlights from './HighlightsDB/ShowMoreHighlights/ShowMoreHighlights';
 import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 import { fetchUserHistory } from '../../services/quiz';
+import UserSearchSection from './UserSearch';
 
 export default function Dashboard() {
   const { status: quizStatus, userHistory } = useSelector(
@@ -108,12 +109,11 @@ export default function Dashboard() {
             <RecentlyViewedPosts />
           </div>
         </div>
-        <div className="col-lg-4 mt-2">
-          <div className="card border-dark topics">
-            <h4 className="card-header text-center">Topics</h4>
-            <TopicsDB />
+        {isAdmin && (
+          <div className="col-lg-4 mt-2">
+            <UserSearchSection />
           </div>
-        </div>
+        )}
         <div className="col-lg mt-2">
           <div className="card side-right-1">
             <h4 className="card-header text-center">Notifications</h4>

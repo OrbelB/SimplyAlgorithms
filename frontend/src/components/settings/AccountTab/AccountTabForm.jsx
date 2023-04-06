@@ -7,7 +7,7 @@ import TeacherRequest from './TeacherRequestForm';
 import { updateUserData } from '../../../services/user';
 
 export default function AccountTabForm() {
-  const { username, firstName, lastName, email, phoneNumber, dob } =
+  const { username, firstName, lastName, email, phoneNumber, dob, role } =
     useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,7 +37,6 @@ export default function AccountTabForm() {
       updateUserData({
         updatedUserData: {
           userId: authUserId,
-          username: input?.usrname,
           firstName: input?.firstName,
           lastName: input?.lastName,
           email: input?.em,
@@ -157,18 +156,15 @@ export default function AccountTabForm() {
           </label>
           <div className="form-group">
             <strong className="text-secondary mb-1">
-              {' '}
-              Current Username: {username}
+              Cannot change your username: {username}
             </strong>
             <input
               type="text"
               className="form-control"
               id="usernameInput"
               name="usrname"
-              placeholder="Enter username"
-              value={input.usrname}
-              onChange={onInputChange}
-              onBlur={validateInput}
+              value={username}
+              readOnly
             />
             {error.usrname && (
               <span className="err text-danger">{error.usrname}</span>
@@ -178,7 +174,6 @@ export default function AccountTabForm() {
           <label className="mt-2 h5">Birthdate</label>
           <div className="form-group">
             <strong className="text-secondary mb-1">
-              {' '}
               Current birthdate: {dob}
             </strong>
             <input
@@ -247,7 +242,8 @@ export default function AccountTabForm() {
                 name="inlineRadioOptions"
                 id="inlineRadio1"
                 value="option1"
-                checked
+                checked={role === 'STUDENT'}
+                disabled={role === 'TEACHER'}
               />
               <label className="form-check-label h6" htmlFor="inlineRadio1">
                 Student
@@ -260,7 +256,8 @@ export default function AccountTabForm() {
                 name="inlineRadioOptions"
                 id="inlineRadio2"
                 value="option2"
-                disabled
+                checked={role === 'TEACHER'}
+                disabled={role === 'STUDENT'}
               />
               <label className="form-check-label h6" htmlFor="inlineRadio2">
                 Teacher
@@ -278,7 +275,7 @@ export default function AccountTabForm() {
             Reset Changes
           </button>
           <hr />
-          <TeacherRequest />
+          {role === 'STUDENT' && <TeacherRequest />}
           <hr />
           <div className="form-group">
             <label className="d-block text-danger h5">Delete Account</label>

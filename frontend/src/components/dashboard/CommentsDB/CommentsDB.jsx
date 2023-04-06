@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import CommentsPreview from './CommentsPreview/CommentsPreview';
 import './CommentsDB.css';
 
@@ -8,19 +9,9 @@ const SELECTED_TOPICS = [
 ];
 export { SELECTED_TOPICS };
 export default function CommentsDB() {
+  const { dashboardInfo } = useSelector((state) => state.user);
   return (
-    <div>
-      {/* {SELECTED_TOPICS.map(({ index, topic }) => {
-        return (
-          <div key={`${topic} ${index}`}>
-            <div className="firstline p-2">
-              <div className="topic-selected">
-                <h5>Topic: {topic}</h5>
-              </div>
-            </div>
-          </div>
-        );
-      })} */}
+    <>
       <div className="secondline-comments row p-2">
         <div className="col-8">
           <div className="input-group">
@@ -76,8 +67,11 @@ export default function CommentsDB() {
         </div>
       </div>
       <div className="thirdline">
-        <CommentsPreview />
+        <CommentsPreview
+          key={dashboardInfo?.notifications?.length}
+          notifications={dashboardInfo?.notifications?.slice(0, 5) ?? []}
+        />
       </div>
-    </div>
+    </>
   );
 }

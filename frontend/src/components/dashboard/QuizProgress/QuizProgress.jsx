@@ -11,13 +11,6 @@ import QuizDB from './QuizDB/QuizDB';
 import useJwtPermssionExists from '../../../hooks/use-jwtPermission';
 import { quizActions } from '../../../store/reducers/quiz-slice';
 
-// const linechar = [
-//   {
-//     qname: ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5', 'Quiz 6'],
-//     dtachart: [90, 90, 20, 50, 20, 12],
-//   },
-// ];
-
 export default function QuizProgress({ userHistory }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();

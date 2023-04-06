@@ -1,9 +1,10 @@
-import { nanoid } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 import CommentsPreview from '../CommentsPreview/CommentsPreview';
-import { SELECTED_TOPICS } from '../CommentsDB';
+
 import './ShowMoreComments.css';
 
 export default function ShowMoreComments() {
+  const { dashboardInfo } = useSelector((state) => state.user);
   return (
     <>
       {/* <!-- Button trigger modal --> */}
@@ -43,19 +44,6 @@ export default function ShowMoreComments() {
               />
             </div>
             <div className="modal-body">
-              <div>
-                {SELECTED_TOPICS.map(({ topic }) => {
-                  return (
-                    <div key={nanoid()}>
-                      <div className="firstline">
-                        <div className="topic-selected">
-                          <h5>Topic: {topic}</h5>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
               <div className="secondline row">
                 <div className="col-8">
                   <div className="input-group">
@@ -114,7 +102,9 @@ export default function ShowMoreComments() {
                 </div>
               </div>
               <div className="thirdline">
-                <CommentsPreview />
+                <CommentsPreview
+                  notifications={dashboardInfo?.notifications ?? []}
+                />
               </div>
             </div>
           </div>

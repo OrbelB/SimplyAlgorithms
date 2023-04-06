@@ -11,16 +11,6 @@ import { updateForum } from '../../../services/forum';
 import TagForm from '../tags/TagForm';
 import { tagsActions } from '../../../store/reducers/tags-slice';
 
-// // experiment
-// // eslint-disable-next-line import/order
-// import { EditorState, convertToRaw } from 'draft-js';
-// // eslint-disable-next-line import/order
-// import { Editor } from 'react-draft-wysiwyg';
-// // eslint-disable-next-line import/order
-// import draftToHtml from 'draftjs-to-html';
-// // eslint-disable-next-line import/order
-// import htmlToDraft from 'html-to-draftjs';
-
 export default function ForumEdit() {
   const { pageId } = useParams();
   const { forum, status } = useSelector((state) => state.forum);
@@ -56,7 +46,8 @@ export default function ForumEdit() {
 
   let isFormValid = false;
   if (titleIsValid && descriptionIsValid) isFormValid = true;
-  const onSubmitForm = () => {
+  const onSubmitForm = (e) => {
+    e.preventDefault();
     if (!isFormValid) return;
     dispatch(
       updateForum({
@@ -87,10 +78,11 @@ export default function ForumEdit() {
   }
 
   return (
-    <div className="container form-group pt-5">
+    <form className="container-xxl form-group pt-5" onSubmit={onSubmitForm}>
+      <h2 className="row justify-content-center mb-4">EDIT FORUM</h2>
       <div className="row justify-content-center">
         <TextField
-          className="col-auto w-100 mb-5"
+          className="col-auto w-75 mb-5"
           id="margin-dense"
           required
           label="Title"
@@ -98,7 +90,7 @@ export default function ForumEdit() {
           onChange={titleChangeHandler}
         />
         <TextareaAutosize
-          className="col-auto w-100 mb-5"
+          className="col-auto w-75 mb-5"
           id="filled-multiline-flexible"
           label="Description"
           minRows={15}
@@ -106,35 +98,30 @@ export default function ForumEdit() {
           value={description}
           onChange={descriptionChangeHandler}
         />
-        <h4 className="row justify-content-center">Current Categories</h4>
-        <div className="w-100">
+        <h3 className="row justify-content-center">CURRENT CATEGORIES</h3>
+        <div className="w-75 m-0 p-0">
           <TagForm currentTags={currentTags} setCurrentTags={setCurrentTags} />
         </div>
       </div>
-      <div className="row justify-content-around mt-5">
-        <div className="col-auto">
-          <button
-            type="button"
-            className=" btn  btn-outline-secondary"
-            onClick={() => {
-              dispatch(tagsActions.resetData());
-              navigate(redirectTo, { replace: true });
-            }}
-          >
-            BACK
-          </button>
-        </div>
-        <div className="col-auto d-flex justify-content-end">
-          <button
-            type="button"
-            className="btn  btn-outline-primary"
-            onClick={onSubmitForm}
-            disabled={!isFormValid}
-          >
-            SUBMIT
-          </button>
-        </div>
+      <div className="d-flex justify-content-around mt-5 mb-5">
+        <button
+          type="button"
+          className="btn  btn-secondary btn-lg"
+          onClick={() => {
+            dispatch(tagsActions.resetData());
+            navigate(redirectTo, { replace: true });
+          }}
+        >
+          BACK
+        </button>
+        <button
+          type="submit"
+          className="btn btn-lg  btn-success"
+          disabled={!isFormValid}
+        >
+          SUBMIT
+        </button>
       </div>
-    </div>
+    </form>
   );
 }

@@ -122,7 +122,7 @@ export default function NotificationsPreview({ setShow }) {
       >
         <h4>{title}</h4>
 
-        <p>{message}</p>
+        <p style={{ whiteSpace: 'pre-wrap' }}>{message}</p>
       </div>
     )
   );

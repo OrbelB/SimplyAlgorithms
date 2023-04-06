@@ -92,3 +92,28 @@ export const checkAvailability = createAsyncThunk(
     return response.data;
   }
 );
+
+export const requestRoleChange = createAsyncThunk(
+  'user/request-role-change',
+  async (passedParams) => {
+    const { roleRequestForm, jwtAccessToken } = passedParams;
+    const response = await userEndpoints.requestRoleChange(
+      roleRequestForm,
+      jwtAccessToken
+    );
+    return response.data;
+  }
+);
+
+export const updateUserRole = createAsyncThunk(
+  'user/update-role',
+  async (passedParams) => {
+    const { usernameOrId, role, jwtAccessToken } = passedParams;
+    const response = await userEndpoints.updateRole(
+      usernameOrId,
+      role,
+      jwtAccessToken
+    );
+    return response.data;
+  }
+);

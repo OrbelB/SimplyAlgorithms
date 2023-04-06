@@ -24,12 +24,14 @@ export default function TagForm({ currentTags, setCurrentTags }) {
   const tagsAvailable = useSelector(selectAllTags);
   const { totalElements } = useSelector((state) => state.tags);
 
-  // fetch all tags in database
-  if (tagsAvailable.length !== totalElements || tagsAvailable.length === 0) {
-    dispatch(
-      fetchTags({ page: 0, size: totalElements === 0 ? 10 : totalElements })
-    );
-  }
+  useEffect(() => {
+    // fetch all tags in database
+    if (tagsAvailable.length !== totalElements || tagsAvailable.length === 0) {
+      dispatch(
+        fetchTags({ page: 0, size: totalElements === 0 ? 10 : totalElements })
+      );
+    }
+  }, [dispatch, tagsAvailable, totalElements]);
 
   useEffect(() => {
     if (tagId !== '' && tagSelected !== undefined && hasTagBeenAdded) {
@@ -65,6 +67,7 @@ export default function TagForm({ currentTags, setCurrentTags }) {
     if (e.key !== 'Enter') return;
     setCurrentTags(currentTags.concat({ tag: newTagName, tagId: '' }));
     setNewTagName('');
+    e.preventDefault();
   };
   return (
     <>

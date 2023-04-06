@@ -103,4 +103,33 @@ export const userEndpoints = {
         Authorization: 'Bearer ' + accessToken,
       },
     }),
+  requestRoleChange: (roleRequestForm, jwtAccessToken) =>
+    put(`${PUBLIC_ENDPOINT_ROUTE}/request-role`, roleRequestForm, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
+      },
+    }),
+  lockAccount: (usernameOrId, accountNonLocked, jwtAccessToken) =>
+    put(`${PUBLIC_ENDPOINT_ROUTE}/lock-account`, null, {
+      params: {
+        usernameOrId,
+        accountNonLocked,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
+      },
+    }),
+  updateRole: (usernameOrId, role, jwtAccessToken) =>
+    put(`${PUBLIC_ENDPOINT_ROUTE}/update-role`, null, {
+      params: {
+        usernameOrId,
+        role,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
+      },
+    }),
 };

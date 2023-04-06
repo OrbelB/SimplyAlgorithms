@@ -39,6 +39,7 @@ import {
 } from '../../../../services/note';
 // import { updateSharedEditPermission } from '../../../../store/reducers/note-slice';
 import { timeToExpire } from '../../../../utilities/beautify-time';
+import useJwtPermssionExists from '../../../../hooks/use-jwtPermission';
 
 const content = {
   blocks: [
@@ -57,6 +58,7 @@ const content = {
 
 export default function NoteBookList({ element, sharedToo, innerRef }) {
   const dispatch = useDispatch();
+  const isStudent = useJwtPermssionExists({ permission: 'ROLE_STUDENT' });
   const [shareDays, setShareDays] = useState(15);
   const { status } = useSelector((state) => state.note);
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
@@ -499,7 +501,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
           <Button
             type="button"
             variant="contained"
-            disabled={status === 'pending'}
+            disabled={status === 'pending' || isStudent}
             color={isPublic ? 'success' : 'error'}
             onClick={handleUpdatingIsPublic}
           >

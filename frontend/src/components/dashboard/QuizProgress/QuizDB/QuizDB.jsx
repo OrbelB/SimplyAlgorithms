@@ -20,13 +20,13 @@ export default function QuizDB({ userHistory }) {
               <div className="card quizdb p-2">
                 <div className="container-fluid">
                   <div className="row">
-                    <h5>{quizDTO.title}</h5>
+                    <h3>{quizDTO.title}</h3>
                   </div>
                   <div className="row">
                     <p>Created By {createdBy.username}</p>
                   </div>
                   <div className="row">
-                    <div className="col">
+                    <div className="col-auto">
                       <CircularProgressbar
                         value={averageScore}
                         text={`${averageScore}%`}

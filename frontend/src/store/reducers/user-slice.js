@@ -10,6 +10,8 @@ import {
   fetchUserDashboardInfo,
   removeSingleNotification,
   checkAvailability,
+  requestRoleChange,
+  updateUserRole,
 } from '../../services/user';
 
 const initialState = {
@@ -196,13 +198,14 @@ export const userSlice = createSlice({
         state.status = 'failed';
       })
       .addCase(fetchUserDashboardInfo.pending, (state) => {
-        state.status = 'pending';
+        state.status = 'pendingDashboard';
       })
       .addCase(fetchUserDashboardInfo.fulfilled, (state, action) => {
         state.dashboardInfo = action.payload;
+        state.status = 'success';
       })
       .addCase(fetchUserDashboardInfo.rejected, (state, action) => {
-        state.error = action.payload.message;
+        state.error = action.error.message;
         state.status = 'failed';
       })
       .addCase(checkAvailability.pending, (state) => {
@@ -217,6 +220,26 @@ export const userSlice = createSlice({
         if (email !== undefined || email !== null) state.emailAvailable = email;
       })
       .addCase(checkAvailability.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+      .addCase(requestRoleChange.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(requestRoleChange.fulfilled, (state) => {
+        state.status = 'success';
+      })
+      .addCase(requestRoleChange.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+      .addCase(updateUserRole.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(updateUserRole.fulfilled, (state) => {
+        state.status = 'success';
+      })
+      .addCase(updateUserRole.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       });

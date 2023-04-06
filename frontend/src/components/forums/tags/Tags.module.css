@@ -15,7 +15,8 @@
 .last-button {
   background-color: var(--color-border-input-form);
   border-radius: 10px 10px 10px 10px;
-  font-size: 3vw;
+  width: 100% !important;
+  font-size: 20px !important;
   font-family: 'Readex Pro', sans-serif;
   border: 1px solid #0f52d8;
 }
