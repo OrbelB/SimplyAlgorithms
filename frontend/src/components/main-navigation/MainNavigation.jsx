@@ -25,6 +25,7 @@ import './MainNavigation.css';
 const pages = [
   { name: 'Home', path: 'home' },
   { name: 'Dashboard', path: 'dashboard' },
+  { name: 'Wiki', path: 'wiki' },
   { name: 'Forums', path: 'forums' },
   { name: 'Quizzes', path: 'quiz' },
 ];
