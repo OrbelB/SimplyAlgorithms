@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 // service
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { noteEndpoints } from './Api/note';
