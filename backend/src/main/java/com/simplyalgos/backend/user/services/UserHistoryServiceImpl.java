@@ -25,6 +25,7 @@ import java.util.UUID;
 @Slf4j
 @Transactional
 public class UserHistoryServiceImpl implements UserHistoryService {
+
     private final UserHistoryRepository userHistoryRepository;
 
     private final UserHistoryMapper userHistoryMapper;
@@ -36,9 +37,9 @@ public class UserHistoryServiceImpl implements UserHistoryService {
 
     private void updateStreakDays(@NonNull UserHistory userHistory, @NonNull LocalDate currentDate) {
         LocalDate lastLogin = userHistory.getDayLoggedIn().toLocalDate();
+        // check if user already logged in today
         if (lastLogin.equals(currentDate)) {
             log.info("user already logged in this day");
-            return;
         }
 
         if (lastLogin.plusDays(1).equals(currentDate)) { //if user logged in yesterday then add one to it
@@ -61,6 +62,6 @@ public class UserHistoryServiceImpl implements UserHistoryService {
                                         (short) 1, user)
                 );
         updateStreakDays(userHistory, currentDate);
-        userHistoryRepository.save(userHistory);
+        userHistoryRepository.saveAndFlush(userHistory);
     }
 }

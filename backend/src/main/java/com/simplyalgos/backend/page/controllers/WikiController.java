@@ -45,14 +45,12 @@ public class WikiController {
     @PreAuthorize("hasRole(T(com.simplyalgos.backend.user.enums.UserRoles).ADMIN.name())")
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createWikiMainCategory(@RequestBody WikiDTO wiki) {
-        log.info("check object "  + Json.pretty(wiki));
         return ResponseEntity.status(HttpStatus.CREATED).body(wikiService.saveWiki(wiki));
     }
 
     @PreAuthorize("hasRole(T(com.simplyalgos.backend.user.enums.UserRoles).ADMIN.name())")
     @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateWikiMainCategory(@RequestBody WikiDTO wiki) {
-        log.info("check object "  + Json.pretty(wiki));
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(wikiService.updateWiki(wiki));
     }
 

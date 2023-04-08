@@ -1,123 +1,181 @@
 package com.simplyalgos.backend.bootstrap;
 
-import com.simplyalgos.backend.page.domains.Topic;
-import com.simplyalgos.backend.page.repositories.TopicRepository;
+import com.nimbusds.jose.shaded.gson.GsonBuilder;
+import com.simplyalgos.backend.comment.enums.CommentType;
+import com.simplyalgos.backend.page.domains.Wiki;
+import com.simplyalgos.backend.page.repositories.WikiRepository;
 import com.simplyalgos.backend.user.domains.User;
+import com.simplyalgos.backend.user.enums.UserRoles;
+import com.simplyalgos.backend.user.repositories.AuthorityRepository;
+import com.simplyalgos.backend.user.repositories.RoleRepository;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.security.Authority;
-import com.simplyalgos.backend.user.repositories.AuthorityRepository;
 import com.simplyalgos.backend.user.security.Role;
-import com.simplyalgos.backend.user.repositories.RoleRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import jakarta.transaction.Transactional;
 import java.sql.Date;
-import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Slf4j
 @Component
 public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
+    private final WikiRepository wikiRepository;
     private final AuthorityRepository authorityRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TopicRepository topicRepository;
+
+
+    @Value("${ADMIN_PASSWORD}")
+    private String adminPassword;
+
+    @Value("${ADMIN_EMAIL}")
+    private String adminEmail;
+
+
+    @Value("${BOT_PASSWORD}")
+    private String botPassword;
 
     @Transactional
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (userRepository.findByUsername("admin").isEmpty()) {
+        if (!userRepository.existsByUsername("admin")) {
             loadDefaultUsers();
         }
 
-        if(topicRepository.findById(UUID.fromString("54e9d8be-f123-4360-9c76-0c4c2ccd99eb")).isEmpty()){
+        if (!wikiRepository.existsByWikiName("Main Category")) {
             loadDefaultTopicPages();
         }
     }
 
     private void loadDefaultTopicPages() {
 
-        Map<String, Object> pageDescription = new HashMap<>();
-        pageDescription.put("description", "template");
-        topicRepository.save(
-                Topic.builder()
-                        .pageId(UUID.fromString("3ba9a5c8-a328-4c88-80e0-57872ed56bde"))
-                        .downVotes(0)
-                        .upVotes(0)
-                        .video("template")
-                        .source("template")
-                        .createdBy(userRepository.findByUsername("admin")
-                                .orElseThrow(() -> new NoSuchElementException("admin")))
-                        .pageDescription(pageDescription)
-                        .title("Bubble Sort")
-                        .downVotes(0)
+        Map<String, Object> pageDescription = new GsonBuilder().create().fromJson("{\n" +
+                "        \"blocks\": [\n" +
+                "            {\n" +
+                "                \"key\": \"2d4ek\",\n" +
+                "                \"text\": \"This main category always has to be here\",\n" +
+                "                \"type\": \"header-one\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {\n" +
+                "                    \"text-align\": \"center\"\n" +
+                "                }\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"key\": \"evc2g\",\n" +
+                "                \"text\": \"\",\n" +
+                "                \"type\": \"unstyled\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {}\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"key\": \"frdnn\",\n" +
+                "                \"text\": \"sdafdas\",\n" +
+                "                \"type\": \"unstyled\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {}\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"key\": \"6dero\",\n" +
+                "                \"text\": \"f yhjhgj\",\n" +
+                "                \"type\": \"unstyled\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {}\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"key\": \"f84o8\",\n" +
+                "                \"text\": \"sad\",\n" +
+                "                \"type\": \"unstyled\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {}\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"key\": \"cgtjq\",\n" +
+                "                \"text\": \"fghj\",\n" +
+                "                \"type\": \"unstyled\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {}\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"key\": \"60pdg\",\n" +
+                "                \"text\": \"sda\",\n" +
+                "                \"type\": \"unstyled\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {}\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"key\": \"f9s1g\",\n" +
+                "                \"text\": \"f\",\n" +
+                "                \"type\": \"unstyled\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {}\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"key\": \"5pft3\",\n" +
+                "                \"text\": \"sad\",\n" +
+                "                \"type\": \"unstyled\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {}\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"key\": \"9fqti\",\n" +
+                "                \"text\": \"fsadf\",\n" +
+                "                \"type\": \"unstyled\",\n" +
+                "                \"depth\": 0,\n" +
+                "                \"inlineStyleRanges\": [],\n" +
+                "                \"entityRanges\": [],\n" +
+                "                \"data\": {}\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"entityMap\": {}\n" +
+                "    }", Map.class);
+        wikiRepository.save(
+                Wiki.builder()
+                        .isParentChild(CommentType.PARENT.label)
+                        .wikiName("Main Category")
+                        .description(pageDescription)
                         .build()
         );
-
-
-        topicRepository.save(
-                Topic.builder()
-                        .pageId(UUID.fromString("7940b97e-d662-4c19-a2bc-2cd74f3fe25c"))
-                        .downVotes(0)
-                        .upVotes(0)
-                        .video("template")
-                        .source("template")
-                        .createdBy(userRepository.findByUsername("admin")
-                                .orElseThrow(() -> new NoSuchElementException("admin")))
-                        .pageDescription(pageDescription)
-                        .title("Binary Search Trees")
-                        .downVotes(0)
-                        .build()
-        );
-
-        topicRepository.save(
-                Topic.builder()
-                        .pageId(UUID.fromString("c9fc9f60-6468-45ed-ab1f-5463f4b72865"))
-                        .downVotes(0)
-                        .upVotes(0)
-                        .source("template")
-                        .video("template")
-                        .createdBy(userRepository.findByUsername("admin")
-                                .orElseThrow(() -> new NoSuchElementException("admin")))
-                        .pageDescription(pageDescription)
-                        .title("Arrays")
-                        .downVotes(0)
-                        .build()
-        );
-
-        topicRepository.save(
-                Topic.builder()
-                        .pageId(UUID.fromString("54e9d8be-f123-4360-9c76-0c4c2ccd99eb"))
-                        .downVotes(0)
-                        .upVotes(0)
-                        .source("template")
-                        .video("template")
-                        .createdBy(userRepository.findByUsername("admin")
-                                .orElseThrow(() -> new NoSuchElementException("admin")))
-                        .pageDescription(pageDescription)
-                        .title("BFS")
-                        .downVotes(0)
-                        .build()
-        );
-        log.debug(MessageFormat.format("the current loaded pages are {0}", topicRepository.findAll().size()));
     }
 
     private void loadDefaultUsers() {
-
         //user auth
         Authority usersCRUD = authorityRepository.save(Authority.builder().permission("users.crud").build());
         Authority updateUser = authorityRepository.save(Authority.builder().permission("user.update").build());
         Authority updateUserPassword = authorityRepository.save(Authority.builder().permission("user.update-password").build());
         Authority readUser = authorityRepository.save(Authority.builder().permission("user.read").build());
         Authority deleteUser = authorityRepository.save(Authority.builder().permission("user.delete").build());
+
         //forum auths
         Authority createForum = authorityRepository.save(Authority.builder().permission("forum.create").build());
         Authority updateForum = authorityRepository.save(Authority.builder().permission("forum.update").build());
@@ -146,12 +204,19 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         Authority deleteQuiz = authorityRepository.save(Authority.builder().permission("quiz.delete").build());
         Authority takeQuiz = authorityRepository.save(Authority.builder().permission("quiz.take").build());
 
-        Role studentRole = roleRepository.save(Role.builder().roleName("STUDENT").build());
+        Role studentRole = roleRepository.save(Role.builder().roleName(UserRoles.STUDENT.name()).build());
 
-        Role adminRole = roleRepository.save(Role.builder().roleName("ADMIN").build());
+        Role adminRole = roleRepository.save(Role.builder().roleName(UserRoles.ADMIN.name()).build());
 
-        //can create / update topic pages & quizes but cannot delete them
-        Role teacherRole = roleRepository.save(Role.builder().roleName("TEACHER").build());
+        //can create / update topic pages & quiz's but cannot delete them
+        Role teacherRole = roleRepository.save(Role.builder().roleName(UserRoles.TEACHER.name()).build());
+
+        Role aIRole = roleRepository.save(Role.builder().roleName(UserRoles.AI.name()).build());
+
+        aIRole.setAuthorities(new HashSet<>(Set.of(createForum, updateForum, readForum, deleteForum,
+                updateUser, readUser, deleteUser, createVote, removeVote, createReport, removeReport,
+                createComment, removeComment, updateComment, updateUserPassword, createTopic,
+                removeTopic, updateTopic, createQuiz, updateQuiz, deleteQuiz, takeQuiz)));
 
         adminRole.setAuthorities(new HashSet<>(Set.of(createForum,
                 updateForum, readForum, deleteForum,
@@ -171,16 +236,29 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                 createComment, removeComment, updateComment, updateUserPassword, createTopic,
                 updateTopic, createQuiz, updateQuiz, takeQuiz, deleteQuiz)));
 
-        roleRepository.saveAll(Arrays.asList(studentRole, adminRole, teacherRole));
+        roleRepository.saveAll(Arrays.asList(studentRole, adminRole, teacherRole, aIRole));
+
+        userRepository.save(
+                User.builder()
+                        .username("Chatty")
+                        .password(passwordEncoder.encode(botPassword))
+                        .email("bot@this.com")
+                        .dob(Date.valueOf(LocalDate.of(2000, 1, 1)))
+                        .firstName("Chatty")
+                        .lastName("AI")
+                        .profilePicture("https://cdn2.thecatapi.com/images/1.jpg")
+                        .role(aIRole)
+                        .build()
+        );
 
         //add default user
         userRepository.save(
                 User.builder()
                         .username("admin")
-                        .password(passwordEncoder.encode("admin"))
-                        .email("this@email")
+                        .password(passwordEncoder.encode(adminPassword))
+                        .email(adminEmail)
                         .dob(Date.valueOf(LocalDate.of(2000, 1, 1)))
-                        .firstName("admin_name")
+                        .firstName("admin_firstName")
                         .lastName("admin_lastName")
                         .profilePicture("https://cdn2.thecatapi.com/images/_8WxuPwzw.jpg")
                         .role(adminRole)

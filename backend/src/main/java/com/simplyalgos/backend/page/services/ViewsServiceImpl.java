@@ -53,9 +53,7 @@ public class ViewsServiceImpl implements ViewsService {
 
     @Override
     public Set<Views> listForumsByUserView(UUID userId) {
-        Set<Views> views = viewsRepository.findAllByUserReferenceView_UserIdOrderByVisitedDateDesc(userId);
-        log.info("the current views are " + views.stream().findFirst().get().getPageViewed().getPageId());
-        return views;
+        return viewsRepository.findAllByUserReferenceView_UserIdOrderByVisitedDateDesc(userId);
     }
 
     @Override

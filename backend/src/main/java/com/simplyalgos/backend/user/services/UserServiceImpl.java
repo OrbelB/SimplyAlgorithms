@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserService {
                 .append("And the reason for the role change is:\n\n")
                 .append(roleChangeForm.reasoning()).append("\n\n")
                 .append("Please login to the admin dashboard to approve or reject the request.");
-
         // send notification to admins to approve role change
         users.forEach(user -> {
             SimpleMailMessage mailMessage = new SimpleMailMessage();

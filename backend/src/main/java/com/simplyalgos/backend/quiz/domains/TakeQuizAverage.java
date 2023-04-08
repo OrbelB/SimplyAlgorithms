@@ -3,11 +3,11 @@ package com.simplyalgos.backend.quiz.domains;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.user.domains.User;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import java.util.UUID;
@@ -54,13 +54,15 @@ public class TakeQuizAverage {
     private int attempts;
 
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "fk_user_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @JsonIncludeProperties({"quizId", "score"})
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Quiz referenceQuizForAvgScore;
 
 

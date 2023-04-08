@@ -40,6 +40,7 @@ public class UserNotification {
     private String message;
     @Column(name = "notification_quantity")
     private short notificationQuantity;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)

@@ -3,6 +3,7 @@ package com.simplyalgos.backend.security;
 import com.simplyalgos.backend.exceptions.ElementExistsException;
 import com.simplyalgos.backend.exceptions.PasswordsDontMatchException;
 import com.simplyalgos.backend.storage.StorageService;
+import com.simplyalgos.backend.user.enums.UserRoles;
 import com.simplyalgos.backend.user.security.Role;
 import com.simplyalgos.backend.user.repositories.RoleRepository;
 import com.simplyalgos.backend.user.domains.User;
@@ -61,10 +62,10 @@ public class JpaUserDetailsServiceImpl implements JpaUserDetailsService {
         }
         User user = userRegisteredMapper.create(userDto);
         if (userDto.getProfilePicture() != null) {
-            log.info(userDto.getProfilePicture() + "check if the correct method is call");
+            log.info(userDto.getProfilePicture() + " check if the correct method is call");
             user.setProfilePicture(storageService.uploadImageFile(userDto.getProfilePicture()));
         }
-        user.setRoles(Set.of(assignRoleToNewUser("STUDENT")));
+        user.setRoles(Set.of(assignRoleToNewUser(UserRoles.STUDENT.name())));
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         User createdUser = userRepository.saveAndFlush(user);

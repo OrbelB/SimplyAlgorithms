@@ -56,9 +56,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenDTO register(SignupDTO signupDTO) {
         userDetailsService.createUser(signupDTO);
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signupDTO.getUsername(), signupDTO.getPassword()));
-        return tokenGenerator.createToken(authentication);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(signupDTO.getUsername(), signupDTO.getPassword()));
+            return tokenGenerator.createToken(authentication);
+        } catch (Exception exception) {
+            log.error("username not authorized " + exception);
+            throw new UserNotAuthorizedException("Username or password is incorrect");
+        }
     }
 
     @Override

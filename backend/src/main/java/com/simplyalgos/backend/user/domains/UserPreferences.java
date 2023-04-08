@@ -3,6 +3,8 @@ package com.simplyalgos.backend.user.domains;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
@@ -20,6 +22,7 @@ public class UserPreferences {
             parameters = @org.hibernate.annotations.Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
                     value = "org.hibernate.type.UUIDCharType"))
     @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false, name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UUID userId;
 
     @Column(name = "account_changes")

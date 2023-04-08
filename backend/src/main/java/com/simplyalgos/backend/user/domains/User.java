@@ -154,61 +154,60 @@ public class User implements UserDetails, CredentialsContainer {
 
 
     @JsonIgnore
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
     //maps user page votes
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PageVote> pageVotes = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "userReferenceView", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "userReferenceView", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Views> views = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "userVoteReference", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "userVoteReference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<CommentVote> commentVotes = new HashSet<>();
 
-    @OneToMany(mappedBy = "takenBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "takenBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TakeQuiz> takenQuizzes = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TakeQuizAverage> AvgUserScores = new HashSet<>();
 
-    @OneToMany(mappedBy = "commentReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "commentReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentReport> commentReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "pageReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "pageReportedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PageReport> pageReports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Forum> forumsCreated = new HashSet<>();
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Quiz> quizzesCreated = new HashSet<>();
 
-    @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "userNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserNotification> userNotifications = new HashSet<>();
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Topic> topicsCreated = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserNotes> notesCreated = new HashSet<>();
 
-    @OneToMany(mappedBy = "sharedTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "sharedTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<NoteShare> sharedNotes = new HashSet<>();
 
 //    universal report stuff
-
-    @OneToMany(mappedBy = "culpritUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "culpritUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UniversalReport> culpritUser = new HashSet<>();
 
-    @OneToMany(mappedBy = "victimUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "victimUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UniversalReport> victimUser = new HashSet<>();
 
-    @OneToMany(mappedBy = "resolvedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "resolvedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UniversalReport> resolvedBy = new HashSet<>();
 }

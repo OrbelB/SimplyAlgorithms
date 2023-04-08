@@ -9,6 +9,9 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserRegisteredMapper {
+
+
+    @Mapping(target= "password", ignore = true)
     @Mapping(target = "profilePicture", ignore = true)
     public User create(SignupDTO userCreated);
 }

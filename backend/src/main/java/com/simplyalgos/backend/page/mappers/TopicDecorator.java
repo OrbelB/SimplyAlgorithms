@@ -6,7 +6,6 @@ import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.page.domains.CodeSnippet;
 import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.domains.TopicExternalResource;
-import com.simplyalgos.backend.page.domains.TopicSteps;
 import com.simplyalgos.backend.page.dtos.*;
 import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
@@ -14,7 +13,6 @@ import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -100,16 +98,6 @@ public class TopicDecorator implements TopicMapper {
                 .collect(Collectors.toSet());
     }
 
-    private Set<TopicStepsDTO> mapTopicStepsToStepsDTO(List<TopicSteps> topicSteps) {
-        return topicSteps.stream().map(topicStep ->
-                        TopicStepsDTO
-                                .builder()
-                                .stepNumber(topicStep.getStepNumber())
-                                .stepId(topicStep.getStepId())
-                                .step(topicStep.getStep())
-                                .build())
-                .collect(Collectors.toSet());
-    }
 
     private Set<CodeSnippetDTO> mapCodeSnippetToCodeSnippetDTO(Set<CodeSnippet> codeSnippets) {
         return codeSnippets.stream().map(codeSnippet ->

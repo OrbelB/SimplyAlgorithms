@@ -16,7 +16,9 @@ import java.util.UUID;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "user_history")
+@Builder
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class UserHistory {
 
@@ -27,8 +29,9 @@ public class UserHistory {
     @Column(length = 36, columnDefinition = "varchar", nullable = false, name = "user_id")
     private UUID userId;
 
+    @Builder.Default
     @Column(name = "days_streak")
-    private short dayStreak;
+    private short dayStreak = 0;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "day_logged_in")
@@ -40,12 +43,5 @@ public class UserHistory {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User userReference;
 
-    @Builder
-    public UserHistory(UUID userId, short dayStreak, Date dayLoggedIn, User userReference) {
-        this.userId = userId;
-        this.dayStreak = dayStreak;
-        this.dayLoggedIn = dayLoggedIn;
-        this.userReference = userReference;
-    }
 
 }
