@@ -13,7 +13,7 @@ export default function HighlightsDB() {
     <div>
       {SELECTEDTOPICS2.map(({ topic }) => {
         return (
-          <div key={nanoid}>
+          <div key={() => nanoid()}>
             <div className="firstline p-2">
               <div className="topic-selected">
                 <h5>Topic: {topic}</h5>

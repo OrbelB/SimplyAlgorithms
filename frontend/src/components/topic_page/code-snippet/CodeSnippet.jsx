@@ -14,7 +14,7 @@ export default function CodeSnippet({
         <nav className="bg-secondary rounded-top">
           {snippets.length > 0 && (
             <div
-              key={nanoid}
+              key={() => nanoid()}
               className="nav navbar-code nav-pills"
               id="nav-tab"
               role="tablist"

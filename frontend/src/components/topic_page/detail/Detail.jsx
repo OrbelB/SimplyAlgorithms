@@ -24,7 +24,7 @@ export default function Detail({ pageDescription, references }) {
               <tbody>
                 {references?.map((reference, index) => {
                   return (
-                    <tr key={nanoid} className="border-bottom">
+                    <tr key={() => nanoid()} className="border-bottom">
                       <td className="p-0 m-0">{index + 1}</td>
                       <td className="py-3 text-start">
                         <a

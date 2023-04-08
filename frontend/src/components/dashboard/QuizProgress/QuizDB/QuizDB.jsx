@@ -16,7 +16,7 @@ export default function QuizDB({ userHistory }) {
             highestScore,
             lowestSore,
           }) => (
-            <div key={nanoid} className="col">
+            <div key={() => nanoid()} className="col">
               <div className="card quizdb p-2">
                 <div className="container-fluid">
                   <div className="row">

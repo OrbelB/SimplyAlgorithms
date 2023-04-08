@@ -38,7 +38,7 @@ export default function Bell() {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchDashboardInfo();
-    }, 30000);
+    }, 60000);
     return () => {
       clearInterval(interval);
     };

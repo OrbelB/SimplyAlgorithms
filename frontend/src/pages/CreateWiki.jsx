@@ -198,7 +198,7 @@ export default function CreateWiki() {
   if (Object.keys(wikiName).length !== 0 && !wikiNameAvailable) {
     helperText = `You cannot change the title of your wiki when updating it, the title is ${wiki.wikiName}`;
   } else if (
-    !wikiNameAvailable === false &&
+    wikiNameAvailable === false &&
     Object.keys(wikiName).length === 0
   ) {
     helperText = 'Name is taken choose another one';

@@ -367,7 +367,7 @@ export default function CreateTopic() {
         </h5>
         {references.map((input, index) => {
           return (
-            <div key={nanoid} className="mb-4">
+            <div key={() => nanoid()} className="mb-4">
               <div className="row mb-4">
                 <input
                   className="label-topic"
@@ -415,7 +415,7 @@ export default function CreateTopic() {
         <h5 className="fi">Ex: Java | public static void...</h5>
         {snippets.map((input, index) => {
           return (
-            <div key={nanoid}>
+            <div key={() => nanoid()}>
               <div className="row mb-4">
                 <input
                   className="label-topic"

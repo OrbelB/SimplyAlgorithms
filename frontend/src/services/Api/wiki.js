@@ -82,7 +82,7 @@ export const wikiEndpoints = {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer  ${jwtAccessToken}`,
+          Authorization: `Bearer ${jwtAccessToken}`,
         },
       }
     ),

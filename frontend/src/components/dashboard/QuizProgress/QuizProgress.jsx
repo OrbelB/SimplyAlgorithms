@@ -30,7 +30,7 @@ export default function QuizProgress({ userHistory }) {
     <div>
       {currentUserInfo.map(() => {
         return (
-          <div key={nanoid} className="container-fluid">
+          <div key={() => nanoid()} className="container-fluid">
             <div className="row">
               <div className="col text-center">
                 <h5 className="text-center m-4">Scores</h5>
