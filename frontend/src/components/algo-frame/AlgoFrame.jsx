@@ -64,19 +64,18 @@ export default function AlgoFrame({
             <p>Your browser does not support iframes :( </p>
           </iframe>
           <div className={cx(styles['credit'])}>
-            Algorithm visualizer brought to you by
+            Algorithm visualizer brought to you by &nbsp;
             <a
               className={cx(styles['credit_link'])}
-              href="https://algorithm-visualizer.org/"
+              href={vizSource}
               target="_blank"
               rel="noreferrer"
             >
-              {' '}
               {vizSource}
             </a>
           </div>
         </div>
-        {isAdmin || isTeacher ? (
+        {(isAdmin || isTeacher) && pageId ? (
           <div className="col-1 text-end">
             <OptionsMenu
               handleOnDelete={handleOnDelete}

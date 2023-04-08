@@ -1,10 +1,12 @@
-import { useState } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
 import 'react-tabs/style/react-tabs.css';
 import './CodeSnippet.css';
 
-export default function CodeSnippet({ snippets }) {
-  const [snippetIndex, setSnippetIndex] = useState(0);
+export default function CodeSnippet({
+  snippets,
+  snippetIndex,
+  setSnippetIndex,
+}) {
   return (
     <div className="component">
       <h1>Implementations</h1>
@@ -55,7 +57,9 @@ export default function CodeSnippet({ snippets }) {
               role="tabpanel"
               aria-labelledby="nav-java-tab"
             >
-              <code>{snippets[snippetIndex]?.codeText}</code>
+              <code className="code-style">
+                {snippets[snippetIndex]?.codeText}
+              </code>
             </div>
           )}
         </div>

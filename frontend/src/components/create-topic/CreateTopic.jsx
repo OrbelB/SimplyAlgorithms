@@ -1,17 +1,13 @@
-/* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import draftToHtml from 'draftjs-to-html';
-import parse from 'html-react-parser';
-import cx from 'classnames';
-import { Button, TextField } from '@mui/material';
+
+import { Button, TextField, MenuItem, TextareaAutosize } from '@mui/material';
 import debounce from 'lodash.debounce';
 import { useNavigate, useParams } from 'react-router-dom';
 import { nanoid } from '@reduxjs/toolkit';
 import TextEditor from '../text-editor/TextEditor';
 import '../text-editor/TextEditor.css';
 import './CreateTopic.css';
-import styles from '../topic_page/algo-frame/Frame.module.css';
 import {
   getNameAvailability,
   createTopic,
@@ -19,8 +15,10 @@ import {
   updateTopic,
 } from '../../services/topic';
 import { fetchWikiSubCategoriesNames } from '../../services/wiki';
-import TransferList from '../transferlist';
 import { topicActions } from '../../store/reducers/topic-slice';
+import AlgoFrame from '../algo-frame/AlgoFrame';
+import Detail from '../topic_page/detail/Detail';
+import CodeSnippet from '../topic_page/code-snippet/CodeSnippet';
 
 const content = {
   blocks: [
@@ -37,31 +35,6 @@ const content = {
   entityMap: {},
 };
 
-// const options = [
-//   'inline',
-//   'blockType',
-//   'fontSize',
-//   'fontFamily',
-//   'textAlign',
-//   'colorPicker',
-//   'link',
-//   'emoji',
-//   'image',
-//   'remove',
-//   'history',
-// ];
-
-function getIds(searchBar, names, prop, title) {
-  return searchBar.pages
-    .map((item) => {
-      const matchingItems = names.filter((name) => name[title] === item.title);
-      return matchingItems.length > 0
-        ? matchingItems.map((name) => name[`${prop}Id`])[0]
-        : undefined;
-    })
-    .filter((id) => id !== undefined);
-}
-
 export default function CreateTopic() {
   const topicName = useParams();
   const dispatch = useDispatch();
@@ -75,39 +48,45 @@ export default function CreateTopic() {
   const { wikiNames } = useSelector((state) => state.wiki);
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
 
-  const [title, setTitle] = useState(() => topic?.title ?? '');
-  const [searchBar, setSearchBar] = useState(() =>
-    topic.urlPath ? { pages: [{ title: topic.urlPath.split('/')[0] }] } : {}
-  );
-  const [pages, setPages] = useState(() =>
-    topic.urlPath ? Array.from(topic.urlPath.split('/')[0]) : []
-  );
-  const [visualizer, setVisualizer] = useState(() => topic.visualizer ?? '');
-  const [attribution, setAttribution] = useState(() => topic.source ?? '');
-  const [process, setProcess] = useState(
-    () => topic?.pageDescription ?? content
-  );
-  const [snippets, setSnippets] = useState(
-    () => topic.codeSnippets ?? [{ languageTitle: '', codeText: '' }]
-  );
-  const [references, setReferences] = useState(
-    () =>
-      topic?.topicExternalResources ?? [{ title: '', externalResourceLink: '' }]
-  );
+  const [title, setTitle] = useState('');
+  const [visualizer, setVisualizer] = useState('');
+  const [attribution, setAttribution] = useState('');
+  const [process, setProcess] = useState(content);
+  const [snippets, setSnippets] = useState([
+    { languageTitle: '', codeText: '' },
+  ]);
+  const [references, setReferences] = useState([
+    { title: '', externalResourceLink: '' },
+  ]);
   const [snippetIndex, setSnippetIndex] = useState(0);
-
   const [once, setOnce] = useState(true);
+  const [wikiCategory, setWikiCategory] = useState('');
 
   const isReadyToSubmit =
     (topicNameAvailable || topic?.title || title !== '') &&
     Object.values(process).length > 0 &&
     visualizer !== '' &&
     attribution !== '' &&
-    searchBar?.pages?.length > 0;
+    wikiCategory !== '';
+
+  // reset the state of the page in the event of the topic name been part of the url
+  useEffect(() => {
+    console.count('useEffect resetState');
+    if (topicName.topicName === undefined || topicName.topicName === 'new') {
+      setVisualizer('');
+      setAttribution('');
+      setProcess(content);
+      setWikiCategory('');
+      setTitle('');
+      setSnippets([{ languageTitle: '', codeText: '' }]);
+      setReferences([{ title: '', externalResourceLink: '' }]);
+    }
+  }, [topicName.topicName]);
 
   // used to fetch the topic data in the event of the topic name been part of the url
   // for editing purposes
   useEffect(() => {
+    console.count('useEffect fetchSingleTopic');
     if (
       topicStatus === 'idle' &&
       Object.keys(topic).length === 0 &&
@@ -117,9 +96,10 @@ export default function CreateTopic() {
     }
   }, [dispatch, topic, topicName.topicName, topicStatus]);
 
-  // used to set the state of the this current edit page to the topic data
+  // used to set the state of the current edit page to the topic data
   // that is being edited in the event of the topic name been part of the url
   useEffect(() => {
+    console.count('useEffect setTopicData reset');
     if (
       topicStatus === 'success' &&
       (topic?.codeSnippets?.length > 0 ||
@@ -128,17 +108,9 @@ export default function CreateTopic() {
       once
     ) {
       setOnce(false);
-      setPages(Array.from([topic.urlPath.split('/')[0]]));
       setSnippets(topic.codeSnippets);
       setReferences(topic.topicExternalResources);
-      setSearchBar({
-        pages: [
-          {
-            link: topic.urlPath.split('/')[0],
-            title: topic.urlPath.split('/')[0],
-          },
-        ],
-      });
+      setWikiCategory(topic.urlPath.split('/')[0] ?? '');
       setTitle(topic.title);
       setVisualizer(topic.visualizer);
       setAttribution(topic.source);
@@ -159,6 +131,7 @@ export default function CreateTopic() {
   // checks if the urlPath is not null and not empty and if the topicStatus is success
   // if so, it means that the topic has been created or updated, therefore the user is redirected
   useEffect(() => {
+    console.count('useEffect setTopicData');
     if (urlPath !== null && urlPath !== '' && topicStatus === 'success') {
       const currentUrl = urlPath;
       dispatch(topicActions.resetData());
@@ -170,20 +143,6 @@ export default function CreateTopic() {
     }
   }, [dispatch, navigate, topicName, topicStatus, urlPath]);
 
-  const handlePageSetup = (currPages) => {
-    // remove the previous element and replace it for the new one
-    const newPage = currPages.filter((page) => !pages.includes(page));
-    // remove the previous element and replace it for the new one
-    const updatedSearchBar = {
-      ...searchBar,
-      pages: newPage.map((page) => {
-        return { link: page, title: page };
-      }),
-    };
-    setSearchBar(updatedSearchBar);
-    setPages(newPage);
-  };
-
   const handleTitleChange = debounce((e) => {
     setTitle(e.target.value);
     dispatch(getNameAvailability({ name: e.target.value, jwtAccessToken }));
@@ -191,11 +150,9 @@ export default function CreateTopic() {
 
   const handleSaveTopic = async (e) => {
     e.preventDefault();
+    console.info('handleSaveTopic');
     if (!isReadyToSubmit) return;
-    let wikiIds = [];
-    // get the page ids by the page names from the search bar
-    wikiIds = getIds(searchBar, wikiNames, 'wiki', 'wikiName');
-    const wikiInfo = wikiNames.find((wiki) => wiki.wikiId === wikiIds[0]);
+    const wikiInfo = wikiNames.find((wiki) => wiki.wikiName === wikiCategory);
     const topicToCreate = {
       userId,
       title,
@@ -206,7 +163,6 @@ export default function CreateTopic() {
       codeSnippets: snippets,
       externalResources: references,
     };
-
     try {
       await dispatch(
         createTopic({ topic: topicToCreate, jwtAccessToken })
@@ -218,15 +174,13 @@ export default function CreateTopic() {
     }
   };
 
+  console.count('outstide handleUpdateTopic');
   const handleUpdateTopic = async (e) => {
     e.preventDefault();
-
+    console.info('handleSaveTopic');
     if (!isReadyToSubmit) return;
-    let wikiIds = {};
 
-    // get the page ids by the page names from the search bar
-    wikiIds = getIds(searchBar, wikiNames, 'wiki', 'wikiName');
-    const wikiInfo = wikiNames.find((wiki) => wiki.wikiId === wikiIds[0]);
+    const wikiInfo = wikiNames.find((wiki) => wiki.wikiName === wikiCategory);
     const topicToUpdate = {
       pageId: topic.pageId,
       userId,
@@ -242,9 +196,10 @@ export default function CreateTopic() {
     dispatch(updateTopic({ updatedTopic: topicToUpdate, jwtAccessToken }));
   };
 
-  const displayProcess = parse(draftToHtml(process));
+  // const displayProcess = parse(draftToHtml(process));
 
   const handleReferenceChange = (index, event) => {
+    console.info('index', index);
     const data = [...references];
     data[index][event.target.name] = event.target.value;
     setReferences(data);
@@ -281,7 +236,7 @@ export default function CreateTopic() {
   let helperText;
 
   if (Object.keys(topicName).length !== 0 && !topicNameAvailable) {
-    helperText = `You cannot change the title of your wiki when updating it, the title is ${topic.title}`;
+    helperText = `You cannot change the title of your topic page when updating it, the title is ${topic.title}`;
   } else if (
     topicNameAvailable === false &&
     Object.keys(topicName).length === 0
@@ -305,7 +260,7 @@ export default function CreateTopic() {
       <h5 className="fi">Preview the topic page below before submitting.</h5>
       <br />
       <br />
-      <form className="topic-form">
+      <form className="topic-form g-2">
         <h2 className="ft">1- ALGORITHM TITLE</h2>
         <h5 className="fi">Note: Once set, title cannot be changed</h5>
         <TextField
@@ -325,7 +280,7 @@ export default function CreateTopic() {
         <br />
         <h2 className="ft">2- CATEGORY SELECTION</h2>
         <h5 className="fi">Note: Once set, category cannot be changed</h5>
-        <div className="col-auto col-md-6 text-center">
+        <div className="col-auto col-md-6 text-center mb-5">
           <Button
             variant="contained"
             onClick={() => {
@@ -338,19 +293,21 @@ export default function CreateTopic() {
         </div>
         {wikiNames.length > 0 && (
           <div className="col-auto col-md-6 text-center">
-            <TransferList
-              disabledDouble
-              itemsToChooseFrom={wikiNames
-                .map((currWiki) => {
-                  if (topic?.urlPath?.split('/')[0] !== currWiki.wikiName) {
-                    return currWiki.wikiName;
-                  }
-                  return undefined;
-                })
-                .filter((curr) => curr !== undefined)}
-              itemsChosen={pages}
-              setItemsChosen={handlePageSetup}
-            />
+            <TextField
+              select
+              fullWidth
+              variant="outlined"
+              sx={{ fontSize: '1.5rem' }}
+              helperText="Please select the wiki category"
+              value={wikiCategory}
+              onChange={(e) => setWikiCategory(e.target.value)}
+            >
+              {wikiNames.map((wiki) => (
+                <MenuItem key={wiki.wikiId} value={wiki.wikiName}>
+                  {wiki.wikiName}
+                </MenuItem>
+              ))}
+            </TextField>
           </div>
         )}
         <br />
@@ -362,14 +319,15 @@ export default function CreateTopic() {
           the video will not display
         </h5>
         <h5 className="fi">
-          From video page, click on "Share" and then on "Embed". Copy the link
-          from "src" in the given HTML code.
+          From video page, click on &quot;Share&ldquo; and then on
+          &quot;Embed&ldquo;. Copy the link from &quot;src&ldquo; in the given
+          HTML code.
         </h5>
         <br />
         <label htmlFor="vis-input">
           <input
             id="vis-input"
-            className="label"
+            className="label-topic"
             type="url"
             value={visualizer}
             onChange={(e) => setVisualizer(e.target.value)}
@@ -381,7 +339,7 @@ export default function CreateTopic() {
         <label htmlFor="vis-source">
           <input
             id="vis-source"
-            className="label"
+            className="label-topic"
             type="text"
             required
             value={attribution}
@@ -411,37 +369,43 @@ export default function CreateTopic() {
         <br />
         <h2 className="ft">6- FURTHER REFERENCES: LINKS</h2>
         <h5 className="fi">Source Title and Link</h5>
-        <h5 className="fi">
+        <h5 className="fi mb-4">
           Ex: GeeksforGeeks-QuickSort | https://www.geeksforgeeks.org/
         </h5>
         {references.map((input, index) => {
           return (
-            // eslint-disable-next-line react/no-array-index-key
-            <div key={index}>
-              <input
-                className="label"
-                name="title"
-                placeholder="Title"
-                value={input.title}
-                onChange={(e) => handleReferenceChange(index, e)}
-              />
-              <input
-                className="label"
-                name="externalResourceLink"
-                placeholder="Link"
-                value={input.externalResourceLink}
-                onChange={(e) => handleReferenceChange(index, e)}
-              />
-              <button
-                type="button"
-                className="form-button w-auto"
-                onClick={() => removeReferences(index)}
-              >
-                REMOVE REFERENCE
-              </button>
+            <div key={nanoid} className="mb-4">
+              <div className="row mb-4">
+                <input
+                  className="label-topic"
+                  name="title"
+                  placeholder="Title"
+                  value={input?.title}
+                  onChange={(e) => handleReferenceChange(index, e)}
+                />
+              </div>
+              <div className="row mb-4">
+                <input
+                  className=" label-topic"
+                  name="externalResourceLink"
+                  placeholder="Link"
+                  value={input?.externalResourceLink}
+                  onChange={(e) => handleReferenceChange(index, e)}
+                />
+              </div>
+              <div className="row justify-content-center">
+                <button
+                  type="button"
+                  className="form-button w-auto p-1"
+                  onClick={() => removeReferences(index)}
+                >
+                  REMOVE REFERENCE
+                </button>
+              </div>
             </div>
           );
         })}
+
         <br />
         <button
           type="button"
@@ -458,29 +422,35 @@ export default function CreateTopic() {
         <h5 className="fi">Ex: Java | public static void...</h5>
         {snippets.map((input, index) => {
           return (
-            // eslint-disable-next-line react/no-array-index-key
-            <div key={index}>
-              <input
-                className="label"
-                name="languageTitle"
-                placeholder="Language"
-                value={input?.languageTitle}
-                onChange={(e) => handleSnippetChange(index, e)}
-              />
-              <textarea
-                className="label2"
-                name="codeText"
-                placeholder="   Enter code"
-                value={input?.codeText}
-                onChange={(e) => handleSnippetChange(index, e)}
-              />
-              <button
-                type="button"
-                className="form-button w-auto"
-                onClick={() => removeSnippets(index)}
-              >
-                REMOVE SNIPPET
-              </button>
+            <div key={nanoid}>
+              <div className="row mb-4">
+                <input
+                  className="label-topic"
+                  name="languageTitle"
+                  placeholder="Language"
+                  value={input?.languageTitle}
+                  onChange={(e) => handleSnippetChange(index, e)}
+                />
+              </div>
+              <div className="row mb-4">
+                <TextareaAutosize
+                  minRows={5}
+                  className="label2"
+                  name="codeText"
+                  placeholder="Enter code"
+                  value={input?.codeText}
+                  onChange={(e) => handleSnippetChange(index, e)}
+                />
+              </div>
+              <div className="row mb-4 justify-content-center">
+                <button
+                  type="button"
+                  className="form-button w-auto"
+                  onClick={() => removeSnippets(index)}
+                >
+                  REMOVE SNIPPET
+                </button>
+              </div>
             </div>
           );
         })}
@@ -496,6 +466,7 @@ export default function CreateTopic() {
         <br />
         <br />
         <Button
+          sx={{ padding: '1rem', width: '200px' }}
           variant="contained"
           color="success"
           size="large"
@@ -511,117 +482,13 @@ export default function CreateTopic() {
       <h1>New Topic Page Preview:</h1>
       <br />
       <br />
-      <div className="Frame_algo_title__lDbbF">{title}</div>
-      <div className={cx(styles['container-style'], 'container-fluid')}>
-        <div className="row justify-content-between">
-          <div className="col col-sm-auto mt-3" />
-          <div className="row">
-            <iframe
-              id="viz_alg"
-              src={visualizer}
-              className="Frame_website__ZlBLM"
-              loading="lazy"
-              title="algorithm visualizer"
-            />
-            <div className="bg-transparent" />
-            <div className="Frame_credit__KSKRG">
-              Algorithm visualizer brought to you by
-              <a
-                className=""
-                href={attribution}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {' '}
-                {attribution}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="detail text-center">
-        <div className="top p-5">{displayProcess}</div>
-        <div className="container-fluid bot">
-          <div className="row justify-content-around  mt-auto mt-sm-5   p-2">
-            <div className="col-auto col-sm-auto align-self-center">
-              <h3 className="m-3 mb-4">FURTHER REFERENCES</h3>
-              {references.map((user) => {
-                return (
-                  <div key={nanoid()} className="user-card">
-                    <h4>
-                      <a
-                        href={user?.externalResourceLink}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {user?.title}
-                      </a>
-                    </h4>
-                  </div>
-                );
-              })}
-              <div />
-              <div />
-            </div>
-          </div>
-        </div>
-        <div className="component">
-          <h1>Implementations</h1>
-          <div className="container">
-            <nav className="bg-secondary rounded-top">
-              {snippets.length > 0 && (
-                <div
-                  key={nanoid()}
-                  className="nav navbar-code nav-pills"
-                  id="nav-tab"
-                  role="tablist"
-                >
-                  {snippets[snippetIndex]?.languageTitle !== '' &&
-                    snippets?.map(({ languageTitle }, index) => {
-                      return (
-                        <button
-                          key={nanoid()}
-                          className={`nav-link ${
-                            snippetIndex === index ? 'active' : ''
-                          } text-white`}
-                          id={languageTitle}
-                          onClick={() => {
-                            setSnippetIndex(index);
-                          }}
-                          data-bs-toggle="tab"
-                          data-bs-target="#nav-java"
-                          type="button"
-                          role="tab"
-                          aria-controls="nav-java"
-                          aria-selected="true"
-                        >
-                          {languageTitle}
-                        </button>
-                      );
-                    })}
-                </div>
-              )}
-            </nav>
-            <div
-              className="tab-content description rounded-bottom"
-              id="nav-tabContent"
-            >
-              {snippets[snippetIndex]?.codeText !== '' && (
-                <div
-                  key={snippets[snippetIndex]?.codeText}
-                  className="tab-pane fade active show ws"
-                  id={snippets[snippetIndex]?.codeText}
-                  role="tabpanel"
-                  aria-labelledby="nav-java-tab"
-                >
-                  <code>{snippets[snippetIndex]?.codeText}</code>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="bottom" />
-        </div>
-      </div>
+      <AlgoFrame vizTitle={title} vizUrl={visualizer} vizSource={attribution} />
+      <Detail pageDescription={process} references={references} />
+      <CodeSnippet
+        snippets={snippets}
+        setSnippetIndex={setSnippetIndex}
+        snippetIndex={snippetIndex}
+      />
     </div>
   );
 }

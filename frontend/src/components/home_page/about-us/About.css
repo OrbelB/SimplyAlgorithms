@@ -6,6 +6,13 @@
     height: auto;
 }
 
+h1 {
+    font-family: 'Readex Pro', sans-serif;
+    padding-bottom: 20px;
+    padding-top: 50px;
+    text-align: center;
+}
+
 .head {
     font-size: 4em;
     font-family: 'Readex Pro', sans-serif;
@@ -19,4 +26,8 @@
     font-size: 1.5em;
     margin-left: 15%;
     margin-right: 15%;
+}
+
+.bottom {
+    height: 70px;
 }

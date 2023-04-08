@@ -127,7 +127,6 @@ export const forumSlice = createSlice({
       // })
       .addCase(createForum.fulfilled, (state, action) => {
         if (!action?.payload) {
-          console.log('nothing passed');
           return;
         }
         state.status = 'successToIdle';

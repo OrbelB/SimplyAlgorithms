@@ -21,7 +21,7 @@ export default function CommentFrame({ passedComments, pageId }) {
   });
 
   return (
-    <div className="bg-white mt-5 ">
+    <div className="bg-white">
       <InputComment pageId={pageId} />
       {passedComments.map((comment, index) => {
         if (index + 1 === passedComments.length) {

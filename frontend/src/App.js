@@ -1,12 +1,10 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-filename-extension */
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import NotificationTab from './components/settings/NotificationTab/NotificationTab';
 import RequireAuth from './components/authentication/RequireAuth';
-import BinarySearchTree from './pages/t_pages/BinarySearchTree';
-import BreadtFirstSearch from './pages/t_pages/BreadtFirstSearch';
-import Arrays from './pages/t_pages/Arrays';
 import ScrollToTop from './hooks/ScrollToTop';
 import useRefreshToken from './hooks/use-refreshToken';
 import Layout from './components/layout/Layout';
@@ -82,12 +80,6 @@ function App() {
             </Route>
           </Route>
 
-          {/* SAMPLE TOPIC PAGES */}
-          <Route path="/search">
-            <Route path="binarysearchtree" element={<BinarySearchTree />} />
-            <Route path="bfs" element={<BreadtFirstSearch />} />
-          </Route>
-          <Route path="/arrays" element={<Arrays />} />
           {/* WIKI PAGES */}
           <Route path="/wiki" action={() => wikiActions.resetData()}>
             <Route index element={<Navigate replace to="Main Category" />} />

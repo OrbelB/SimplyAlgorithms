@@ -33,7 +33,8 @@ h5 {
 }
 
 .editor-wrapper {
-  border: 1px solid black;
+  border: 2px solid black;
+  
 }
 
 .editor-toolbar {
@@ -41,7 +42,7 @@ h5 {
 }
 
 .editor-title {
-  font-size: 2em;
+  padding: 1em;
   overflow-y: hidden;
   overflow-x: auto;
   min-height: 45vh;
@@ -51,7 +52,7 @@ h5 {
   min-width: 50vh;
 }
 
-.label {
+.label-topic {
   border-radius: 5px 5px 5px 5px;
   border: 1px solid black;
   font-size: 1.5em;
@@ -64,6 +65,7 @@ h5 {
 }
 
 .label2 {
+  padding-top: 0.5em;
   font-size: 1.5em;
   border-radius: 10px 10px 10px 10px;
   display: flex;

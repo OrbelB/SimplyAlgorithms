@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 import {
   Box,
   Button,
-  Typography,
+  MenuItem,
   Modal,
   TextField,
-  MenuItem,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import './Report.css';
@@ -59,7 +60,6 @@ export default function BasicModal() {
         description: reportDesc,
       },
     ]);
-    console.log(theReport);
     setSelectedReason('');
     setReportDesc('');
     handleClose();

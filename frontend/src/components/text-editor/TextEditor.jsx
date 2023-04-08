@@ -20,6 +20,14 @@ export default function TextEditor(props) {
 
   return (
     <Editor
+      toolbar={{
+        image: {
+          uploadEnabled: true,
+          previewImage: true,
+          alignmentEnabled: true,
+          alt: { present: true, mandatory: true },
+        },
+      }}
       toolbarClassName={props.toolbar}
       wrapperClassName={props.wrapper}
       editorClassName={props.editor}

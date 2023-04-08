@@ -34,6 +34,7 @@ export default function TopicPage() {
   const { commentParents, status: commentStatus } = useSelector(
     (state) => state.comment
   );
+  const [snippetIndex, setSnippetIndex] = useState(0);
   const { status: voteStatus } = useSelector((state) => state.commentVotes);
   const { status: topicVoteStatus } = useSelector((state) => state.topicVotes);
 
@@ -194,7 +195,11 @@ export default function TopicPage() {
           />
         </section>
         <section id="code">
-          <CodeSnippet snippets={topic?.codeSnippets} />
+          <CodeSnippet
+            snippets={topic?.codeSnippets}
+            setSnippetIndex={setSnippetIndex}
+            snippetIndex={snippetIndex}
+          />
         </section>
         <section id="forumspreview">
           <ForumPreview />

@@ -1,30 +1,96 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
- 
+
 .detail {
-    background-color: var(--color-bg-second);
-    font-family: 'Readex Pro', sans-serif;
+  background-color: var(--color-bg-second);
+  font-family: 'Readex Pro', sans-serif;
+}
+
+.list-group-item {
+  background: var(--color-bg-second);
+}
+
+.mid {
+  background-color: var(--color-bg-main);
+  padding: 5% 12%;
 }
 
 .background {
-    background-image: url(https://www.transparenttextures.com/patterns/gplay.png)
-}
- 
-.bot {
-    padding: 5% 12%;
+  background-image: url(https://www.transparenttextures.com/patterns/gplay.png);
 }
 
- 
+.bot {
+  padding: 5% 12%;
+}
+
+.fr {
+  display: block;
+}
+
+.reference-section {
+  background-color: #f8f9fa;
+}
+
+.table {
+  background-color: #fff;
+}
+
+.table td,
+.table th {
+  border: none;
+  vertical-align: middle;
+}
+
+.reference-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #333;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+.table td {
+  border-bottom: 1px solid #dee2e6;
+  font-size: 16px;
+}
+
+.table th {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.card {
+  box-shadow: none;
+}
+
+.reference-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.card-title a {
+  color: #212529;
+}
+
+.card-title a:hover {
+  color: #007bff;
+}
+
 @media only screen and (min-width: 768px) {
-    .vid iframe {
-        width:  450px;
-        height: 300px;
-    }
+  .vid iframe {
+    width: 450px;
+    height: 300px;
+  }
 }
 
 @media only screen and (max-width: 768px) {
-    .vid iframe {
-        width: 200px;
-        height: 150px;
-    }
+  .vid iframe {
+    width: 200px;
+    height: 150px;
+  }
 }
-

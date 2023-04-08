@@ -23,6 +23,12 @@
   width: 10em;
 }
 
+.head {
+  font-size: 4em;
+  font-family: 'Readex Pro', sans-serif;
+  text-shadow: -1.3px 1.3px #2196f3, -2.6px 2.6px #43a047, -3.9px 3.9px #ff5722;
+}
+
 .topic:hover {
   color: white;
   box-shadow: rgba(0, 0, 0, 0.25) s0 8px 15px;
