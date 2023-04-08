@@ -41,7 +41,7 @@ export default function InputComment({ pageId }) {
   };
 
   return (
-    <div className={cx('container-fluid mb-4', styles['input-comment-style'])}>
+    <div className={cx('container-fluid', styles['input-comment-style'])}>
       <form className={cx('grid p-3')} onSubmit={handleSubmitForm}>
         <div className="row justify-content-evenly">
           <div className="col-auto col-sm-auto m-auto align-self-center">

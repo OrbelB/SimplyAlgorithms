@@ -7,7 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-
+// In your application's entrypoint
+import { enableMapSet } from 'immer';
 import store from './store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -22,6 +23,7 @@ store.dispatch(
     size: 15,
   })
 );
+enableMapSet();
 store.dispatch(fetchWikiLinks());
 store.dispatch(fetchSubCategories());
 const root = ReactDOM.createRoot(document.getElementById('root'));

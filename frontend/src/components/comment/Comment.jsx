@@ -1,5 +1,8 @@
-import { useState } from 'react';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button } from '@mui/material';
+import KeyboardTabRoundedIcon from '@mui/icons-material/KeyboardTabRounded';
 import ChildComment from './ChildComment';
 import AddEditComment from './AddEditComment';
 import CommentBox from './CommentBox';
@@ -32,18 +35,46 @@ export default function Comment({
   parentCommentId,
   downVotes,
 }) {
+  const { commentChildrenCurrPages, commentChildrenTotalPages, status } =
+    useSelector((state) => state.comment);
   const [showReplies, setShowReplies] = useState(false);
   const [inputChildComment, setInputChildComment] = useState(false);
   const { jwtAccessToken, userId: authUserId } = useSelector(
     (state) => state.auth
   );
-  const status = useSelector((state) => state.comment.status);
+
+  const [fetchMoreChildrenComments, setFetchMoreChildrenComments] =
+    useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const dispatch = useDispatch();
   const hasReplies = showReplies && replyCount > 0;
   const childrenComments = useSelector((state) =>
     selectChildrenCommentsByParentCommentId(state, parentCommentId)
   );
+
+  useEffect(() => {
+    if (
+      commentChildrenCurrPages.get(parentCommentId) !==
+        commentChildrenTotalPages.get(parentCommentId) &&
+      fetchMoreChildrenComments
+    ) {
+      setFetchMoreChildrenComments(true);
+      dispatch(
+        fetchChildrenComments({
+          page: commentChildrenCurrPages.get(parentCommentId),
+          size: 10,
+          parentCommentId,
+        })
+      );
+    }
+  }, [
+    commentChildrenCurrPages,
+    commentChildrenTotalPages,
+    dispatch,
+    fetchMoreChildrenComments,
+    parentCommentId,
+  ]);
+
   const handleShowReplies = () => {
     if (!showReplies) {
       dispatch(
@@ -163,8 +194,8 @@ export default function Comment({
           removeData={() => setShowErrorMessage(false)}
         />
       )}
-      <div className="container-fluid" ref={innerRef}>
-        <div className="row justify-content-center g-2">
+      <div className="container-fluid " ref={innerRef}>
+        <div className="row p-4 justify-content-center gx-2 g-0">
           <CommentBox
             commentId={parentCommentId}
             userId={userId}
@@ -211,24 +242,56 @@ export default function Comment({
                 )}
               </div>
             </div>
-            {hasReplies && (
-              <div className="row m-0 p-0">
-                {childrenComments?.map(({ comment }) => (
-                  <ChildComment
-                    key={comment.commentId}
-                    commentText={comment?.commentText}
-                    commentId={comment.commentId}
-                    createdDate={comment.createdDate}
-                    profilePicture={comment?.createdBy?.profilePicture}
-                    userId={comment?.createdBy?.userId}
-                    username={comment?.createdBy?.username}
-                    upVotes={comment.likes}
-                    downVotes={comment.dislikes}
-                    deleteChildComment={handleDeleteChildComment}
-                    editChildComment={handleEditChildComment}
-                  />
-                ))}
-              </div>
+            {hasReplies && childrenComments.length > 0 && (
+              <>
+                <div className="row m-0 p-0 gy-4">
+                  {childrenComments?.map(({ comment }) => (
+                    <ChildComment
+                      key={comment.commentId}
+                      commentText={comment?.commentText}
+                      commentId={comment.commentId}
+                      createdDate={comment.createdDate}
+                      profilePicture={comment?.createdBy?.profilePicture}
+                      userId={comment?.createdBy?.userId}
+                      username={comment?.createdBy?.username}
+                      upVotes={comment.likes}
+                      downVotes={comment.dislikes}
+                      deleteChildComment={handleDeleteChildComment}
+                      editChildComment={handleEditChildComment}
+                    />
+                  ))}
+                </div>
+                <div
+                  className="row m-0 p-0 justify-content-start mt-2"
+                  hidden={
+                    commentChildrenCurrPages.get(parentCommentId) + 1 >=
+                    commentChildrenTotalPages.get(parentCommentId)
+                  }
+                >
+                  <Button
+                    component="button"
+                    variant="outlined"
+                    startIcon={<KeyboardTabRoundedIcon />}
+                    disabled={
+                      commentChildrenCurrPages.get(parentCommentId) + 1 ===
+                        commentChildrenTotalPages.get(parentCommentId) ||
+                      status === 'loading'
+                    }
+                    onClick={() => {
+                      dispatch(
+                        commentActions.updateCurrentChildrenPage({
+                          parentCommentId,
+                          commentChildrenCurrPage:
+                            commentChildrenCurrPages.get(parentCommentId),
+                        })
+                      );
+                      setFetchMoreChildrenComments(true);
+                    }}
+                  >
+                    show more replies
+                  </Button>
+                </div>
+              </>
             )}
           </CommentBox>
         </div>

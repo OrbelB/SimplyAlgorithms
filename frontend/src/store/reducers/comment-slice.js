@@ -3,6 +3,8 @@ import {
   createEntityAdapter,
   createSelector,
 } from '@reduxjs/toolkit';
+
+import { Map } from 'immutable';
 import {
   fetchParentComments,
   createParentComment,
@@ -22,7 +24,8 @@ const initialState = commentAdapter.getInitialState({
   commentParents: [],
   commentParentCurrPage: 0,
   commentParentsTotalPages: undefined,
-  commentChildrenTotalPages: undefined,
+  commentChildrenTotalPages: Map(),
+  commentChildrenCurrPages: Map(),
   error: '',
   status: 'idle',
 });
@@ -36,11 +39,18 @@ export const commentSlice = createSlice({
       state.status = 'idle';
       state.commentParentCurrPage = 0;
       state.commentParentsTotalPages = undefined;
-      state.commentChildrenTotalPages = undefined;
+      state.commentChildrenTotalPages = Map();
+      state.commentChildrenCurrPages = Map();
       state.commentParents = [];
     },
     updateCurrentParentPage: (state) => {
       state.commentParentCurrPage += 1;
+    },
+    updateCurrentChildrenPage: (state, action) => {
+      state.commentChildrenCurrPages = state.commentChildrenCurrPages.set(
+        action.payload.parentCommentId,
+        action.payload.commentChildrenCurrPage + 1
+      );
     },
     addSingleReply: (state, action) => {
       const commentId = action.payload?.commentId;
@@ -70,6 +80,16 @@ export const commentSlice = createSlice({
       })
       .addCase(fetchChildrenComments.fulfilled, (state, action) => {
         state.status = 'success';
+        const { rootId } = action.payload.content[0];
+        state.commentChildrenCurrPages = state.commentChildrenCurrPages.set(
+          String(rootId),
+          action.payload.number
+        );
+        state.commentChildrenTotalPages = state.commentChildrenTotalPages.set(
+          String(rootId),
+          action.payload.totalPages
+        );
+
         const childrenComments = action.payload?.content?.map((comment) => {
           comment.parentCommentId = comment?.rootId;
           comment.comment.createdDate = new Date(

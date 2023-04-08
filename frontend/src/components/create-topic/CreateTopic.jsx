@@ -71,7 +71,6 @@ export default function CreateTopic() {
 
   // reset the state of the page in the event of the topic name been part of the url
   useEffect(() => {
-    console.count('useEffect resetState');
     if (topicName.topicName === undefined || topicName.topicName === 'new') {
       setVisualizer('');
       setAttribution('');
@@ -86,7 +85,6 @@ export default function CreateTopic() {
   // used to fetch the topic data in the event of the topic name been part of the url
   // for editing purposes
   useEffect(() => {
-    console.count('useEffect fetchSingleTopic');
     if (
       topicStatus === 'idle' &&
       Object.keys(topic).length === 0 &&
@@ -99,7 +97,6 @@ export default function CreateTopic() {
   // used to set the state of the current edit page to the topic data
   // that is being edited in the event of the topic name been part of the url
   useEffect(() => {
-    console.count('useEffect setTopicData reset');
     if (
       topicStatus === 'success' &&
       (topic?.codeSnippets?.length > 0 ||
@@ -131,7 +128,6 @@ export default function CreateTopic() {
   // checks if the urlPath is not null and not empty and if the topicStatus is success
   // if so, it means that the topic has been created or updated, therefore the user is redirected
   useEffect(() => {
-    console.count('useEffect setTopicData');
     if (urlPath !== null && urlPath !== '' && topicStatus === 'success') {
       const currentUrl = urlPath;
       dispatch(topicActions.resetData());
@@ -150,7 +146,6 @@ export default function CreateTopic() {
 
   const handleSaveTopic = async (e) => {
     e.preventDefault();
-    console.info('handleSaveTopic');
     if (!isReadyToSubmit) return;
     const wikiInfo = wikiNames.find((wiki) => wiki.wikiName === wikiCategory);
     const topicToCreate = {
@@ -174,10 +169,9 @@ export default function CreateTopic() {
     }
   };
 
-  console.count('outstide handleUpdateTopic');
   const handleUpdateTopic = async (e) => {
     e.preventDefault();
-    console.info('handleSaveTopic');
+
     if (!isReadyToSubmit) return;
 
     const wikiInfo = wikiNames.find((wiki) => wiki.wikiName === wikiCategory);
@@ -199,7 +193,6 @@ export default function CreateTopic() {
   // const displayProcess = parse(draftToHtml(process));
 
   const handleReferenceChange = (index, event) => {
-    console.info('index', index);
     const data = [...references];
     data[index][event.target.name] = event.target.value;
     setReferences(data);
