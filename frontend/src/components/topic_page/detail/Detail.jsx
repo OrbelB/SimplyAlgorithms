@@ -8,7 +8,7 @@ export default function Detail({ pageDescription, references }) {
   return (
     <div className="detail text-center">
       <div className="top p-5">{description}</div>
-      <div className="row justify-content-around  mt-auto mt-sm-5   p-2">
+      <div className="row justify-content-around background mt-auto mt-sm-5   p-2">
         <div className="col-auto col-sm-auto align-self-center">
           <h3 className="m-3 mb-4">FUTURE REFERENCES</h3>
           {references.map((user) => {

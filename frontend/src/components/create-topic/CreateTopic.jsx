@@ -298,13 +298,16 @@ export default function CreateTopic() {
   return (
     <div className="createtopic">
       <br />
-      <h2 className="text-center mb-5">Topic Page Creation Form</h2>
-      <h5>Instructions: Fill out the fields with the correct formats.</h5>
-      <h5>Preview the topic page below before submitting.</h5>
+      <h2 className="text-center mb-5 pt">TOPIC PAGE CREATION FORM</h2>
+      <h5 className="fi">
+        Instructions: Fill out the fields with the correct formats.
+      </h5>
+      <h5 className="fi">Preview the topic page below before submitting.</h5>
+      <br />
       <br />
       <form className="topic-form">
-        <h2>Algorithm Title</h2>
-        <h5>Note: Once set, title cannot be changed</h5>
+        <h2 className="ft">1- ALGORITHM TITLE</h2>
+        <h5 className="fi">Note: Once set, title cannot be changed</h5>
         <TextField
           disabled={topicName?.topicName !== undefined}
           error={topicNameAvailable !== null && !topicNameAvailable}
@@ -319,8 +322,9 @@ export default function CreateTopic() {
         />
         <br />
         <br />
-        <h2>Category Selection</h2>
-        <h5>Note: Once set, category cannot be changed</h5>
+        <br />
+        <h2 className="ft">2- CATEGORY SELECTION</h2>
+        <h5 className="fi">Note: Once set, category cannot be changed</h5>
         <div className="col-auto col-md-6 text-center">
           <Button
             variant="contained"
@@ -351,12 +355,13 @@ export default function CreateTopic() {
         )}
         <br />
         <br />
-        <h2>Embedded Visualizer or Video Source</h2>
-        <h5>
+        <br />
+        <h2 className="ft">3- VISUALIZER OR VIDEO SOURCE</h2>
+        <h5 className="fi">
           Note: If embedding YouTube videos, please use specific embed link or
           the video will not display
         </h5>
-        <h5>
+        <h5 className="fi">
           From video page, click on "Share" and then on "Embed". Copy the link
           from "src" in the given HTML code.
         </h5>
@@ -372,7 +377,7 @@ export default function CreateTopic() {
         </label>
         <br />
         <br />
-        <h2>Source Attribution</h2>
+        <h2 className="ft">4- SOURCE ATTRIBUTION</h2>
         <label htmlFor="vis-source">
           <input
             id="vis-source"
@@ -385,8 +390,11 @@ export default function CreateTopic() {
         </label>
         <br />
         <br />
-        <h2>Algorithm Steps, Process, Running Time/Space Complexity</h2>
-        <h5>Please manually include section titles</h5>
+        <br />
+        <h2 className="ft">
+          5- ALGO STEPS/PROCESS/RUNNING TIME/SPACE COMPLEXITY
+        </h2>
+        <h5 className="fi">Please manually include section titles</h5>
         <div className="form-group m-3 col-10">
           <TextEditor
             key={topic?.title}
@@ -400,9 +408,12 @@ export default function CreateTopic() {
         </div>
         <br />
         <br />
-        <h2>Further References - Links</h2>
-        <h5>Source Title and Link</h5>
-        <h5>Ex: GeeksforGeeks-QuickSort | https://www.geeksforgeeks.org/</h5>
+        <br />
+        <h2 className="ft">6- FURTHER REFERENCES: LINKS</h2>
+        <h5 className="fi">Source Title and Link</h5>
+        <h5 className="fi">
+          Ex: GeeksforGeeks-QuickSort | https://www.geeksforgeeks.org/
+        </h5>
         {references.map((input, index) => {
           return (
             // eslint-disable-next-line react/no-array-index-key
@@ -426,7 +437,7 @@ export default function CreateTopic() {
                 className="form-button w-auto"
                 onClick={() => removeReferences(index)}
               >
-                Remove Reference
+                REMOVE REFERENCE
               </button>
             </div>
           );
@@ -437,13 +448,14 @@ export default function CreateTopic() {
           className="form-button w-auto"
           onClick={addReferences}
         >
-          Add Reference
+          ADD REFERENCE
         </button>
         <br />
         <br />
-        <h2>Code Snippets</h2>
-        <h5>Language and Code</h5>
-        <h5>Ex: Java | public static void...</h5>
+        <br />
+        <h2 className="ft">7- CODE SNIPPETS</h2>
+        <h5 className="fi">Language and Code</h5>
+        <h5 className="fi">Ex: Java | public static void...</h5>
         {snippets.map((input, index) => {
           return (
             // eslint-disable-next-line react/no-array-index-key
@@ -458,7 +470,7 @@ export default function CreateTopic() {
               <textarea
                 className="label2"
                 name="codeText"
-                placeholder="code"
+                placeholder="   Enter code"
                 value={input?.codeText}
                 onChange={(e) => handleSnippetChange(index, e)}
               />
@@ -467,7 +479,7 @@ export default function CreateTopic() {
                 className="form-button w-auto"
                 onClick={() => removeSnippets(index)}
               >
-                Remove Snippet
+                REMOVE SNIPPET
               </button>
             </div>
           );
@@ -478,8 +490,9 @@ export default function CreateTopic() {
           className="form-button w-auto"
           onClick={addSnippets}
         >
-          Add Snippet
+          ADD SNIPPET
         </button>
+        <br />
         <br />
         <br />
         <Button
