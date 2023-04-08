@@ -24,7 +24,7 @@ const HIGHLIGHTS_PREVIEWS = [
 
 export default function HighlightsPreview() {
   return HIGHLIGHTS_PREVIEWS.map(({ category, comment }) => (
-    <div key={nanoid()}>
+    <div key={nanoid}>
       <div className="preview-sect m-2">
         <div className="first-line">
           <h4 className="preview-category">{category}</h4>

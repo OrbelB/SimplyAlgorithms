@@ -26,9 +26,9 @@ export default function TopicsDB() {
     <div className="container-fluid w-100">
       <div className="row">
         {topicsdb.map((item) => (
-          <div key={nanoid()} className="col">
+          <div key={nanoid} className="col">
             <CircularProgressbar
-              key={nanoid()}
+              key={nanoid}
               className="m-5  mb-0 w-75"
               value={item.topic_completion}
               text={`${item.topic_completion}%`}

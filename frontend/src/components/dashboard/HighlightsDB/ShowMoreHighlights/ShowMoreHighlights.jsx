@@ -46,7 +46,7 @@ export default function ShowMoreHighlights() {
               <div>
                 {SELECTEDTOPICS2.map(({ topic }) => {
                   return (
-                    <div key={nanoid()}>
+                    <div key={nanoid}>
                       <div className="firstline">
                         <div className="topic-selected">
                           <h5>Topic: {topic}</h5>

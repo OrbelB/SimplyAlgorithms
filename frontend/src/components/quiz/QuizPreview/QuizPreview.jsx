@@ -30,7 +30,7 @@ export default function QuizDB({ quizList, status }) {
             return (
               <NavLink
                 ref={lastElementChild}
-                key={nanoid()}
+                key={nanoid}
                 className="nav-hover"
                 aria-current="page"
                 to={quizId}
@@ -67,7 +67,7 @@ export default function QuizDB({ quizList, status }) {
           }
           return (
             <NavLink
-              key={nanoid()}
+              key={nanoid}
               className="nav-hover"
               aria-current="page"
               to={quizId}
