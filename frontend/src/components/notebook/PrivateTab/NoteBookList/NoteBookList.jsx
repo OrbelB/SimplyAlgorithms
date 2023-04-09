@@ -256,17 +256,16 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
   const [message, setMessage] = useState('');
 
   const handleOpenAUS = () => {
-    if (isPublic === 0) {
-      setMessage(
-        'Your notes will now be publicly accessible when you confirm. However, you will no longer be able to share your Note privately.'
-      );
-      setOpenAUS(true);
-    } else {
+    if (isPublic === true) {
       setMessage(
         'The public will lose access to your notes once you confirm. However, after that, you can share with others privately.'
       );
-      setOpenAUS(true);
+    } else if (isPublic === false) {
+      setMessage(
+        'Your notes will now be publicly accessible when you confirm. However, you will no longer be able to share your Note privately.'
+      );
     }
+    setOpenAUS(true);
   };
 
   const handleCloseAUS = () => {
@@ -274,11 +273,10 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
   };
 
   const handleConfirmAUS = () => {
-    // Do something when the user confirms
-    if (isPublic === 0) {
-      setIsPublic(1);
-    } else {
-      setIsPublic(0);
+    if (isPublic === true) {
+      setIsPublic(false);
+    } else if (isPublic === false) {
+      setIsPublic(true);
     }
     setOpenAUS(false);
   };
