@@ -1,4 +1,7 @@
+import { Card } from 'react-bootstrap';
 import './PostPreview_noratings.css';
+import { nanoid } from '@reduxjs/toolkit';
+import { CardContent, CardHeader, Typography } from '@mui/material';
 
 const POST_REVIEWS_WITHNORATING = [
   {
@@ -22,23 +25,21 @@ const POST_REVIEWS_WITHNORATING = [
 export { POST_REVIEWS_WITHNORATING };
 
 export default function PostPreview() {
-  return (
-    <div>
-      {POST_REVIEWS_WITHNORATING.map(({ id, name, title }) => {
-        return (
-          <>
-            <div key={id} className="preview-sect">
-              <div className="first-line">
-                <img alt="Profile Pic" className="profile-pic" />
-                <h4 className="preview-username">{name}</h4>
-              </div>
-              <h5 className="preview-title">{title}</h5>
-            </div>
-            <br />
-            <br />
-          </>
-        );
-      })}
-    </div>
-  );
+  return POST_REVIEWS_WITHNORATING.map(({ name, title }) => (
+    <Card key={nanoid()} className="m-2">
+      <CardHeader
+        avatar={<img alt="Profile Pic" className="profile-pic" />}
+        title={
+          <Typography variant="h5" className="preview-username">
+            {name}
+          </Typography>
+        }
+      />
+      <CardContent>
+        <Typography variant="h5" className="preview-title">
+          {title}
+        </Typography>
+      </CardContent>
+    </Card>
+  ));
 }

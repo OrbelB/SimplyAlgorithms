@@ -2,12 +2,14 @@
 import {
   Box,
   Button,
+  IconButton,
   MenuItem,
   Modal,
   TextField,
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import './Report.css';
 
 const style = {
@@ -82,6 +84,12 @@ export default function BasicModal() {
         aria-describedby="modal-modal-description"
       >
         <Box className="reportModal" sx={style}>
+          <IconButton
+            onClick={handleClose}
+            sx={{ position: 'absolute', margin: 3, top: 0, right: 0 }}
+          >
+            <CloseIcon />
+          </IconButton>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Report
           </Typography>

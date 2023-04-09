@@ -21,6 +21,7 @@ import {
 import ShareIcon from '@mui/icons-material/Share';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import parse from 'html-react-parser';
 import draftToHtml from 'draftjs-to-html';
@@ -40,6 +41,7 @@ import {
 // import { updateSharedEditPermission } from '../../../../store/reducers/note-slice';
 import { timeToExpire } from '../../../../utilities/beautify-time';
 import useJwtPermssionExists from '../../../../hooks/use-jwtPermission';
+import AreYouSureModal from '../../../AreYourSureModal/AreYouSureModal';
 
 const content = {
   blocks: [
@@ -250,6 +252,37 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     dispatch(updateExpireDateOnSharedNotes({ noteShareDTO, jwtAccessToken }));
   };
 
+  const [openAUS, setOpenAUS] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleOpenAUS = () => {
+    if (isPublic === 0) {
+      setMessage(
+        'Your notes will now be publicly accessible when you confirm. However, you will no longer be able to share your Note privately.'
+      );
+      setOpenAUS(true);
+    } else {
+      setMessage(
+        'The public will lose access to your notes once you confirm. However, after that, you can share with others privately.'
+      );
+      setOpenAUS(true);
+    }
+  };
+
+  const handleCloseAUS = () => {
+    setOpenAUS(false);
+  };
+
+  const handleConfirmAUS = () => {
+    // Do something when the user confirms
+    if (isPublic === 0) {
+      setIsPublic(1);
+    } else {
+      setIsPublic(0);
+    }
+    setOpenAUS(false);
+  };
+
   return editPage === false ? (
     <div className="card m-3 mb-4">
       <div className="card-body" ref={innerRef}>
@@ -340,6 +373,12 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
+              <IconButton
+                onClick={handleClose}
+                sx={{ position: 'absolute', margin: 3, top: 0, right: 0 }}
+              >
+                <CloseIcon />
+              </IconButton>
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 Share
               </Typography>
@@ -503,10 +542,17 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
             variant="contained"
             disabled={status === 'pending' || isStudent}
             color={isPublic ? 'success' : 'error'}
-            onClick={handleUpdatingIsPublic}
+            onClick={(handleUpdatingIsPublic, handleOpenAUS)}
           >
             {isPublic ? 'Public' : 'Private'}
           </Button>
+          <AreYouSureModal
+            open={openAUS}
+            onClose={handleCloseAUS}
+            onConfirm={handleConfirmAUS}
+            title="Are you sure?"
+            message={message}
+          />
           <div className="form-group m-3">
             <Typography variant="label">Description: </Typography>
             <TextEditor

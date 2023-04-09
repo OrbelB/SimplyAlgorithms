@@ -27,15 +27,18 @@ export default function RecentlyViewedPosts() {
         }}
       >
         <CardContent>
-          <Avatar
-            alt="Profile Pic"
-            loading="lazy"
-            src={userDto.profilePicture}
-          />
-          <Typography variant="h4" className="side-username">
-            {userDto?.username}
-          </Typography>
-          <Typography variant="h5" className="line-two">
+          <div style={{ display: 'flex', alignItems: 'left' }}>
+            <Avatar
+              alt="Profile Pic"
+              loading="lazy"
+              src={userDto.profilePicture}
+              sx={{ marginRight: '10px' }}
+            />
+            <Typography variant="h5" className="side-username">
+              {userDto?.username}
+            </Typography>
+          </div>
+          <Typography sx={{ display: 'block', marginTop: '20px' }} variant="h5">
             {title}
           </Typography>
         </CardContent>

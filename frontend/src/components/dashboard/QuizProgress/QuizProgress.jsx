@@ -31,69 +31,70 @@ export default function QuizProgress({ userHistory }) {
       {currentUserInfo.map(() => {
         return (
           <div key={() => nanoid()} className="container-fluid">
-            <div className="row">
-              <div className="col text-center">
-                <h5 className="text-center m-4">Scores</h5>
-                <div className="row justify-content-sm-center justify-content-md-center justify-content-lg-between">
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-4">
-                    <Chart
-                      type="line"
-                      width={300}
-                      height={300}
-                      series={[
-                        {
-                          name: 'Quiz Score',
-                          data: userHistory.map((quiz) =>
-                            Number(quiz.averageScore)
-                          ),
-                        },
-                      ]}
-                      options={{
-                        xaxis: {
-                          categories: userHistory.map(
-                            (quiz) => quiz.quizDTO.title
-                          ),
-                        },
-                        title: {
-                          text: 'Quiz Scores',
-                        },
-                      }}
-                    />
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 align-self-center text-center">
-                    <Chart
-                      type="radialBar"
-                      width={300}
-                      height={300}
-                      series={[Number(averageScore)]}
-                      options={{
-                        labels: ['Score'],
-                        title: {
-                          text: 'Average Quiz Score',
-                        },
-                      }}
-                    />
-                  </div>
-                  {(isAdmin || isTeacher) && (
-                    <div className="col-12 cold-sm-12 col-md-12 col-lg-4 text-none text-lg-end">
-                      <Button
-                        type="button"
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => {
-                          navigate('/quiz/createquiz');
-                          dispatch(quizActions.resetData());
-                        }}
-                      >
-                        create quiz
-                      </Button>
-                    </div>
-                  )}
+            <div className="d-flex justify-content-center align-items-center flex-column">
+              {(isAdmin || isTeacher) && (
+                <div className="text-end">
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => {
+                      navigate('/quiz/createquiz');
+                      dispatch(quizActions.resetData());
+                    }}
+                  >
+                    Create Quiz
+                  </Button>
+                </div>
+              )}
+              <h4 className="text-center my-4">Scores</h4>
+            </div>
+            <div className="d-flex justify-content-center my-4">
+              <div className="row">
+                <div className="col-12 col-md-6 mb-4 pr-md-3">
+                  <Chart
+                    type="line"
+                    width={300}
+                    height={300}
+                    series={[
+                      {
+                        name: 'Quiz Score',
+                        data: userHistory.map((quiz) =>
+                          Number(quiz.averageScore)
+                        ),
+                      },
+                    ]}
+                    options={{
+                      xaxis: {
+                        categories: userHistory.map(
+                          (quiz) => quiz.quizDTO.title
+                        ),
+                      },
+                      title: {
+                        text: 'Quiz Scores',
+                      },
+                    }}
+                  />
+                </div>
+                <div className="col-12 col-md-6 pl-md-3">
+                  <Chart
+                    type="radialBar"
+                    width={300}
+                    height={300}
+                    series={[Number(averageScore)]}
+                    options={{
+                      labels: ['Score'],
+                      title: {
+                        text: 'Average Quiz Score',
+                      },
+                    }}
+                  />
                 </div>
               </div>
             </div>
+
             <div className="row">
-              <h5 className="m-4 text-center">Recently Taken Quizzes</h5>
+              <h4 className="m-4 text-center">Recently Taken Quizzes</h4>
               <QuizDB userHistory={userHistory} />
             </div>
             <div className="mb-5"> </div>

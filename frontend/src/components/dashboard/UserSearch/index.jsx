@@ -86,7 +86,7 @@ export default function UserSearchSection() {
       <form noValidate autoComplete="off">
         <Card
           variant="elevation"
-          sx={{ border: 3, borderColor: 'black' }}
+          sx={{ border: 2, borderColor: 'black' }}
           raised
         >
           <CardHeader

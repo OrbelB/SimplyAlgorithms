@@ -10,6 +10,7 @@ export default function NavbarTopic() {
           borderColor: 'grey.500',
           height: 55,
           width: 550,
+          borderRadius: '30px', // add borderRadius to match the rounded ends
         }}
         className="rounded-pill"
         showLabels
@@ -22,6 +23,8 @@ export default function NavbarTopic() {
             flexDirection: 'column',
             alignItems: 'center',
             borderRight: '3px solid grey',
+            backgroundColor: '#97F9FF',
+            borderRadius: '30px 0 0 30px', // add borderRadius to match the rounded ends
           }}
           label={
             <span
@@ -46,6 +49,8 @@ export default function NavbarTopic() {
             flexDirection: 'column',
             alignItems: 'center',
             borderRight: '3px solid grey',
+            backgroundColor: '#FDFCF4',
+            borderRadius: '0', // add borderRadius to match the rounded ends
           }}
           label={
             <span
@@ -70,6 +75,8 @@ export default function NavbarTopic() {
             flexDirection: 'column',
             alignItems: 'center',
             borderRight: '3px solid grey',
+            backgroundColor: '#d3fef4',
+            borderRadius: '0', // add borderRadius to match the rounded ends
           }}
           label={
             <span
@@ -93,6 +100,8 @@ export default function NavbarTopic() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            backgroundColor: '#80A1FF',
+            borderRadius: '0 30px 30px 0', // add borderRadius to match the rounded ends
           }}
           label={
             <span

@@ -1,63 +1,82 @@
-import './QuizDB.css';
+import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import { nanoid } from '@reduxjs/toolkit';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
+import Chart from 'react-apexcharts';
+import { useState } from 'react';
 
 export default function QuizDB({ userHistory }) {
+  const [showAll, setShowAll] = useState(false);
+
+  const displayUserHistory = showAll ? userHistory : userHistory.slice(0, 6);
+
+  const handleShowAll = () => setShowAll(true);
+
   return (
-    <div className="container-fluid w-100">
-      <div className="row justify-content-start align-items-end">
-        {userHistory?.map(
-          ({
-            createdBy,
-            quizDTO,
-            averageScore,
-            attempts,
-            highestScore,
-            lowestSore,
-          }) => (
-            <div key={() => nanoid()} className="col">
-              <div className="card quizdb p-2">
-                <div className="container-fluid">
-                  <div className="row">
-                    <h3>{quizDTO.title}</h3>
-                  </div>
-                  <div className="row">
-                    <p>Created By {createdBy.username}</p>
-                  </div>
-                  <div className="row">
-                    <div className="col-auto">
-                      <CircularProgressbar
-                        value={averageScore}
-                        text={`${averageScore}%`}
-                        maxValue={100}
-                        minValue={0}
-                        strokeWidth="10"
-                        styles={buildStyles({
-                          strokeLinecap: 'round',
-                          textSize: '18px',
-                          pathColor: `#0000FF`,
-                          textColor: 'black',
-                          trailColor: 'darkgray',
-                        })}
-                      />
-                    </div>
-                    <div className="col-auto">
-                      <h6>Attempts: {attempts} </h6>
-                    </div>
-                    <div className="col-auto">
-                      <h6>Highest Score: {highestScore}</h6>
-                    </div>
-                    <div className="col-auto">
-                      <h6>Lowest Score: {lowestSore}</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )
-        )}
-      </div>
-    </div>
+    <Grid container spacing={4}>
+      {displayUserHistory.map(
+        ({
+          createdBy,
+          quizDTO,
+          averageScore,
+          attempts,
+          highestScore,
+          lowestSore,
+        }) => (
+          <Grid key={nanoid()} item xs={12} md={6} lg={4}>
+            <Card
+              sx={{
+                height: '100%',
+                border: 2,
+                borderColor: 'black',
+                borderRadius: '20px',
+                backgroundColor: '#d3d3d3',
+              }}
+            >
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {quizDTO.title}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                  Created By {createdBy.username}
+                </Typography>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item xs={12} md={6}>
+                    <Chart
+                      type="radialBar"
+                      width={225}
+                      height={225}
+                      series={[Number(averageScore)]}
+                      options={{
+                        labels: ['Score'],
+                        title: {
+                          text: '',
+                        },
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Typography variant="body1">
+                      Attempts: {attempts}
+                    </Typography>
+                    <Typography variant="body1">
+                      Highest Score: {highestScore}
+                    </Typography>
+                    <Typography variant="body1">
+                      Lowest Score: {lowestSore}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+        )
+      )}
+      {!showAll && userHistory.length > 6 && (
+        <Grid item xs={12}>
+          <Button onClick={handleShowAll} variant="contained">
+            Show All
+          </Button>
+        </Grid>
+      )}
+    </Grid>
   );
 }

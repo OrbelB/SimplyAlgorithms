@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Badge, Button, Card, CardHeader } from '@mui/material';
 import RecentlyViewedPosts from './RecentlyViewPosts/RecentlyViewedPosts';
 
-import './Dashboard.css';
 import DayStreak from './DayStreak/DayStreak';
 import QuizProgress from './QuizProgress/QuizProgress';
-import CommentsDB from './CommentsDB/CommentsDB';
-import HighlightsDB from './HighlightsDB/HighlightsDB';
+// import CommentsDB from './CommentsDB/CommentsDB';
+import NotesDB from './HighlightsDB/NotesDB';
 import Notifications from './Notifications/Notifications';
-import ShowMoreComments from './CommentsDB/ShowMoreComments/ShowMoreComments';
-import ShowMoreHighlights from './HighlightsDB/ShowMoreHighlights/ShowMoreHighlights';
+// import ShowMoreComments from './CommentsDB/ShowMoreComments/ShowMoreComments';
+import ShowMoreNotes from './HighlightsDB/ShowMoreNotes/ShowMoreNotes';
 import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 import { fetchUserHistory } from '../../services/quiz';
 import UserSearchSection from './UserSearch';
@@ -51,82 +50,94 @@ export default function Dashboard() {
 
   return (
     <div className="container-fluid">
-      <div className="row ps-2 justify-content-between mt-4">
-        <div className="col-auto align-self-center 0">
-          <h2>
+      <div className="row ps-2 mt-5 mb-5 align-items-center">
+        <div className="col">
+          <h2 className="mb-0">
             {username.toUpperCase()}
             &apos;S DASHBOARD
           </h2>
         </div>
         {isAdmin || isTeacher ? (
-          <div className="col-auto align-self-center 0">
+          <div className="col-auto">
             <Button
               variant="contained"
               color="success"
+              sx={{ fontSize: '15px', mt: 2 }}
               onClick={handleRedirect}
             >
-              create topic
+              Create A Topic
             </Button>
           </div>
         ) : null}
         <div className="col-auto">
-          <button
-            type="button"
+          <Button
+            variant="contained"
+            sx={{ fontSize: '15px', mt: 2 }}
             onClick={() => setShowNotifications(true)}
-            className="bts btn"
-            data-bs-toggle="modal"
-            data-bs-target="#notificationdb"
+            endIcon={
+              <Badge
+                badgeContent={dashboardInfo?.notifications?.length}
+                color="error"
+                sx={{ m: 1 }}
+              />
+            }
           >
-            <h5>
-              Notifications
-              <span className="badge">
-                {dashboardInfo?.notifications?.length}
-              </span>
-            </h5>
-          </button>
-
+            Notifications
+          </Button>
           <Notifications
             show={showNotifications}
             setShow={setShowNotifications}
           />
         </div>
       </div>
-      <div className="row mt-4 ps-3">
-        <div className="card border-dark quizzes">
-          <h4 className="card-header text-center">Quizzes</h4>
+
+      <div className="row m-1">
+        <Card
+          sx={{
+            height: 'auto',
+            border: 2,
+            backgroundColor: '#c7ffd2',
+            boxShadow: 2,
+          }}
+        >
+          <CardHeader
+            title="Quizzes"
+            className="text-center"
+            titleTypographyProps={{ variant: 'h4' }}
+          />
           <QuizProgress userHistory={userHistory} />
-        </div>
+        </Card>
       </div>
       <div className="row mt-3 mb-3">
         <div className="col-lg-3 mt-2">
-          <div className="mt-2 mb-4">
+          <div className="mb-4">
             <DayStreak />
           </div>
-          <div className="card rvp">
-            <div className="card-header text-center">
-              <h5>Recently Viewed Posts</h5>
-            </div>
+          <Card
+            sx={{
+              height: 'auto',
+              border: 2,
+              backgroundColor: 'var(--color-bg-main)',
+              boxShadow: 2,
+            }}
+          >
+            <CardHeader title="Recently Viewed Posts" className="text-center" />
             <RecentlyViewedPosts />
-          </div>
+          </Card>
         </div>
         {isAdmin && (
           <div className="col-lg-4 mt-2">
-            <UserSearchSection />
+            <Card>
+              <UserSearchSection />
+            </Card>
           </div>
         )}
         <div className="col-lg mt-2">
-          <div className="card side-right-1">
-            <h4 className="card-header text-center">Notifications</h4>
-            <CommentsDB />
-            <ShowMoreComments />
-          </div>
-        </div>
-        <div className="col-lg mt-2">
-          <div className="card side-right-2">
-            <h4 className="card-header text-center">Highlights</h4>
-            <HighlightsDB />
-            <ShowMoreHighlights />
-          </div>
+          <Card sx={{ height: 'auto', border: 2, backgroundColor: '#e8adad' }}>
+            <CardHeader title="Notes" className="text-center" />
+            <NotesDB />
+            <ShowMoreNotes />
+          </Card>
         </div>
       </div>
     </div>

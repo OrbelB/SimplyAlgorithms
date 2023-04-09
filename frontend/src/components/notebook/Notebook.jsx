@@ -16,13 +16,13 @@ import {
 export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
   const [NoteTab, setNoteTab] = useState(1);
   const { userId, jwtAccessToken } = useSelector((state) => state.auth);
-  const [drawerWidth, setDrawerWidth] = useState(450);
+  const [drawerWidth, setDrawerWidth] = useState('45vw');
   const dispatch = useDispatch();
   const handleToggle = () => {
-    if (drawerWidth === 450) {
+    if (drawerWidth === '45vw') {
       setDrawerWidth('100vw');
     } else {
-      setDrawerWidth(450);
+      setDrawerWidth('45vw');
     }
   };
 
@@ -85,7 +85,7 @@ export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
             className="m-3"
             onClick={handleToggle}
           >
-            {drawerWidth === 450 ? 'Default' : 'Full Screen'}
+            {drawerWidth === '45vw' ? 'Default' : 'Full Screen'}
           </Button>
         </Box>
         <h1 className="text-center">Notebook</h1>
