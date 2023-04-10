@@ -78,6 +78,7 @@ public class UserNotesServiceImp implements UserNotesService {
 
 
     //    Implemented && note tested
+//    This not will never be allowed to be public,
     @Override
     public UserNoteDTO savePublicNote(UUID userId, UUID noteId) {
         UserNotes userNotes = getUserNotes(noteId);
@@ -207,6 +208,12 @@ public class UserNotesServiceImp implements UserNotesService {
         if (!userNotesOptional.isPresent()) {
             throw new NoSuchElementException(
                     MessageFormat.format("note with Id {0} not found ", noteId));
+        }
+        if (!noteShareService.canAccessSharedNote(shareId)) {
+            noteShareService.unShareNote(shareId);
+            throw new UserNotAuthorizedException(MessageFormat
+                    .format("share info with share Id {0} has expired "
+                            , noteId));
         }
 
         return FullShareNoteDTO.builder()

@@ -94,12 +94,11 @@ public class NoteController {
         }
         return ResponseEntity.ok(noteShareService
                 .listSharedNotes(userId, PageRequest.of(page, size)));
-
     }
 
     //    TESTED AND PASSED
 //    @NotePermission
-    @PublicNotePermission
+//    @PublicNotePermission
     @GetMapping(path = "/listPublicNotes", produces = "application/json")
     public ResponseEntity<?> listPublicNotes(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                              @RequestParam(name = "size", defaultValue = "5") Integer size,

@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
             simpleMailMessage.setFrom(GetUsernameRequestEmailValues.FROM.label);
             simpleMailMessage.setSubject(GetUsernameRequestEmailValues.SUBJECT.label);
             simpleMailMessage.setText(GetUsernameRequestEmailValues.BODY.label + user.getUsername());
-            simpleMailMessage.setTo("verified email");
+            simpleMailMessage.setTo(user.getEmail());
             emailService.sendEmail(simpleMailMessage);
             return true;
         }

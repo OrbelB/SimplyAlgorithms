@@ -124,6 +124,11 @@ public class NoteShareServiceImp implements NoteShareService {
                     .format("Cannot share note to self Check userName user {0}", fullShareNoteDTO
                             .getNoteShareDTO().getShareToUserName()));
         }
+        Timestamp sharelength = createShareLength(fullShareNoteDTO.getNoteShareDTO().getNumberOfDaysToShare());
+
+        if (ShareLengthExpired(NoteShare.builder().shareLength(sharelength).build())){
+            throw new NoteErrorException(MessageFormat.format(("Cannot pass in a negative share date, share date: {0}"), sharelength));
+        }
 
 //        to avoid crashing the prog when a very large value is passed in
         if(fullShareNoteDTO.getNoteShareDTO().getNumberOfDaysToShare() > 365 ){
@@ -138,8 +143,7 @@ public class NoteShareServiceImp implements NoteShareService {
                         (fullShareNoteDTO.getNoteShareDTO().isCanEdit())
                                 ? ((short) 1) : ((short) 0))
                 .shareLength(createShareLength(fullShareNoteDTO
-                        .getNoteShareDTO()
-                        .getNumberOfDaysToShare()))
+                        .getNoteShareDTO().getNumberOfDaysToShare()))
                 .build());
 
         return noteMapper.noteShareToNoteShareDTO(noteShare);
@@ -163,6 +167,15 @@ public class NoteShareServiceImp implements NoteShareService {
             throw new ElementNotFoundException(
                     MessageFormat
                             .format("share with shareId {0} does not exists", noteShareDTO.getShareId()));
+        }
+
+        Timestamp sharelength = createShareLength(noteShareDTO.getNumberOfDaysToShare());
+
+        if (ShareLengthExpired(NoteShare.builder().shareLength(sharelength).build())){
+            unShareNote(noteShareDTO.getShareId());
+            return NoteShareDTO.builder()
+                    .shareId(noteShareDTO.getShareId())
+                    .build();
         }
 
         noteShare.get().setShareLength(increaseShareDate(
