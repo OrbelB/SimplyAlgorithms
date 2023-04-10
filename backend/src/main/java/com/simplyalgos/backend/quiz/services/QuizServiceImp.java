@@ -122,7 +122,7 @@ public class QuizServiceImp implements QuizService {
 
         log.debug("finished creating of new quiz" + newQuiz.getQuizId());
 
-        log.debug("Quiz Service QuizQuestionDTO JSON: " + Json.pretty(fullQuizDTO.getQuizQuestionDTO()));
+        log.debug("Quiz Service QuizQuestionDTO JSON: " + fullQuizDTO.getQuizQuestionDTO().size());
         return newQuiz.getQuizId();
 
     }

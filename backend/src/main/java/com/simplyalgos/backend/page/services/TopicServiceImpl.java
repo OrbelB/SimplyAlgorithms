@@ -106,7 +106,7 @@ public class TopicServiceImpl implements TopicService {
         );
         topicMapper.updateTopicFromFullTopicDto(fullTopicDTO, topicToUpdate);
         topicToUpdate.setPageDescription(fullTopicDTO.getPageDescription());
-        log.info("topic new page desc " + Json.pretty(topicToUpdate.getPageDescription()));
+        log.info("topic new page desc ");
         if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getExternalResources())) {
             mapExternalResourcesToTopic(topicToUpdate, fullTopicDTO.getExternalResources());
         }
@@ -142,7 +142,6 @@ public class TopicServiceImpl implements TopicService {
     public String createPage(FullTopicDTO fullTopicDTO) {
         Topic createdTopic = topicMapper.fullTopicDTOToTopic(fullTopicDTO);
         createdTopic.setPageId(UUID.randomUUID());
-        log.debug(MessageFormat.format("Created topic: {0}", Json.pretty(fullTopicDTO)));
         if (fullTopicDTO.getCodeSnippets() != null) {
             createdTopic.setCodeSnippets(fullTopicDTO.getCodeSnippets().stream().map(
                     codeSnippetDTO -> CodeSnippet.builder()

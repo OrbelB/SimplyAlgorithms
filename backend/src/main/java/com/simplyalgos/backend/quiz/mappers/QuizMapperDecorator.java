@@ -44,7 +44,7 @@ public class QuizMapperDecorator implements QuizMapper{
 
     @Override
     public List<QuizQuestion> quizQuestionDTOToQuizQuestion(List<QuizQuestionDTO> quizQuestionDTO) {
-        log.debug("quizQuestionDTO Size: " +  Json.pretty(quizQuestionDTO));
+        log.debug("quizQuestionDTO Size: " +  quizQuestionDTO.size());
         List<QuizQuestion> quizQuestionList = quizMapper.quizQuestionDTOToQuizQuestion(quizQuestionDTO);
         for(int i = 0; i < quizQuestionList.size(); i++){
             quizQuestionList.get(i).setAnswerChoices(

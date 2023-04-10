@@ -68,7 +68,6 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
                     )
             );
         }
-
         QuizQuestion quizQuestion = questionRepository.saveAndFlush(
                 quizQuestionBuilder.build()
         );
@@ -77,7 +76,6 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
 
 
     private void removeQuestionsMissingInList(List<UUID> questionIds, UUID quizId) {
-
         List<QuizQuestion> quizQuestions = questionRepository
                 .findAllByQuestionIdNotInAndBelongsToThisQuiz_QuizId(questionIds, quizId);
 
@@ -109,7 +107,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
                 );
                 quizQuestionAnswerService.saveAllQuizQuestionAnswers(quizQuestionDTO);
                 updatedQuizQuestionsDTO.add(getQuizQuestion(quizQuestionDTO.getQuizId(), quizQuestionDTO.getQuestionId()));
-                log.debug("Added new QUestion Question: " + Json.pretty(updatedQuizQuestionsDTO));
+                log.debug("Added new QUestion Question: " + updatedQuizQuestionsDTO.size());
             } else {
                 log.debug("Updating existing quiz question");
                 log.debug("adding to Quiz question List");

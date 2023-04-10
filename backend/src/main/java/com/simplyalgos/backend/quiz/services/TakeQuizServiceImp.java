@@ -60,7 +60,7 @@ public class TakeQuizServiceImp implements TakeQuizService {
                     .build();
         }
         throw new NoSuchElementException(
-                MessageFormat.format("Take Quiz with Id {0} not found", Json.pretty(takeQuizDTO)));
+                MessageFormat.format("Take Quiz with Id {0} not found", takeQuizDTO.getTakeQuizId()));
     }
 
 
@@ -72,7 +72,7 @@ public class TakeQuizServiceImp implements TakeQuizService {
         if (userOptional.isPresent() && quizOptional.isPresent()) {
             List<TakeQuiz> takeQuizList = takeQuizRepository
                     .findAllByTakenBy_UserIdAndQuizReference_QuizId(userId, quizId);
-            log.debug("All of user Quiz quiz scores" + Json.pretty(takeQuizList));
+            log.debug("All of user Quiz quiz scores" + takeQuizList.size());
 
             return quizMapper.takeQuizToTakeQuizDTO(takeQuizList);
         }
@@ -155,10 +155,10 @@ public class TakeQuizServiceImp implements TakeQuizService {
 //    each question has the same weight
     @Override
     public UUID createTakenQuiz(TakeQuizDTO takeQuizDTO) {
-        log.info("Checking if the quiz exists" + Json.pretty(takeQuizDTO));
+        log.info("Checking if the quiz exists" + takeQuizDTO.getTakeQuizId());
         Optional<Quiz> quizOptional = quizRepository.findById(takeQuizDTO.getQuizId());
         Optional<User> userOptional = userRepository.findById(takeQuizDTO.getUserId());
-        log.debug("creating a new Take Quiz With: " + Json.pretty(takeQuizDTO));
+        log.debug("creating a new Take Quiz With: " + takeQuizDTO.getTakeQuizId());
         if (quizOptional.isPresent() && userOptional.isPresent()) {
             log.debug("Starting the creation of a new Take Quiz");
             TakeQuiz takeQuiz = takeQuizRepository.saveAndFlush(

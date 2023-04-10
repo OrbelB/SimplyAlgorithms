@@ -38,7 +38,6 @@ public class QuizController {
     private final TakeQuizService takeQuizService;
     private final QuizQuestionAnswerService questionAnswerService;
     private final QuizQuestionService quizQuestionService;
-
     private final TakeQuizAverageService takeQuizAverageService;
 
     //need to pass in the tags
@@ -113,9 +112,8 @@ public class QuizController {
     @PostMapping(path = "/create", consumes = "application/json")
     public ResponseEntity<?> createQuiz(@RequestBody FullQuizDTO fullQuizDTO) {
         log.debug("Creating a new Quiz: " + fullQuizDTO.getQuizDTO().getTag().getTag());
-        log.debug("questions" + Json.pretty(fullQuizDTO.getQuizQuestionDTO()));
+        log.debug("questions" + fullQuizDTO.getQuizQuestionDTO().size());
         log.debug("number of questions: " + fullQuizDTO.getQuizQuestionDTO().size());
-
         var response = ResponseEntity.status(HttpStatus.CREATED)
                 .body(quizService.createQuizWithFullQuizDTO(fullQuizDTO));
         List<QuizQuestionDTO> quizQuestionDTOList = quizQuestionService

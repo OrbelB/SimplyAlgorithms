@@ -29,7 +29,7 @@ public class UniversalReportController {
 //    TESTED AND PASSED
     @PostMapping(path = "/createReport", consumes = "application/json" ,produces = "application/json")
     public ResponseEntity<?> createReport(@RequestBody UniversalReportDTO universalReportDTO){
-        log.debug("Creating a new report \n" + Json.pretty(universalReportDTO));
+        log.debug("Creating a new report");
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(URS.createReport(universalReportDTO));
     }

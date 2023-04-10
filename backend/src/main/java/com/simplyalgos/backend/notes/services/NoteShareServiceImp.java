@@ -15,7 +15,6 @@ import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.utils.StringUtils;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
-import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -131,7 +130,7 @@ public class NoteShareServiceImp implements NoteShareService {
         }
 
 //        to avoid crashing the prog when a very large value is passed in
-        if(fullShareNoteDTO.getNoteShareDTO().getNumberOfDaysToShare() > 365 ){
+        if (fullShareNoteDTO.getNoteShareDTO().getNumberOfDaysToShare() > 365) {
             fullShareNoteDTO.getNoteShareDTO().setNumberOfDaysToShare(365);
         }
 

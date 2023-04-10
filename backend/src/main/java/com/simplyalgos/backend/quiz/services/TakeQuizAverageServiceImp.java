@@ -52,7 +52,7 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
                 (takeQuizDTO.getTakenBy().getUserId(), takeQuizDTO.getQuizReference().getQuizId())){
             throw new NoSuchElementException ("Record already exists for quiz ");
         }
-        log.debug("Create record take quiz DTO " + Json.pretty(takeQuizDTO));
+        log.debug("Create record take quiz DTO ");
         double runTime = getTimeDiff(takeQuizDTO);
         TakeQuizAverage takeQuizAverage =  takeQuizAverageRepository.saveAndFlush(
                 TakeQuizAverage
@@ -68,7 +68,7 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
                         .referenceQuizForAvgScore(quizService.getQuiz(takeQuizDTO.getQuizReference().getQuizId()))
                         .build());
 
-        log.debug("Create record Saved object: " + Json.pretty(takeQuizAverage));
+        log.debug("Create record Saved object" );
 
         return true;
     }

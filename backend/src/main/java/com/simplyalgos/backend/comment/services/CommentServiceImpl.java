@@ -74,7 +74,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ObjectPagedList<?> getChildrenComments(UUID parentComment, Pageable pageable) {
         Page<CommentChild> childComments = parentChildCommentService.getChildrenCommentList(parentComment, pageable);
-        log.info(MessageFormat.format("found {0}  child comment", childComments.getTotalElements()));
         return new ObjectPagedList<>(
                 childComments
                         .stream()

@@ -54,10 +54,10 @@ public class Quiz {
     private List<QuizQuestion> questions = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "quizReference")
+    @OneToMany(mappedBy = "quizReference", cascade = CascadeType.ALL)
     private Set<TakeQuiz> quizzesTaken = new HashSet<>();
 
-    @OneToMany(mappedBy = "referenceQuizForAvgScore")
+    @OneToMany(mappedBy = "referenceQuizForAvgScore", cascade = CascadeType.ALL)
     private Set<TakeQuizAverage> referenceQuizForAvgScore = new HashSet<>();
 
 
@@ -70,6 +70,5 @@ public class Quiz {
         if(StringUtils.isNotNullAndEmptyOrBlank(tag)){
             this.tagId = tag;
         }
-
     }
 }

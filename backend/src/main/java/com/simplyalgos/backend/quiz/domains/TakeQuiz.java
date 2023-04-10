@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.user.domains.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import java.sql.Timestamp;
@@ -46,10 +44,12 @@ public class TakeQuiz {
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User takenBy;
 
     @JsonIncludeProperties({"quizId", "score"})
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Quiz quizReference;
 }

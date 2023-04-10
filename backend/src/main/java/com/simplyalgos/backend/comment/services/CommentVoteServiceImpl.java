@@ -41,9 +41,7 @@ public class CommentVoteServiceImpl implements CommentVoteService {
         if (optionalCommentVote.isPresent()) {
             commentVote = optionalCommentVote.get();
             commentVote.setVote(commentLikeDislikeDTO.likeDislike());
-            CommentLikeDislikeDTO commentLikeDislikeDTO1 = commentVoteMapper.commentVoteToCommentVoteDTO(commentVoteRepository.save(commentVote));
-            log.info(MessageFormat.format("This is the freshly added comment created {0} {1}", commentLikeDislikeDTO1.commentId(), commentLikeDislikeDTO1.userId()));
-            return commentLikeDislikeDTO1;
+            return commentVoteMapper.commentVoteToCommentVoteDTO(commentVoteRepository.save(commentVote));
         }
         return commentVoteMapper.commentVoteToCommentVoteDTO(commentVoteRepository.save(
                 CommentVote.builder().commentVoteId(CommentVoteId

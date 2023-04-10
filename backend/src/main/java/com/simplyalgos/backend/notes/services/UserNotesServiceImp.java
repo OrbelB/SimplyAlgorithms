@@ -48,7 +48,6 @@ public class UserNotesServiceImp implements UserNotesService {
 
         Page<UserNotes> userNotesPage = userNoteRepository
                 .findAllByCreatedBy_UserIdAndTitleStartingWith(userId, title, pageable, UserNotes.class);
-        log.info("userNotesPage: {}", userNotesPage.getContent().size());
         return new ObjectPagedList<>(
                 userNotesPage.stream()
                         .map(noteMapper::userNotesToUserNoteDTO)
@@ -83,10 +82,14 @@ public class UserNotesServiceImp implements UserNotesService {
     public UserNoteDTO savePublicNote(UUID userId, UUID noteId) {
         UserNotes userNotes = getUserNotes(noteId);
 
+        // limit the size title to 250 characters
+        String title = userNotes.getTitle().length() > 200 ?
+                userNotes.getTitle().substring(0, 128).concat("...") + userNotes.getCreatedBy()  :
+                userNotes.getTitle() + userNotes.getCreatedBy();
 
         return noteMapper.userNotesToUserNoteDTO(userNoteRepository.saveAndFlush(
                 UserNotes.builder()
-                        .title(userNotes.getTitle() + " Created by " + userNotes.getCreatedBy().getUsername())
+                        .title(title)
                         .createdDate(userNotes.getCreatedDate())
                         .lastUpdated(userNotes.getLastUpdated())
                         .isPublic((short) 0)

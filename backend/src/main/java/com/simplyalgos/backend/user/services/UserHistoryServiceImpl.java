@@ -48,7 +48,7 @@ public class UserHistoryServiceImpl implements UserHistoryService {
             userHistory.setDayStreak((short) 1);
         }
         userHistory.setDayLoggedIn(Date.valueOf(currentDate));
-        log.info(MessageFormat.format("updating the user state for current {0} ", Json.pretty(userHistory)));
+
     }
 
     @Override
