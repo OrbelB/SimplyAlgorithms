@@ -74,7 +74,7 @@ export default function ForumQuickView({
         </Typography>
       </CardActionArea>
       <CardActions className="pb-4">
-        <div className="row justify-content-between btn-group">
+        <div className="row row-style justify-content-between btn-group">
           <div className="col-auto col-lg-4 m-0 p-0 align-self-end ">
             <i className="bi bi-hand-thumbs-up ms-4"> {` ${upVotes}`}</i>
             <i className="bi bi-hand-thumbs-down ms-4"> {` ${downVotes}`}</i>

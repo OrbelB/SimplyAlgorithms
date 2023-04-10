@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@mui/material';
 import parse from 'html-react-parser';
 import draftToHtml from 'draftjs-to-html';
@@ -27,7 +27,6 @@ export default function PubNoteList({ notes }) {
   });
   const [noteSaved, setNoteSaved] = useState({ status: false, index: null });
   const [saved, setSaved] = useState(new Array(notes?.length).fill(false));
-
   useEffect(() => {
     if (status === 'success' && noteSaved.index !== null) {
       const newSaved = [...saved];
@@ -65,6 +64,16 @@ export default function PubNoteList({ notes }) {
       />
     );
 
+  const handleNoteBodyHTML = useCallback((noteBody) => {
+    let htmlContent = draftToHtml(noteBody);
+    htmlContent = htmlContent.replace(
+      /<img([^>]+)>/gi,
+      `<img$1 class="img-fluid" loading="lazy">`
+    );
+    const parsedContent = parse(htmlContent);
+    return parsedContent;
+  }, []);
+
   return (
     <>
       {noteSaved.status && alertMessage}
@@ -79,7 +88,7 @@ export default function PubNoteList({ notes }) {
               <div className="card-body">
                 <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
                 <div className="card-text m-2">
-                  {parse(draftToHtml(userNoteDTO?.noteBody))}
+                  {handleNoteBodyHTML(userNoteDTO?.noteBody)}
                 </div>
                 <div className="m-2 mb-0 d-flex justify-content-between">
                   <Report />
@@ -101,7 +110,7 @@ export default function PubNoteList({ notes }) {
             <div className="card-body">
               <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
               <div className="card-text m-2">
-                {parse(draftToHtml(userNoteDTO?.noteBody))}
+                {handleNoteBodyHTML(userNoteDTO?.noteBody)}
               </div>
               <div className="m-2 mb-0 d-flex justify-content-between">
                 <Report />

@@ -27,7 +27,13 @@ export default function WikiPage() {
   }, [status, wiki, wikiName, dispatch, jwtAccessToken]);
 
   const body = useMemo(() => {
-    return parse(draftToHtml(wiki?.description));
+    let htmlContent = draftToHtml(wiki?.description);
+    htmlContent = htmlContent.replace(
+      /<img([^>]+)>/gi,
+      `<img$1 class="img-fluid" loading="lazy">`
+    );
+
+    return parse(htmlContent);
   }, [wiki?.description]);
 
   if (nameAvailable) {

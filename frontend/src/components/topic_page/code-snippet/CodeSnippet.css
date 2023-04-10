@@ -12,7 +12,9 @@ h1 {
 
 .component {
   background-color: #d3fef4;
-  padding: 0 5rem 0 5rem;
+  border-radius: 10px;
+  border-style: none;
+  padding: 1.2em;
 }
 
 .languages {

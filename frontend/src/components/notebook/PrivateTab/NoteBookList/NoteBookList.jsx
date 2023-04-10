@@ -66,7 +66,13 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
   const [editPage, setEditPage] = useState(false);
   const body = useMemo(() => {
-    return parse(draftToHtml(element?.noteBody));
+    let htmlContent = draftToHtml(element?.noteBody);
+    htmlContent = htmlContent.replace(
+      /<img([^>]+)>/gi,
+      `<img$1 class="img-fluid" loading="lazy">`
+    );
+    const parsedContent = parse(htmlContent);
+    return parsedContent;
   }, [element?.noteBody]);
 
   const [shareTo, setShareTo] = useState('');
@@ -272,11 +278,11 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     setOpenAUS(false);
   };
 
-  const handleConfirmAUS = () => {
+  const handleConfirmAUS = async () => {
     if (isPublic === true) {
-      setIsPublic(false);
+      await handleUpdatingIsPublic();
     } else if (isPublic === false) {
-      setIsPublic(true);
+      await handleUpdatingIsPublic();
     }
     setOpenAUS(false);
   };
@@ -540,7 +546,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
             variant="contained"
             disabled={status === 'pending' || isStudent}
             color={isPublic ? 'success' : 'error'}
-            onClick={(handleUpdatingIsPublic, handleOpenAUS)}
+            onClick={handleOpenAUS}
           >
             {isPublic ? 'Public' : 'Private'}
           </Button>

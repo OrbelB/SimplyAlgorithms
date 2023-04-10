@@ -55,17 +55,19 @@ export default function ProfileTabForm() {
           <div className="card mb-4 mb-xl-0">
             <div className="card-header h5">Profile Picture</div>
             <div className="card-body text-center">
-              <img
-                src={
-                  images === undefined
-                    ? profilePicture
-                    : URL.createObjectURL(images)
-                }
-                height="200px"
-                width="220px"
-                className="rounded-4 m-4"
-                alt="profile"
-              />
+              <div className="row justify-content-center">
+                <img
+                  src={
+                    images === undefined
+                      ? profilePicture
+                      : URL.createObjectURL(images)
+                  }
+                  height="auto"
+                  width="auto"
+                  className="rounded-4 m-4 img-fluid"
+                  alt="profile"
+                />
+              </div>
               <input
                 type="file"
                 id="profilePicture"

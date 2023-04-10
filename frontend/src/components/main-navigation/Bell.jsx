@@ -26,7 +26,7 @@ export default function Bell() {
 
   // to avoid recreating the function on every render
   const fetchDashboardInfo = useCallback(() => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn && authUserId === '') return;
     dispatch(
       fetchUserDashboardInfo({
         userId: authUserId,

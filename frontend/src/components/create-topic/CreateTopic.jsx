@@ -66,8 +66,7 @@ export default function CreateTopic() {
     (topicNameAvailable || topic?.title || title !== '') &&
     Object.values(process).length > 0 &&
     visualizer !== '' &&
-    attribution !== '' &&
-    wikiCategory !== '';
+    attribution !== '';
 
   // reset the state of the page in the event of the topic name been part of the url
   useEffect(() => {
@@ -107,7 +106,7 @@ export default function CreateTopic() {
       setOnce(false);
       setSnippets(topic.codeSnippets);
       setReferences(topic.topicExternalResources);
-      setWikiCategory(topic.urlPath.split('/')[0] ?? '');
+      setWikiCategory(topic?.urlPath?.split('/')[0] ?? '');
       setTitle(topic.title);
       setVisualizer(topic.visualizer);
       setAttribution(topic.source);
@@ -128,11 +127,11 @@ export default function CreateTopic() {
   // checks if the urlPath is not null and not empty and if the topicStatus is success
   // if so, it means that the topic has been created or updated, therefore the user is redirected
   useEffect(() => {
-    if (urlPath !== null && urlPath !== '' && topicStatus === 'success') {
+    if (urlPath !== null && topicStatus === 'success') {
       const currentUrl = urlPath;
       dispatch(topicActions.resetData());
       navigate(
-        currentUrl !== null
+        currentUrl !== ''
           ? `/wiki/${currentUrl}`
           : `/topic/${topicName?.topicName}`
       );
@@ -146,6 +145,7 @@ export default function CreateTopic() {
 
   const handleSaveTopic = async (e) => {
     e.preventDefault();
+
     if (!isReadyToSubmit) return;
     const wikiInfo = wikiNames.find((wiki) => wiki.wikiName === wikiCategory);
     const topicToCreate = {
@@ -189,8 +189,6 @@ export default function CreateTopic() {
 
     dispatch(updateTopic({ updatedTopic: topicToUpdate, jwtAccessToken }));
   };
-
-  // const displayProcess = parse(draftToHtml(process));
 
   const handleReferenceChange = (index, event) => {
     const data = [...references];
@@ -367,7 +365,7 @@ export default function CreateTopic() {
         </h5>
         {references.map((input, index) => {
           return (
-            <div key={() => nanoid()} className="mb-4">
+            <div key={nanoid()} className="mb-4">
               <div className="row mb-4">
                 <input
                   className="label-topic"
@@ -415,7 +413,7 @@ export default function CreateTopic() {
         <h5 className="fi">Ex: Java | public static void...</h5>
         {snippets.map((input, index) => {
           return (
-            <div key={() => nanoid()}>
+            <div key={nanoid()}>
               <div className="row mb-4">
                 <input
                   className="label-topic"
@@ -464,7 +462,7 @@ export default function CreateTopic() {
           color="success"
           size="large"
           type="submit"
-          disabled={!isReadyToSubmit && topicStatus === 'pending'}
+          disabled={!isReadyToSubmit || topicStatus === 'pending'}
           onClick={topicName.topicName ? handleUpdateTopic : handleSaveTopic}
         >
           Save

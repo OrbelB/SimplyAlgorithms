@@ -46,37 +46,49 @@ export default function AlgoFrame({
   function disableLoader() {}
   return (
     <div className={cx(styles['container-style'])}>
-      <div className="row">
-        <div className="col-10">
-          <div className={cx(styles['temp_view'])}>
-            <Grid />
+      <div className="row m-0 p-0 justify-content-center">
+        <div className="col-12">
+          {vizUrl === undefined && (
+            <div className="row justify-content-center">
+              <div className={cx(styles['temp_view'])}>
+                <Grid />
+              </div>
+            </div>
+          )}
+          <div className="row justify-content-center">
+            <div className={cx(styles['algo_title'], 'text-center')}>
+              {vizTitle}
+            </div>
           </div>
-          <div className={cx(styles['algo_title'])}>{vizTitle}</div>
-          <iframe
-            id="viz_alg"
-            src={vizUrl}
-            className={cx(styles['website'])}
-            loading="lazy"
-            scrolling="no"
-            title="bubble sort algorithm visualizer by algorithm-visualizer.org"
-            onLoad={disableLoader}
-          >
-            <p>Your browser does not support iframes :( </p>
-          </iframe>
-          <div className={cx(styles['credit'])}>
-            Algorithm visualizer brought to you by &nbsp;
-            <a
-              className={cx(styles['credit_link'])}
-              href={vizSource}
-              target="_blank"
-              rel="noreferrer"
+          <div className="row justify-content-center">
+            <iframe
+              id="viz_alg"
+              src={vizUrl}
+              className={cx(styles['website'])}
+              loading="lazy"
+              scrolling="no"
+              title="algorithm visualizer by algorithm-visualizer.org"
+              onLoad={disableLoader}
             >
-              {vizSource}
-            </a>
+              <p>Your browser does not support iframes :( </p>
+            </iframe>
+          </div>
+          <div className="row justify-content-center">
+            <div className={cx(styles['credit'])}>
+              Algorithm visualizer brought to you by &nbsp;
+              <a
+                className={cx(styles['credit_link'])}
+                href={vizSource}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {vizSource}
+              </a>
+            </div>
           </div>
         </div>
         {(isAdmin || isTeacher) && pageId ? (
-          <div className="col-1 text-end">
+          <div className="row-cols text-end">
             <OptionsMenu
               handleOnDelete={handleOnDelete}
               handleOnEdit={handleOnEdit}

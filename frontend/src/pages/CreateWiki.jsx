@@ -109,7 +109,12 @@ export default function CreateWiki() {
   ]);
 
   const body = useMemo(() => {
-    return parse(draftToHtml(content));
+    let htmlContent = draftToHtml(content);
+    htmlContent = htmlContent.replace(
+      /<img([^>]+)>/gi,
+      `<img$1 class="img-fluid" loading="lazy">`
+    );
+    return parse(htmlContent);
   }, [content]);
 
   const handlePageSetup = (currPages) => {

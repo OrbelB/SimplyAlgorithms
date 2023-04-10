@@ -54,7 +54,7 @@
     border-radius: 0px 10px 10px 0px;
 }
 
-.row {
+.row-style {
     display: flex;
     flex-direction: row;
     width: 100%;

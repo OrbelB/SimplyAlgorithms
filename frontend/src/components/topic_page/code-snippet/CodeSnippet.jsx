@@ -1,6 +1,28 @@
 import { nanoid } from '@reduxjs/toolkit';
 import 'react-tabs/style/react-tabs.css';
 import './CodeSnippet.css';
+import { Box, Typography, Tabs, Tab } from '@mui/material';
+import { styled } from '@mui/system';
+
+const Container = styled(Box)({
+  backgroundColor: '#f5f5f5',
+  padding: '16px',
+  borderRadius: '8px',
+  boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.1)',
+});
+
+const CodeBlock = styled(Box)({
+  backgroundColor: '#e9e9e9',
+  borderRadius: '4px',
+  padding: '8px',
+  marginBottom: '16px',
+});
+
+const Comment = styled(Typography)({
+  color: '#6a9955',
+  fontStyle: 'italic',
+  marginBottom: '8px',
+});
 
 export default function CodeSnippet({
   snippets,
@@ -8,9 +30,48 @@ export default function CodeSnippet({
   setSnippetIndex,
 }) {
   return (
-    <div className="component">
+    <div className="component ">
       <h1>Implementations</h1>
-      <div className="container">
+      <Container>
+        <Tabs
+          value={snippetIndex}
+          onChange={(_, value) => {
+            setSnippetIndex(value);
+          }}
+        >
+          {snippets.map((codeBlock, index) => (
+            <Tab
+              key={nanoid()}
+              label={codeBlock?.languageTitle}
+              value={index}
+            />
+          ))}
+        </Tabs>
+        <CodeBlock>
+          <Typography
+            variant="body2"
+            whiteSpace="pre-wrap"
+            sx={{ overflowX: 'auto' }}
+          >
+            {snippets[snippetIndex]?.codeText.split('\n').map((line) => {
+              const trimmedLine = line?.trim();
+              if (
+                trimmedLine.startsWith('#') ||
+                trimmedLine.startsWith('//') ||
+                trimmedLine.startsWith('/*')
+              ) {
+                return <Comment key={nanoid()}>{line}</Comment>;
+              }
+              return (
+                <Typography key={nanoid()} variant="body1">
+                  {line}
+                </Typography>
+              );
+            })}
+          </Typography>
+        </CodeBlock>
+      </Container>
+      {/* <div className="container">
         <nav className="bg-secondary rounded-top">
           {snippets.length > 0 && (
             <div
@@ -63,7 +124,7 @@ export default function CodeSnippet({
             </div>
           )}
         </div>
-      </div>
+      </div> */}
       <div className="bottom" />
     </div>
   );

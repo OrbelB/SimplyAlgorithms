@@ -61,8 +61,11 @@ export default function WikiHome({
           <div className="col-md-7">
             <div className="card">
               <div className="card-header border-bottom mb-3 d-flex d-md-none" />
-              <div className="card-body tab-content">
-                <div className="tab-pane active" id="profile">
+              <div className="card-body container-fluid tab-content">
+                <div
+                  className="d-flex flex-column flex-fill text-center tab-pane active"
+                  id="profile"
+                >
                   {Body}
                 </div>
               </div>

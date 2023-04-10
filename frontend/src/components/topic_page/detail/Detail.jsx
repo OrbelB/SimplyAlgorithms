@@ -1,14 +1,22 @@
+import { useMemo } from 'react';
 import parse from 'html-react-parser';
 import { nanoid } from '@reduxjs/toolkit';
 import draftToHtml from 'draftjs-to-html';
 import './Detail.css';
 
 export default function Detail({ pageDescription, references }) {
-  const description = parse(draftToHtml(pageDescription));
+  const description = useMemo(() => {
+    let htmlContent = draftToHtml(pageDescription);
+    htmlContent = htmlContent.replace(
+      /<img([^>]+)>/gi,
+      `<img$1 class="img-fluid" loading="lazy">`
+    );
+    return parse(htmlContent);
+  }, [pageDescription]);
   return (
     <>
       <div className="detail container-fluid g-0 text-center">
-        <div className="row" style={{ wordWrap: 'break-word' }}>
+        <div className="row m-5 text-center" style={{ wordWrap: 'break-word' }}>
           {description}
         </div>
       </div>
