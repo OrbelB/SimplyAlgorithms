@@ -135,7 +135,7 @@ export const quizSlice = createSlice({
           questionId,
           answer: '',
           answerId,
-          isCorrect: false,
+          isCorrect: 0,
         });
     },
     // what ever you are passing into the action their name should match
