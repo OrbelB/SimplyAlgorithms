@@ -19,9 +19,6 @@
 /* .topic-form :nth-child(even) {
   background-color: gray;
 } */
-h5 {
-  text-align: center;
-}
 
 .container-fluid {
   height: fit-content;
@@ -33,8 +30,8 @@ h5 {
 }
 
 .editor-wrapper {
+  overflow-x: auto;
   border: 2px solid black;
-  
 }
 
 .editor-toolbar {
@@ -43,9 +40,10 @@ h5 {
 
 .editor-title {
   padding: 1em;
-  overflow-y: hidden;
-  overflow-x: auto;
-  min-height: 45vh;
+  overflow-y: auto;
+  overflow-x: none;
+  min-height: 60dvh;
+  max-height: 60dvh;
 }
 
 .json-display {

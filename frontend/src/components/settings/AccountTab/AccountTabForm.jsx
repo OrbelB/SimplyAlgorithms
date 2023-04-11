@@ -191,7 +191,6 @@ export default function AccountTabForm() {
           </label>
           <div className="form-group">
             <strong className="text-secondary mb-1">
-              {' '}
               Current Email: {email}
             </strong>
             <input

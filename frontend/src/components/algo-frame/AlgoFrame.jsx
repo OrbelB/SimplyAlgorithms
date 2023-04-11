@@ -55,16 +55,16 @@ export default function AlgoFrame({
               </div>
             </div>
           )}
-          <div className="row justify-content-center">
+          <div className="row justify-content-center g-0 m-0 p-0">
             <div className={cx(styles['algo_title'], 'text-center')}>
               {vizTitle}
             </div>
           </div>
-          <div className="row justify-content-center">
+          <div className="row justify-content-center m-0 p-0">
             <iframe
               id="viz_alg"
               src={vizUrl}
-              className={cx(styles['website'])}
+              className={cx(styles['website'], 'm-0 p-0')}
               loading="lazy"
               scrolling="no"
               title="algorithm visualizer by algorithm-visualizer.org"
@@ -73,8 +73,8 @@ export default function AlgoFrame({
               <p>Your browser does not support iframes :( </p>
             </iframe>
           </div>
-          <div className="row justify-content-center">
-            <div className={cx(styles['credit'])}>
+          <div className="row justify-content-center m-0 p-0 ">
+            <div className={cx(styles['credit'], 'text-center')}>
               Algorithm visualizer brought to you by &nbsp;
               <a
                 className={cx(styles['credit_link'])}

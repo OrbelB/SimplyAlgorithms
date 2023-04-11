@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable react/no-array-index-key */
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Button, TextField, MenuItem, TextareaAutosize } from '@mui/material';
+import { Button, TextField, MenuItem } from '@mui/material';
 import debounce from 'lodash.debounce';
 import { useNavigate, useParams } from 'react-router-dom';
-import { nanoid } from '@reduxjs/toolkit';
+
 import TextEditor from '../text-editor/TextEditor';
 import '../text-editor/TextEditor.css';
 import './CreateTopic.css';
@@ -19,6 +20,8 @@ import { topicActions } from '../../store/reducers/topic-slice';
 import AlgoFrame from '../algo-frame/AlgoFrame';
 import Detail from '../topic_page/detail/Detail';
 import CodeSnippet from '../topic_page/code-snippet/CodeSnippet';
+import ReferenceForm from './ReferenceForm';
+import SnippetForm from './SnippetForm';
 
 const content = {
   blocks: [
@@ -190,39 +193,51 @@ export default function CreateTopic() {
     dispatch(updateTopic({ updatedTopic: topicToUpdate, jwtAccessToken }));
   };
 
-  const handleReferenceChange = (index, event) => {
-    const data = [...references];
-    data[index][event.target.name] = event.target.value;
-    setReferences(data);
-  };
+  const handleReferenceChange = useCallback(
+    (index, event) => {
+      const data = [...references];
+      data[index][event.target.name] = event.target.value;
+      setReferences(data);
+    },
+    [references]
+  );
 
   const addReferences = () => {
     const newReference = { title: '', externalResourceLink: '' };
     setReferences([...references, newReference]);
   };
 
-  const removeReferences = (index) => {
-    const data = [...references];
-    data.splice(index, 1);
-    setReferences(data);
-  };
+  const removeReferences = useCallback(
+    (index) => {
+      const data = [...references];
+      data.splice(index, 1);
+      setReferences(data);
+    },
+    [references]
+  );
 
-  const handleSnippetChange = (index, event) => {
-    const data = [...snippets];
-    data[index][event.target.name] = event.target.value;
-    setSnippets(data);
-  };
+  const handleSnippetChange = useCallback(
+    (index, event) => {
+      const data = [...snippets];
+      data[index][event.target.name] = event.target.value;
+      setSnippets(data);
+    },
+    [snippets]
+  );
 
   const addSnippets = () => {
     const newSnippet = { languageTitle: '', codeText: '' };
     setSnippets([...snippets, newSnippet]);
   };
 
-  const removeSnippets = (index) => {
-    const data = [...snippets];
-    data.splice(index, 1);
-    setSnippets(data);
-  };
+  const removeSnippets = useCallback(
+    (index) => {
+      const data = [...snippets];
+      data.splice(index, 1);
+      setSnippets(data);
+    },
+    [snippets]
+  );
 
   let helperText;
 
@@ -241,19 +256,51 @@ export default function CreateTopic() {
     setProcess(e);
   };
 
+  const showReferences = useCallback(() => {
+    return references.map((reference, index) => {
+      return (
+        <ReferenceForm
+          key={index}
+          reference={reference}
+          index={index}
+          handleReferenceChange={handleReferenceChange}
+          removeReferences={removeReferences}
+        />
+      );
+    });
+  }, [references, handleReferenceChange, removeReferences]);
+
+  const showSnippetsForm = useCallback(() => {
+    return snippets.map((snippet, index) => {
+      return (
+        <SnippetForm
+          key={index}
+          snippet={snippet}
+          index={index}
+          handleSnippetChange={handleSnippetChange}
+          removeSnippets={removeSnippets}
+        />
+      );
+    });
+  }, [snippets, handleSnippetChange, removeSnippets]);
+
   return (
     <div className="createtopic">
       <br />
       <h2 className="text-center mb-5 pt">TOPIC PAGE CREATION FORM</h2>
-      <h5 className="fi">
+      <h5 className="fi text-center">
         Instructions: Fill out the fields with the correct formats.
       </h5>
-      <h5 className="fi">Preview the topic page below before submitting.</h5>
+      <h5 className="fi text-center">
+        Preview the topic page below before submitting.
+      </h5>
       <br />
       <br />
       <form className="topic-form g-2">
         <h2 className="ft">1- ALGORITHM TITLE</h2>
-        <h5 className="fi">Note: Once set, title cannot be changed</h5>
+        <h5 className="fi text-center">
+          Note: Once set, title cannot be changed
+        </h5>
         <TextField
           disabled={topicName?.topicName !== undefined}
           error={topicNameAvailable !== null && !topicNameAvailable}
@@ -270,7 +317,9 @@ export default function CreateTopic() {
         <br />
         <br />
         <h2 className="ft">2- CATEGORY SELECTION</h2>
-        <h5 className="fi">Note: Once set, category cannot be changed</h5>
+        <h5 className="fi text-center">
+          Note: Once set, category cannot be changed
+        </h5>
         <div className="col-auto col-md-6 text-center mb-5">
           <Button
             variant="contained"
@@ -363,40 +412,38 @@ export default function CreateTopic() {
         <h5 className="fi mb-4">
           Ex: GeeksforGeeks-QuickSort | https://www.geeksforgeeks.org/
         </h5>
-        {references.map((input, index) => {
-          return (
-            <div key={nanoid()} className="mb-4">
-              <div className="row mb-4">
-                <input
-                  className="label-topic"
-                  name="title"
-                  placeholder="Title"
-                  value={input?.title}
-                  onChange={(e) => handleReferenceChange(index, e)}
-                />
-              </div>
-              <div className="row mb-4">
-                <input
-                  className=" label-topic"
-                  name="externalResourceLink"
-                  placeholder="Link"
-                  value={input?.externalResourceLink}
-                  onChange={(e) => handleReferenceChange(index, e)}
-                />
-              </div>
-              <div className="row justify-content-center">
-                <button
-                  type="button"
-                  className="form-button w-auto p-1"
-                  onClick={() => removeReferences(index)}
-                >
-                  REMOVE REFERENCE
-                </button>
-              </div>
-            </div>
-          );
-        })}
-
+        {
+          showReferences()
+          // <div key={index} className="mb-4">
+          //   <div className="row mb-4">
+          //     <input
+          //       className="label-topic"
+          //       name="title"
+          //       placeholder="Title"
+          //       value={input?.title}
+          //       onChange={(e) => handleReferenceChange(index, e)}
+          //     />
+          //   </div>
+          //   <div className="row mb-4">
+          //     <input
+          //       className=" label-topic"
+          //       name="externalResourceLink"
+          //       placeholder="Link"
+          //       value={input?.externalResourceLink}
+          //       onChange={(e) => handleReferenceChange(index, e)}
+          //     />
+          //   </div>
+          //   <div className="row justify-content-center">
+          //     <button
+          //       type="button"
+          //       className="form-button w-auto p-1"
+          //       onClick={() => removeReferences(index)}
+          //     >
+          //       REMOVE REFERENCE
+          //     </button>
+          //   </div>
+          // </div>
+        }
         <br />
         <button
           type="button"
@@ -411,7 +458,8 @@ export default function CreateTopic() {
         <h2 className="ft">7- CODE SNIPPETS</h2>
         <h5 className="fi">Language and Code</h5>
         <h5 className="fi">Ex: Java | public static void...</h5>
-        {snippets.map((input, index) => {
+        {
+          showSnippetsForm() /* {snippets.map((input, index) => {
           return (
             <div key={nanoid()}>
               <div className="row mb-4">
@@ -444,7 +492,8 @@ export default function CreateTopic() {
               </div>
             </div>
           );
-        })}
+        })} */
+        }
         <br />
         <button
           type="button"

@@ -14,6 +14,7 @@ import ShowMoreNotes from './HighlightsDB/ShowMoreNotes/ShowMoreNotes';
 import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 import { fetchUserHistory } from '../../services/quiz';
 import UserSearchSection from './UserSearch';
+import { topicActions } from '../../store/reducers/topic-slice';
 
 export default function Dashboard() {
   const { status: quizStatus, userHistory } = useSelector(
@@ -45,6 +46,7 @@ export default function Dashboard() {
   }, [dispatch, jwtAccessToken, once, quizStatus, userHistory?.length, userId]);
 
   const handleRedirect = () => {
+    dispatch(topicActions.resetData());
     navigate('/topic/new/create');
   };
 

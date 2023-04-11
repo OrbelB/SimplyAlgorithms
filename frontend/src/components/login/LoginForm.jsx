@@ -100,7 +100,7 @@ export default function LoginForm() {
           reloadPage={reloadPage}
         />
       )}
-      {error !== '' && (
+      {status === 'failedLogin' && (
         <div className="col ms-0 p-2 alert alert-danger align-items-center align-content-center">
           <p className="text-center small">{error}</p>
         </div>

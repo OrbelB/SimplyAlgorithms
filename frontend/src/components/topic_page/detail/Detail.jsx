@@ -16,7 +16,10 @@ export default function Detail({ pageDescription, references }) {
   return (
     <>
       <div className="detail container-fluid g-0 text-center">
-        <div className="row m-5 text-center" style={{ wordWrap: 'break-word' }}>
+        <div
+          className="row m-5 mt-0 mb-0 text-center gy-3 pb-5 pt-5"
+          style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
+        >
           {description}
         </div>
       </div>
@@ -32,7 +35,7 @@ export default function Detail({ pageDescription, references }) {
               <tbody>
                 {references?.map((reference, index) => {
                   return (
-                    <tr key={() => nanoid()} className="border-bottom">
+                    <tr key={nanoid()} className="border-bottom">
                       <td className="p-0 m-0">{index + 1}</td>
                       <td className="py-3 text-start">
                         <a

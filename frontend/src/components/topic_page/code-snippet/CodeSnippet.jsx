@@ -21,7 +21,8 @@ const CodeBlock = styled(Box)({
 const Comment = styled(Typography)({
   color: '#6a9955',
   fontStyle: 'italic',
-  marginBottom: '8px',
+  marginBottom: '0px',
+  paddingBottom: '0px',
 });
 
 export default function CodeSnippet({
@@ -47,8 +48,9 @@ export default function CodeSnippet({
             />
           ))}
         </Tabs>
-        <CodeBlock>
+        <CodeBlock variant="div">
           <Typography
+            component="pre"
             variant="body2"
             whiteSpace="pre-wrap"
             sx={{ overflowX: 'auto' }}
@@ -62,6 +64,7 @@ export default function CodeSnippet({
               ) {
                 return <Comment key={nanoid()}>{line}</Comment>;
               }
+              if (trimmedLine === '') return <br key={nanoid()} />;
               return (
                 <Typography key={nanoid()} variant="body1">
                   {line}

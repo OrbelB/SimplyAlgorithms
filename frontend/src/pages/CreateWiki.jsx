@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import parse from 'html-react-parser';
+import '../components/create-topic/CreateTopic.css';
 import draftToHtml from 'draftjs-to-html';
 import { Button, TextField, Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';

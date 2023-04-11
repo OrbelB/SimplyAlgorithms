@@ -29,9 +29,11 @@ export default function ProfileTabForm() {
   const updateData = async () => {
     if (!isFormValid) return;
     let newProfilePicture;
-    await imageToStringBase64(images).then(
-      (value) => (newProfilePicture = value)
-    );
+    if (images !== undefined) {
+      await imageToStringBase64(images).then(
+        (value) => (newProfilePicture = value)
+      );
+    }
     dispatch(
       updateUserData({
         updatedUserData: {

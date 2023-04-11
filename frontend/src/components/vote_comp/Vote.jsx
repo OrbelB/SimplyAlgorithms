@@ -32,11 +32,11 @@ export default function Vote({
   const [dislike, setdislike] = useState(dislike_);
 
   const likeActive = useMemo(() => {
-    return userVote !== undefined && userVote.likeDislike;
+    return userVote !== undefined && userVote?.likeDislike === true;
   }, [userVote]);
 
   const dislikeActive = useMemo(() => {
-    return userVote !== undefined && !userVote.likeDislike;
+    return userVote !== undefined && userVote?.likeDislike === false;
   }, [userVote]);
 
   const likeForum = async () => {
@@ -52,29 +52,13 @@ export default function Vote({
             userId: authUserId,
             accessToken: jwtAccessToken,
           })
-        );
+        ).unwrap();
       } finally {
         if (status !== 'failed') {
           setlike(like - 1);
         }
       }
     } else {
-      try {
-        await dispatch(
-          votePage({
-            voteObject: {
-              pageId,
-              userId: authUserId,
-              likeDislike: true,
-            },
-            accessToken: jwtAccessToken,
-          })
-        );
-      } finally {
-        if (status !== 'failed') {
-          setlike(like + 1);
-        }
-      }
       if (dislikeActive) {
         try {
           await dispatch(
@@ -86,12 +70,28 @@ export default function Vote({
               },
               accessToken: jwtAccessToken,
             })
-          );
+          ).unwrap();
         } finally {
           if (status !== 'failed') {
             setlike(like + 1);
             setdislike(dislike - 1);
           }
+        }
+      }
+      try {
+        await dispatch(
+          votePage({
+            voteObject: {
+              pageId,
+              userId: authUserId,
+              likeDislike: true,
+            },
+            accessToken: jwtAccessToken,
+          })
+        ).unwrap();
+      } finally {
+        if (status !== 'failed') {
+          setlike(like + 1);
         }
       }
     }
@@ -111,29 +111,13 @@ export default function Vote({
             userId: authUserId,
             accessToken: jwtAccessToken,
           })
-        );
+        ).unwrap();
       } finally {
         if (status !== 'failed') {
           setdislike(dislike - 1);
         }
       }
     } else {
-      try {
-        dispatch(
-          votePage({
-            voteObject: {
-              pageId,
-              userId: authUserId,
-              likeDislike: false,
-            },
-            accessToken: jwtAccessToken,
-          })
-        );
-      } finally {
-        if (status !== 'failed') {
-          setdislike(dislike + 1);
-        }
-      }
       if (likeActive) {
         try {
           dispatch(
@@ -145,12 +129,28 @@ export default function Vote({
               },
               accessToken: jwtAccessToken,
             })
-          );
+          ).unwrap();
         } finally {
           if (status !== 'failed') {
             setdislike(dislike + 1);
             setlike(like - 1);
           }
+        }
+      }
+      try {
+        dispatch(
+          votePage({
+            voteObject: {
+              pageId,
+              userId: authUserId,
+              likeDislike: false,
+            },
+            accessToken: jwtAccessToken,
+          })
+        ).unwrap();
+      } finally {
+        if (status !== 'failed') {
+          setdislike(dislike + 1);
         }
       }
     }
@@ -167,6 +167,7 @@ export default function Vote({
         variant="contained"
         color="success"
         size="large"
+        disabled={status === 'loading' || status === 'pending'}
         onClick={likeForum}
         className={cx(fp.ld, 'm-1 col-auto rounded-pill')}
         type="button"
@@ -177,6 +178,7 @@ export default function Vote({
         variant="contained"
         color="error"
         size="large"
+        disabled={status === 'loading' || status === 'pending'}
         onClick={dislikeForum}
         className={cx(fp.ld, 'm-1 col-auto rounded-pill')}
         type="button"

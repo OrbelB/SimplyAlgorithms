@@ -54,7 +54,7 @@ export const authSlice = createSlice({
         state.isLoggedIn = true;
       })
       .addCase(login.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = 'failedLogin';
         const { message } = action.payload ?? '';
         state.error =
           message ?? 'The server is temporarly down, please try again later!';
