@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   removeSingleNotification,
-  fetchUserDashboardInfo,
+  fetchUserNotifications,
 } from '../../../../services/user';
 import { forumActions } from '../../../../store/reducers/forum-slice';
 import './NotificationsPreview.css';
@@ -33,8 +33,8 @@ const NOTIFICATION_PREVIEWS = [
 
 export { NOTIFICATION_PREVIEWS };
 
-export default function NotificationsPreview({ setShow }) {
-  const { dashboardInfo, status } = useSelector((state) => state.user);
+export default function NotificationsPreview({ setShow, lastElementChild }) {
+  const { notifications, status } = useSelector((state) => state.user);
   const { userId: authUserId, jwtAccessToken } = useSelector(
     (state) => state.auth
   );
@@ -42,22 +42,18 @@ export default function NotificationsPreview({ setShow }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (status === 'idle' && dashboardInfo?.notifications?.length === 0) {
+    if (status === 'idle' && notifications?.length === 0) {
       dispatch(
-        fetchUserDashboardInfo({
+        fetchUserNotifications({
+          page: 0,
+          size: 15,
           userId: authUserId,
           jwtAccessToken,
         })
       );
     }
     return () => {};
-  }, [
-    authUserId,
-    dashboardInfo?.notifications?.length,
-    dispatch,
-    jwtAccessToken,
-    status,
-  ]);
+  }, [authUserId, notifications?.length, dispatch, jwtAccessToken, status]);
 
   // TODO: Refactor this function to be more dynamic and not hard coded.
   function handleNavigation(notificationId, referenceId, message, title) {
@@ -108,26 +104,48 @@ export default function NotificationsPreview({ setShow }) {
     );
   }
 
-  return dashboardInfo?.notifications?.map(
-    ({ notificationId, referenceId, title, message }) => (
-      <div
-        key={notificationId}
-        onClick={() =>
-          handleNavigation(notificationId, referenceId, message, title)
-        }
-        role="button"
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleNavigation(notificationId, referenceId, message, title);
+  return notifications?.map(
+    ({ notificationId, referenceId, title, message }, index) => {
+      return index + 1 === notifications.length ? (
+        <div
+          ref={lastElementChild}
+          key={notificationId}
+          onClick={() =>
+            handleNavigation(notificationId, referenceId, message, title)
           }
-        }}
-        tabIndex={0}
-        className="preview-sect d-flex flex-column justify-content-center p-4 mt-3 mb-5"
-      >
-        <h4>{title}</h4>
+          role="button"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleNavigation(notificationId, referenceId, message, title);
+            }
+          }}
+          tabIndex={0}
+          className="preview-sect d-flex flex-column justify-content-center p-4 mt-3 mb-5"
+        >
+          <h4>{title}</h4>
 
-        <p style={{ whiteSpace: 'pre-wrap' }}>{message}</p>
-      </div>
-    )
+          <p style={{ whiteSpace: 'pre-wrap' }}>{message}</p>
+        </div>
+      ) : (
+        <div
+          key={notificationId}
+          onClick={() =>
+            handleNavigation(notificationId, referenceId, message, title)
+          }
+          role="button"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleNavigation(notificationId, referenceId, message, title);
+            }
+          }}
+          tabIndex={0}
+          className="preview-sect d-flex flex-column justify-content-center p-4 mt-3 mb-5"
+        >
+          <h4>{title}</h4>
+
+          <p style={{ whiteSpace: 'pre-wrap' }}>{message}</p>
+        </div>
+      );
+    }
   );
 }

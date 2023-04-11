@@ -20,7 +20,7 @@ export default function Dashboard() {
   const { status: quizStatus, userHistory } = useSelector(
     (state) => state.quiz
   );
-  const { username, dashboardInfo } = useSelector((state) => state.user);
+  const { username, notifications } = useSelector((state) => state.user);
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -78,7 +78,7 @@ export default function Dashboard() {
             onClick={() => setShowNotifications(true)}
             endIcon={
               <Badge
-                badgeContent={dashboardInfo?.notifications?.length}
+                badgeContent={notifications?.length}
                 color="error"
                 sx={{ m: 1 }}
               />

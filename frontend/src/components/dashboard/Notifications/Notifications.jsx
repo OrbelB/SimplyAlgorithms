@@ -1,15 +1,40 @@
 import './Notifications.css';
 import { Modal } from 'react-bootstrap';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import NotificationsPreview from './NotificationsPreview/NotifcationsPreview';
+import useSortBy from '../../../hooks/use-sortBy';
+import usePaginationWithInfiniteScroll from '../../../hooks/use-pagination';
+import { userActions } from '../../../store/reducers/user-slice';
+import { fetchUserNotifications } from '../../../services/user';
 
 export default function Notifications({ show, setShow }) {
-  const [selectedOption, setSelectedOption] = useState('');
+  const {
+    userId,
+    jwtAccessToken,
+    notificationsTotalPages,
+    notificationsCurrPage,
+  } = useSelector((state) => state.auth);
+  const { status } = useSelector((state) => state.user);
 
-  const handleSelectChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
+  const { sortBy, handleSortBy } = useSortBy({
+    actionToDispatch: fetchUserNotifications,
+    userId,
+    jwtAccessToken,
+    status,
+  });
+
+  const { lastElementChild } = usePaginationWithInfiniteScroll({
+    totalPages: notificationsTotalPages,
+    currPage: notificationsCurrPage,
+    updateCurrPage: userActions.updateNotificationCurrPage,
+    itemId: userId,
+    itemName: 'userId',
+    fetchFunction: fetchUserNotifications,
+    status,
+    jwtAccessToken,
+  });
+
   return (
     <>
       {/* <!-- Modal --> */}
@@ -35,17 +60,21 @@ export default function Notifications({ show, setShow }) {
             <Select
               labelId="my-select-label"
               id="my-select"
-              value={selectedOption}
-              onChange={handleSelectChange}
+              value={sortBy.get('sortBy')}
+              onChange={(e) => {
+                handleSortBy(e.target.value);
+              }}
               sx={{ color: 'black' }}
             >
               <MenuItem value="">None</MenuItem>
-              <MenuItem value="option1">Newest</MenuItem>
-              <MenuItem value="option2">Alphabetically</MenuItem>
+              <MenuItem value="Alphabetical">Alphabetically</MenuItem>
             </Select>
           </FormControl>
           <div className="secondline">
-            <NotificationsPreview setShow={setShow} />
+            <NotificationsPreview
+              setShow={setShow}
+              lastNode={lastElementChild}
+            />
           </div>
         </Modal.Body>
       </Modal>

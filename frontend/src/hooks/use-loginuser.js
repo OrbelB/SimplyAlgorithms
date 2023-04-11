@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // import { useLocation } from "react-router-dom";
 import { useEffect } from 'react';
-import { fetchUser, fetchUserDashboardInfo } from '../services/user';
+import {
+  fetchUser,
+  fetchUserDayStreak,
+  fetchUserNotifications,
+} from '../services/user';
 import templateImage from '../assets/person-fill.png';
 
 export default function useLoginUser(redirectTo) {
@@ -18,7 +22,10 @@ export default function useLoginUser(redirectTo) {
     if (isLoggedIn && profilePicture === templateImage) {
       if (status === 'idle') {
         dispatch(fetchUser({ userId, jwtAccessToken }));
-        dispatch(fetchUserDashboardInfo({ userId, jwtAccessToken }));
+        dispatch(fetchUserDayStreak({ userId, jwtAccessToken }));
+        dispatch(
+          fetchUserNotifications({ userId, page: 0, size: 12, jwtAccessToken })
+        );
       }
     }
     if (status === 'succeeded') {

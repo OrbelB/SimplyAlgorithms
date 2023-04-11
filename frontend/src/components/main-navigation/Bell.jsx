@@ -4,7 +4,7 @@ import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import cx from 'classnames';
 
-import { fetchUserDashboardInfo } from '../../services/user';
+import { fetchUserNotifications } from '../../services/user';
 import LoadingBackdrop from '../loading/LoadingBackdrop';
 
 const Notifications = lazy(() =>
@@ -17,7 +17,7 @@ export default function Bell() {
     setClickedBell(!clickedBell);
   };
   const dispatch = useDispatch();
-  const { dashboardInfo } = useSelector((state) => state.user);
+  const { notifications } = useSelector((state) => state.user);
   const {
     userId: authUserId,
     jwtAccessToken,
@@ -28,7 +28,10 @@ export default function Bell() {
   const fetchDashboardInfo = useCallback(() => {
     if (!isLoggedIn && authUserId === '') return;
     dispatch(
-      fetchUserDashboardInfo({
+      fetchUserNotifications({
+        page: 0,
+        size: 15,
+        sortBy: 'createdDate',
         userId: authUserId,
         jwtAccessToken,
       })
@@ -50,7 +53,7 @@ export default function Bell() {
         <Notifications setShow={setClickedBell} show={clickedBell} />
       </Suspense>
       <Badge
-        badgeContent={dashboardInfo?.notifications?.length}
+        badgeContent={notifications?.length}
         color="info"
         onClick={handleBellButtonClicked}
       >

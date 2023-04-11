@@ -7,11 +7,12 @@ import {
   updateUserData,
   deleteUser,
   updatePreferences,
-  fetchUserDashboardInfo,
   removeSingleNotification,
   checkAvailability,
   requestRoleChange,
   updateUserRole,
+  fetchUserDayStreak,
+  fetchUserNotifications,
 } from '../../services/user';
 
 const initialState = {
@@ -29,7 +30,10 @@ const initialState = {
   status: 'idle',
   error: '',
   userPreferences: {},
-  dashboardInfo: {},
+  notifications: [],
+  notificationsCurrPage: undefined,
+  notificationsTotalPages: undefined,
+  dayStreak: undefined,
   nameAvailable: undefined,
   emailAvailable: undefined,
 };
@@ -43,9 +47,16 @@ export const userSlice = createSlice({
       state.profilePicture = action.payload?.profilePicture;
       state.username = action.payload?.username;
     },
+    updateNotificationCurrPage: (state) => {
+      state.notificationsCurrPage += 1;
+    },
     onUserLogout: (state) => {
       state.status = 'idle';
+      state.notifications = [];
+      state.notificationsCurrPage = undefined;
+      state.notificationsTotalPages = undefined;
       state.error = '';
+      state.dayStreak = undefined;
       state.email = '';
       state.profilePicture = noUserImageTemplate;
       state.firstName = '';
@@ -60,7 +71,6 @@ export const userSlice = createSlice({
       state.dob = '';
       state.userId = '';
       state.userPreferences = '';
-      state.dashboardInfo = {};
       state.userPreferences = {};
       state.nameAvailable = undefined;
       state.emailAvailable = undefined;
@@ -188,7 +198,7 @@ export const userSlice = createSlice({
       })
       .addCase(removeSingleNotification.fulfilled, (state, action) => {
         const { notifications } = state.dashboardInfo;
-        state.dashboardInfo.notifications = notifications.filter(
+        state.notifications = notifications.filter(
           (notification) => notification.notificationId !== action.payload
         );
         state.status = 'success';
@@ -197,14 +207,14 @@ export const userSlice = createSlice({
         state.error = action.payload.message;
         state.status = 'failed';
       })
-      .addCase(fetchUserDashboardInfo.pending, (state) => {
+      .addCase(fetchUserDayStreak.pending, (state) => {
         state.status = 'pendingDashboard';
       })
-      .addCase(fetchUserDashboardInfo.fulfilled, (state, action) => {
-        state.dashboardInfo = action.payload;
+      .addCase(fetchUserDayStreak.fulfilled, (state, action) => {
+        state.dayStreak = action.payload;
         state.status = 'success';
       })
-      .addCase(fetchUserDashboardInfo.rejected, (state, action) => {
+      .addCase(fetchUserDayStreak.rejected, (state, action) => {
         state.error = action.error.message;
         state.status = 'failed';
       })
@@ -240,6 +250,29 @@ export const userSlice = createSlice({
         state.status = 'success';
       })
       .addCase(updateUserRole.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+      .addCase(fetchUserNotifications.pending, (state) => {
+        state.status = 'pendingDashboard';
+      })
+      .addCase(fetchUserNotifications.fulfilled, (state, action) => {
+        const { content, number, totalPages } = action.payload;
+
+        state.notifications = content.concat(
+          state.notifications.filter(
+            (n) =>
+              !content.find(
+                (notification) =>
+                  notification.notificationId === n.notificationId
+              )
+          )
+        );
+        state.notificationsCurrPage = number;
+        state.notificationsTotalPages = totalPages;
+        state.status = 'success';
+      })
+      .addCase(fetchUserNotifications.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       });

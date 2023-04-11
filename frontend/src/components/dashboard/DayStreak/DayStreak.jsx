@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { MdWhatshot } from 'react-icons/md';
 
 export default function DayStreak() {
-  const { dashboardInfo } = useSelector((state) => state.user);
+  const { dayStreak } = useSelector((state) => state.user);
   return (
     <Card
       className="daystreak"
@@ -18,7 +18,7 @@ export default function DayStreak() {
       />
       <CardContent className="daystreak-body">
         <Typography variant="h2" align="center">
-          {dashboardInfo.dayStreak}
+          {dayStreak}
           <MdWhatshot style={{ marginBottom: 10, marginLeft: 5 }} />
         </Typography>
       </CardContent>

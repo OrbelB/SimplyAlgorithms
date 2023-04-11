@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUser, fetchUserDashboardInfo } from '../services/user';
+import {
+  fetchUser,
+  fetchUserDayStreak,
+  fetchUserNotifications,
+} from '../services/user';
 import { refreshAccessToken } from '../services/auth';
 import { authActions } from '../store/reducers/auth-slice';
 import image from '../assets/person-fill.png';
@@ -25,8 +29,11 @@ export default function useRefreshToken() {
       jwtAccessToken &&
       profilePicture === image
     ) {
-      dispatch(fetchUserDashboardInfo({ userId, jwtAccessToken }));
+      dispatch(fetchUserDayStreak({ userId, jwtAccessToken }));
       dispatch(fetchUser({ userId, jwtAccessToken }));
+      dispatch(
+        fetchUserNotifications({ userId, page: 0, size: 12, jwtAccessToken })
+      );
     }
 
     if (profilePicture !== image && !isLoggedIn) {

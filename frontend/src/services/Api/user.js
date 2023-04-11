@@ -96,8 +96,22 @@ export const userEndpoints = {
         Authorization: 'Bearer ' + accessToken,
       },
     }),
-  fetchUserDashboardInfo: (userId, accessToken) =>
-    get(`${PUBLIC_ENDPOINT_ROUTE}/dashboard/${userId}`, {
+  fetchNotifications: (userId, page, size, sortBy, title, jwtAccessToken) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/notifications`, {
+      params: {
+        userId,
+        page,
+        size,
+        sortBy,
+        title,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
+      },
+    }),
+  fetchDayStreak: (userId, accessToken) =>
+    get(`${PUBLIC_ENDPOINT_ROUTE}/dayStreak/${userId}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + accessToken,

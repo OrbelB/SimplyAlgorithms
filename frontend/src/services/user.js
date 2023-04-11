@@ -58,12 +58,26 @@ export const updatePreferences = createAsyncThunk(
   }
 );
 
-export const fetchUserDashboardInfo = createAsyncThunk(
-  'user/dashboard',
+export const fetchUserDayStreak = createAsyncThunk(
+  'user/day-streak',
   async (passedParams) => {
     const { userId, jwtAccessToken } = passedParams;
-    const response = await userEndpoints.fetchUserDashboardInfo(
+    const response = await userEndpoints.fetchDayStreak(userId, jwtAccessToken);
+    return response.data;
+  }
+);
+
+export const fetchUserNotifications = createAsyncThunk(
+  'user/notifications',
+  async (passedParams) => {
+    const { userId, page, size, sortBy, title, jwtAccessToken } = passedParams;
+
+    const response = await userEndpoints.fetchNotifications(
       userId,
+      page,
+      size,
+      sortBy,
+      title,
       jwtAccessToken
     );
     return response.data;
