@@ -18,15 +18,13 @@ import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 
 @RequiredArgsConstructor
@@ -90,11 +88,29 @@ public class UserController {
     }
 
     @UserReadPermission
-    @GetMapping(path = "/dashboard/{userId}", produces = "application/json")
-    public ResponseEntity<?> fetchDashboardInformation(@PathVariable UUID userId) {
-        return ResponseEntity.ok(dashboardService.displayNotifications(userId));
+    @GetMapping(path = "/notifications", produces = "application/json")
+    public ResponseEntity<?> fetchNotifications(@RequestParam(name="userId") UUID userId,
+                                                @RequestParam(name = "page", defaultValue = "0") int page,
+                                                @RequestParam(name = "size", defaultValue = "10") int size,
+                                                @RequestParam(name = "sortBy", required = false) String sortBy,
+                                                @RequestParam(name = "title", required = false) String title
+    ) {
+        if (StringUtils.isNotNullAndEmptyOrBlank(sortBy)) {
+            return ResponseEntity.ok(
+                    dashboardService.
+                            displayNotifications(userId,
+                                    PageRequest.of(page, size, Sort.by(sortBy).ascending())
+                            )
+            );
+        }
+        return ResponseEntity.ok(dashboardService.displayNotifications(userId, PageRequest.of(page, size)));
     }
 
+    @UserReadPermission
+    @GetMapping(path = "/dayStreak/{userId}", produces = "application/json")
+    public ResponseEntity<?> fetchDashboardInformation(@PathVariable UUID userId) {
+        return ResponseEntity.ok(dashboardService.displayUserDayStreak(userId));
+    }
 
 
     @PutMapping(path = "/update-role", produces = "application/json")

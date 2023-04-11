@@ -37,7 +37,7 @@ public class UserNotes {
     @Column(length = 36, name = "note_id")
     private UUID noteId;
 
-    @Column(length = 48, name = "note_title")
+    @Column(length = 256, name = "note_title")
     private String title;
 
     @Temporal(TemporalType.TIMESTAMP)

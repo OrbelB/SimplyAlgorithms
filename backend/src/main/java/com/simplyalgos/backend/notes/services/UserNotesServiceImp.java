@@ -83,13 +83,13 @@ public class UserNotesServiceImp implements UserNotesService {
         UserNotes userNotes = getUserNotes(noteId);
 
         // limit the size title to 250 characters
-        String title = userNotes.getTitle().length() > 200 ?
-                userNotes.getTitle().substring(0, 128).concat("...") + userNotes.getCreatedBy()  :
-                userNotes.getTitle() + userNotes.getCreatedBy();
-
+        String title = userNotes.getTitle().length() > 60 ?
+                userNotes.getTitle().substring(0, 40).concat("...") + userNotes.getCreatedBy().getUsername()  :
+                userNotes.getTitle() + userNotes.getCreatedBy().getUsername();
+        log.info("title of the note is " + title);
         return noteMapper.userNotesToUserNoteDTO(userNoteRepository.saveAndFlush(
                 UserNotes.builder()
-                        .title(title)
+                        .title((title.toCharArray().length >= 190 ) ? title.substring(0, 150) : title)
                         .createdDate(userNotes.getCreatedDate())
                         .lastUpdated(userNotes.getLastUpdated())
                         .isPublic((short) 0)

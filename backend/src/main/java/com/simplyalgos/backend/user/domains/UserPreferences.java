@@ -31,7 +31,6 @@ public class UserPreferences {
     @Column(name = "replies_notification")
     private boolean repliesNotification;
 
-
     @Column(name = "post_likes")
     private boolean postLikes;
 

@@ -14,6 +14,9 @@ public interface UserNotificationRepository extends JpaRepository<UserNotificati
     Page<UserNotification> findAllByUserNotification_UserId(UUID userId, Pageable pageable);
     Set<UserNotification> findAllByUserNotification_UserId(UUID userId);
 
+
+    <T> Page<T> findAllByUserNotification_UserId(UUID userId, Class<T> type, Pageable pageable);
+
     Optional<UserNotification> findByReferenceIdAndUserNotification_UserId(UUID referenceId, UUID userId);
     boolean existsByReferenceIdAndUserNotification_UserId(UUID referenceId, UUID userId);
 }

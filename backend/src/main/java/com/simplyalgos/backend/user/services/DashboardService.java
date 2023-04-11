@@ -4,7 +4,9 @@ import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
 import com.simplyalgos.backend.universalReport.dto.UniversalReportDTO;
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.dtos.DashboardDTO;
+import com.simplyalgos.backend.web.pagination.ObjectPagedList;
+import org.springframework.data.domain.Pageable;
+
 
 import java.util.UUID;
 
@@ -16,7 +18,16 @@ public interface DashboardService {
      * @return DashboardDTO which contains the user's notifications and days
      * user has been logged in consecutively  and the id of the user
      */
-    DashboardDTO displayNotifications(UUID userId);
+    ObjectPagedList<?> displayNotifications(UUID userId , Pageable pageable);
+
+    /**
+     * @param userId the id of the user currently logged in to the system and requesting the
+     *               dashboard information
+     * @return dashboard which contains user streak days which is the number of days
+     * user has been logged in consecutively  and the id of the user
+     */
+    int displayUserDayStreak(UUID userId);
+
 
 //    ----------------------------------------------------------
     @Deprecated

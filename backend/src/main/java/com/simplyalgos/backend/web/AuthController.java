@@ -31,7 +31,6 @@ public class AuthController {
         return ResponseEntity.ok(authService.register(signupDTO));
     }
 
-
     @PostMapping(path = "/login", consumes = "application/json")
     public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(authService.login(loginDTO));

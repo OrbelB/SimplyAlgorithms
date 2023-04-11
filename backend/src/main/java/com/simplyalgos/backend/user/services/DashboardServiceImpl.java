@@ -4,12 +4,14 @@ import com.simplyalgos.backend.page.domains.Topic;
 import com.simplyalgos.backend.page.repositories.projection.ForumInformation;
 import com.simplyalgos.backend.universalReport.dto.UniversalReportDTO;
 import com.simplyalgos.backend.user.domains.User;
-import com.simplyalgos.backend.user.dtos.DashboardDTO;
 import com.simplyalgos.backend.user.enums.NotificationMessage;
 import com.simplyalgos.backend.user.enums.NotificationType;
+import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.util.UUID;
 
@@ -25,15 +27,16 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final UserHistoryService userHistoryService;
 
+    @Override
+    public ObjectPagedList<?> displayNotifications(UUID userId, Pageable pageable) {
 
+
+        return userNotificationService.getNotifications(pageable,userId);
+    }
 
     @Override
-    public DashboardDTO displayNotifications(UUID userId) {
-        DashboardDTO.DashboardDTOBuilder dashboard = DashboardDTO.builder();
-        dashboard.userId(userId);
-        dashboard.dayStreak(userHistoryService.getUserStreakDays(userId));
-        dashboard.notifications(userNotificationService.getNotifications(userId));
-        return dashboard.build();
+    public int displayUserDayStreak(UUID userId) {
+        return userHistoryService.getUserStreakDays(userId);
     }
 
     @Override

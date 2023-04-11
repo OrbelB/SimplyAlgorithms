@@ -132,9 +132,9 @@ public class UserNotificationServiceImpl implements UserNotificationService {
 
     @Override
     public ObjectPagedList<?> getNotifications(Pageable pageable, UUID userId) {
-        Page<UserNotification> userNotifications = userNotificationRepository
-                .findAllByUserNotification_UserId(userId, pageable);
-        return new ObjectPagedList<>(userNotifications.getContent(),
+        Page<NotificationDTO> userNotifications = userNotificationRepository
+                .findAllByUserNotification_UserId(userId, NotificationDTO.class, pageable);
+        return new ObjectPagedList<>(userNotifications.stream().toList(),
                 PageRequest.of(userNotifications.getNumber(),
                         userNotifications.getSize(),
                         userNotifications.getSort()),

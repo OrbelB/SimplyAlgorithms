@@ -210,4 +210,5 @@ public class User implements UserDetails, CredentialsContainer {
 
     @OneToMany(mappedBy = "resolvedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UniversalReport> resolvedBy = new HashSet<>();
+
 }
