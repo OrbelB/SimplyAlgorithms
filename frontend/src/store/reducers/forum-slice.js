@@ -29,6 +29,7 @@ export const forumSlice = createSlice({
       state.status = 'idle';
       state.error = '';
       state.pageId = '';
+      state.reportId = '';
     },
     addSingleReply: (state, action) => {
       state.forum.comments = state.forum.comments.map((comment) => {

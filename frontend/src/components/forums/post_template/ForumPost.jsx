@@ -148,7 +148,7 @@ export default function ForumPost() {
   }
   if (status === 'success' || status === 'completed') {
     return (
-      <div className={cx(fp.window, 'row gy-5')}>
+      <div className={cx(fp.window, 'row gy-5 gx-0')}>
         <div className="col-12">
           <div
             className={cx(

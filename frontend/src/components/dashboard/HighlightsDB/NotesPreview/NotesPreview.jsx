@@ -1,31 +1,43 @@
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
 import { Card, CardContent, Typography } from '@mui/material';
 
-const NOTES_PREVIEWS = [
-  {
-    id: 1,
-    title: 'Splay Tree',
-    description:
-      'Nulla mauris elit, iaculis sit amet imperdiet dapibus, interdum sit amet mauris.',
-  },
-  {
-    id: 2,
-    title: 'Splay Tree',
-    description:
-      'Phasellus ut varius nisl. Phasellus vulputate neque sed neque consectetur, non aliquam risus condimentum.',
-  },
-  {
-    id: 3,
-    title: 'Splay Tree',
-    description:
-      ' Etiam eros lorem, commodo pulvinar tincidunt a, ullamcorper sit amet neque.',
-  },
-];
+import parse from 'html-react-parser';
+import draftToHtml from 'draftjs-to-html';
+import { listUserNotes } from '../../../../services/note';
 
-export default function HighlightsPreview() {
-  return NOTES_PREVIEWS.map(({ title, description }) => (
+export default function HighlightsPreview({ privateNotes, innerRef }) {
+  const { userId, jwtAccessToken } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (userId && jwtAccessToken) {
+      dispatch(listUserNotes({ page: 0, size: 5, userId, jwtAccessToken }));
+    }
+  }, [userId, jwtAccessToken, dispatch]);
+
+  const handleNoteBodyHTML = useCallback((noteBody) => {
+    let htmlContent = draftToHtml(noteBody);
+    htmlContent = htmlContent.replace(
+      /<img([^>]+)>/gi,
+      `<img$1 class="img-fluid" loading="lazy">`
+    );
+    const parsedContent = parse(htmlContent);
+    return parsedContent;
+  }, []);
+
+  const noComments = (
+    <div className="d-flex justify-content-center align-items-center">
+      <Typography variant="h5" className="text-center">
+        No notes to display
+      </Typography>
+    </div>
+  );
+
+  const comment = ({ title, noteBody, lastNode }) => (
     <Card
       key={nanoid()}
+      ref={lastNode}
       sx={{
         height: '100%',
         border: 2,
@@ -40,10 +52,22 @@ export default function HighlightsPreview() {
         <Typography variant="h5" className="preview-title" gutterBottom>
           {title}
         </Typography>
-        <Typography variant="body1" className="preview-description">
-          {description}
+        <Typography
+          variant="body1"
+          component="div"
+          className="preview-description"
+        >
+          {handleNoteBodyHTML(noteBody)}
         </Typography>
       </CardContent>
     </Card>
-  ));
+  );
+  return privateNotes.length === 0
+    ? noComments
+    : privateNotes?.map(({ title, noteBody }, index) => {
+        if (index + 1 === privateNotes.length) {
+          comment({ title, noteBody, innerRef });
+        }
+        return comment({ title, noteBody });
+      });
 }

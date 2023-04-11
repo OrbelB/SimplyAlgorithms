@@ -219,7 +219,7 @@ export const commentSlice = createSlice({
         }
         state.status = 'success';
         state.commentParents = state.commentParents.filter(
-          (comment) => comment.comment.commentId !== action.payload
+          (comment) => comment.commentId !== action.payload
         );
       })
       .addCase(deleteParentComment.rejected, (state) => {

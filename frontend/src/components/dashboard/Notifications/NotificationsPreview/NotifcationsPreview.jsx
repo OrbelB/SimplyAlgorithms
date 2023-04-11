@@ -7,6 +7,8 @@ import {
 } from '../../../../services/user';
 import { forumActions } from '../../../../store/reducers/forum-slice';
 import './NotificationsPreview.css';
+import { forumsActions } from '../../../../store/reducers/forums-slice';
+import { commentActions } from '../../../../store/reducers/comment-slice';
 
 const NOTIFICATION_PREVIEWS = [
   {
@@ -62,6 +64,8 @@ export default function NotificationsPreview({ setShow }) {
     if (message.includes('post.')) {
       setShow(false);
       dispatch(forumActions.resetData());
+      dispatch(forumsActions.resetData());
+      dispatch(commentActions.resetData());
       navigate(`/forums/${referenceId}`, {
         preventScrollReset: true,
         replace: true,

@@ -1,8 +1,56 @@
 import './ShowMoreNotes.css';
-import { Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+import {
+  Button,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+} from '@mui/material';
 import NotesPreview from '../NotesPreview/NotesPreview';
+import useSearchBar from '../../../../hooks/use-searchBar';
+
+import usePaginationWithInfiniteScroll from '../../../../hooks/use-pagination';
+import useSortBy from '../../../../hooks/use-sortBy';
+import { listUserNotes } from '../../../../services/note';
 
 export default function ShowMoreNotes() {
+  const {
+    status,
+    currentPrivateNotePage,
+    totalPrivateNotePages,
+    updateCurrentPrivateNotePage,
+    privateNotes: notes,
+  } = useSelector((state) => state.note);
+  const { jwtAccessToken, userId } = useSelector((state) => state.auth);
+
+  const { lastElementChild: lastNote } = usePaginationWithInfiniteScroll({
+    currPage: currentPrivateNotePage,
+    totalPages: totalPrivateNotePages,
+    updateCurrPage: updateCurrentPrivateNotePage,
+    itemId: userId,
+    itemName: 'userId',
+    fetchFunction: listUserNotes,
+    jwtAccessToken,
+    status,
+  });
+  const { handleSearch, searchResults: privateNotes } = useSearchBar({
+    searchFrom: notes,
+    valueSearched: 'title',
+    actionToDispatch: listUserNotes,
+    userId,
+    jwtAccessToken,
+    status,
+    debounceTime: 500,
+  });
+
+  const { sortBy, handleSortBy } = useSortBy({
+    actionToDispatch: listUserNotes,
+    userId,
+    jwtAccessToken,
+    status,
+  });
+
   return (
     <>
       {/* <!-- Button trigger modal --> */}
@@ -51,40 +99,31 @@ export default function ShowMoreNotes() {
                       id="form1"
                       className="form-control"
                       placeholder="Search..."
+                      onChange={handleSearch}
                     />
                   </div>
                 </div>
-
                 <div className="col-1">
-                  <div className="sortby">
-                    <button
-                      className="btn btn-primary dropdown-toggle"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
+                  <FormControl sx={{ minWidth: 120 }} size="small">
+                    <InputLabel sx={{ color: 'black' }}>Sort By</InputLabel>
+                    <Select
+                      label="Sort By"
+                      autoWidth
+                      sx={{
+                        backgroundColor: 'lightblue',
+                      }}
+                      value={sortBy.get('sortBy') ?? ''}
+                      onChange={(e) => handleSortBy(e.target.value)}
                     >
-                      Sort by
-                    </button>
-                    <ul
-                      className="dropdown-menu"
-                      aria-labelledby="dropdownMenuButton1"
-                    >
-                      <li>
-                        <button className="dropdown-item" type="button">
-                          Newest
-                        </button>
-                      </li>
-                      <li>
-                        <button className="dropdown-item" type="button">
-                          Alphabetically
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
+                      <MenuItem value="">None</MenuItem>
+                      <MenuItem value="createdDate">Date</MenuItem>
+                      <MenuItem value="Alphabetical">Alphabetically</MenuItem>
+                    </Select>
+                  </FormControl>
                 </div>
               </div>
               <div className="thirdline">
-                <NotesPreview />
+                <NotesPreview privateNotes={privateNotes} innerRef={lastNote} />
               </div>
             </div>
           </div>
