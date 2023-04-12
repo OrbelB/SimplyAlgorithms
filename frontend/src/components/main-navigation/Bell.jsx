@@ -31,7 +31,7 @@ export default function Bell() {
       fetchUserNotifications({
         page: 0,
         size: 15,
-        sortBy: 'createdDate',
+        // sortBy: 'createdDate',
         userId: authUserId,
         jwtAccessToken,
       })
