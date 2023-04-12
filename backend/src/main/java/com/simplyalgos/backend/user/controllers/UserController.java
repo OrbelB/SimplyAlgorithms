@@ -139,12 +139,13 @@ public class UserController {
         return ResponseEntity.ok().body(map);
     }
 
-
+//  add the number of days to lock the acocunt
     @PutMapping(path = "/lock-account", produces = "application/json")
     @PreAuthorize("hasAuthority('users.crud')")
     public ResponseEntity<?> lockAccount(@RequestParam(name = "usernameOrId") String usernameOrId,
-                                         @RequestParam(name = "accountNonLocked") boolean accountNonLocked) {
-        return ResponseEntity.accepted().body(userService.LockUserAccount(usernameOrId, accountNonLocked));
+                                         @RequestParam(name = "accountLockedSwitch") boolean accountLockedSwitch,
+                                         @RequestParam(name = "daysToLock" , defaultValue = "30", required = false) int daysToLock) {
+        return ResponseEntity.accepted().body(userService.LockUserAccount(usernameOrId, daysToLock, accountLockedSwitch));
     }
 
     @PutMapping(path = "/request-role")

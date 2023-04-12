@@ -1,8 +1,10 @@
 package com.simplyalgos.backend.web;
 
+import com.simplyalgos.backend.exceptions.UserNotAuthorizedException;
 import com.simplyalgos.backend.user.dtos.ChangePasswordDTO;
 import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
 import com.simplyalgos.backend.user.dtos.PasswordResetRequestDTO;
+import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.dtos.LoginDTO;
 import com.simplyalgos.backend.web.dtos.SignupDTO;
 import com.simplyalgos.backend.web.dtos.TokenDTO;
@@ -12,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.MessageFormat;
 
 
 //endpoints for registering, logging in and updating tokens
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
 
+    private final UserService userService;
 
 
 
@@ -33,7 +38,15 @@ public class AuthController {
 
     @PostMapping(path = "/login", consumes = "application/json")
     public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
+        if (userService.isUserLocked(loginDTO.username())) {
+            if (userService.accountLockExpired(loginDTO.username())){
+                return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(authService.login(loginDTO));
+            }
+            throw new UserNotAuthorizedException(MessageFormat
+                    .format("User {0} account is locked, please check email for lock expire date", loginDTO.username()));
+        }
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(authService.login(loginDTO));
+
     }
 
     @PostMapping("/token")

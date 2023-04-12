@@ -98,6 +98,8 @@ public class User implements UserDetails, CredentialsContainer {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "lock_expire_date")
+    private Timestamp accountLockExpireDate;
 
     @Override
     public boolean isAccountNonExpired() {

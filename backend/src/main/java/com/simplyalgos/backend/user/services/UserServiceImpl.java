@@ -23,10 +23,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.text.MessageFormat;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.UUID;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -214,15 +214,65 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInformation LockUserAccount(String usernameOrId, boolean accountNonLocked) {
+    public UserInformation LockUserAccount(String usernameOrId, int lengthOfLock, boolean accountNonLocked) {
         User user = userRepository.findByUsername(usernameOrId).orElseGet(() ->
                 userRepository.findById(UUID.fromString(usernameOrId)).orElseThrow(() ->
                         new ElementNotFoundException("USERNAME OR USERID : " + usernameOrId + " NOT FOUND")
                 )
         );
-        user.setAccountNonLocked(!user.getAccountNonLocked());
+        String message =
+                "You accounr has been unlocked you may log in at any time :) \n welcome back";
+        String subject = "Account has been unlocked";
+        user.setAccountNonLocked(accountNonLocked);
+        if (!accountNonLocked) {
+            //Admin in locking the account
+            user.setAccountLockExpireDate(daysToTimestamp(lengthOfLock));
+            String formattedTimestamp = user.getAccountLockExpireDate()
+                    .toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            message = "Hello, \n your account has been locked by an admin and will be unocked on: "
+                    + formattedTimestamp +" \n If you belive this is an error Please reply to this email";
+            subject = "Account " + user.getUsername() + " has been locked";
+
+        }
+//        send email to the user
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject(subject);
+        mailMessage.setText(message);
+        emailService.sendEmail(mailMessage);
         return userMapper.userToUserInformation(userRepository.save(user));
     }
 
+    @Override
+    public boolean isUserLocked(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new NoSuchElementException("username note founds username: " + username));
+        return !user.getAccountNonLocked();
+    }
 
+    @Override
+    public Timestamp daysToTimestamp(int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, days);
+        Date expirationDate = calendar.getTime();
+        return new Timestamp(expirationDate.getTime());
+    }
+
+    @Override
+    public boolean accountLockExpired(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new NoSuchElementException("username note founds username: " + username));
+
+        Calendar cal = Calendar.getInstance();
+//        getAccountExpireDate hold the Timestamp date where the user's lock will be released;
+        if (user.getAccountLockExpireDate().before(cal.getTime())) {
+            user.setAccountLockExpireDate(null);
+            user.setAccountNonExpired(true);
+            userRepository.saveAndFlush(user);
+            return true;
+        }
+        return false;
+    }
 }

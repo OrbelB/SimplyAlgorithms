@@ -6,6 +6,7 @@ import com.simplyalgos.backend.user.repositories.projections.UserInformationOnly
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 public interface UserService {
@@ -37,8 +38,14 @@ public interface UserService {
 
     UserInformation changeUserRole(String usernameOrId, String role);
 
-    UserInformation LockUserAccount(String username, boolean accountNonLocked);
+    UserInformation LockUserAccount(String usernameOrId, int lengthOfLock, boolean accountNonLocked);
 
+    boolean isUserLocked(String username);
+
+    Timestamp daysToTimestamp(int days);
+
+//    if the lock date is expired ie current date is after LockDate then it will unlock user
+    boolean accountLockExpired(String username);
 
 
 
