@@ -91,8 +91,6 @@ public class AuthServiceImpl implements AuthService {
         try {
             Authentication authentication = refreshTokenAuthProvider
                     .authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
-
-            log.info("authentication has this data " + authentication.getPrincipal().getClass());
             if (userDetailsService.IsUserAccountNonLockedAndAuthenticated(authentication.getName()))
                 return tokenGenerator.createToken(authentication);
             throw new UserNotAuthorizedException("User is not authorized");
@@ -107,7 +105,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userService.userUserNameExists(passwordResetRequestDTO.getUsername());
         // String tempEmail = "djefferson545@gmail.com";
         PasswordResetToken passwordResetToken = passwordResetTokenService.createPasswordResetToken(user);
-        log.info("A NEW RESET PASSWORD TOKEN HAS BEEN CREATED FOR USER " + user.getUsername()
+        log.debug("A NEW RESET PASSWORD TOKEN HAS BEEN CREATED FOR USER " + user.getUsername()
                 + " THE TOKEN IS: " + passwordResetToken.getPasswordResetTokenID());
 
         String passwordResetLinkLocal = "http://localhost:3000/passwordReset?token=" + passwordResetToken.getPasswordResetTokenID().toString();
@@ -117,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
         simpleMailMessage.setText(ResetPasswordRequestEmailValues.BODY.label + " " + user.getEmail() + "\n\n\n CLICK HERE TO RESET PASSWORD: \n" +
                 passwordResetLinkLocal);
         simpleMailMessage.setTo(user.getEmail());
-        log.info(user.getEmail() + " USER EMAIL");
+        log.debug(user.getEmail() + " USER EMAIL");
         emailService.sendEmail(simpleMailMessage);
     }
 
@@ -129,7 +127,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public <T> T getUsername(GetUsernameDTO getUsernameDTO, Class<T> tClass) {
         boolean found = userService.getUsername(getUsernameDTO);
-        log.info("GOT EMAIL: " + getUsernameDTO.getEmail());
+        log.debug("GOT EMAIL: " + getUsernameDTO.getEmail());
         return tClass.cast(found);
     }
 }

@@ -17,4 +17,5 @@ public class UserDataDTO {
     String firstName;
     String lastName;
     String profilePicture;
+    String roleName;
 }

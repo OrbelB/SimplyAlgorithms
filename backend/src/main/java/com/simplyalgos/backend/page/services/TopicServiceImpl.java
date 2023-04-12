@@ -15,11 +15,9 @@ import com.simplyalgos.backend.page.repositories.projection.TopicInformation;
 import com.simplyalgos.backend.page.repositories.projection.TopicNameAndIDOnly;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.services.PageReportService;
-import com.simplyalgos.backend.tag.services.TagService;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.utils.StringUtils;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
-import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -106,7 +104,7 @@ public class TopicServiceImpl implements TopicService {
         );
         topicMapper.updateTopicFromFullTopicDto(fullTopicDTO, topicToUpdate);
         topicToUpdate.setPageDescription(fullTopicDTO.getPageDescription());
-        log.info("topic new page desc ");
+        log.debug("topic new page desc ");
         if (StringUtils.isNotNullAndEmptyOrBlank(fullTopicDTO.getExternalResources())) {
             mapExternalResourcesToTopic(topicToUpdate, fullTopicDTO.getExternalResources());
         }
@@ -128,7 +126,7 @@ public class TopicServiceImpl implements TopicService {
             }
             wikiTopicPageRepository.deleteByWikiTopicPageIdNotInAndTopicPage(Set.of(wikiTopicPageId), topicToUpdate);
             topicToUpdate.setUrlPath(fullTopicDTO.getWikiInfo().wikiName() + "/" + topicToUpdate.getTitle());
-            log.info("Wiki info updated for topic: {}", topicToUpdate.getUrlPath());
+            log.debug("Wiki info updated for topic: {}", topicToUpdate.getUrlPath());
         }
         return topicRepository.saveAndFlush(topicToUpdate).getUrlPath();
     }

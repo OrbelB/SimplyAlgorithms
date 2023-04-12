@@ -60,7 +60,7 @@ public class UserController {
     @UserUpdatePermission
     @PutMapping(path = "/update", produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> update(@RequestBody UserDataPostDTO userDTO) {
-        log.info("user id is " + userDTO.getUserId());
+        log.debug("user id is " + userDTO.getUserId());
         return ResponseEntity.accepted().body(userService.updateUser(userDTO));
     }
 

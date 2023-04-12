@@ -62,7 +62,7 @@ public class JpaUserDetailsServiceImpl implements JpaUserDetailsService {
         }
         User user = userRegisteredMapper.create(userDto);
         if (userDto.getProfilePicture() != null) {
-            log.info(userDto.getProfilePicture() + " check if the correct method is call");
+            log.debug(userDto.getProfilePicture() + " check if the correct method is call");
             user.setProfilePicture(storageService.uploadImageFile(userDto.getProfilePicture()));
         }
         user.setRoles(Set.of(assignRoleToNewUser(UserRoles.STUDENT.name())));

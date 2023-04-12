@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
                                 .format("user with id {0} not found", userToUpdate.getUserId())
                 )
         );
-        log.info(MessageFormat.format("this is the passed profiledPicture {0}", userToUpdate.getProfilePicture()));
+        log.debug(MessageFormat.format("this is the passed profiledPicture {0}", userToUpdate.getProfilePicture()));
         userMapper.updateUser(userToUpdate, user);
         if (userToUpdate.getProfilePicture() != null) {
             user.setProfilePicture(storageService
@@ -145,10 +145,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User userUserNameExists(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> {
-            log.info("USERNAME: " + username + " NOT FOUND");
+            log.debug("USERNAME: " + username + " NOT FOUND");
             return new ElementNotFoundException();
         });
-        log.info("USER FOUND FROM FRONT END: " + username + " ----- FROM DATABASE" + user.getUsername());
+        log.debug("USER FOUND FROM FRONT END: " + username + " ----- FROM DATABASE" + user.getUsername());
         return user;
     }
 
@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> {
-            log.info("USERNAME: " + username + " NOT FOUND");
+            log.debug("USERNAME: " + username + " NOT FOUND");
             return new ElementNotFoundException();
         });
     }
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
             user.addRole(roleToAdd);
             // notify user of role change
             dashboardService.addRoleChangeNotification(user, roleToAdd.getRoleName());
-            log.info("USER: " + user.getUsername() + " ROLE CHANGED TO: " + role);
+            log.debug("USER: " + user.getUsername() + " ROLE CHANGED TO: " + role);
             return userMapper.userToUserInformation(userRepository.save(user));
         }
         throw new ElementNotFoundException("ROLE: " + role + " NOT FOUND");

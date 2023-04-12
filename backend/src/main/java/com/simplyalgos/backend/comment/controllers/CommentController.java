@@ -57,7 +57,7 @@ public class CommentController {
     @CreateCommentPermission
     @PostMapping(path = "/create-parent-comment", consumes = "application/json")
     public ResponseEntity<?> createParentComment(@RequestBody CommentDTO commentDTO) {
-        log.info("id of user is" + commentDTO.userId());
+        log.debug("id of user is" + commentDTO.userId());
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createParentComment(commentDTO));
     }
 
@@ -78,7 +78,7 @@ public class CommentController {
     @DeleteCommentPermission
     @DeleteMapping(path = "/delete")
     public ResponseEntity<?> deleteComment(@RequestParam(name = "userId") String userId, @RequestParam(name = "commentId") UUID commentId) {
-        log.info(MessageFormat.format("userId IS {0}", userId));
+        log.debug(MessageFormat.format("userId IS {0}", userId));
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(commentService.deleteComment(commentId));
     }
 

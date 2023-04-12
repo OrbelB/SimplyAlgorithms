@@ -28,7 +28,7 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
 
     @Override
     public boolean isNotificationEnableForType(@NonNull NotificationType notificationType, @NonNull UUID userId) {
-        log.info(MessageFormat.format("current notification type passed is: {0} and userID {1}", notificationType.toString(), userId.toString()));
+        log.debug(MessageFormat.format("current notification type passed is: {0} and userID {1}", notificationType.toString(), userId.toString()));
         UserPreferences userPreferences = userPreferencesRepository.findByUserId(userId).orElseThrow(() -> new ElementNotFoundException("Element could not be found"));
         return switch (notificationType) {
             case ACCOUNT_CHANGES -> userPreferences.isAccountChanges();

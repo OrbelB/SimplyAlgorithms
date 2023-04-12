@@ -35,6 +35,7 @@ public class CommentMapper {
                         .lastName(comment.getCreatedBy().getLastName())
                         .profilePicture(comment.getCreatedBy().getProfilePicture())
                         .username(comment.getCreatedBy().getUsername())
+                        .roleName(comment.getCreatedBy().getRoles().stream().findFirst().orElseThrow().getRoleName())
                         .build())
                 .likes(comment.getLikes())
                 .dislikes(comment.getDislikes())

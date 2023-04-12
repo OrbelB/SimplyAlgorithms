@@ -86,7 +86,7 @@ public class UserNotesServiceImp implements UserNotesService {
         String title = userNotes.getTitle().length() > 60 ?
                 userNotes.getTitle().substring(0, 40).concat("...") + userNotes.getCreatedBy().getUsername()  :
                 userNotes.getTitle() + userNotes.getCreatedBy().getUsername();
-        log.info("title of the note is " + title);
+        log.debug("title of the note is " + title);
         return noteMapper.userNotesToUserNoteDTO(userNoteRepository.saveAndFlush(
                 UserNotes.builder()
                         .title((title.toCharArray().length >= 190 ) ? title.substring(0, 150) : title)

@@ -12,7 +12,6 @@ import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
-import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -155,7 +154,7 @@ public class TakeQuizServiceImp implements TakeQuizService {
 //    each question has the same weight
     @Override
     public UUID createTakenQuiz(TakeQuizDTO takeQuizDTO) {
-        log.info("Checking if the quiz exists" + takeQuizDTO.getTakeQuizId());
+        log.debug("Checking if the quiz exists" + takeQuizDTO.getTakeQuizId());
         Optional<Quiz> quizOptional = quizRepository.findById(takeQuizDTO.getQuizId());
         Optional<User> userOptional = userRepository.findById(takeQuizDTO.getUserId());
         log.debug("creating a new Take Quiz With: " + takeQuizDTO.getTakeQuizId());
@@ -183,7 +182,7 @@ public class TakeQuizServiceImp implements TakeQuizService {
     public UUID deleteAllUserTakeQuizHistory(UUID userId) {
         takeQuizRepository.deleteAllByTakenBy_UserId(userId);
         takeQuizAverageService.resetAllAverageQuizScore(userId);
-        log.info("deleteAllUserTakeQuizHistory not implemented");
+        log.debug("deleteAllUserTakeQuizHistory not implemented");
         return userId;
     }
 
@@ -196,7 +195,7 @@ public class TakeQuizServiceImp implements TakeQuizService {
 
     @Override
     public UUID deleteOldUserTakenQuizHistory(UUID userId) {
-        log.info("deleteOldUserTakenQuizHistory not implemented");
+        log.debug("deleteOldUserTakenQuizHistory not implemented");
         return userId;
     }
 

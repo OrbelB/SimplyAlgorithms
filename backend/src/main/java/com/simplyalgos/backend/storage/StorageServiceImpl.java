@@ -56,7 +56,7 @@ public class StorageServiceImpl implements StorageService {
     public String deleteFile(String fileName)  {
         if (fileName.length() < BUCKET_URL_ENDPOINT.length()) return null;
         String filepath = fileName.replace(BUCKET_URL_ENDPOINT, "");
-        log.info(filepath + " check current value should be without the url ");
+        log.debug(filepath + " check current value should be without the url ");
         s3Client.deleteObject(bucketName, filepath);
         return filepath;
     }

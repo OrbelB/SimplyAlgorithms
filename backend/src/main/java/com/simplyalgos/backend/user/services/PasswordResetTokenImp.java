@@ -32,7 +32,7 @@ public class PasswordResetTokenImp implements PasswordResetTokenService {
         if(passwordResetTokenRepository.existsByUserId(user)){
             passwordResetTokenRepository.deleteByUserId(user);
         }
-        log.info("NOW CREATING THE NEW PASSWORD");
+        log.debug("NOW CREATING THE NEW PASSWORD");
         // create expire date of 15 minutes from now
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -45,7 +45,7 @@ public class PasswordResetTokenImp implements PasswordResetTokenService {
     public void printAllTokens() {
         List<PasswordResetToken> passlist = passwordResetTokenRepository.findAll();
         for(int i = 0; i < passlist.size(); i++){
-            log.info(i + " ~ ");
+
         }
     }
 
@@ -55,7 +55,7 @@ public class PasswordResetTokenImp implements PasswordResetTokenService {
 
 
         if(!isTokenExpired(passToken)){
-            log.info("RESETTING PASSWORD");
+            log.debug("RESETTING PASSWORD");
             jpaUserDetailsService.resetUserPassword(passToken.getUserId().getUserId(),changePasswordDTO.getNewPassword());
             passwordResetTokenRepository.deleteById(UUID.fromString(changePasswordDTO.getPasswordToken()));
             return;
@@ -73,10 +73,10 @@ public class PasswordResetTokenImp implements PasswordResetTokenService {
                 passwordResetTokenRepository.deleteById(passwordResetTokenList.get(i).getPasswordResetTokenID());
             }
             else{
-                log.info("Token not deleted: " + passwordResetTokenList.get(i).getPasswordResetTokenID());
+                log.debug("Token not deleted: " + passwordResetTokenList.get(i).getPasswordResetTokenID());
             }
         }
-        log.info("~~~END OF PASSWORD RESET TOKEN EXPIRE DELETION~~~");
+        log.debug("~~~END OF PASSWORD RESET TOKEN EXPIRE DELETION~~~");
     }
 
 

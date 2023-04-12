@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.MessageFormat;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -61,7 +60,6 @@ public class TopicController {
     @DeleteMapping(path = "/delete")
     public ResponseEntity<?> deleteForum(@RequestParam(name = "userId") UUID userId,
                                          @RequestParam(name = "pageId") UUID pageId) {
-        log.info(MessageFormat.format("this is userId {0}, and this is pageId {1} ", userId, pageId));
         topicService.deleteTopicPage(pageId, userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -75,10 +73,6 @@ public class TopicController {
     @CreateVotePermission
     @PostMapping(path = "/vote", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> likeOrDislike(@RequestBody LikeDislikeDTO likeDislikeDTO) {
-        log.info(MessageFormat.format("userid {0}, pageId {1}, likeDislikeDTO {2}",
-                likeDislikeDTO.userId(),
-                likeDislikeDTO.pageId(),
-                likeDislikeDTO.likeDislike()));
         topicService.userLikedOrDisliked(likeDislikeDTO.userId(), likeDislikeDTO.pageId(), likeDislikeDTO.likeDislike());
         return ResponseEntity.accepted().body(topicService.userLikedOrDisliked(likeDislikeDTO.userId(), likeDislikeDTO.pageId(), likeDislikeDTO.likeDislike()));
     }

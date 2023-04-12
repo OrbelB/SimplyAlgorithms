@@ -272,7 +272,7 @@ public class NoteController {
     @PublicNotePermission
     @PutMapping(path = "/privateNote", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> makeNotePrivate(@RequestBody PublicNoteDTO publicNoteDTO) {
-        log.info("Making note private" + publicNoteDTO.getUserNoteDTO().getNoteId());
+        log.debug("Making note private" + publicNoteDTO.getUserNoteDTO().getNoteId());
         publicNotesService
                 .makeNotePrivateUsingNoteId(publicNoteDTO.getUserNoteDTO().getNoteId());
         return ResponseEntity.status((HttpStatus.ACCEPTED)).body(userNotesService

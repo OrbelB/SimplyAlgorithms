@@ -431,6 +431,11 @@ class CommentServiceImplTest {
                                 public String getProfilePicture() {
                                     return null;
                                 }
+
+                                @Override
+                                public String getRoleName() {
+                                    return null;
+                                }
                             };
                         }
 

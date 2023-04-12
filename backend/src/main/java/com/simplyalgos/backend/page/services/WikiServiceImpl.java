@@ -72,7 +72,7 @@ public class WikiServiceImpl implements WikiService {
         wikiToUpdate.setWikiName(wiki.getWikiName());
         wikiToUpdate.setDescription(wiki.getDescription());
         if (Objects.equals(wikiToUpdate.getIsParentChild(), "parent")) {
-            log.info("Updating children wikis from a parent");
+            log.debug("Updating children wikis from a parent");
             updateChildrenWikis(wiki.getWikiIds(), wikiToUpdate);
         } else if (Objects.equals(wikiToUpdate.getIsParentChild(), "child")) {
             updateTopicPages(wiki.getPageIds(), wikiToUpdate);

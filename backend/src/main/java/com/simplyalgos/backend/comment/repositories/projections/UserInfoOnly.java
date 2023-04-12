@@ -21,4 +21,7 @@ public interface UserInfoOnly {
 
     @Value("#{target.profilePicture}")
     String getProfilePicture();
+
+    @Value("#{target.roles.stream().findFirst().orElseThrow().getRoleName()}")
+    String getRoleName();
 }

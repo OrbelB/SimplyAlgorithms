@@ -56,14 +56,12 @@ public class ForumController {
 
     @GetMapping("/{pageId}")
     public ResponseEntity<?> getForum(@PathVariable String pageId) {
-        log.info(MessageFormat.format("page requested is {0}", pageId));
         return ResponseEntity.ok(forumService.getForumPage(pageId));
     }
 
     @CreateForumPermission
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createForum(@RequestBody ForumDTO forumDTO) {
-        log.info("this is the object data " + forumDTO.getUserDto().getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(forumService.createForum(forumDTO));
     }
 
@@ -78,7 +76,6 @@ public class ForumController {
     @DeleteMapping(path = "/delete", produces = "application/json")
     public ResponseEntity<?> deleteForum(@RequestParam(name = "userId") String userId,
                                          @RequestParam(name = "pageId") String pageId) {
-        log.info(MessageFormat.format("this is userId {0}, and this is pageId {1} ", userId, pageId));
         return ResponseEntity.accepted().body(forumService.deleteForum(pageId, userId));
     }
 
