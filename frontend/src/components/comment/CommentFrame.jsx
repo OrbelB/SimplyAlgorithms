@@ -33,6 +33,7 @@ export default function CommentFrame({ passedComments, pageId }) {
               username={comment?.createdBy?.username}
               parentCommentId={comment?.commentId}
               profilePicture={comment?.createdBy?.profilePicture}
+              roleName={comment?.createdBy?.roleName}
               commentText={comment?.commentText}
               createdDate={comment?.createdDate}
               upVotes={comment?.likes}
@@ -48,6 +49,7 @@ export default function CommentFrame({ passedComments, pageId }) {
             key={comment?.commentId}
             userId={comment?.createdBy?.userId}
             username={comment?.createdBy?.username}
+            roleName={comment?.createdBy?.roleName}
             parentCommentId={comment?.commentId}
             profilePicture={comment?.createdBy?.profilePicture}
             commentText={comment?.commentText}

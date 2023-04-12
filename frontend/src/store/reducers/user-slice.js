@@ -197,8 +197,7 @@ export const userSlice = createSlice({
         state.status = 'pending';
       })
       .addCase(removeSingleNotification.fulfilled, (state, action) => {
-        const { notifications } = state.dashboardInfo;
-        state.notifications = notifications.filter(
+        state.notifications = state.notifications.filter(
           (notification) => notification.notificationId !== action.payload
         );
         state.status = 'success';

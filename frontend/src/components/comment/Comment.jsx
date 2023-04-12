@@ -32,6 +32,7 @@ export default function Comment({
   pageId,
   replies = [],
   replyCount,
+  roleName,
   parentCommentId,
   downVotes,
 }) {
@@ -197,6 +198,7 @@ export default function Comment({
       <div className="container-fluid " ref={innerRef}>
         <div className="row p-4 justify-content-center gx-2 g-0">
           <CommentBox
+            roleName={roleName}
             commentId={parentCommentId}
             userId={userId}
             commentText={commentText}
@@ -244,9 +246,10 @@ export default function Comment({
             </div>
             {hasReplies && childrenComments.length > 0 && (
               <>
-                <div className="row m-0 p-0 gy-4">
+                <div className="row m-0 p-0 g-0 gy-4">
                   {childrenComments?.map(({ comment }) => (
                     <ChildComment
+                      roleName={comment?.createdBy?.roleName}
                       key={comment.commentId}
                       commentText={comment?.commentText}
                       commentId={comment.commentId}

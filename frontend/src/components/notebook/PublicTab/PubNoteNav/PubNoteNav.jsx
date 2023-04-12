@@ -5,9 +5,6 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
   Collapse,
   Alert,
   IconButton,
@@ -71,11 +68,6 @@ export default function PubNoteNav() {
             </Select>
           </FormControl>
           <br />
-        </div>
-        <div sx={{ width: '100%' }}>
-          <FormGroup sx={{ maxWidth: '100%', marginLeft: '10px' }}>
-            <FormControlLabel control={<Checkbox />} label="Saved Notes" />
-          </FormGroup>
         </div>
         <div sx={{ width: '100%' }}>
           <Collapse in={open}>
