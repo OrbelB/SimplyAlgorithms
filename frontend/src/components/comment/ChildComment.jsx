@@ -12,6 +12,7 @@ export default function ChildComment({
   commentId,
   editChildComment,
   userId,
+  roleName,
 }) {
   const onDeleteComment = () => {
     deleteChildComment(userId, commentId);
@@ -26,6 +27,7 @@ export default function ChildComment({
       <div className="grid">
         <div className="row">
           <CommentBox
+            roleName={roleName}
             commentId={commentId}
             userId={userId}
             upVotes={upVotes}
