@@ -38,12 +38,15 @@ public class AuthController {
 
     @PostMapping(path = "/login", consumes = "application/json")
     public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
+
         if (userService.isUserLocked(loginDTO.username())) {
+//            log.debug("account Lock flagged");
             if (userService.accountLockExpired(loginDTO.username())){
+//                log.debug("account Lock expired now logging in user");
                 return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(authService.login(loginDTO));
             }
             throw new UserNotAuthorizedException(MessageFormat
-                    .format("User {0} account is locked, please check email for lock expire date", loginDTO.username()));
+                    .format("User: {0} account is locked, please check email for lock expire date", loginDTO.username()));
         }
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(authService.login(loginDTO));
 

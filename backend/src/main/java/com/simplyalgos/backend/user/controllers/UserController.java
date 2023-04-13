@@ -142,9 +142,11 @@ public class UserController {
 //  add the number of days to lock the acocunt
     @PutMapping(path = "/lock-account", produces = "application/json")
     @PreAuthorize("hasAuthority('users.crud')")
+//    @AdminPermission
     public ResponseEntity<?> lockAccount(@RequestParam(name = "usernameOrId") String usernameOrId,
                                          @RequestParam(name = "accountLockedSwitch") boolean accountLockedSwitch,
                                          @RequestParam(name = "daysToLock" , defaultValue = "30", required = false) int daysToLock) {
+//        log.debug("Locking account " + usernameOrId + " for " + daysToLock + " days");
         return ResponseEntity.accepted().body(userService.LockUserAccount(usernameOrId, daysToLock, accountLockedSwitch));
     }
 

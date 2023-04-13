@@ -18,6 +18,7 @@ import com.simplyalgos.backend.universalReport.domain.UniversalReport;
 import com.simplyalgos.backend.user.security.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ForeignKey;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.usertype.UserTypeLegacyBridge;
@@ -27,6 +28,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Propagation;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -98,6 +100,7 @@ public class User implements UserDetails, CredentialsContainer {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "lock_expire_date")
     private Timestamp accountLockExpireDate;
 

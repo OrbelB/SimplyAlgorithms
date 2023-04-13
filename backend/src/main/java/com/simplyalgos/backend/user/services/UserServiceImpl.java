@@ -13,6 +13,7 @@ import com.simplyalgos.backend.user.repositories.UserRepository;
 import com.simplyalgos.backend.user.repositories.projections.UserInformationOnly;
 import com.simplyalgos.backend.user.security.Role;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
+import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import java.sql.Timestamp;
 import java.text.MessageFormat;
@@ -220,6 +222,15 @@ public class UserServiceImpl implements UserService {
                         new ElementNotFoundException("USERNAME OR USERID : " + usernameOrId + " NOT FOUND")
                 )
         );
+
+        if(lengthOfLock > 365){
+            lengthOfLock = 365;
+        }
+
+        if(lengthOfLock < -365) {
+            lengthOfLock = -365;
+        }
+
         String message =
                 "You accounr has been unlocked you may log in at any time :) \n welcome back";
         String subject = "Account has been unlocked";
@@ -248,6 +259,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new NoSuchElementException("username note founds username: " + username));
+
+//        log.debug("User information: " + user.getUsername() + " \n " + user.getAccountNonLocked());
+
         return !user.getAccountNonLocked();
     }
 
@@ -267,10 +281,15 @@ public class UserServiceImpl implements UserService {
 
         Calendar cal = Calendar.getInstance();
 //        getAccountExpireDate hold the Timestamp date where the user's lock will be released;
+
+//        log.debug("Account is expired? " + user.getAccountLockExpireDate().before(cal.getTime())
+//                 + " Expire date: " + user.getAccountLockExpireDate() + " Todays daye: " + cal.getTime());
+
         if (user.getAccountLockExpireDate().before(cal.getTime())) {
-            user.setAccountLockExpireDate(null);
-            user.setAccountNonExpired(true);
-            userRepository.saveAndFlush(user);
+//            user.setAccountLockExpireDate(null);
+//            log.debug("updating the information");
+            user.setAccountNonLocked(true);
+            userRepository.save(user);
             return true;
         }
         return false;
