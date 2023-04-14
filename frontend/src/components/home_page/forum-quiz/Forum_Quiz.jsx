@@ -8,7 +8,7 @@ export default function Forum() {
       <h1 className="head">HAVE A QUESTION?</h1>
       <br />
       <div className="forum-body">
-        <img src={image} alt="forum pic" className="pic" />
+        <img src={image} alt="forum pic" className="pic img-fluid" />
         <p className="body">
           Use our forums to have discussions with users about different topics.
           Find the precise topic you are looking for in the Category List, then

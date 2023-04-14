@@ -78,7 +78,7 @@ export default function CommentBox({
       </div>
       <div className="col-8 col-sm-8 col-md-9 col-lg-9 ms-md-0 ms-3 pb-4">
         <div className="row g-0 justify-content-md-start justify-content-sm-center gy-2">
-          <div className="col-auto col-sm-12 align-self-sm-center  col-lg-1 col-md-1 me-md-3">
+          <div className="col-auto col-sm-12 align-self-sm-center col-lg-1 col-md-1 me-md-3">
             <Avatar
               sx={{
                 width: 45,

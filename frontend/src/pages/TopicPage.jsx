@@ -156,7 +156,7 @@ export default function TopicPage() {
   };
   return (
     topic.pageId &&
-    topicStatus === 'success' && (
+    topic.title === topicName && (
       <>
         <section id="visualizer">
           <AlgoFrame

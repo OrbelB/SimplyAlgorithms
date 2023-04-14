@@ -4,12 +4,9 @@ import { topicEndpoints } from './Api/topic';
 export const fetchTopicList = createAsyncThunk(
   'topic/getList',
   async (pageParams) => {
-    const { page, size, sortBy } = pageParams;
-    const response = await topicEndpoints
-      .list(page, size, sortBy)
-      .catch((error) => {
-        return error;
-      });
+    const { page, size, sortBy, title } = pageParams;
+    const response = await topicEndpoints.list(page, size, sortBy, title);
+
     return response.data;
   }
 );

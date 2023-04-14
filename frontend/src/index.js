@@ -8,6 +8,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { enableMapSet } from 'immer';
+import {
+  createTheme,
+  ThemeProvider,
+  responsiveFontSizes,
+} from '@mui/material/styles';
 
 import './index.css';
 import store from './store';
@@ -24,17 +29,21 @@ store.dispatch(
     size: 15,
   })
 );
+let theme = createTheme();
+theme = responsiveFontSizes(theme);
 enableMapSet();
 store.dispatch(fetchWikiLinks());
 store.dispatch(fetchSubCategories());
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>
+  <ThemeProvider theme={theme}>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
+  </ThemeProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

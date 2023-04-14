@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@mui/material';
+import { Button, Collapse, List } from '@mui/material';
 import KeyboardTabRoundedIcon from '@mui/icons-material/KeyboardTabRounded';
+import { TransitionGroup } from 'react-transition-group';
 import ChildComment from './ChildComment';
 import AddEditComment from './AddEditComment';
 import CommentBox from './CommentBox';
@@ -244,25 +245,34 @@ export default function Comment({
                 )}
               </div>
             </div>
-            {hasReplies && childrenComments.length > 0 && (
+            {hasReplies && (
               <>
                 <div className="row m-0 p-0 g-0 gy-4">
-                  {childrenComments?.map(({ comment }) => (
-                    <ChildComment
-                      roleName={comment?.createdBy?.roleName}
-                      key={comment.commentId}
-                      commentText={comment?.commentText}
-                      commentId={comment.commentId}
-                      createdDate={comment.createdDate}
-                      profilePicture={comment?.createdBy?.profilePicture}
-                      userId={comment?.createdBy?.userId}
-                      username={comment?.createdBy?.username}
-                      upVotes={comment.likes}
-                      downVotes={comment.dislikes}
-                      deleteChildComment={handleDeleteChildComment}
-                      editChildComment={handleEditChildComment}
-                    />
-                  ))}
+                  <List>
+                    <TransitionGroup>
+                      {childrenComments?.map(({ comment }) => {
+                        return (
+                          <Collapse key={comment.commentId}>
+                            <ChildComment
+                              roleName={comment?.createdBy?.roleName}
+                              commentText={comment?.commentText}
+                              commentId={comment.commentId}
+                              createdDate={comment.createdDate}
+                              profilePicture={
+                                comment?.createdBy?.profilePicture
+                              }
+                              userId={comment?.createdBy?.userId}
+                              username={comment?.createdBy?.username}
+                              upVotes={comment.likes}
+                              downVotes={comment.dislikes}
+                              deleteChildComment={handleDeleteChildComment}
+                              editChildComment={handleEditChildComment}
+                            />
+                          </Collapse>
+                        );
+                      })}
+                    </TransitionGroup>
+                  </List>
                 </div>
                 <div
                   className="row m-0 p-0 justify-content-start mt-2"
@@ -272,7 +282,6 @@ export default function Comment({
                   }
                 >
                   <Button
-                    component="button"
                     variant="outlined"
                     startIcon={<KeyboardTabRoundedIcon />}
                     disabled={

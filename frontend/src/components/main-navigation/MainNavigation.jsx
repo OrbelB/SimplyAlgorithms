@@ -15,12 +15,14 @@ import {
   Menu,
   Divider,
 } from '@mui/material';
+
 import image from '../../assets/nav-logo.png';
 import Logout from '../logout/Logout';
 import Notebook from '../notebook/Notebook';
 import Bell from './Bell';
 import DropdownMenu from './dropdown-menu/DropdownMenu';
 import './MainNavigation.css';
+import SearchBar from './SearchBar';
 
 const pages = [
   { name: 'Home', path: 'home' },
@@ -53,13 +55,14 @@ export default function MainNavigation() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const profilePicture = useSelector((state) => state.user.profilePicture);
   const navigate = useNavigate();
+
   const { wikiLinks } = useSelector((state) => state.wiki);
+
   const {
     handleOpenMenu: handleOpenNavMenu,
     handleCloseMenu: handleCloseNavMenu,
     anchorEl: anchorElNav,
   } = useAnchoEl();
-
   const {
     handleOpenMenu: handleOpenUserMenu,
     handleCloseMenu: handleCloseUserMenu,
@@ -99,7 +102,18 @@ export default function MainNavigation() {
         >
           <Container maxWidth="xxl">
             <Toolbar disableGutters>
-              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: { xs: 'flex', md: 'flex', lg: 'none' },
+                }}
+              >
+                <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
+                  <DropdownMenu
+                    dropdownTitle="Categories"
+                    nestedDropdownSelections={wikiLinks}
+                  />
+                </Box>
                 <IconButton
                   size="large"
                   aria-label="menu sm screen"
@@ -125,7 +139,7 @@ export default function MainNavigation() {
                   open={Boolean(anchorElNav)}
                   onClose={handleCloseNavMenu}
                   sx={{
-                    display: { xs: 'block', md: 'none' },
+                    display: { xs: 'block', md: 'block' },
                   }}
                 >
                   {pages.map(({ name, path }) => (
@@ -142,25 +156,22 @@ export default function MainNavigation() {
                 </Menu>
               </Box>
               <Box
-                component="img"
                 sx={{
-                  display: { sm: 'flex', md: 'none' },
-                  flexGrow: 1,
-                  fontWeight: 700,
-                  color: 'inherit',
-                  height: 40,
-                  width: 200,
-                  maxHeight: { xs: 60, md: 60 },
-                  maxWidth: { xs: 'auto', md: 250 },
+                  display: { xs: 'flex', sm: 'flex', md: 'flex', lg: 'none' },
                 }}
-                loading="lazy"
-                alt="logo"
-                src={image}
-              />
+              >
+                <SearchBar />
+              </Box>
               <Box
                 sx={{
                   flexGrow: 1,
-                  display: { xs: 'none', sm: 'none', md: 'flex' },
+                  display: {
+                    xs: 'none',
+                    sm: 'none',
+                    md: 'none',
+                    lg: 'flex',
+                    xl: 'flex',
+                  },
                 }}
               >
                 <DropdownMenu
@@ -188,11 +199,18 @@ export default function MainNavigation() {
                   </Button>
                 ))}
               </Box>
-              <Box component="div" sx={{ flexGrow: 2 }}>
+              <Box component="div" sx={{ flexGrow: 1 }}>
                 <Box
                   component="img"
+                  className="img-fluid"
                   sx={{
-                    display: { xs: 'none', lg: 'flex' },
+                    display: {
+                      xs: 'none',
+                      md: 'none',
+                      sm: 'none',
+                      lg: 'none',
+                      xl: 'flex',
+                    },
                     color: 'inherit',
 
                     textDecoration: 'none',
@@ -205,6 +223,15 @@ export default function MainNavigation() {
                   alt="logo"
                   src={image}
                 />
+              </Box>
+              <Box
+                sx={{
+                  flexGrow: 0,
+                  marginRight: 2,
+                  display: { xs: 'none', sm: 'none', md: 'none', lg: 'flex' },
+                }}
+              >
+                <SearchBar />
               </Box>
               {isLoggedIn && (
                 <Box component="div" className="me-2">

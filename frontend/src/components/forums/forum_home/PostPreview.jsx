@@ -1,12 +1,29 @@
 import './PostPreview.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMemo } from 'react';
+import { Card, Typography, CardContent } from '@mui/material';
+import { styled } from '@mui/system';
 import { forumActions } from '../../../store/reducers/forum-slice';
 import { fetchForumList } from '../../../services/forum';
 import ForumQuickView from './ForumQuickView';
 import AlertSnackBar from '../../alert-messages-snackbar/AlertSnackBar';
 import { forumsActions } from '../../../store/reducers/forums-slice';
 import usePaginationWithInfiniteScroll from '../../../hooks/use-pagination';
+
+const StyledCard = styled(Card)({
+  minWidth: '275px',
+  backgroundColor: '#f5f5f5',
+  boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.2)',
+});
+
+const StyledTitle = styled(Typography)({
+  fontWeight: 'bold',
+  marginBottom: '16px',
+});
+
+const StyledDescription = styled(Typography)({
+  color: 'rgba(0, 0, 0, 0.6)',
+});
 
 export default function PostPreview({ forums }) {
   const {
@@ -49,8 +66,8 @@ export default function PostPreview({ forums }) {
           removeData={removeReportId}
         />
       )}
-      <>
-        {showedForums.map((forum, index) => {
+      {showedForums.length > 0 ? (
+        showedForums.map((forum, index) => {
           if (showedForums.length === index + 1) {
             return (
               <ForumQuickView
@@ -74,8 +91,20 @@ export default function PostPreview({ forums }) {
               downVotes={forum?.downVotes}
             />
           );
-        })}
-      </>
+        })
+      ) : (
+        <StyledCard>
+          <CardContent>
+            <StyledTitle variant="h5" component="h2">
+              No forums found!
+            </StyledTitle>
+            <StyledDescription variant="body1" component="p">
+              There are currently no forums in the database that match with your
+              request.
+            </StyledDescription>
+          </CardContent>
+        </StyledCard>
+      )}
     </>
   );
 }

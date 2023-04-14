@@ -35,13 +35,25 @@
 }
 
 .filter-button {
-  background-color: #c3d5f8;
-  border-color: var(--color-border-input-form);
+  background-color: #25427a !important;
+  border-color: 15px solid var(--color-border-input-form) !important;
   font-family: 'Readex Pro', sans-serif;
-  font-size: 2em;
+  font-size: 1.5dvw;
   font-weight: bold;
-  width: 8em;
-  height: 3em;
+  width: 15dvw;
+  height: 8dvh;
+}
+
+@media screen and (max-width: 1500px) {
+  .filter-button {
+    font-size: 18px;
+    height: 60px;
+    padding-left: 12dvw;
+    padding-right: 12dvw;
+    padding-top: 3dvh;
+    padding-bottom: 3dvh;
+    width: 20dvw;
+  }
 }
 
 .first-filter {

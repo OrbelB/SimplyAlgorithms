@@ -10,12 +10,13 @@ export const topicEndpoints = {
         'Content-Type': 'application/json',
       },
     }),
-  list: (page, size, sortBy) =>
+  list: (page, size, sortBy, title) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/list`, {
       params: {
         page,
         size,
         sortBy,
+        title,
       },
     }),
   create: (topic, jwtAccessToken) =>

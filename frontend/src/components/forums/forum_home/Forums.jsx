@@ -1,5 +1,5 @@
 import './Forums.css';
-import { Input } from '@mui/material';
+import { Input, Button, ButtonGroup } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import PostPreview from './PostPreview';
@@ -52,41 +52,43 @@ export default function Forums() {
     <div className="forums-section container-fluid">
       <h1 className="forum-title text-center">FORUMS</h1>
       <div className="row justify-content-around align-self-center">
-        <div className="row filters pb-5 pt-2 d-flex justify-content-center">
-          <button
-            id="upVotes"
-            className="filter-button first-filter"
-            onClick={(e) => sortForums(e)}
-            type="button"
-          >
-            Top Rated
-          </button>
-          <button
-            id="createdDate"
-            className="filter-button"
-            onClick={(e) => sortForums(e)}
-            type="button"
-          >
-            New
-          </button>
-          <button
-            id="title"
-            className="filter-button"
-            onClick={(e) => sortForums(e)}
-            type="button"
-          >
-            Alphabetical
-          </button>
-          <button
-            id=""
-            className="filter-button last-filter"
-            onClick={(e) => sortForums(e)}
-            type="button"
-          >
-            Other
-          </button>
+        <div className="pb-5 pt-2 d-flex justify-content-center text-center">
+          <ButtonGroup variant="contained">
+            <Button
+              id="upVotes"
+              className="filter-button first-filter"
+              onClick={(e) => sortForums(e)}
+              type="button"
+            >
+              Top Rated
+            </Button>
+            <Button
+              id="createdDate"
+              className="filter-button"
+              onClick={(e) => sortForums(e)}
+              type="button"
+            >
+              New
+            </Button>
+            <Button
+              id="title"
+              className="filter-button"
+              onClick={(e) => sortForums(e)}
+              type="button"
+            >
+              Alphabetical
+            </Button>
+            <Button
+              id=""
+              className="filter-button last-filter"
+              onClick={(e) => sortForums(e)}
+              type="button"
+            >
+              Other
+            </Button>
+          </ButtonGroup>
         </div>
-        <div className="col-auto col-md-3">
+        <div className="col-auto col-lg-3 p-2 p-sm-2 p-md-2 p-lg-2">
           <div className="side1">
             <Tags />
           </div>
@@ -94,8 +96,8 @@ export default function Forums() {
         <div
           className={
             isLoggedIn
-              ? `col-auto col-md-6  text-center`
-              : 'col-auto col-md-10 col-lg-10 text-center'
+              ? `col-auto col-lg-6   p-2 p-sm-4 p-sx-4 p-md-4 text-center`
+              : 'col-auto col-lg-10 col-lg-10  p-2 p-sm-4 p-sx-4 p-md-4 text-center'
           }
         >
           <Post />
@@ -111,7 +113,7 @@ export default function Forums() {
         </div>
 
         {isLoggedIn && jwtAccessToken !== '' && (
-          <div className="col-auto col-md-3">
+          <div className="col-auto col-md-12 col-lg-3 p-lg-4 p=xs-2 p-sm-2 p-md-3 ">
             <div className="side2">
               <div className="recent-posts">
                 <h1 className="category-label">Recently Viewed Posts</h1>

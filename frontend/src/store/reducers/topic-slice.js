@@ -7,6 +7,7 @@ import {
   fetchSingleTopic,
   fetchTopicNames,
   getNameAvailability,
+  fetchTopicList,
 } from '../../services/topic';
 
 // initial state for slice  which defines the data for this specific domain
@@ -16,6 +17,9 @@ const initialState = {
   urlPath: null,
   status: 'idle',
   topicNames: [],
+  topicList: [],
+  topicListCurrPage: undefined,
+  topicListTotalPages: undefined,
   error: '',
   reportId: '',
   nameAvailable: null,
@@ -32,6 +36,9 @@ export const topicSlice = createSlice({
       state.nameAvailable = null;
       state.reportId = '';
       state.status = 'idle';
+      state.topicList = [];
+      state.topicListCurrPage = undefined;
+      state.topicListTotalPages = undefined;
       state.error = '';
       state.pageId = '';
       state.urlPath = null;
@@ -134,6 +141,20 @@ export const topicSlice = createSlice({
       })
       .addCase(getNameAvailability.rejected, (state) => {
         state.status = 'failed';
+      })
+      .addCase(fetchTopicList.pending, (state) => {
+        state.status = 'running';
+      })
+      .addCase(fetchTopicList.fulfilled, (state, action) => {
+        state.status = 'success';
+        const { number, content, totalPages } = action.payload;
+        state.topicListCurrPage = number;
+        state.topicList = content.concat(
+          state.topicList.filter(
+            (topic) => !content.find((t) => t.pageId === topic.pageId)
+          )
+        );
+        state.topicListTotalPages = totalPages;
       });
   },
 });
