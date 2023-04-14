@@ -171,6 +171,11 @@ export default function ForumPost() {
                 </div>
               </div>
               <div className="row">
+                <div className={cx(fp.postMidSection, 'col-auto col-md-2')}>
+                  Role: {forum?.userDto?.roleName}
+                </div>
+              </div>
+              <div className="row">
                 <div className={cx(fp.postBorderBottom, 'col-auto col-md-2')}>
                   Posted: {beautifyTime({ createdDate: forum?.createdDate })}
                 </div>

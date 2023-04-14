@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-nested-ternary */
 import { useState, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -132,10 +133,10 @@ export default function QuizScreen({
         <>
           <div className="question-section container">
             <div className="row justify-content-center">
-              <CountdownCircleTimer
+              {/* <CountdownCircleTimer
                 isPlaying
                 size={150}
-                duration={300}
+                duration={100}
                 colors={['#004777', '#F7B801', '#A30000', '#A30000']}
                 colorsTime={[7, 5, 2, 0]}
                 onComplete={() => {
@@ -152,7 +153,7 @@ export default function QuizScreen({
                     </span>
                   );
                 }}
-              </CountdownCircleTimer>
+              </CountdownCircleTimer> */}
               <div className="question-count text-center p-3 h1">
                 <span>Question {currentQuestion + 1}</span>/{questions.length}
                 <div className="question-text h3 pt-3">

@@ -62,19 +62,22 @@ export default function QuizDB({ userHistory }) {
                         Attempts: {attempts}
                       </Typography>
                       <Typography variant="body1">
+                        Average Score: {averageScore}
+                      </Typography>
+                      <Typography variant="body1">
                         Highest Score: {highestScore}
                       </Typography>
                       <Typography variant="body1">
                         Lowest Score: {lowestSore}
                       </Typography>
                       <Typography variant="body1">
-                        Average Time: {averageTime}
+                        Average Time: {averageTime} min
                       </Typography>
                       <Typography variant="body1">
-                        Best Time: {bestTime}
+                        Best Time: {bestTime} min
                       </Typography>
                       <Typography variant="body1">
-                        Worst Time: {worstTime}
+                        Worst Time: {worstTime} min
                       </Typography>
                     </Grid>
                   </Grid>
