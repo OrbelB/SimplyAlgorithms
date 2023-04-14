@@ -232,7 +232,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String message =
-                "You accounr has been unlocked you may log in at any time :) \n welcome back";
+                "You account has been unlocked you may log in at any time :) \n welcome back";
         String subject = "Account has been unlocked";
         user.setAccountNonLocked(accountNonLocked);
         if (!accountNonLocked) {
@@ -240,8 +240,8 @@ public class UserServiceImpl implements UserService {
             user.setAccountLockExpireDate(daysToTimestamp(lengthOfLock));
             String formattedTimestamp = user.getAccountLockExpireDate()
                     .toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            message = "Hello, \n your account has been locked by an admin and will be unocked on: "
-                    + formattedTimestamp +" \n If you belive this is an error Please reply to this email";
+            message = "Hello, \n your account has been locked by an admin and will be unlocked on: "
+                    + formattedTimestamp +" \n If you believe this is an error Please reply to this email";
             subject = "Account " + user.getUsername() + " has been locked";
 
         }

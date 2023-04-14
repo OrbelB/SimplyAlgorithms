@@ -19,6 +19,8 @@ public interface TopicService {
 
     ObjectPagedList<?> listTopicPages(Pageable pageable);
 
+    ObjectPagedList<?> listTopicPagesByTitle(String title, Pageable pageable);
+
     TopicInformation getTopicPage(UUID pageId);
 
     TopicInformation getTopicPage(String pageTitle);
@@ -46,5 +48,6 @@ public interface TopicService {
     boolean isPageNameUnique(String pageName);
 
     void updateUrlPath(UUID pageId, String urlPath);
+
 
 }

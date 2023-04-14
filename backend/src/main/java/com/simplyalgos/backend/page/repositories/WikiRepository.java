@@ -2,6 +2,7 @@ package com.simplyalgos.backend.page.repositories;
 
 import com.simplyalgos.backend.page.domains.Wiki;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 import java.util.Set;

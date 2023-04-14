@@ -8,6 +8,7 @@ import com.simplyalgos.backend.page.services.TopicService;
 import com.simplyalgos.backend.page.services.WikiService;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.security.perms.CreateReportPermission;
+import com.simplyalgos.backend.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -32,13 +34,17 @@ public class TopicController {
 
 
     @GetMapping("/list")
-    public ResponseEntity<?> listPages(@RequestParam(name = "page",  defaultValue = "0") Integer page,
-                                       @RequestParam(name = "size",  defaultValue = "5") Integer size,
-                                       @RequestParam(name = "sortBy", required = false) String sortBy) {
-        if (!(sortBy == null)) {
-            if (sortBy.equals("upVotes")) {
-                return ResponseEntity.ok(topicService.listTopicPages(PageRequest.of(page, size, Sort.by(sortBy).descending())));
+    public ResponseEntity<?> listPages(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                       @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                       @RequestParam(name = "sortBy", required = false) String sortBy,
+                                       @RequestParam(name = "title", required = false) String title) {
 
+        if (StringUtils.isNotNullAndEmptyOrBlank(title)) {
+            return ResponseEntity.ok(topicService.listTopicPagesByTitle(title, PageRequest.of(page, size)));
+        }
+        if (StringUtils.isNotNullAndEmptyOrBlank(sortBy)) {
+            if (Objects.equals(sortBy, "upVotes")) {
+                return ResponseEntity.ok(topicService.listTopicPages(PageRequest.of(page, size, Sort.by(sortBy).descending())));
             }
             return ResponseEntity.ok(topicService.listTopicPages(PageRequest.of(page, size, Sort.by(sortBy).ascending())));
         }
@@ -110,8 +116,8 @@ public class TopicController {
         return ResponseEntity.ok(wikiService.getWikiTopicsBasicInfo());
     }
 
-    @GetMapping(path ="name/available", produces = "application/json")
-    public ResponseEntity<?> isNameAvailable(@RequestParam(name = "name") String name){
+    @GetMapping(path = "name/available", produces = "application/json")
+    public ResponseEntity<?> isNameAvailable(@RequestParam(name = "name") String name) {
         return ResponseEntity.ok(topicService.isPageNameUnique(name.trim()));
     }
 

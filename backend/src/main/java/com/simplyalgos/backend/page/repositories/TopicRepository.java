@@ -1,6 +1,8 @@
 package com.simplyalgos.backend.page.repositories;
 
 import com.simplyalgos.backend.page.domains.Topic;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +22,9 @@ public interface TopicRepository extends JpaRepository<Topic, UUID> {
 
     boolean existsByTitle(String title);
 
+    <T> Page<T> findAllProjectedBy(Class<T> type, Pageable pageable);
+
+    <T> Page<T> findAllByTitleStartingWith(String title, Class<T> type, Pageable pageable);
 
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE topic_page SET url_path = :url_path  where page_id = :page_id")

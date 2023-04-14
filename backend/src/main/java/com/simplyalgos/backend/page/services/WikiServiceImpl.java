@@ -164,9 +164,9 @@ public class WikiServiceImpl implements WikiService {
         // remove the ones that are not in the list
         wikiTopicPageRepository.deleteByWikiTopicPageIdNotInAndWikiCategory(pageIds.stream()
                 .map(pageId -> WikiTopicPageId.builder()
-                            .wikiId(updateWiki.getWikiId())
-                            .pageId(pageId)
-                            .build()
+                        .wikiId(updateWiki.getWikiId())
+                        .pageId(pageId)
+                        .build()
                 ).collect(Collectors.toSet()), updateWiki);
     }
 
@@ -197,9 +197,7 @@ public class WikiServiceImpl implements WikiService {
                     .collect(Collectors.toSet())
             );
             newWiki.setIsParentChild("child");
-        } else if (wiki.getWikiIds() != null && wiki.getWikiIds().
-
-                size() > 0) {
+        } else if (wiki.getWikiIds() != null && wiki.getWikiIds().size() > 0) {
             // map the sub categories or sub wikis to the wiki
             newWiki.setWikiChildren(wiki.getWikiIds().stream()
                     .map(wikiRepository::getReferenceById)
@@ -215,10 +213,7 @@ public class WikiServiceImpl implements WikiService {
         } else {
             newWiki.setIsParentChild("child");
         }
-        return wikiRepository.save(newWiki).
-
-                getWikiName();
-
+        return wikiRepository.save(newWiki).getWikiName();
     }
 
 

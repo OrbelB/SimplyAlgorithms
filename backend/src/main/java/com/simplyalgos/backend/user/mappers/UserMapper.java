@@ -15,10 +15,6 @@ public interface UserMapper {
     @Mapping(target = "role", ignore = true)
     UserDTO userToUserDto(User user);
 
-
-
-
-
     @Mapping(target = "role" ,
             expression = "java(user.getRoles().stream()" +
                     ".findFirst().orElseThrow()" +

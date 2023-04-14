@@ -13,6 +13,7 @@ import com.simplyalgos.backend.page.mappers.TopicMapper;
 import com.simplyalgos.backend.page.repositories.*;
 import com.simplyalgos.backend.page.repositories.projection.TopicInformation;
 import com.simplyalgos.backend.page.repositories.projection.TopicNameAndIDOnly;
+import com.simplyalgos.backend.page.repositories.projection.TopicNameAndLinkInformation;
 import com.simplyalgos.backend.report.dtos.PageReportDTO;
 import com.simplyalgos.backend.report.services.PageReportService;
 import com.simplyalgos.backend.user.services.UserService;
@@ -66,14 +67,24 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public ObjectPagedList<?> listTopicPages(Pageable pageable) {
-        Page<Topic> topicPage = topicRepository.findAll(pageable);
+        Page<TopicNameAndLinkInformation> topicPage = topicRepository.findAllProjectedBy(TopicNameAndLinkInformation.class, pageable);
         return new ObjectPagedList<>(
-                topicPage
-                        .stream()
-                        .map(topicMapper::topicToFullTopicDTO)
-                        .collect(Collectors.toList()),
+                topicPage.toList(),
                 PageRequest.of(topicPage.getPageable().getPageNumber(),
-                        topicPage.getPageable().getPageSize()
+                        topicPage.getPageable().getPageSize(),
+                        topicPage.getPageable().getSort()
+                ),
+                topicPage.getTotalElements());
+    }
+
+    @Override
+    public ObjectPagedList<?> listTopicPagesByTitle(String title, Pageable pageable) {
+        Page<TopicNameAndLinkInformation> topicPage = topicRepository.findAllByTitleStartingWith(title, TopicNameAndLinkInformation.class, pageable);
+        return new ObjectPagedList<>(
+                topicPage.toList(),
+                PageRequest.of(topicPage.getPageable().getPageNumber(),
+                        topicPage.getPageable().getPageSize(),
+                        topicPage.getPageable().getSort()
                 ),
                 topicPage.getTotalElements());
     }
@@ -206,7 +217,7 @@ public class TopicServiceImpl implements TopicService {
                                 .topicPage(topic)
                                 .title(externalResource.getTitle())
                                 .build());
-                    }else {
+                    } else {
                         TopicExternalResource topicExternalResource = topicExternalResourceRepository.findById(topicExternalResourceId).orElseThrow();
                         topicExternalResource.setTitle(externalResource.getTitle());
                     }
@@ -235,7 +246,7 @@ public class TopicServiceImpl implements TopicService {
                         .topicPage(page)
                         .codeText(codeSnippetDTO.getCodeText())
                         .build());
-            }else {
+            } else {
                 CodeSnippet codeSnippet = codeSnippetRepository.findById(codeSnippetId).orElseThrow();
                 codeSnippet.setCodeText(codeSnippetDTO.getCodeText());
             }

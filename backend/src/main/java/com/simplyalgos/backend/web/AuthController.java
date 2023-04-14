@@ -1,5 +1,6 @@
 package com.simplyalgos.backend.web;
 
+import com.simplyalgos.backend.exceptions.CustomAccountLockedException;
 import com.simplyalgos.backend.exceptions.UserNotAuthorizedException;
 import com.simplyalgos.backend.user.dtos.ChangePasswordDTO;
 import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
@@ -45,7 +46,7 @@ public class AuthController {
 //                log.debug("account Lock expired now logging in user");
                 return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(authService.login(loginDTO));
             }
-            throw new UserNotAuthorizedException(MessageFormat
+            throw new CustomAccountLockedException(MessageFormat
                     .format("User: {0} account is locked, please check email for lock expire date", loginDTO.username()));
         }
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(authService.login(loginDTO));

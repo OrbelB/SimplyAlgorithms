@@ -26,5 +26,4 @@ public class ScheduleTask {
 //        passwordResetTokenService.printAllTokens();
         passwordResetTokenService.deleteExpiredPasswordResetTokens();
     }
-
 }
