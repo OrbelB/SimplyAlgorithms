@@ -21,6 +21,9 @@ export default function QuizDB({ userHistory }) {
             attempts,
             highestScore,
             lowestSore,
+            worstTime,
+            averageTime,
+            bestTime,
           }) => (
             <Grid key={nanoid()} item xs={12} md={6} lg={4}>
               <Card
@@ -63,6 +66,15 @@ export default function QuizDB({ userHistory }) {
                       </Typography>
                       <Typography variant="body1">
                         Lowest Score: {lowestSore}
+                      </Typography>
+                      <Typography variant="body1">
+                        Average Time: {averageTime}
+                      </Typography>
+                      <Typography variant="body1">
+                        Best Time: {bestTime}
+                      </Typography>
+                      <Typography variant="body1">
+                        Worst Time: {worstTime}
                       </Typography>
                     </Grid>
                   </Grid>
