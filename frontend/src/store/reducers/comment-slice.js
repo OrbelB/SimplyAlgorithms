@@ -81,15 +81,20 @@ export const commentSlice = createSlice({
       .addCase(fetchChildrenComments.fulfilled, (state, action) => {
         state.status = 'success';
         const { rootId } = action.payload.content[0];
-        state.commentChildrenCurrPages = state.commentChildrenCurrPages.set(
-          String(rootId),
-          action.payload.number
-        );
+        const { number, totalPages } = action.payload;
+        if (
+          number === 0 &&
+          state.commentChildrenCurrPages.get(String(rootId)) === undefined
+        ) {
+          state.commentChildrenCurrPages = state.commentChildrenCurrPages.set(
+            String(rootId),
+            number
+          );
+        }
         state.commentChildrenTotalPages = state.commentChildrenTotalPages.set(
           String(rootId),
-          action.payload.totalPages
+          totalPages
         );
-
         const childrenComments = action.payload?.content?.map((comment) => {
           comment.parentCommentId = comment?.rootId;
           comment.comment.createdDate = new Date(

@@ -97,7 +97,10 @@ export default function PubNoteList({ notes }) {
             >
               <div className="card-body">
                 <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
-                <div className="card-text m-2">
+                <h6 className="text-secondary m-2">
+                  {`Created By: ${userNoteDTO?.createdBy?.username}`}
+                </h6>
+                <div className="card-text m-3">
                   {handleNoteBodyHTML(userNoteDTO?.noteBody)}
                 </div>
                 <div className="m-2 mb-0 d-flex justify-content-between">

@@ -4,13 +4,14 @@ import cx from 'classnames';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
+import { TextField, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+
 import useValidateInput from '../../hooks/use-ValidateInput';
 import { login } from '../../services/auth';
-import styles from './LoginForm.module.css';
 import PasswordReset from './PasswordReset';
 import ConfirmPopup from '../confirmation/ConfirmPopup';
 import ForgotUsername from './ForgotUsername';
-
 // function useErrorMessage() {
 //   const [errorMessage, setErrorMessage] = useState('');
 //   const { status, error } = useSelector((state) => state.auth);
@@ -78,6 +79,10 @@ export default function LoginForm() {
     }
   }, [status, handleCheckbox, jwtRefreshToken, resetUsernameHandler]);
 
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   const headermes = 'PASSWORD RESET';
   const bodymes =
     'If the username matches a username we will send the user a reset password email, remeber to check the spam folder :)';
@@ -105,85 +110,59 @@ export default function LoginForm() {
           <p className="text-center small">{error}</p>
         </div>
       )}
-      <form onSubmit={onSubmitFormHandler}>
-        <div className="row  justify-content-between mt-5 mb-1">
-          <div className="col-auto m-0 p-0">
-            <label className="form-label" htmlFor="username-form">
-              Username
-            </label>
-          </div>
-          {usernameInputHasError && (
-            <div className="col-auto p-0 m-1 alert alert-danger">
-              <p className="text-center small mt-2">
-                username cannot be empty!
-              </p>
-            </div>
-          )}
-        </div>
-        <div
-          className={cx(
-            'row border border-2 rounded-5',
-            styles[`row-input-style${!usernameInputHasError ? '' : '-invalid'}`]
-          )}
-        >
-          <input
+      <form onSubmit={onSubmitFormHandler} className="mt-5 mb-5">
+        <div className={cx('row mb-5')}>
+          <TextField
+            label="Username"
             type="username"
+            fullWidth
+            name="username"
+            helperText={
+              usernameInputHasError
+                ? 'username cannot be empty!'
+                : 'enter your username or email'
+            }
+            error={usernameInputHasError}
             id="username-form"
-            placeholder="username"
-            className={cx('p-auto', styles['input-style'])}
             onChange={usernameChangedHandler}
             onBlur={usernameBlurHandler}
             value={username}
             required
           />
         </div>
-        <div className="row  justify-content-between mt-5 m-0">
-          <div className="col-auto m-0 p-0">
-            <label className="form-label m-0 mb-2 p-0" htmlFor="password-form">
-              Password
-            </label>
-          </div>
-          {passwordInputHasError && (
-            <div className="col-auto ms-0 p-1 alert alert-danger align-content-center">
-              <p className="text-center small">password cannot be empty!</p>
-            </div>
-          )}
-        </div>
-        <div
-          className={cx(
-            'row justify-content-between border border-2 rounded-5',
-            styles[`row-input-style${!passwordInputHasError ? '' : '-invalid'}`]
-          )}
-        >
-          <div className="col-auto col-sm-10 col-md-10 col-lg-10 col-sm-auto align-self-center">
-            <input
-              autoComplete="off"
-              type={isPasswordVisible ? 'text' : 'password'}
-              id="password-form"
-              placeholder="*******"
-              onChange={passwordChangedHandler}
-              onBlur={passwordBlurHandler}
-              value={password}
-              className={cx('p-auto', styles['input-style'])}
-              required
-            />
-          </div>
-          <div className="col-auto col-sm-auto align-self-center me-auto me-lg-2">
-            <i
-              role="button"
-              className={cx(
-                `bi bi-eye${isPasswordVisible ? '' : '-slash'}`,
-                styles['password-visible-style']
-              )}
-              onClick={handlePasswordVisibility}
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'start') {
-                  handlePasswordVisibility();
-                }
-              }}
-            />
-          </div>
+        <div className={cx('row mb-5')}>
+          <TextField
+            fullWidth
+            error={passwordInputHasError}
+            autoComplete="off"
+            label="Password"
+            id="password-form"
+            type={isPasswordVisible ? 'text' : 'password'}
+            name="password"
+            helperText={
+              passwordInputHasError
+                ? 'password cannot be empty!'
+                : 'Enter your password'
+            }
+            onChange={passwordChangedHandler}
+            onBlur={passwordBlurHandler}
+            value={password}
+            required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handlePasswordVisibility}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
         </div>
         <div className="row justify-content-center justify-content-sm-between mt-5">
           <div className="col-auto col-md-4">

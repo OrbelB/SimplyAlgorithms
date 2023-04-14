@@ -17,11 +17,6 @@ export default function Categories() {
       <br />
       <br />
       <div className="categories">
-        <button type="button" className="t0 topic">
-          <NavLink to="/wiki/Main Category" onClick={handleRedirect}>
-            <p className="stuff">What Are Algorithms?</p>
-          </NavLink>
-        </button>
         <div className="row justify-content-center">
           {subCategories.map((subCategory) => (
             <button
