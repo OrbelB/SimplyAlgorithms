@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import Chart from 'react-apexcharts';
 import { useDispatch } from 'react-redux';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import { Button } from '@mui/material';
 import { submitQuiz } from '../../../services/quiz';
 
 import './QuizScreen.css';
@@ -76,6 +77,16 @@ export default function QuizScreen({
     [userSelectAnswer]
   );
 
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
+
   return (
     <div className="quiz-screen p-5">
       {showScore ? (
@@ -112,7 +123,10 @@ export default function QuizScreen({
               </button>
             </NavLink>
           </div>
-          <Report />
+          <Button type="button" variant="contained" onClick={handleOpenReport}>
+            Report
+          </Button>
+          <Report open={openReport} handleClose={handleCloseReport} />
         </div>
       ) : (
         <>
@@ -148,7 +162,7 @@ export default function QuizScreen({
             </div>
           </div>
           <div className="row">
-            <div className="answer-section text-center">
+            <div className="answer-section d-flex flex-column align-items-center">
               {questions[currentQuestion].answers.map((answer, index) => (
                 <button
                   id={answer.answerId}
@@ -156,6 +170,10 @@ export default function QuizScreen({
                   type="button"
                   disabled={userSelectAnswer.position !== -1}
                   className={buttonStyle(answer, index)}
+                  style={{
+                    margin: '10px',
+                    display: 'block',
+                  }}
                   onClick={() =>
                     handleAnswerOptionClick(answer.isCorrect, index)
                   }

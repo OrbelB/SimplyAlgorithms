@@ -21,14 +21,14 @@
   text-align: center;
   text-decoration: underline;
 }
-.quetion {
+.question {
   white-space: pre-wrap;
   font-size: 25px;
-  padding: 2% 5% 5% 5%;
+  padding: 2% 5% 5% 3%;
   text-align: left;
 }
 .vote {
-  margin-left: 1%;
+  margin-left: 3%;
   padding: 1%;
   width: 20%;
 }

@@ -1,5 +1,8 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import Report from '../report/Report';
 import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 
 export default function OptionsMenu({
@@ -26,12 +29,24 @@ export default function OptionsMenu({
 
   const permission = authUserId === userId || isAdmin;
   const seeOptions = permission || canReply || isAdmin;
+
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
+
   return (
     seeOptions && (
       <div className="btn-group dropdown-center">
         <i
           role="button"
           className="dropdown-toggle-split bi bi-three-dots-vertical"
+          style={{ fontSize: '25px' }}
           data-bs-toggle="dropdown"
           aria-expanded="false"
           tabIndex={0}
@@ -76,6 +91,16 @@ export default function OptionsMenu({
               Reply
             </i>
           )}
+          <i
+            className="dropdown-item bi bi-flag-fill text-primary"
+            role="button"
+            onClick={handleOpenReport}
+            tabIndex={0}
+          >
+            {' '}
+            Report
+          </i>
+          <Report open={openReport} handleClose={handleCloseReport} />
         </div>
       </div>
     )

@@ -187,21 +187,23 @@ export default function ForumPost() {
                 />
               ))}
             </div>
-            <div className={cx('row justify-content-center')}>
-              <p className={cx(fp.quetion, 'overflow-auto fw-normal lh-base')}>
+            <div className={cx('row justify-content-left')}>
+              <p className={cx(fp.question, 'overflow-auto fw-normal lh-base')}>
                 {forum?.descriptionText}
               </p>
             </div>
-            <Vote
-              status={forumVoteStatus}
-              deleteVote={deleteForumVote}
-              votePage={voteForum}
-              selectByVoteId={selectByForumVoteId}
-              pageId={forum?.pageId}
-              like_={forum?.upVotes}
-              dislike_={forum?.downVotes}
-              user_voted_={forum?.upVotes > 0 || forum.downVotes > 0}
-            />
+            <div className={cx('row justify-content-left')}>
+              <Vote
+                status={forumVoteStatus}
+                deleteVote={deleteForumVote}
+                votePage={voteForum}
+                selectByVoteId={selectByForumVoteId}
+                pageId={forum?.pageId}
+                like_={forum?.upVotes}
+                dislike_={forum?.downVotes}
+                user_voted_={forum?.upVotes > 0 || forum.downVotes > 0}
+              />
+            </div>
           </div>
         </div>
         <div className="col-12">

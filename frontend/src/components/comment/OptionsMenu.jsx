@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import Report from '../report/Report';
 
 export default function OptionMenu({
   userId,
@@ -23,6 +25,16 @@ export default function OptionMenu({
   };
   const permission = authUserId === userId;
   const seeOptions = permission || canReply;
+
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
   return (
     seeOptions && (
       <div className="btn-group dropup-center">
@@ -56,6 +68,16 @@ export default function OptionMenu({
               Edit
             </i>
           )}
+          <i
+            className="dropdown-item bi bi-flag-fill text-primary"
+            role="button"
+            onClick={handleOpenReport}
+            tabIndex={0}
+          >
+            {' '}
+            Report
+          </i>
+          <Report open={openReport} handleClose={handleCloseReport} />
           {canReply && (
             <i
               role="button"

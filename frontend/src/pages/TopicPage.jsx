@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Slide, useScrollTrigger } from '@mui/material';
+import { Button, Slide, useScrollTrigger } from '@mui/material';
+import FlagIcon from '@mui/icons-material/Flag';
 import {
   fetchSingleTopic,
   fetchVotes,
   deleteTopicVote,
   voteTopic,
 } from '../services/topic';
+import Report from '../components/report/Report';
 import { fetchParentComments, listVotesByPage } from '../services/comment';
 import NavbarTopic from '../components/navbarFortopic/NavbarTopic';
 import Vote from '../components/vote_comp/Vote';
@@ -143,6 +145,15 @@ export default function TopicPage() {
     jwtAccessToken,
   ]);
 
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
   return (
     topic.pageId &&
     topicStatus === 'success' && (
@@ -162,15 +173,27 @@ export default function TopicPage() {
           in={!isScrolling && open}
         >
           <div>
-            <Vote
-              status={topicVoteStatus}
-              deleteVote={deleteTopicVote}
-              selectByVoteId={selectByTopicVoteId}
-              votePage={voteTopic}
-              pageId={topic?.pageId}
-              like_={topic.upVotes ?? 0}
-              dislike_={topic.downVotes ?? 0}
-            />
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Vote
+                status={topicVoteStatus}
+                deleteVote={deleteTopicVote}
+                selectByVoteId={selectByTopicVoteId}
+                votePage={voteTopic}
+                pageId={topic?.pageId}
+                like_={topic.upVotes ?? 0}
+                dislike_={topic.downVotes ?? 0}
+              />
+              <Button
+                type="button"
+                variant="contained"
+                startIcon={<FlagIcon />}
+                style={{ fontSize: '15px', marginLeft: '1rem' }}
+                onClick={handleOpenReport}
+              >
+                Report
+              </Button>
+              <Report open={openReport} handleClose={handleCloseReport} />
+            </div>
           </div>
         </Slide>
         <Slide

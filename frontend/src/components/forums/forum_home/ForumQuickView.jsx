@@ -1,14 +1,16 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import FlagIcon from '@mui/icons-material/Flag';
 import {
   Typography,
   Card,
   CardActionArea,
   CardActions,
   Avatar,
+  Button,
 } from '@mui/material';
-import Report from '../report/Report';
+import Report from '../../report/Report';
 import './PostPreview.css';
 import { forumActions } from '../../../store/reducers/forum-slice';
 import { forumVoteActions } from '../../../store/reducers/forum-vote-slice';
@@ -35,6 +37,16 @@ export default function ForumQuickView({
     dispatch(forumsActions.resetData());
     navigate(`${pageId}`);
   }, [dispatch, navigate, pageId]);
+
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
 
   return (
     <Card
@@ -80,7 +92,20 @@ export default function ForumQuickView({
             <i className="bi bi-hand-thumbs-down ms-4"> {` ${downVotes}`}</i>
           </div>
           <div className="col-4 m-0 p-0 align-self-end">
-            {isLoggedIn && <Report pageId={pageId} />}
+            {isLoggedIn && (
+              <>
+                <Button
+                  type="button"
+                  variant="contained"
+                  startIcon={<FlagIcon />}
+                  sx={{ fontSize: '15px' }}
+                  onClick={handleOpenReport}
+                >
+                  Report
+                </Button>
+                <Report open={openReport} handleClose={handleCloseReport} />
+              </>
+            )}
           </div>
         </div>
       </CardActions>

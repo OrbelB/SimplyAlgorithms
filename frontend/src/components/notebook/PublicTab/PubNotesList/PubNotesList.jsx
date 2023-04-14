@@ -74,6 +74,16 @@ export default function PubNoteList({ notes }) {
     return parsedContent;
   }, []);
 
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
+
   return (
     <>
       {noteSaved.status && alertMessage}
@@ -91,7 +101,14 @@ export default function PubNoteList({ notes }) {
                   {handleNoteBodyHTML(userNoteDTO?.noteBody)}
                 </div>
                 <div className="m-2 mb-0 d-flex justify-content-between">
-                  <Report />
+                  <Button
+                    type="button"
+                    variant="contained"
+                    onClick={handleOpenReport}
+                  >
+                    Report
+                  </Button>
+                  <Report open={openReport} handleClose={handleCloseReport} />
                   <Button
                     variant="contained"
                     color={saved[index] ? 'error' : 'success'}

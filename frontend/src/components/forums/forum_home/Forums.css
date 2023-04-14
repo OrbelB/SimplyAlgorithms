@@ -1,100 +1,98 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .forums-section {
-    width: 100%;
-    background-color: #d1fbff;
-    background-image: url("https://www.transparenttextures.com/patterns/gplay.png");
+  width: 100%;
+  background-color: #d1fbff;
+  background-image: url('https://www.transparenttextures.com/patterns/gplay.png');
 }
 
 .forum-title {
-    font-size: 7em;
-    font-family: 'Readex Pro', sans-serif;
-    padding-bottom: 0.5em;
-    text-shadow: -1px 1px #7e57c2,
-               -2px 2px #2196f3,
-               -3px 3px #26c6da,
-               -4px 4px #43a047;
+  font-size: 7em;
+  font-family: 'Readex Pro', sans-serif;
+  padding-bottom: 0.5em;
+  text-shadow: -1px 1px #7e57c2, -2px 2px #2196f3, -3px 3px #26c6da,
+    -4px 4px #43a047;
 }
 
 .category-label {
-    font-size: 3em;
-    font-weight: bold;
+  font-size: 3em;
+  font-weight: bold;
 }
 
 .search-bar {
-    background-color: #eff8f8;
-    border-radius: 5px 5px 5px 5px;
-    color: black;
-    font-size: 1.3em;
-    padding: 0.5em 1.5em 0.5em 1em;
-    width: 85%;
+  background-color: #eff8f8;
+  border-radius: 5px 5px 5px 5px;
+  color: black;
+  font-size: 1.3em;
+  padding: 0.5em 1.5em 0.5em 1em;
+  width: 85%;
 }
 
 .btn-group {
-    color: black;
-    flex-direction: column; 
-    padding-top: 1em;
+  color: black;
+  flex-direction: column;
+  padding-top: 1em;
 }
 
 .filter-button {
-    background-color: #c3d5f8;
-    border-color: var(--color-border-input-form);
-    font-family: 'Readex Pro', sans-serif;
-    font-size: 1.8em;
-    font-weight: bold;
-    width: 7.5em;
-    height: 3em;
+  background-color: #c3d5f8;
+  border-color: var(--color-border-input-form);
+  font-family: 'Readex Pro', sans-serif;
+  font-size: 2em;
+  font-weight: bold;
+  width: 8em;
+  height: 3em;
 }
 
 .first-filter {
-    border-radius: 10px 0px 0px 10px;
+  border-radius: 10px 0px 0px 10px;
 }
 
 .last-filter {
-    border-radius: 0px 10px 10px 0px;
+  border-radius: 0px 10px 10px 0px;
 }
 
 .row-style {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
 .column {
-    display: flex;
-    flex-direction: row;
-    flex-basis: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-basis: 100%;
 }
 
 .side1 {
-    text-align: center;
-    flex: 0.3;
-    margin-right: 3%;
+  text-align: center;
+  flex: 0.3;
+  margin-right: 3%;
 }
 
 .side2 {
-    text-align: center;
-    flex: 0.3;
-    margin-left: 3%;
+  text-align: center;
+  flex: 0.3;
+  margin-left: 3%;
 }
 
 .middle {
-    text-align: center;
-    flex: 0.9;
+  text-align: center;
+  flex: 0.9;
 }
 
 .filters {
-    text-align: center;
+  text-align: center;
 }
 
 /*For mobile */
 
 @media (max-width: 1200px) {
-    .column {
-        flex-direction: column;
-    }
-    
-    .category {
-        font-size: 1.5em;
-    }
+  .column {
+    flex-direction: column;
+  }
+
+  .category {
+    font-size: 1.5em;
+  }
 }

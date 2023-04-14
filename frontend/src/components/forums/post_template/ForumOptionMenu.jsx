@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Report from '../../report/Report';
 import { deleteForum } from '../../../services/forum';
 import { forumsActions } from '../../../store/reducers/forums-slice';
 import useJwtPermssionExists from '../../../hooks/use-jwtPermission';
@@ -34,12 +37,24 @@ export default function ForumOptionMenu({ pageId, userId }) {
   };
 
   const permission = authUserId === userId || isAdmin;
+
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
+
   return (
     permission && (
       <div className="btn-group dropdown-center align-self-start p-0">
         <i
           role="button"
           className="dropdown-toggle-split bi bi-three-dots"
+          style={{ fontSize: '25px' }}
           data-bs-toggle="dropdown"
           aria-expanded="false"
         />
@@ -72,6 +87,16 @@ export default function ForumOptionMenu({ pageId, userId }) {
             {' '}
             Edit
           </i>
+          <i
+            className="dropdown-item bi bi-flag-fill text-primary"
+            role="button"
+            onClick={handleOpenReport}
+            tabIndex={0}
+          >
+            {' '}
+            Report
+          </i>
+          <Report open={openReport} handleClose={handleCloseReport} />
         </div>
       </div>
     )

@@ -61,10 +61,10 @@ export default function Forums() {
           className={
             isLoggedIn
               ? `col-auto col-md-6  text-center`
-              : 'col-auto col-md-9 col-lg-9 text-center'
+              : 'col-auto col-md-10 col-lg-10 text-center'
           }
         >
-          <div className="filters pb-5 pt-2">
+          <div className="filters pb-5 pt-2 d-flex justify-content-center">
             <button
               id="upVotes"
               className="filter-button first-filter"

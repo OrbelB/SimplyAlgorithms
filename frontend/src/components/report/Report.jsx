@@ -43,11 +43,7 @@ const reasons = [
   },
 ];
 
-export default function BasicModal() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
+export default function BasicModal({ open, handleClose }) {
   const [selectedReason, setSelectedReason] = useState('');
   const [reportDesc, setReportDesc] = useState('');
   const [theReport, setTheReport] = useState([]);
@@ -74,9 +70,6 @@ export default function BasicModal() {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleOpen}>
-        Report
-      </Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -94,8 +87,8 @@ export default function BasicModal() {
             Report
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Did you want to report something you saw. Well you are at the right
-            place. Follow the instructions below.
+            Reporting something? We&apos;re here to help. Please follow the
+            instructions below based on the type of report you need to make.
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField
@@ -135,7 +128,11 @@ export default function BasicModal() {
             <Button type="submit" variant="contained" color="primary">
               submit
             </Button>
-            <Button onClick={handleClear} variant="outlined">
+            <Button
+              onClick={handleClear}
+              sx={{ marginLeft: '1rem' }}
+              variant="outlined"
+            >
               Reset
             </Button>
           </form>
