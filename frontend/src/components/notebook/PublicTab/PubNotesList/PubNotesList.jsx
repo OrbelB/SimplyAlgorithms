@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@mui/material';
 import parse from 'html-react-parser';
 import draftToHtml from 'draftjs-to-html';
+import FlagIcon from '@mui/icons-material/Flag';
 import Report from '../../../report/Report';
 import usePaginationWithInfiniteScroll from '../../../../hooks/use-pagination';
 import { updateCurrentPublicNotePage } from '../../../../store/reducers/note-slice';
@@ -108,6 +109,7 @@ export default function PubNoteList({ notes }) {
                     type="button"
                     variant="contained"
                     onClick={handleOpenReport}
+                    startIcon={<FlagIcon />}
                   >
                     Report
                   </Button>
@@ -133,7 +135,15 @@ export default function PubNoteList({ notes }) {
                 {handleNoteBodyHTML(userNoteDTO?.noteBody)}
               </div>
               <div className="m-2 mb-0 d-flex justify-content-between">
-                <Report />
+                <Button
+                  type="button"
+                  variant="contained"
+                  onClick={handleOpenReport}
+                  startIcon={<FlagIcon />}
+                >
+                  Report
+                </Button>
+                <Report open={openReport} handleClose={handleCloseReport} />
                 <Button
                   variant="contained"
                   color={saved[index] ? 'error' : 'success'}
