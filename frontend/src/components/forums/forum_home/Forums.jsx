@@ -52,6 +52,40 @@ export default function Forums() {
     <div className="forums-section container-fluid">
       <h1 className="forum-title text-center">FORUMS</h1>
       <div className="row justify-content-around align-self-center">
+        <div className="row filters pb-5 pt-2 d-flex justify-content-center">
+          <button
+            id="upVotes"
+            className="filter-button first-filter"
+            onClick={(e) => sortForums(e)}
+            type="button"
+          >
+            Top Rated
+          </button>
+          <button
+            id="createdDate"
+            className="filter-button"
+            onClick={(e) => sortForums(e)}
+            type="button"
+          >
+            New
+          </button>
+          <button
+            id="title"
+            className="filter-button"
+            onClick={(e) => sortForums(e)}
+            type="button"
+          >
+            Alphabetical
+          </button>
+          <button
+            id=""
+            className="filter-button last-filter"
+            onClick={(e) => sortForums(e)}
+            type="button"
+          >
+            Other
+          </button>
+        </div>
         <div className="col-auto col-md-3">
           <div className="side1">
             <Tags />
@@ -64,40 +98,6 @@ export default function Forums() {
               : 'col-auto col-md-10 col-lg-10 text-center'
           }
         >
-          <div className="filters pb-5 pt-2 d-flex justify-content-center">
-            <button
-              id="upVotes"
-              className="filter-button first-filter"
-              onClick={(e) => sortForums(e)}
-              type="button"
-            >
-              Top Rated
-            </button>
-            <button
-              id="createdDate"
-              className="filter-button"
-              onClick={(e) => sortForums(e)}
-              type="button"
-            >
-              New
-            </button>
-            <button
-              id="title"
-              className="filter-button"
-              onClick={(e) => sortForums(e)}
-              type="button"
-            >
-              Alphabetical
-            </button>
-            <button
-              id=""
-              className="filter-button last-filter"
-              onClick={(e) => sortForums(e)}
-              type="button"
-            >
-              Other
-            </button>
-          </div>
           <Post />
           <br />
           <br />
