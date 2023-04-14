@@ -12,6 +12,7 @@ import {
   Divider,
   CardActions,
 } from '@mui/material';
+import UserSearchModal from './UserSearchModal/UserSearchModal';
 import { updateUserRole, checkAvailability } from '../../../services/user';
 import AlertSnackBar from '../../alert-messages-snackbar/AlertSnackBar';
 
@@ -80,6 +81,34 @@ export default function UserSearchSection() {
 
   const canRequestRoleChange =
     userIdOrUsername !== '' && roleToChangeTo !== '' && !nameAvailable;
+
+  const [openUserReports, setOpenUserReports] = useState(false);
+
+  const handleOpenUserReports = () => {
+    setOpenUserReports(true);
+  };
+
+  const handleCloseUserReports = () => {
+    setOpenUserReports(false);
+  };
+
+  const reports = [
+    {
+      reportId: '123',
+      foreignId: '456',
+      culpritUser: '789',
+      victimUser: '101',
+      resolvedBy: '112',
+      typeOfForeignId: 'something',
+      category: 'profanity',
+      report: 'some description',
+      resolveNote: 'Removed offensive language.',
+      reportDate: '2022-03-25 09:30:00',
+      resolveDate: '2022-03-25 10:30:00',
+      isResolved: 'Yes',
+    },
+    // additional report objects
+  ];
   return (
     <>
       {alertSnackBarType}
@@ -234,10 +263,15 @@ export default function UserSearchSection() {
               variant="contained"
               color="success"
               size="large"
-              type="submit"
+              onClick={handleOpenUserReports}
             >
               Search Reports
             </Button>
+            <UserSearchModal
+              reports={reports}
+              open={openUserReports}
+              handleClose={handleCloseUserReports}
+            />
           </CardActions>
         </Card>
       </form>
