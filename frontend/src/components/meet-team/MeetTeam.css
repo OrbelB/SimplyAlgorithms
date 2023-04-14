@@ -37,6 +37,7 @@
     display: flex;
     flex-direction: row;
     gap: 5%;
+    width: fit-content;
 }
 
 .member-name {
@@ -52,10 +53,8 @@
 .n4 { background-color: #05c26d;}
 
 .portrait {
-    background-color: lightgray;
-    border-radius: 40%;
-    width: 10em; 
-    height: 10em;
+    max-width: 370px;
+    max-height: 490px;
 }
 
 .member-bio {
@@ -133,7 +132,8 @@
     100% { background-position: 0 0; }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 1024px) {
+
     .team-members {
         flex-direction: column;
     }
@@ -144,5 +144,10 @@
 
     .bio-space {
         margin-bottom: 10%;
+    }
+
+    .portrait {
+        width: fit-content;
+        height: fit-content;
     }
 }
