@@ -11,13 +11,10 @@
   display: flex;
 }
 
-
 .head {
   font-size: 4em;
   font-family: 'Readex Pro', sans-serif;
-  text-shadow: -1.3px 1.3px #2196f3,
-  -2.6px 2.6px #43a047,
-  -3.9px 3.9px #ff5722;
+  text-shadow: -1.3px 1.3px #2196f3, -2.6px 2.6px #43a047, -3.9px 3.9px #ff5722;
 }
 
 .pic {
@@ -29,6 +26,7 @@
   margin: 25px;
   margin-top: 0;
 }
+
 .body {
   font-family: 'Readex Pro', sans-serif;
   font-size: 1.5em;
@@ -45,6 +43,7 @@
   padding: 10px;
   margin-bottom: 50px;
 }
+
 .fbtext {
   font-family: 'Readex Pro', sans-serif;
   color: white;
@@ -73,6 +72,7 @@
     justify-content: center;
     flex-wrap: wrap;
   }
+
   .pic {
     width: auto;
     height: 10em;

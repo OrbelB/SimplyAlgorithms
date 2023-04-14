@@ -73,12 +73,12 @@ export default function WikiHome({
           </div>
           {isAdmin && (
             <div className="col-auto">
-              <div className="row-cols pb-5">
+              <div className="row-cols mb-3">
                 <Button
                   disabled={disabled}
                   variant="contained"
                   color="success"
-                  size="small"
+                  size="medium"
                   onClick={handleAdd}
                 >
                   CREATE A NEW WIKI

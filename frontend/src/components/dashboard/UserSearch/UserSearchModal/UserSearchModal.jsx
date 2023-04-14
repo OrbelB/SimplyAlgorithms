@@ -81,7 +81,7 @@ export default function ReportTable({ reports, open, handleClose }) {
                     <TableCell>{report.typeOfForeignId}</TableCell>
                     <TableCell>{report.category}</TableCell>
                     <TableCell onClick={() => handleReportClick(report)}>
-                      {report.report.substring(0, 50)}
+                      {report.report.substring(0, 50) + ' ...'}
                     </TableCell>
                     <TableCell>{report.resolveNote}</TableCell>
                     <TableCell>{report.reportDate}</TableCell>

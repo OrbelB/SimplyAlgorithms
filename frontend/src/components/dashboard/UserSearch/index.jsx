@@ -101,13 +101,13 @@ export default function UserSearchSection() {
       resolvedBy: '112',
       typeOfForeignId: 'something',
       category: 'profanity',
-      report: 'some description',
-      resolveNote: 'Removed offensive language.',
-      reportDate: '2022-03-25 09:30:00',
-      resolveDate: '2022-03-25 10:30:00',
+      report:
+        'here will be a description of the report, and this will be seen once clicked',
+      resolveNote: 'Removed offensive language',
+      reportDate: '2022-03-25',
+      resolveDate: '2022-03-25',
       isResolved: 'Yes',
     },
-    // additional report objects
   ];
   return (
     <>
