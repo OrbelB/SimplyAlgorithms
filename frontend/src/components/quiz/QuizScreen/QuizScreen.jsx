@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import Chart from 'react-apexcharts';
 import { useDispatch } from 'react-redux';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import { Button } from '@mui/material';
+import { Button, Avatar } from '@mui/material';
 import { submitQuiz } from '../../../services/quiz';
 
 import './QuizScreen.css';
@@ -156,6 +156,20 @@ export default function QuizScreen({
               </CountdownCircleTimer> */}
               <div className="question-count text-center p-3 h1">
                 <span>Question {currentQuestion + 1}</span>/{questions.length}
+                <div className="margin-bottom-lg"> </div>
+                {questions[currentQuestion].picture !== '' &&
+                  questions[currentQuestion].picture !== null && (
+                    <span>
+                      <Avatar
+                        sx={{ width: 350, height: 350 }}
+                        src={questions[currentQuestion].picture}
+                        className="mx-auto my-3"
+                        alt="quiz picture"
+                        loading="lazy"
+                        variant="rounded"
+                      />
+                    </span>
+                  )}
                 <div className="question-text h3 pt-3">
                   {questions[currentQuestion].question}
                 </div>
