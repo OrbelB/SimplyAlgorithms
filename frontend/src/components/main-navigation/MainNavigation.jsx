@@ -52,11 +52,16 @@ function useAnchoEl() {
 }
 
 export default function MainNavigation() {
+  const [selectedTab, setSelectedTab] = useState(pages[0].name);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const profilePicture = useSelector((state) => state.user.profilePicture);
   const navigate = useNavigate();
 
   const { wikiLinks } = useSelector((state) => state.wiki);
+
+  const handleSelectedTab = (name) => {
+    setSelectedTab(name);
+  };
 
   const {
     handleOpenMenu: handleOpenNavMenu,
@@ -182,9 +187,13 @@ export default function MainNavigation() {
                   <Button
                     key={name}
                     onClick={() => {
+                      handleSelectedTab(name);
                       handleCloseNavMenu();
                       navigate(`/${path}`);
                     }}
+                    className={`nav-item${
+                      selectedTab === name ? ' selected' : ''
+                    }`}
                     sx={{
                       p: 2,
                       color: 'black',
