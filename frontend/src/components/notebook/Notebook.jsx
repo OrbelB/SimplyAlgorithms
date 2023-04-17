@@ -14,6 +14,7 @@ import {
 } from '../../services/note';
 
 export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
+  const [selectedTab, setSelectedTab] = useState(1);
   const [NoteTab, setNoteTab] = useState(1);
   const { userId, jwtAccessToken } = useSelector((state) => state.auth);
   const [drawerWidth, setDrawerWidth] = useState('45vw');
@@ -27,6 +28,7 @@ export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
   };
 
   const handleTabChange = async (newValue) => {
+    setSelectedTab(newValue);
     switch (newValue) {
       case 1:
         if (NoteTab === 1) break;
@@ -92,30 +94,36 @@ export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
         <ButtonGroup className="btn-group d-flex flex-row flex-wrap justify-content-center">
           <Button
             type="button"
-            className="btn btn-danger d-inline-flex flex-grow-0"
+            className={`btn btn-danger d-inline-flex flex-grow-0 ${
+              selectedTab === 1 ? 'text-decoration-underline fw-bold' : ''
+            }`}
             variant="contained"
             color="error"
-            style={{ fontSize: '17px', height: '35px', minWidth: '100px' }}
+            style={{ fontSize: '20px', height: '40px', minWidth: '100px' }}
             onClick={() => handleTabChange(1)}
           >
             Private
           </Button>
           <Button
             type="button"
-            className="btn btn-success d-inline-flex flex-grow-0"
+            className={`btn btn-success d-inline-flex flex-grow-0 ${
+              selectedTab === 2 ? 'text-decoration-underline fw-bold' : ''
+            }`}
             variant="contained"
             color="success"
-            style={{ fontSize: '17px', height: '35px', minWidth: '100px' }}
+            style={{ fontSize: '20px', height: '40px', minWidth: '100px' }}
             onClick={() => handleTabChange(2)}
           >
             Public
           </Button>
           <Button
             type="button"
-            className="btn btn-secondary d-inline-flex flex-grow-0"
+            className={`btn btn-secondary d-inline-flex flex-grow-0 ${
+              selectedTab === 3 ? 'text-decoration-underline fw-bold' : ''
+            }`}
             variant="contained"
             color="secondary"
-            style={{ fontSize: '17px', height: '35px', minWidth: '100px' }}
+            style={{ fontSize: '20px', height: '40px', minWidth: '100px' }}
             onClick={() => handleTabChange(3)}
           >
             Shared
