@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-nested-ternary */
 import { useState, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import Chart from 'react-apexcharts';
 import { useDispatch } from 'react-redux';
-import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Button, Avatar } from '@mui/material';
 import { submitQuiz } from '../../../services/quiz';
 
@@ -20,6 +18,7 @@ export default function QuizScreen({
   stop,
   jwtAccessToken,
   startedAt,
+  userDto,
   finishedAt,
 }) {
   const dispatch = useDispatch();
@@ -141,33 +140,19 @@ export default function QuizScreen({
           >
             Report
           </Button>
-          <Report open={openReport} handleClose={handleCloseReport} />
+          <Report
+            open={openReport}
+            handleClose={handleCloseReport}
+            culpritUserId={userDto?.userId}
+            foreignId={quizId}
+            typeOfForeignId="quiz"
+            victumUserId={userId}
+          />
         </div>
       ) : (
         <>
           <div className="question-section container">
             <div className="row justify-content-center">
-              {/* <CountdownCircleTimer
-                isPlaying
-                size={150}
-                duration={100}
-                colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-                colorsTime={[7, 5, 2, 0]}
-                onComplete={() => {
-                  setShowScore(true);
-                }}
-              >
-                {({ remainingTime }) => {
-                  const hours = Math.floor(remainingTime / 3600);
-                  const minutes = Math.floor((remainingTime % 3600) / 60);
-                  const seconds = remainingTime % 60;
-                  return (
-                    <span className="h3 countbar text-center">
-                      {hours}:{minutes}:{seconds}
-                    </span>
-                  );
-                }}
-              </CountdownCircleTimer> */}
               <div className="question-count text-center p-3 h1">
                 <span>Question {currentQuestion + 1}</span>/{questions.length}
                 <div className="margin-bottom-lg"> </div>

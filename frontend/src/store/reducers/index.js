@@ -13,6 +13,7 @@ import { forumVotesSlice } from './forum-vote-slice';
 import { quizSlice } from './quiz-slice';
 import { wikiSlice } from './wiki-slice';
 import { noteSlice } from './note-slice';
+import { reportSlice } from './report-slice';
 
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   quiz: quizSlice.reducer,
   wiki: wikiSlice.reducer,
   note: noteSlice.reducer,
+  report: reportSlice.reducer,
 });
 
 export default rootReducer;

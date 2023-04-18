@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button } from '@mui/material';
 import draftToHtml from 'draftjs-to-html';
 import parse from 'html-react-parser';
@@ -12,6 +13,8 @@ export default function ShareNoteCard({
   userNoteDTO,
   handleClick,
 }) {
+  const { userId } = useSelector((state) => state.auth);
+  const [openReport, setOpenReport] = useState(false);
   const body = useMemo(() => {
     let htmlContent = draftToHtml(userNoteDTO?.noteBody);
     htmlContent = htmlContent.replace(
@@ -20,8 +23,6 @@ export default function ShareNoteCard({
     );
     return parse(htmlContent);
   }, [userNoteDTO?.noteBody]);
-
-  const [openReport, setOpenReport] = useState(false);
 
   const handleOpenReport = () => {
     setOpenReport(true);
@@ -56,7 +57,14 @@ export default function ShareNoteCard({
           >
             Report
           </Button>
-          <Report open={openReport} handleClose={handleCloseReport} />
+          <Report
+            culpritUserId={userNoteDTO?.createdBy?.userId}
+            foreignId={userNoteDTO.noteId}
+            typeOfForeignId="note"
+            victumUserId={userId}
+            open={openReport}
+            handleClose={handleCloseReport}
+          />
           <Button onClick={() => handleClick(noteShareDTO, userNoteDTO)}>
             View
           </Button>

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import cx from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { voteComment, deleteCommentVote } from '../../services/comment';
@@ -13,6 +13,10 @@ export default function Votes({ commentId, upVotes, downVotes }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [votes, setVotes] = useState(upVotes - downVotes);
+
+  useEffect(() => {
+    setVotes(upVotes - downVotes);
+  }, [upVotes, downVotes]);
   const {
     userId: authUserID,
     jwtAccessToken,

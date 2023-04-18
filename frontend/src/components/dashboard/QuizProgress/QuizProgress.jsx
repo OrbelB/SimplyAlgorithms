@@ -30,7 +30,7 @@ export default function QuizProgress({ userHistory }) {
     <div>
       {currentUserInfo.map(() => {
         return (
-          <div key={() => nanoid()} className="container-fluid">
+          <div key={nanoid()} className="container-fluid">
             <div className="d-flex justify-content-center align-items-center flex-column">
               {(isAdmin || isTeacher) && (
                 <div className="text-end">

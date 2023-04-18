@@ -26,7 +26,7 @@ export default function ForumQuickView({
   downVotes,
   innerRef,
 }) {
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, userId: victimId } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const removeData = useCallback(() => {
@@ -103,7 +103,14 @@ export default function ForumQuickView({
                 >
                   Report
                 </Button>
-                <Report open={openReport} handleClose={handleCloseReport} />
+                <Report
+                  open={openReport}
+                  handleClose={handleCloseReport}
+                  culpritUserId={userDto.userId}
+                  foreignId={pageId}
+                  typeOfForeignId="forum"
+                  victumUserId={victimId}
+                />
               </>
             )}
           </div>

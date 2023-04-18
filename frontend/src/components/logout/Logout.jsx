@@ -14,6 +14,7 @@ import { quizActions } from '../../store/reducers/quiz-slice';
 import { topicVoteActions } from '../../store/reducers/topic-votes-slice';
 import { commentActions } from '../../store/reducers/comment-slice';
 import { resetData } from '../../store/reducers/note-slice';
+import { reportActions } from '../../store/reducers/report-slice';
 
 export default function Logout({ handleLogout }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -37,6 +38,7 @@ export default function Logout({ handleLogout }) {
     dispatch(forumActions.resetData());
     dispatch(commentActions.resetData());
     dispatch(resetData());
+    dispatch(reportActions.resetData());
     // remove refresh token cookie
     Cookies.remove('refresh-token');
     handleLogout(!showModal);

@@ -20,12 +20,12 @@ export default function useLoginUser(redirectTo) {
 
   useEffect(() => {
     if (isLoggedIn && profilePicture === templateImage) {
-      if (status === 'idle') {
-        dispatch(fetchUser({ userId, jwtAccessToken }));
+      if (status === 'idle' || status === 'success') {
         dispatch(fetchUserDayStreak({ userId, jwtAccessToken }));
         dispatch(
           fetchUserNotifications({ userId, page: 0, size: 12, jwtAccessToken })
         );
+        dispatch(fetchUser({ userId, jwtAccessToken }));
       }
     }
     if (status === 'succeeded') {

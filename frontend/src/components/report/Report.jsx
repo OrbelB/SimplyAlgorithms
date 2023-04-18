@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   Box,
   Button,
@@ -9,8 +8,10 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import CloseIcon from '@mui/icons-material/Close';
 import './Report.css';
+import { createReport } from '../../services/universalReport';
 
 const style = {
   position: 'absolute',
@@ -43,12 +44,65 @@ const reasons = [
   },
 ];
 
-export default function BasicModal({ open, handleClose }) {
+function useReport({
+  foreignId,
+  typeOfForeignId,
+  victumUserId,
+  culpritUserId,
+  category,
+  report,
+}) {
+  const { jwtAccessToken } = useSelector((state) => state.auth);
+  const [reportFinished, setReportFinished] = useState(false);
+  const dispatch = useDispatch();
+
+  const submitReport = async () => {
+    try {
+      await dispatch(
+        createReport({
+          universalReportDTO: {
+            foreignId,
+            typeOfForeignId,
+            victimUser: victumUserId,
+            culpritUser: culpritUserId,
+            catagory: category,
+            report,
+          },
+          jwtAccessToken,
+        })
+      ).unwrap();
+    } finally {
+      setReportFinished(true);
+    }
+  };
+
+  return {
+    reportFinished,
+    submitReport,
+    setReportFinished,
+  };
+}
+
+export default function BasicModal({
+  open,
+  handleClose,
+  foreignId,
+  typeOfForeignId,
+  victumUserId,
+  culpritUserId,
+}) {
   const [selectedReason, setSelectedReason] = useState('');
   const [reportDesc, setReportDesc] = useState('');
-  const [theReport, setTheReport] = useState([]);
-
-  const handleSubmit = (e) => {
+  const [, setTheReport] = useState([]);
+  const { submitReport } = useReport({
+    foreignId,
+    typeOfForeignId,
+    victumUserId,
+    culpritUserId,
+    category: selectedReason,
+    report: reportDesc,
+  });
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setTheReport((oldArray) => [
       ...oldArray,
@@ -58,16 +112,19 @@ export default function BasicModal({ open, handleClose }) {
         description: reportDesc,
       },
     ]);
-    setSelectedReason('');
-    setReportDesc('');
-    handleClose();
+    try {
+      await submitReport();
+    } finally {
+      setSelectedReason('');
+      setReportDesc('');
+      handleClose();
+    }
   };
 
   const handleClear = () => {
     setSelectedReason('');
     setReportDesc('');
   };
-
   return (
     <div>
       <Modal

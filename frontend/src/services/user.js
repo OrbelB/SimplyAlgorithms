@@ -14,11 +14,11 @@ export const fetchUser = createAsyncThunk(
   }
 );
 
-export const deleteUser = createAsyncThunk(
+export const deleteAccount = createAsyncThunk(
   'user/delete',
   async (passedParams) => {
-    const { userId, accessToken } = passedParams;
-    const response = await userEndpoints.delete(userId, accessToken);
+    const { userId, jwtAccessToken } = passedParams;
+    const response = await userEndpoints.delete(userId, jwtAccessToken);
 
     return response.data;
   }
@@ -126,6 +126,21 @@ export const updateUserRole = createAsyncThunk(
     const response = await userEndpoints.updateRole(
       usernameOrId,
       role,
+      jwtAccessToken
+    );
+    return response.data;
+  }
+);
+
+export const requestLockAccount = createAsyncThunk(
+  'user/lock-account',
+  async (passedParams) => {
+    const { usernameOrId, accountLockedSwitch, daysToLock, jwtAccessToken } =
+      passedParams;
+    const response = await userEndpoints.lockAccount(
+      usernameOrId,
+      accountLockedSwitch,
+      daysToLock,
       jwtAccessToken
     );
     return response.data;

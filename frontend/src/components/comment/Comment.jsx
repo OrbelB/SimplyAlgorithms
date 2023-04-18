@@ -249,8 +249,8 @@ export default function Comment({
               <>
                 <div className="row m-0 p-0 g-0 gy-4">
                   <List>
-                    <TransitionGroup>
-                      {childrenComments?.map(({ comment }) => {
+                    <TransitionGroup appear>
+                      {childrenComments.map(({ comment }) => {
                         return (
                           <Collapse key={comment.commentId}>
                             <ChildComment

@@ -50,7 +50,7 @@ export default function JoinQuiz({
             />
           </div>
         </div>
-        <div className="col-md-2 qinfo col-6 mb-3">
+        <div className="col-md-2 qinfo col-sm-9 mb-3">
           <div className="text-left mb-2">
             <h5>Questions</h5>
             <p className="fs-4">{amountOfQuestions}</p>
@@ -65,6 +65,9 @@ export default function JoinQuiz({
         <div className="col-auto text-end">
           <OptionsMenu
             handleOnDelete={handleDeleteQuiz}
+            culpritUserId={createdBy?.userId}
+            foreignId={quiz.quizId}
+            typeOfForeignId="quiz"
             handleOnEdit={handleEditQuiz}
             userId={createdBy.userId}
           />

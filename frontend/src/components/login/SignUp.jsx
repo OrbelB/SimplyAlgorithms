@@ -3,30 +3,37 @@ import Modal from 'react-bootstrap/Modal';
 import { Container, Row } from 'react-bootstrap';
 import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import validator from 'validator';
 import useValidateInput from '../../hooks/use-ValidateInput';
 import { register } from '../../services/auth';
 import imageToStringBase64 from '../../utilities/image-to-data-url';
 import { checkAvailability } from '../../services/user';
+import useLoginUser from '../../hooks/use-loginuser';
 
 export default function SignUp({ showSignUp, handleOnClose }) {
-  const { status } = useSelector((state) => state.auth);
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { userId } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const validEmailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   const [image, setImage] = useState(undefined);
   const [dob, setDob] = useState('');
-  const [submitPostRegister, setSubmitPostRegister] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const showImage = useMemo(() => {
     return image ? URL.createObjectURL(image) : null;
   }, [image]);
+  const location = useLocation();
+  // if there is not a history of prev pages visited returned to home
+  const redirectTo = location?.state?.from?.pathname || '/home';
+  useLoginUser(redirectTo);
+
   useEffect(() => {
-    if (status === 'success') {
+    if (isLoggedIn && userId) {
       handleOnClose(!showSignUp);
     }
-  }, [status, handleOnClose, showSignUp]);
+  }, [handleOnClose, isLoggedIn, showSignUp, userId]);
+
   const { nameAvailable, emailAvailable } = useSelector((state) => state.user);
 
   const {
@@ -106,26 +113,28 @@ export default function SignUp({ showSignUp, handleOnClose }) {
     if (!isFormValid) return;
     let profilePicture;
     await imageToStringBase64(image).then((value) => (profilePicture = value));
-    dispatch(
-      register({
-        lastName,
-        firstName,
-        username,
-        password,
-        email,
-        dob,
-        profilePicture,
-      })
-    );
-    emailReset();
-    usernameReset();
-    rePasswordReset();
-    passwordReset();
-    setImage(undefined);
-    setDob('');
-    setFirstName('');
-    setLastName('');
-    setSubmitPostRegister(!submitPostRegister);
+    try {
+      await dispatch(
+        register({
+          lastName,
+          firstName,
+          username,
+          password,
+          email,
+          dob,
+          profilePicture,
+        })
+      ).unwrap();
+    } finally {
+      emailReset();
+      usernameReset();
+      rePasswordReset();
+      passwordReset();
+      setImage(undefined);
+      setDob('');
+      setFirstName('');
+      setLastName('');
+    }
   };
 
   const handleImage = (e) => {

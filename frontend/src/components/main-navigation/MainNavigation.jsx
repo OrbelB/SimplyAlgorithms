@@ -9,11 +9,11 @@ import {
   IconButton,
   Box,
   MenuItem,
-  Button,
   Tooltip,
   Avatar,
   Menu,
   Divider,
+  Button,
 } from '@mui/material';
 
 import image from '../../assets/nav-logo.png';
@@ -185,6 +185,7 @@ export default function MainNavigation() {
                 />
                 {pages.map(({ name, path }) => (
                   <Button
+                    type="button"
                     key={name}
                     onClick={() => {
                       handleSelectedTab(name);
@@ -208,7 +209,11 @@ export default function MainNavigation() {
                   </Button>
                 ))}
               </Box>
-              <Box component="div" sx={{ flexGrow: 1 }}>
+              <Box
+                component="div"
+                className="navbar-brand"
+                sx={{ flexGrow: 1 }}
+              >
                 <Box
                   component="img"
                   className="img-fluid"

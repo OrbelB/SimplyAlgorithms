@@ -96,7 +96,14 @@ export default function ForumOptionMenu({ pageId, userId }) {
             {' '}
             Report
           </i>
-          <Report open={openReport} handleClose={handleCloseReport} />
+          <Report
+            open={openReport}
+            handleClose={handleCloseReport}
+            culpritUserId={userId}
+            foreignId={pageId}
+            typeOfForeignId="forum"
+            victumUserId={authUserId}
+          />
         </div>
       </div>
     )

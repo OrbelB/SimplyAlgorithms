@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-filename-extension */
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-
+import { useSelector, useDispatch } from 'react-redux';
 import NotificationTab from './components/settings/NotificationTab/NotificationTab';
 import RequireAuth from './components/authentication/RequireAuth';
 import ScrollToTop from './hooks/ScrollToTop';
@@ -10,6 +9,8 @@ import useRefreshToken from './hooks/use-refreshToken';
 import Layout from './components/layout/Layout';
 import { wikiActions } from './store/reducers/wiki-slice';
 import LoadingBackdrop from './components/loading/LoadingBackdrop';
+import AlertSnackBar from './components/alert-messages-snackbar/AlertSnackBar';
+import { reportActions } from './store/reducers/report-slice';
 
 const AccountTab = lazy(() =>
   import('./components/settings/AccountTab/AccountTab')
@@ -47,10 +48,38 @@ const ForumPost = lazy(() =>
 );
 
 function App() {
-  useRefreshToken();
+  const { status, reportId } = useSelector((state) => state.report);
+  const dispatch = useDispatch();
 
+  const showAlertReportSubmitted = useMemo(() => {
+    if (status === 'success' && reportId) {
+      return (
+        <AlertSnackBar
+          passedMessage={`your report with Id ${reportId} has been submitted`}
+          typeMessage="success"
+          removeData={() => {
+            dispatch(reportActions.removeReportId());
+          }}
+        />
+      );
+    }
+    if (status === 'failed' && reportId) {
+      return (
+        <AlertSnackBar
+          passedMessage="Something went wrong, please try again later!"
+          typeMessage="error"
+          removeData={() => {
+            dispatch(reportActions.removeReportId());
+          }}
+        />
+      );
+    }
+    return null;
+  }, [dispatch, reportId, status]);
+  useRefreshToken();
   return (
     <Layout>
+      {showAlertReportSubmitted}
       <Suspense fallback={<LoadingBackdrop />}>
         <ScrollToTop />
         <Routes>

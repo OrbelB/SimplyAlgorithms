@@ -127,6 +127,9 @@ export default function CommentBox({
       <div className="col-2 col-sm-1 col-md-1 col-lg-1 align-self-start p-3 p-lg-0 p-md-0">
         <OptionMenu
           userId={userId}
+          culpritUserId={userId}
+          foreignId={commentId}
+          typeOfForeignId="comment"
           handleDeleteMessage={handleDeleteMessage}
           handleIsEditCommentOpen={handleIsEditCommentOpen}
           handleCancelComment={handleCancelComment}

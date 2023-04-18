@@ -50,21 +50,6 @@ export default function Quizhome() {
 
   return (
     <div className="">
-      {/* <div className="p-5 top-quizhome">
-        <div className="row justify-content-center">
-          <h1 className="quiz-logo">Quizzes</h1>
-          <div className="form-outline w-50 mb-5">
-            <input
-              onChange={handleSearchQuiz}
-              type="search"
-              id="form1"
-              className="form-control"
-              placeholder="Search Here..."
-              aria-label="Search"
-            />
-          </div>
-        </div>
-      </div> */}
       <div className="p-5 bottom-home vh-100">
         <h1 className="quiz-logo text-center">QUIZZES</h1>
         <div className="row justify-content-between quiz-home-buttons mx-auto">

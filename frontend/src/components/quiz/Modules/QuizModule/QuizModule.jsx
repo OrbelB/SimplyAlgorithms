@@ -53,7 +53,7 @@ export default function QuizModule() {
             dispatch(quizActions.updateQuizScore({ score: e.target.value }));
           }}
         />
-        <div className="w-100">
+        <div className="m-0 p-0">
           <TagForm currentTags={currentTags} setCurrentTags={handleTags} />
         </div>
       </div>

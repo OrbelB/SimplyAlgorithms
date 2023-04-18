@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 import React from 'react';
 import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
@@ -11,7 +12,7 @@ export default function Footer() {
       <div className="row g-0 border-bottom border-top border-dark justify-content-center justify-content-sm-center justify-content-md-between">
         <div className="col-12 col-md-12 g-0 col-lg-3 col-xl-3 mt-4 text-center">
           <img
-            className={cx(style['web-logo'], 'ms-4')}
+            className={cx(style['web-logo'], 'ms-4 img-fluid')}
             src={image}
             alt="Simply Algorithms Logo"
             height="200"
@@ -132,7 +133,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="m-2">
-        <div className={cx(style.web_service)}>
+        <div className={cx(style['web_service'])}>
           <h6 className="text-center">
             Privacy Notice © 2022 OJKJ Inc. All Right Reserved
           </h6>

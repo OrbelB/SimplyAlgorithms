@@ -1,5 +1,5 @@
 import { Card } from 'react-bootstrap';
-import './PostPreview_noratings.css';
+// import './PostPreview_noratings.css';
 import { nanoid } from '@reduxjs/toolkit';
 import { CardContent, CardHeader, Typography } from '@mui/material';
 

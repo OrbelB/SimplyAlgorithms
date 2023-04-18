@@ -18,6 +18,7 @@ export default function AlgoFrame({
   vizTitle,
   vizSource,
   topicName,
+  createdBy,
   pageId,
 }) {
   const { userId, jwtAccessToken } = useSelector((state) => state.auth);
@@ -93,6 +94,9 @@ export default function AlgoFrame({
               handleOnDelete={handleOnDelete}
               handleOnEdit={handleOnEdit}
               userId={userId}
+              culpritUserId={createdBy?.userId}
+              foreignId={pageId}
+              typeOfForeignId="topic"
             />
           </div>
         ) : null}
