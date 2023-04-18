@@ -55,7 +55,7 @@ export default function QuizDB({ quizList, status }) {
                         </p>
                         <p className="text-center">Max Score: {score}</p>
                       </div>
-                      <div className="row">{description}</div>
+                      <div className="row text-center">{description}</div>
                       <div>
                         <Avatar
                           sx={{ width: 250, height: 250 }}
