@@ -11,14 +11,14 @@ export const userEndpoints = {
         Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
-  delete: (userId, accessToken) =>
+  delete: (userIdOrUsername, jwtAccessToken) =>
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
+      params: {
+        userIdOrUsername,
+      },
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken,
-      },
-      params: {
-        userId,
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
   available: (username, email) =>
@@ -124,11 +124,17 @@ export const userEndpoints = {
         Authorization: 'Bearer ' + jwtAccessToken,
       },
     }),
-  lockAccount: (usernameOrId, accountNonLocked, jwtAccessToken) =>
+  lockAccount: (
+    usernameOrId,
+    accountLockedSwitch,
+    daysToLock,
+    jwtAccessToken
+  ) =>
     put(`${PUBLIC_ENDPOINT_ROUTE}/lock-account`, null, {
       params: {
         usernameOrId,
-        accountNonLocked,
+        accountLockedSwitch,
+        daysToLock,
       },
       headers: {
         'Content-Type': 'application/json',

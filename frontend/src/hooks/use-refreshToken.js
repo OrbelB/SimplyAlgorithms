@@ -17,7 +17,7 @@ export default function useRefreshToken() {
   const [once, setOnce] = useState(true);
 
   useEffect(() => {
-    if (jwtRefreshToken !== '' && once) {
+    if (jwtRefreshToken !== '' && once && !isLoggedIn) {
       setOnce(false);
       dispatch(refreshAccessToken(jwtRefreshToken));
     }
@@ -30,10 +30,10 @@ export default function useRefreshToken() {
       profilePicture === image
     ) {
       dispatch(fetchUserDayStreak({ userId, jwtAccessToken }));
-      dispatch(fetchUser({ userId, jwtAccessToken }));
       dispatch(
         fetchUserNotifications({ userId, page: 0, size: 12, jwtAccessToken })
       );
+      dispatch(fetchUser({ userId, jwtAccessToken }));
     }
 
     if (profilePicture !== image && !isLoggedIn) {

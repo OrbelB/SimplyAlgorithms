@@ -31,15 +31,31 @@ export default function JoinQuiz({
     navigate(`/quiz/${quiz.quizId}/edit`);
   };
   return (
-    <div className="join-screen container-fluid vh-100 p-5">
-      <div key={quiz.quizId} className="row">
-        <div className="col-md-8">
-          <h1 className="qname text-center display-4 mb-5">
-            {quiz.title.toUpperCase()}
-          </h1>
-          {/* <h5 className="qdescription m-5 text-left">{quizDTO.title}</h5> */}
+    <div className="join-screen container-fluid min-vh-100 p-3">
+      <div className="row">
+        <div className="col-xs-12 col-md-8">
+          <div className="row">
+            <h1 className="qname text-center display-4 mb-5">
+              {quiz.title.toUpperCase()}
+            </h1>
+          </div>
+          <div className="row justify-content-center">
+            <img
+              className="img-fluid"
+              loading="lazy"
+              style={{ maxHeight: 800, maxWidth: 650 }}
+              src="https://cdn.pixabay.com/photo/2015/04/28/07/55/mindset-743166__340.jpg"
+              alt="quiz"
+            />
+          </div>
+          <div className="row">
+            <p className=" text-start display-5 mb-5">
+              some random text to describe what the quiz is all about and what
+              the user can expect
+            </p>
+          </div>
         </div>
-        <div className="col-md-2 qinfo col-6 mb-3">
+        <div className="col-md-2 qinfo col-sm-9 mb-3">
           <div className="text-left mb-2">
             <h5>Questions</h5>
             <p className="fs-4">{amountOfQuestions}</p>
@@ -52,6 +68,9 @@ export default function JoinQuiz({
         <div className="col-auto text-end">
           <OptionsMenu
             handleOnDelete={handleDeleteQuiz}
+            culpritUserId={createdBy?.userId}
+            foreignId={quiz.quizId}
+            typeOfForeignId="quiz"
             handleOnEdit={handleEditQuiz}
             userId={createdBy.userId}
           />

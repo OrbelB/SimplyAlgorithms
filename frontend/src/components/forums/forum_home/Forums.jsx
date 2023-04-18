@@ -118,11 +118,11 @@ export default function Forums() {
         <div
           className={
             isLoggedIn
-              ? `col-auto col-lg-6   p-2 p-sm-4 p-sx-4 p-md-4 text-center`
-              : 'col-auto col-lg-10 col-lg-10  p-2 p-sm-4 p-sx-4 p-md-4 text-center'
+              ? `col-auto col-lg-6  p-2 p-sm-4 p-sx-4 p-md-4 text-center`
+              : 'col-auto col-lg-9  p-2 p-sm-4 p-sx-4 p-md-4 text-center'
           }
         >
-          <Post />
+          {isLoggedIn && <Post />}
           <br />
           <br />
           <Input

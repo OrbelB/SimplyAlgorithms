@@ -50,8 +50,8 @@ export const authSlice = createSlice({
         state.userId = action.payload?.userId;
         state.jwtAccessToken = action.payload?.accessToken;
         state.jwtRefreshToken = action.payload?.refreshToken;
-        state.status = 'success';
         state.isLoggedIn = true;
+        state.status = 'success';
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failedLogin';
@@ -78,11 +78,12 @@ export const authSlice = createSlice({
         state.userId = action.payload?.userId;
         state.jwtAccessToken = action.payload?.accessToken;
         state.jwtRefreshToken = action.payload?.refreshToken;
+        state.isLoggedIn = true;
         state.status = 'success';
       })
       .addCase(resetPasswordRequest.rejected, (state) => {
         // state.error = action.payload;
-        state.error = 'failed';
+        state.error = 'failedTokenRequest';
       })
       .addCase(resetPasswordRequest.fulfilled, () => {})
       .addCase(changePassword.fulfilled, (state) => {

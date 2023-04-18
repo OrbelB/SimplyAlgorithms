@@ -113,7 +113,14 @@ export default function PubNoteList({ notes }) {
                   >
                     Report
                   </Button>
-                  <Report open={openReport} handleClose={handleCloseReport} />
+                  <Report
+                    open={openReport}
+                    handleClose={handleCloseReport}
+                    culpritUserId={userNoteDTO?.createdBy?.userId}
+                    foreignId={userNoteDTO?.noteId}
+                    typeOfForeignId="note"
+                    victumUserId={userId}
+                  />
                   <Button
                     variant="contained"
                     color={saved[index] ? 'error' : 'success'}

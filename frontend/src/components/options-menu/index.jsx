@@ -9,11 +9,14 @@ export default function OptionsMenu({
   userId = '',
   handleOnDelete,
   handleOnEdit,
+  culpritUserId,
+  foreignId,
+  typeOfForeignId,
   handleCancelAction = () => {},
   canReply = false,
 }) {
   const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
-  const authUserId = useSelector((state) => state.user.userId);
+  const authUserId = useSelector((state) => state.auth.userId);
 
   const onDelete = () => {
     handleOnDelete();
@@ -27,6 +30,7 @@ export default function OptionsMenu({
     handleCancelAction();
   };
 
+  // IF THE USER IS THE OWNER OF THE OBJECT
   const permission = authUserId === userId || isAdmin;
   const seeOptions = permission || canReply || isAdmin;
 
@@ -100,7 +104,14 @@ export default function OptionsMenu({
             {' '}
             Report
           </i>
-          <Report open={openReport} handleClose={handleCloseReport} />
+          <Report
+            open={openReport}
+            handleClose={handleCloseReport}
+            culpritUserId={culpritUserId}
+            foreignId={foreignId}
+            victumUserId={authUserId}
+            typeOfForeignId={typeOfForeignId}
+          />
         </div>
       </div>
     )

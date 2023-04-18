@@ -49,8 +49,8 @@ export default function Quizhome() {
   }, [status, quizList, dispatch, totalElements]);
 
   return (
-    <div className="">
-      <div className="p-5 top-quizhome">
+    <div className="container-fluid min-vh-100 g-0 m-0 p-0 bottom-quizhome">
+      <div className="p-3 top-quizhome">
         <div className="row justify-content-center">
           <h1 className="quiz-logo text-center m-3">Quizzes</h1>
           <div className="form-outline w-50 m-5">
@@ -65,9 +65,9 @@ export default function Quizhome() {
           </div>
         </div>
       </div>
-      <div className="p-5 bottom-quizhome vh-100">
+      <div className="p-3 bottom-quizhome">
         <div className="row justify-content-between align-items-center">
-          <div className="col-4 p-0 m-0">
+          <div className="col-4 m-0 ps-1 mb-2">
             <SelectionList
               label="Sort By"
               options={SORTING_OPTIONS}

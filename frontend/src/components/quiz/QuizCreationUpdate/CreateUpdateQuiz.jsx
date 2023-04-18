@@ -89,7 +89,7 @@ export default function CreateQuiz() {
 
   return (
     <div className="container-fluid">
-      <div className="text-center border border-danger rounded-5 bg-info mt-5">
+      <div className="text-center border border-danger rounded-5 bg-info mt-5 p-5">
         <h1>Quiz creation page</h1>
         <b>
           Please review our policies before creating a quiz{' '}

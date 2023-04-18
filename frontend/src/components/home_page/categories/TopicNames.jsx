@@ -13,7 +13,7 @@ export default function TopicNames({ topicNames, topicLink }) {
       {/* change it to a navlink */}
       {topicNames.map((topicName, index) => (
         <NavLink
-          key={() => nanoid()}
+          key={nanoid()}
           className="topic"
           to={topicLink[index]}
           onClick={() => {

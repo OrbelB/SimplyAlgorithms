@@ -8,10 +8,13 @@ export default function OptionMenu({
   userId,
   handleDeleteMessage,
   handleIsEditCommentOpen,
+  culpritUserId,
+  foreignId,
+  typeOfForeignId,
   handleCancelComment = () => {},
   canReply = true,
 }) {
-  const authUserId = useSelector((state) => state.user.userId);
+  const authUserId = useSelector((state) => state.auth.userId);
   const onDeleteMessage = () => {
     handleDeleteMessage();
   };
@@ -77,7 +80,14 @@ export default function OptionMenu({
             {' '}
             Report
           </i>
-          <Report open={openReport} handleClose={handleCloseReport} />
+          <Report
+            open={openReport}
+            handleClose={handleCloseReport}
+            culpritUserId={culpritUserId}
+            foreignId={foreignId}
+            typeOfForeignId={typeOfForeignId}
+            victumUserId={authUserId}
+          />
           {canReply && (
             <i
               role="button"

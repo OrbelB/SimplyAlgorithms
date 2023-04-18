@@ -102,7 +102,7 @@ export const commentSlice = createSlice({
           ).toISOString();
           return comment;
         });
-        commentAdapter.upsertMany(state, childrenComments);
+        commentAdapter.setMany(state, childrenComments);
       })
       .addCase(fetchChildrenComments.rejected, (state, action) => {
         state.status = 'failed';

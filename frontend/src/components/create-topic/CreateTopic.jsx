@@ -522,7 +522,12 @@ export default function CreateTopic() {
       <h1>New Topic Page Preview:</h1>
       <br />
       <br />
-      <AlgoFrame vizTitle={title} vizUrl={visualizer} vizSource={attribution} />
+      <AlgoFrame
+        vizTitle={title}
+        vizUrl={visualizer}
+        vizSource={attribution}
+        createdBy={{}}
+      />
       <Detail pageDescription={process} references={references} />
       <CodeSnippet
         snippets={snippets}

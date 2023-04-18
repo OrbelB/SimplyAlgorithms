@@ -160,6 +160,7 @@ export default function TopicPage() {
       <>
         <section id="visualizer">
           <AlgoFrame
+            createdBy={topic?.createdBy}
             pageId={topic.pageId}
             topicName={topic.title}
             vizUrl={topic.visualizer}
@@ -192,7 +193,14 @@ export default function TopicPage() {
               >
                 Report
               </Button>
-              <Report open={openReport} handleClose={handleCloseReport} />
+              <Report
+                open={openReport}
+                handleClose={handleCloseReport}
+                culpritUserId={topic?.createdBy?.userId}
+                foreignId={topic.pageId}
+                typeOfForeignId="topic"
+                victumUserId={userId}
+              />
             </div>
           </div>
         </Slide>

@@ -51,6 +51,7 @@ export default function QuizSample() {
             retry={() => setIsQuizStarted(false)}
             questions={quizQuestionDTO}
             quizId={quizId}
+            userDto={userDTO}
             userId={userId}
             startedAt={startedAt}
             finishedAt={finishedAt}

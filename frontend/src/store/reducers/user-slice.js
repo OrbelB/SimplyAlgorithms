@@ -5,7 +5,6 @@ import {
   fetchUser,
   updatePassword,
   updateUserData,
-  deleteUser,
   updatePreferences,
   removeSingleNotification,
   checkAvailability,
@@ -13,6 +12,8 @@ import {
   updateUserRole,
   fetchUserDayStreak,
   fetchUserNotifications,
+  requestLockAccount,
+  deleteAccount,
 } from '../../services/user';
 
 const initialState = {
@@ -90,12 +91,10 @@ export const userSlice = createSlice({
         state.profilePicture = action?.payload?.profilePicture;
         state.biography = action?.payload?.biography;
         if (action?.payload?.biography === null) state.biography = '';
-
         state.firstName = action?.payload?.firstName;
         state.lastName = action?.payload?.lastName;
         state.phoneNumber = action?.payload?.phoneNumber;
         if (action?.payload?.phoneNumber === null) state.phoneNumber = '';
-
         state.role = action?.payload?.role;
         state.createdDate = '';
         if (action.payload.createdDate !== undefined)
@@ -112,23 +111,35 @@ export const userSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       })
-      .addCase(deleteUser.fulfilled, (state, action) => {
+      .addCase(deleteAccount.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(deleteAccount.fulfilled, (state, action) => {
         if (!action.payload) return;
-        state.status = 'succeeded';
-        state.error = '';
-        state.email = '';
-        state.profilePicture = noUserImageTemplate;
-        state.firstName = '';
-        state.lastName = '';
-        state.username = '';
-        state.biography = '';
-        state.firstName = '';
-        state.lastName = '';
-        state.phoneNumber = '';
-        state.role = '';
-        state.createdDate = '';
-        state.dob = '';
-        state.userId = '';
+        state.status = 'success';
+        if (action.payload === state.userId) {
+          state.email = '';
+          state.profilePicture = noUserImageTemplate;
+          state.firstName = '';
+          state.lastName = '';
+          state.username = '';
+          state.biography = '';
+          state.firstName = '';
+          state.lastName = '';
+          state.phoneNumber = '';
+          state.role = '';
+          state.createdDate = '';
+          state.dob = '';
+          state.userId = '';
+          state.userPreferences = '';
+          state.userPreferences = {};
+          state.nameAvailable = undefined;
+          state.emailAvailable = undefined;
+        }
+      })
+      .addCase(deleteAccount.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
       })
       .addCase(updatePassword.pending, (state) => {
         state.status = 'pending';
@@ -161,7 +172,7 @@ export const userSlice = createSlice({
       .addCase(updateUserData.fulfilled, (state, action) => {
         if (!action.payload) return;
         if (action.payload.userId === state.userId) {
-          state.status = 'succeeded';
+          state.status = 'success';
           state.userId = action?.payload?.userId;
           state.email = action?.payload?.email;
           state.username = action?.payload?.username;
@@ -272,6 +283,16 @@ export const userSlice = createSlice({
         state.status = 'success';
       })
       .addCase(fetchUserNotifications.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+      .addCase(requestLockAccount.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(requestLockAccount.fulfilled, (state) => {
+        state.status = 'success';
+      })
+      .addCase(requestLockAccount.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       });
