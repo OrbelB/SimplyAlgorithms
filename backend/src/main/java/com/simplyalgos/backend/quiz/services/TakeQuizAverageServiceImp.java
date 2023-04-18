@@ -54,7 +54,7 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
         }
         log.debug("Create record take quiz DTO ");
         double runTime = getTimeDiff(takeQuizDTO);
-        TakeQuizAverage takeQuizAverage =  takeQuizAverageRepository.saveAndFlush(
+        takeQuizAverageRepository.saveAndFlush(
                 TakeQuizAverage
                         .builder()
                         .avgScore(takeQuizDTO.getScore())
@@ -103,9 +103,9 @@ public class TakeQuizAverageServiceImp implements TakeQuizAverageService {
         } else if (takeQuizAverage.getLowestScore() > takeQuizDTO.getScore()) {
             takeQuizAverage.setLowestScore(takeQuizDTO.getScore());
         }
-        if (takeQuizAverage.getBestTime() < runTime) {
+        if (takeQuizAverage.getBestTime() > runTime) {
             takeQuizAverage.setBestTime(runTime);
-        } else if (takeQuizAverage.getWorstTime() > runTime) {
+        } else if (takeQuizAverage.getWorstTime() < runTime) {
             takeQuizAverage.setWorstTime(runTime);
         }
         takeQuizAverageRepository.saveAndFlush(takeQuizAverage);

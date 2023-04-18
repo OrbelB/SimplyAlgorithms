@@ -18,6 +18,8 @@ public class QuizDTO {
     UUID quizId;
     Timestamp createdDate;
     String title;
+    String description;
+    String picture;
     int score;
     TagDTO tag;
 }

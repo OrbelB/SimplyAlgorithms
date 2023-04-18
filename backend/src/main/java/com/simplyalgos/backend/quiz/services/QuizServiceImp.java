@@ -6,6 +6,7 @@ import com.simplyalgos.backend.quiz.dtos.QuizDTO;
 
 import com.simplyalgos.backend.quiz.mappers.QuizMapper;
 import com.simplyalgos.backend.quiz.repositories.QuizRepository;
+import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
 import com.simplyalgos.backend.tag.repositories.TagRepository;
@@ -13,6 +14,7 @@ import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.services.UserService;
+import com.simplyalgos.backend.utils.ImageUtils;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,6 +51,8 @@ public class QuizServiceImp implements QuizService {
     private final UserService userService;
 
     private final UserMapper userMapper;
+
+    private final StorageService storageService;
 
 
     @Override
@@ -95,7 +100,7 @@ public class QuizServiceImp implements QuizService {
     @Override
     public UUID createQuizWithFullQuizDTO(FullQuizDTO fullQuizDTO) {
 //        QuizDTO quizDTO = fullQuizDTO.getQuizDTO();
-        log.debug("Creating a new Quiz");
+//        log.debug("Creating a new Quiz");
 //        log.debug("Here is the tag information " + quizDTO.getTag().getTag() + " this tag Id: " + quizDTO.getTag().getTagId());
 
         if (!StringUtils.isNotNullAndEmptyOrBlank(fullQuizDTO.getQuizDTO().getTag())) {
@@ -103,27 +108,27 @@ public class QuizServiceImp implements QuizService {
         }
 
         Tag quizTag = tagExists(fullQuizDTO.getQuizDTO());
-        log.debug("the paseed in user Id: " + fullQuizDTO.getUserDto().getUserId());
+//        log.debug("the paseed in user Id: " + fullQuizDTO.getUserDto().getUserId());
         User userOptional = userService.getUser(fullQuizDTO.getUserDto().getUserId());
 
+        var quizBuilder = Quiz.builder();
+        if (StringUtils.isNotNullAndEmptyOrBlank(fullQuizDTO.getQuizDTO().getPicture())) {
+            File file = ImageUtils.convertProfilePicture(fullQuizDTO.getQuizDTO().getPicture());
+            if (StringUtils.isNotNullAndEmptyOrBlank(file)) {
+                quizBuilder.picture(storageService.uploadImageFile(file));
+            }
+        }
 
-        log.debug("the user id: " + userOptional.getUserId());
 
-        Quiz newQuiz = quizRepository.saveAndFlush(
-                Quiz.builder()
+        return quizRepository.saveAndFlush(
+                quizBuilder
                         .createdBy(userOptional)
                         .title(fullQuizDTO.getQuizDTO().getTitle())
+                        .description(fullQuizDTO.getQuizDTO().getDescription())
                         .score(fullQuizDTO.getQuizDTO().getScore())
                         .tagId(quizTag)
-                        .build()
-        );
-
-        fullQuizDTO.getQuizDTO().setQuizId(newQuiz.getQuizId());
-
-        log.debug("finished creating of new quiz" + newQuiz.getQuizId());
-
-        log.debug("Quiz Service QuizQuestionDTO JSON: " + fullQuizDTO.getQuizQuestionDTO().size());
-        return newQuiz.getQuizId();
+                        .build())
+                .getQuizId();
 
     }
 
@@ -172,9 +177,9 @@ public class QuizServiceImp implements QuizService {
     public FullQuizDTO updateFullQuiz(FullQuizDTO fullQuizDTO) {
         Optional<Quiz> quizOptional = quizRepository.findById(fullQuizDTO.getQuizDTO().getQuizId());
         if (quizOptional.isPresent()) {
-            QuizDTO quizDTO = updateQuiz(fullQuizDTO.getQuizDTO());
+//            QuizDTO quizDTO = updateQuiz(fullQuizDTO.getQuizDTO());
             UserDataDTO userDTO = userMapper.userTOUserDataDTO(userService.getUser(quizOptional.get().getCreatedBy().getUserId()));
-            fullQuizDTO.setQuizDTO(quizDTO);
+            fullQuizDTO.setQuizDTO(updateQuiz(fullQuizDTO.getQuizDTO()));
             fullQuizDTO.setQuizQuestionDTO(quizQuestionService.updateAllQuizQuestions(fullQuizDTO.getQuizQuestionDTO()));
             fullQuizDTO.setUserDto(userDTO);
             return fullQuizDTO;
@@ -191,6 +196,15 @@ public class QuizServiceImp implements QuizService {
         quiz.setTitle(quizDTO.getTitle());
         quiz.setScore(quizDTO.getScore());
         quiz.setTagId(quizTag);
+        quiz.setDescription(quizDTO.getDescription());
+
+        if (StringUtils.isNotNullAndEmptyOrBlank(quizDTO.getPicture())) {
+            File file = ImageUtils.convertProfilePicture(quizDTO.getPicture());
+            if (StringUtils.isNotNullAndEmptyOrBlank(file)) {
+                quiz.setPicture(storageService.updateProfilePicture(file, quiz.getPicture()));
+            }
+        }
+
         quiz = quizRepository.saveAndFlush(quiz);
         quizDTO.setCreatedDate(quiz.getCreatedDate());
         return quizMapper.quizToQuizDTO(quiz);
@@ -205,6 +219,8 @@ public class QuizServiceImp implements QuizService {
                 quiz.getQuizId(),
                 quiz.getCreatedDate(),
                 quiz.getTitle(),
+                quiz.getDescription(),
+                quiz.getPicture(),
                 quiz.getScore(),
                 new TagDTO(
                         quiz.getTagId().getTagId(),
@@ -226,13 +242,7 @@ public class QuizServiceImp implements QuizService {
             return FullQuizDTO.builder()
                     .quizDTO(quizMapper.quizToQuizDTO(quizOptional.get()))
                     .quizQuestionDTO(quizQuestionService.getAllQuizQuestion(quizId))
-                    .userDto(UserDataDTO.builder()
-                            .userId(quizOptional.get().getCreatedBy().getUserId())
-                            .firstName(quizOptional.get().getCreatedBy().getFirstName())
-                            .lastName(quizOptional.get().getCreatedBy().getLastName())
-                            .username(quizOptional.get().getCreatedBy().getUsername())
-                            .profilePicture(quizOptional.get().getCreatedBy().getProfilePicture())
-                            .build())
+                    .userDto(userMapper.userTOUserDataDTO(quizOptional.get().getCreatedBy()))
                     .build();
         }
         throw new NoSuchElementException(

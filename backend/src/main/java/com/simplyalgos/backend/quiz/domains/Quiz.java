@@ -43,6 +43,12 @@ public class Quiz {
 
     private String title;
 
+    @Column(name = "description", length = 2048)
+    private String description;
+
+    @Column(name = "quiz_piture", length = 300)
+    private String picture;
+
     private int score;
 
     @OneToOne(cascade = CascadeType.PERSIST)

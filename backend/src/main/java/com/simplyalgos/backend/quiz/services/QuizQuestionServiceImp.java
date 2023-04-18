@@ -108,12 +108,9 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
                 quizQuestionAnswerService.saveAllQuizQuestionAnswers(quizQuestionDTO);
                 updatedQuizQuestionsDTO.add(getQuizQuestion(quizQuestionDTO.getQuizId(), quizQuestionDTO.getQuestionId()));
                 log.debug("Added new QUestion Question: " + updatedQuizQuestionsDTO.size());
-            } else {
-                log.debug("Updating existing quiz question");
-                log.debug("adding to Quiz question List");
-                updatedQuizQuestionsDTO.add(
-                        updateQuizQuestionAndAnswers(quizQuestionDTO)
-                );
+            }
+            else {
+                updatedQuizQuestionsDTO.add(updateQuizQuestionAndAnswers(quizQuestionDTO));
             }
         }
         return updatedQuizQuestionsDTO;
@@ -145,6 +142,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
                 }
                 questionRepository.saveAndFlush(optionalQuizQuestion.get());
                 log.debug("Question update has finished");
+
                 quizQuestionAnswerService.updateAllQuizQuestionAnswers(quizQuestionDTO);
                 return quizQuestionDTO;
             }

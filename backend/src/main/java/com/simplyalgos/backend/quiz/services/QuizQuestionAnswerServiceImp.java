@@ -6,6 +6,8 @@ import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.repositories.QuizQuestionAnswerRepository;
 import com.simplyalgos.backend.quiz.repositories.QuizQuestionRepository;
+import com.simplyalgos.backend.utils.StringUtils;
+import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,10 +75,17 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService {
 
     @Override
     public void updateAllQuizQuestionAnswers(QuizQuestionDTO quizQuestionDTO) {
-        Iterator<QuizQuestionAnswerDTO> quizQuestionAnswerDTOIterator = quizQuestionDTO.getAnswers().iterator();
+        Set<QuizQuestionAnswerDTO> quizQuestionAnswerDTOIterator = quizQuestionDTO.getAnswers();
         log.debug("Updating all of the answers for question: " + quizQuestionDTO.getQuestionId());
-        while (quizQuestionAnswerDTOIterator.hasNext()) {
-            updateQuizQuestionAnswer(quizQuestionAnswerDTOIterator.next());
+        int i = 0;
+        log.debug("LOOK HERE: " + Json.pretty(quizQuestionDTO));
+//        uestionAnswer questionAnswerSetIterableTemp : questionAnswerSet
+        for (QuizQuestionAnswerDTO quizQuestionAnswerDTO: quizQuestionAnswerDTOIterator ) {
+            if(quizQuestionAnswerDTO.isDeleteAnswer()){
+                deleteQuizQuestionAnswer(quizQuestionAnswerDTO.getAnswerId());
+            } else {
+                updateQuizQuestionAnswer(quizQuestionAnswerDTO);
+            }
         }
     }
 
@@ -93,7 +102,11 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService {
             log.debug("finished answer update");
             return quizQuestionAnswerDTO;
         }
-        throw new NoSuchElementException(MessageFormat.format("Question Answer does not exists", quizQuestionAnswerDTO.getAnswerId()));
+        else {
+            log.debug("Creating a new answer for quiz +-+");
+            return createQuizQuestionAnswer(quizQuestionAnswerDTO);
+        }
+//        throw new NoSuchElementException(MessageFormat.format("Question Answer does not exists", quizQuestionAnswerDTO.getAnswerId()));
     }
 
     @Override
@@ -137,7 +150,8 @@ public class QuizQuestionAnswerServiceImp implements QuizQuestionAnswerService {
                     questionAnswer.get().getAnswerId(),
                     questionAnswer.get().getAnswerBelongsToQuestion().getQuestionId(),
                     questionAnswer.get().getIsCorrect(),
-                    questionAnswer.get().getAnswer()
+                    questionAnswer.get().getAnswer(),
+                    false
             );
 
         }

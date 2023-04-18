@@ -17,4 +17,6 @@ public class QuizQuestionAnswerDTO {
     short isCorrect;
     String answer;
 
+    boolean deleteAnswer = false;
+
 }

@@ -111,9 +111,9 @@ public class QuizController {
     @CreateQuizPermission
     @PostMapping(path = "/create", consumes = "application/json")
     public ResponseEntity<?> createQuiz(@RequestBody FullQuizDTO fullQuizDTO) {
-        log.debug("Creating a new Quiz: " + fullQuizDTO.getQuizDTO().getTag().getTag());
-        log.debug("questions" + fullQuizDTO.getQuizQuestionDTO().size());
-        log.debug("number of questions: " + fullQuizDTO.getQuizQuestionDTO().size());
+//        log.debug("Creating a new Quiz: " + fullQuizDTO.getQuizDTO().getTag().getTag());
+//        log.debug("questions" + fullQuizDTO.getQuizQuestionDTO().size());
+//        log.debug("number of questions: " + fullQuizDTO.getQuizQuestionDTO().size());
         var response = ResponseEntity.status(HttpStatus.CREATED)
                 .body(quizService.createQuizWithFullQuizDTO(fullQuizDTO));
         List<QuizQuestionDTO> quizQuestionDTOList = quizQuestionService
@@ -137,6 +137,7 @@ public class QuizController {
     @UpdateQuizPermission
     @PostMapping(path = "/update", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateFullQuiz(@RequestBody FullQuizDTO fullQuizDTO) {
+        log.debug("Item passed in " + Json.pretty(fullQuizDTO));
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(quizService.updateFullQuiz(fullQuizDTO));
     }
 //    vrooooom
