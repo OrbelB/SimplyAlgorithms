@@ -248,23 +248,25 @@ export default function EditNote({ note, onGoBack }) {
             />
           </div>
           <div className="d-flex justify-content-between m-2 mb-0">
-            <Button className="m-1" onClick={onGoBack} variant="contained">
-              Go Back
-            </Button>
-            <Button
-              className="m-1"
-              variant="contained"
-              color="success"
-              type="submit"
-            >
-              Save
-            </Button>
+            <div className="d-flex">
+              <Button className="m-1" onClick={onGoBack} variant="contained">
+                Go Back
+              </Button>
+              <Button
+                className="m-1"
+                variant="contained"
+                color="success"
+                type="submit"
+              >
+                Save
+              </Button>
+            </div>
             <Button
               type="button"
               variant="contained"
               onClick={handleOpenReport}
               startIcon={<FlagIcon />}
-              className="ml-auto"
+              className="m-1"
             >
               Report
             </Button>

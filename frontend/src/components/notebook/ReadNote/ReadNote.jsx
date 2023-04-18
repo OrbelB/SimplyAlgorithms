@@ -98,17 +98,16 @@ export default function ReadNote({ note, onGoBack }) {
           <Button className="m-1" onClick={onGoBack} variant="contained">
             Go Back
           </Button>
-          <div className="ml-auto">
-            <Button
-              type="button"
-              variant="contained"
-              onClick={handleOpenReport}
-              startIcon={<FlagIcon />}
-            >
-              Report
-            </Button>
-            <Report open={openReport} handleClose={handleCloseReport} />
-          </div>
+          <Button
+            type="button"
+            variant="contained"
+            onClick={handleOpenReport}
+            startIcon={<FlagIcon />}
+            className="ml-auto"
+          >
+            Report
+          </Button>
+          <Report open={openReport} handleClose={handleCloseReport} />
         </div>
       </div>
     </div>

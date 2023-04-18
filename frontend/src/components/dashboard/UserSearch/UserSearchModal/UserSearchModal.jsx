@@ -42,6 +42,9 @@ export default function ReportTable({ reports, open, handleClose }) {
     setSelectedReport(null);
   };
 
+  const cellStyle = { borderRight: '1px solid #ccc' };
+  const rowStyle = { borderBottom: '1px solid #ccc' };
+
   return (
     <>
       <Modal open={open} onClose={handleClose}>
@@ -55,37 +58,42 @@ export default function ReportTable({ reports, open, handleClose }) {
           <TableContainer component={Paper} sx={{ marginTop: 5 }}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>reportId</TableCell>
-                  <TableCell>foreignId</TableCell>
-                  <TableCell>culpritUser</TableCell>
-                  <TableCell>victimUser</TableCell>
-                  <TableCell>resolvedBy</TableCell>
-                  <TableCell>typeOfForeignId</TableCell>
-                  <TableCell>category</TableCell>
-                  <TableCell>report</TableCell>
-                  <TableCell>resolveNote</TableCell>
-                  <TableCell>reportDate</TableCell>
-                  <TableCell>resolveDate</TableCell>
+                <TableRow sx={rowStyle}>
+                  <TableCell sx={cellStyle}>reportId</TableCell>
+                  <TableCell sx={cellStyle}>foreignId</TableCell>
+                  <TableCell sx={cellStyle}>culpritUser</TableCell>
+                  <TableCell sx={cellStyle}>victimUser</TableCell>
+                  <TableCell sx={cellStyle}>resolvedBy</TableCell>
+                  <TableCell sx={cellStyle}>typeOfForeignId</TableCell>
+                  <TableCell sx={cellStyle}>category</TableCell>
+                  <TableCell sx={cellStyle}>report</TableCell>
+                  <TableCell sx={cellStyle}>resolveNote</TableCell>
+                  <TableCell sx={cellStyle}>reportDate</TableCell>
+                  <TableCell sx={cellStyle}>resolveDate</TableCell>
                   <TableCell>isResolved</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {reports.map((report) => (
-                  <TableRow key={report.reportId}>
-                    <TableCell>{report.reportId}</TableCell>
-                    <TableCell>{report.foreignId}</TableCell>
-                    <TableCell>{report.culpritUser}</TableCell>
-                    <TableCell>{report.victimUser}</TableCell>
-                    <TableCell>{report.resolvedBy}</TableCell>
-                    <TableCell>{report.typeOfForeignId}</TableCell>
-                    <TableCell>{report.category}</TableCell>
-                    <TableCell onClick={() => handleReportClick(report)}>
+                  <TableRow key={report.reportId} sx={rowStyle}>
+                    <TableCell sx={cellStyle}>{report.reportId}</TableCell>
+                    <TableCell sx={cellStyle}>{report.foreignId}</TableCell>
+                    <TableCell sx={cellStyle}>{report.culpritUser}</TableCell>
+                    <TableCell sx={cellStyle}>{report.victimUser}</TableCell>
+                    <TableCell sx={cellStyle}>{report.resolvedBy}</TableCell>
+                    <TableCell sx={cellStyle}>
+                      {report.typeOfForeignId}
+                    </TableCell>
+                    <TableCell sx={cellStyle}>{report.category}</TableCell>
+                    <TableCell
+                      sx={cellStyle}
+                      onClick={() => handleReportClick(report)}
+                    >
                       {report.report.substring(0, 50) + ' ...'}
                     </TableCell>
-                    <TableCell>{report.resolveNote}</TableCell>
-                    <TableCell>{report.reportDate}</TableCell>
-                    <TableCell>{report.resolveDate}</TableCell>
+                    <TableCell sx={cellStyle}>{report.resolveNote}</TableCell>
+                    <TableCell sx={cellStyle}>{report.reportDate}</TableCell>
+                    <TableCell sx={cellStyle}>{report.resolveDate}</TableCell>
                     <TableCell>{report.isResolved}</TableCell>
                   </TableRow>
                 ))}

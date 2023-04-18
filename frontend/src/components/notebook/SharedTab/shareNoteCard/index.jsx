@@ -49,6 +49,9 @@ export default function ShareNoteCard({
         <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
         <div className="card-text m-2">{body}</div>
         <div className="d-flex m-2 mb-0">
+          <Button onClick={() => handleClick(noteShareDTO, userNoteDTO)}>
+            View
+          </Button>
           <Button
             type="button"
             variant="contained"
@@ -65,9 +68,6 @@ export default function ShareNoteCard({
             open={openReport}
             handleClose={handleCloseReport}
           />
-          <Button onClick={() => handleClick(noteShareDTO, userNoteDTO)}>
-            View
-          </Button>
         </div>
       </div>
     </div>

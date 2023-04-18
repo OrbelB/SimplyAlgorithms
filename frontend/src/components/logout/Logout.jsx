@@ -4,6 +4,7 @@ import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { Button } from '@mui/material';
 import { authActions } from '../../store/reducers/auth-slice';
 import { userActions } from '../../store/reducers/user-slice';
 import { viewForumsActions } from '../../store/reducers/viewed-forums-slice';
@@ -67,19 +68,25 @@ export default function Logout({ handleLogout }) {
         <h4>Are you sure you want to logout?</h4>
       </Modal.Body>
       <Modal.Footer className="justify-content-evenly">
-        <div className="col-4">
-          <button
-            className="btn btn-danger"
+        <div className="col-2">
+          <Button
+            color="success"
+            variant="contained"
             onClick={handleUserLogoutRequest}
             type="button"
           >
             YES
-          </button>
+          </Button>
         </div>
         <div className="col-2">
-          <button className="btn btn-light" type="button" onClick={handleClose}>
-            NO
-          </button>
+          <Button
+            type="button"
+            color="error"
+            variant="contained"
+            onClick={handleClose}
+          >
+            No
+          </Button>
         </div>
       </Modal.Footer>
     </Modal>

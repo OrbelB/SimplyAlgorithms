@@ -75,7 +75,7 @@ export default function Notebook({ isDrawerOpen, setIsDrawerOpen }) {
       open={isDrawerOpen}
       onClose={() => setIsDrawerOpen(() => false)}
     >
-      <Box width={drawerWidth}>
+      <Box width={drawerWidth} style={{ overflowY: 'scroll' }}>
         <Box display="flex" justifyContent="space-between" className="m-1">
           <h6 className="text-left m-2">
             To close the notebook, use the
