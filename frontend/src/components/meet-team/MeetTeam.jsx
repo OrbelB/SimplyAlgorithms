@@ -1,7 +1,7 @@
 import './MeetTeam.css';
 import image1 from '../../assets/Orbel.jpg';
 import image2 from '../../assets/Jefferson.jpg';
-import image3 from '../../assets/person-fill.png';
+import image3 from '../../assets/Kevin.jpg';
 import image4 from '../../assets/Joey.jpg';
 
 export default function MeetTeam() {

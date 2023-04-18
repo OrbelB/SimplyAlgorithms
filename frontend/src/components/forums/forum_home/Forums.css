@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
+.tab-active {
+  text-decoration: overline;
+}
+
 .forums-section {
   width: 100%;
   background-color: #d1fbff;

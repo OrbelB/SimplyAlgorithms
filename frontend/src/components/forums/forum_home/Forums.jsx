@@ -1,5 +1,6 @@
 import './Forums.css';
 import { Input, Button, ButtonGroup } from '@mui/material';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import PostPreview from './PostPreview';
@@ -14,6 +15,7 @@ import {
 import useSearchBar from '../../../hooks/use-searchBar';
 
 export default function Forums() {
+  const [activeButton, setActiveButton] = useState('upVotes');
   const { isLoggedIn, jwtAccessToken } = useSelector((state) => state.auth);
   const { status: forumsStatus } = useSelector((state) => state.forums);
   const forums = useSelector(selectSortedForums);
@@ -56,32 +58,52 @@ export default function Forums() {
           <ButtonGroup variant="contained">
             <Button
               id="upVotes"
-              className="filter-button first-filter"
-              onClick={(e) => sortForums(e)}
+              className={`filter-button first-filter ${
+                activeButton === 'upVotes' ? 'tab-active' : ''
+              }`}
+              onClick={(e) => {
+                sortForums(e);
+                setActiveButton('upVotes');
+              }}
               type="button"
             >
               Top Rated
             </Button>
             <Button
               id="createdDate"
-              className="filter-button"
-              onClick={(e) => sortForums(e)}
+              className={`filter-button ${
+                activeButton === 'createdDate' ? 'tab-active' : ''
+              }`}
+              onClick={(e) => {
+                sortForums(e);
+                setActiveButton('createdDate');
+              }}
               type="button"
             >
               New
             </Button>
             <Button
               id="title"
-              className="filter-button"
-              onClick={(e) => sortForums(e)}
+              className={`filter-button ${
+                activeButton === 'title' ? 'tab-active' : ''
+              }`}
+              onClick={(e) => {
+                sortForums(e);
+                setActiveButton('title');
+              }}
               type="button"
             >
               Alphabetical
             </Button>
             <Button
               id=""
-              className="filter-button last-filter"
-              onClick={(e) => sortForums(e)}
+              className={`filter-button last-filter ${
+                activeButton === '' ? 'tab-active' : ''
+              }`}
+              onClick={(e) => {
+                sortForums(e);
+                setActiveButton('');
+              }}
               type="button"
             >
               Other
