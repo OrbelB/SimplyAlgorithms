@@ -24,6 +24,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import ShareIcon from '@mui/icons-material/Share';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import FlagIcon from '@mui/icons-material/Flag';
+import Report from '../../report/Report';
 import { timeToExpire } from '../../../utilities/beautify-time';
 import TextEditor from '../../text-editor/TextEditor';
 import { updateSharedUserNote } from '../../../services/note';
@@ -97,6 +99,16 @@ export default function EditNote({ note, onGoBack }) {
     } finally {
       onGoBack();
     }
+  };
+
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
   };
   return (
     <div className="card m-3 mb-4">
@@ -247,6 +259,16 @@ export default function EditNote({ note, onGoBack }) {
             >
               Save
             </Button>
+            <Button
+              type="button"
+              variant="contained"
+              onClick={handleOpenReport}
+              startIcon={<FlagIcon />}
+              className="ml-auto"
+            >
+              Report
+            </Button>
+            <Report open={openReport} handleClose={handleCloseReport} />
           </div>
         </form>
       </div>

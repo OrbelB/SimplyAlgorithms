@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@mui/material';
 import draftToHtml from 'draftjs-to-html';
 import parse from 'html-react-parser';
+import FlagIcon from '@mui/icons-material/Flag';
 import Report from '../../../report/Report';
 import { timeToExpire } from '../../../../utilities/beautify-time';
 
@@ -19,6 +20,16 @@ export default function ShareNoteCard({
     );
     return parse(htmlContent);
   }, [userNoteDTO?.noteBody]);
+
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
   return (
     <div key={noteShareDTO.shareId} ref={innerRef} className="card m-3 mb-4">
       <div className="card-header justify-content-start d-flex gap-1">
@@ -37,7 +48,15 @@ export default function ShareNoteCard({
         <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
         <div className="card-text m-2">{body}</div>
         <div className="d-flex m-2 mb-0">
-          <Report />
+          <Button
+            type="button"
+            variant="contained"
+            onClick={handleOpenReport}
+            startIcon={<FlagIcon />}
+          >
+            Report
+          </Button>
+          <Report open={openReport} handleClose={handleCloseReport} />
           <Button onClick={() => handleClick(noteShareDTO, userNoteDTO)}>
             View
           </Button>

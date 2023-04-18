@@ -2,6 +2,8 @@
 .quiz-screen {
   background-color: var(--color-bg-second);
   background-image: url('https://www.transparenttextures.com/patterns/bright-squares.png');
+  height: auto;
+  min-height: 100vh;
 }
 
 .question-count,
@@ -14,11 +16,11 @@
 }
 
 .answerbutton-wrong {
-  background-color: #ff0505;
-  border: 1px solid transparent;
+  background-color: #e83845;
+  border: 2px solid #ccc;
   border-radius: 0.75rem;
   box-sizing: border-box;
-  color: #ffffff;
+  color: black;
   cursor: pointer;
   flex: 0 0 auto;
   font-family: 'Inter var', ui-sans-serif, system-ui, -apple-system, system-ui,
@@ -39,14 +41,15 @@
   touch-action: manipulation;
   width: auto;
   margin-right: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .answerbutton-right {
-  background-color: #1eff12;
-  border: 1px solid transparent;
+  background-color: #00a64a;
+  border: 2px solid #ccc;
   border-radius: 0.75rem;
   box-sizing: border-box;
-  color: #ffffff;
+  color: black;
   cursor: pointer;
   flex: 0 0 auto;
   font-family: 'Inter var', ui-sans-serif, system-ui, -apple-system, system-ui,
@@ -67,14 +70,15 @@
   touch-action: manipulation;
   width: auto;
   margin-right: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .answerbutton {
-  background-color: #111827;
-  border: 1px solid transparent;
+  background-color: whitesmoke;
+  border: 2px solid #ccc;
   border-radius: 0.75rem;
   box-sizing: border-box;
-  color: #ffffff;
+  color: black;
   cursor: pointer;
   flex: 0 0 auto;
   font-family: 'Inter var', ui-sans-serif, system-ui, -apple-system, system-ui,
@@ -85,26 +89,19 @@
   line-height: 1.5rem;
   padding: 0.75rem 1.2rem;
   text-align: center;
-  text-decoration: none #6b7280 solid;
-  text-decoration-thickness: auto;
-  transition-duration: 0.2s;
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   width: auto;
   margin-right: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.answerbutton:hover {
-  background-color: #374151;
-}
-
-.answerbutton:focus {
-  box-shadow: none;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+.quizenterbutton {
+  background-color: #58a2db;
+  border: 2px solid #ccc;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.2rem;
 }
 
 @media (min-width: 768px) {

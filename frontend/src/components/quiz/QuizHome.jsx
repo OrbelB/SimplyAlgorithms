@@ -50,7 +50,7 @@ export default function Quizhome() {
 
   return (
     <div className="">
-      <div className="p-5 top-quizhome">
+      {/* <div className="p-5 top-quizhome">
         <div className="row justify-content-center">
           <h1 className="quiz-logo">Quizzes</h1>
           <div className="form-outline w-50 mb-5">
@@ -64,16 +64,27 @@ export default function Quizhome() {
             />
           </div>
         </div>
-      </div>
-      <div className="p-5 bottom-quizhome vh-100">
-        <div className="row justify-content-between align-items-center">
-          <div className="col-4 p-0 m-0">
+      </div> */}
+      <div className="p-5 bottom-home vh-100">
+        <h1 className="quiz-logo text-center">QUIZZES</h1>
+        <div className="row justify-content-between quiz-home-buttons mx-auto">
+          <div className="col ">
             <SelectionList
               label="Sort By"
               options={SORTING_OPTIONS}
               setValue={setSelection}
               value={selection}
               handleAction={handleSortBy}
+            />
+          </div>
+          <div className="col">
+            <input
+              onChange={handleSearchQuiz}
+              type="search"
+              id="form1"
+              className="form-control"
+              placeholder="Search for quiz..."
+              aria-label="Search"
             />
           </div>
         </div>
