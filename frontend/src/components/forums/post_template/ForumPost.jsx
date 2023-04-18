@@ -153,7 +153,7 @@ export default function ForumPost() {
           <div
             className={cx(
               fp.post,
-              'border border-success p-2 rounded-bottom rounded-4 border-info bg-light text-dark bg-opacity-50 h-auto d-inline-block'
+              'border p-2 rounded-bottom rounded-4 text-dark bg-opacity-50 h-auto d-inline-block'
             )}
           >
             <div className="row">

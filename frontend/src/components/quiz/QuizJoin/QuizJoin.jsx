@@ -1,6 +1,7 @@
 import './QuizJoin.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Button } from '@mui/material';
 import OptionsMenu from '../../options-menu';
 import { deleteQuiz } from '../../../services/quiz';
 import { quizActions } from '../../../store/reducers/quiz-slice';
@@ -57,13 +58,15 @@ export default function JoinQuiz({
         </div>
       </div>
       <div className="text-center mt-5">
-        <button
+        <Button
           type="button"
-          className="btn btn-primary btn-lg quizstart"
+          variant="contained"
+          color="primary"
+          sx={{ fontSize: '20px' }}
           onClick={start}
         >
           Start Quiz
-        </button>
+        </Button>
       </div>
     </div>
   );

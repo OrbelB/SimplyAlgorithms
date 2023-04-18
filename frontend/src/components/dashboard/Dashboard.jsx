@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Badge, Button, Card, CardHeader } from '@mui/material';
+import { Badge, Button, Card, CardHeader, darken } from '@mui/material';
 import RecentlyViewedPosts from './RecentlyViewPosts/RecentlyViewedPosts';
 
 import DayStreak from './DayStreak/DayStreak';
@@ -100,12 +100,17 @@ export default function Dashboard() {
             border: 2,
             backgroundColor: '#c7ffd2',
             boxShadow: 2,
+            padding: 0,
+            margin: 0,
           }}
         >
           <CardHeader
+            sx={{
+              bgcolor: darken('#c7ffd2', 0.05),
+              textAlign: 'center',
+            }}
             title="Quizzes"
-            className="text-center"
-            titleTypographyProps={{ variant: 'h4' }}
+            className="text-center mb-3"
           />
           <QuizProgress userHistory={userHistory} />
         </Card>
@@ -123,7 +128,11 @@ export default function Dashboard() {
               boxShadow: 2,
             }}
           >
-            <CardHeader title="Recently Viewed Posts" className="text-center" />
+            <CardHeader
+              sx={{ bgcolor: darken('#97F9FF', 0.05) }}
+              title="Recently Viewed Posts"
+              className="text-center mb-3"
+            />
             <RecentlyViewedPosts />
           </Card>
         </div>
@@ -136,7 +145,14 @@ export default function Dashboard() {
         )}
         <div className="col-lg mt-2">
           <Card sx={{ height: 'auto', border: 2, backgroundColor: '#e8adad' }}>
-            <CardHeader title="Notes" className="text-center" />
+            <CardHeader
+              sx={{
+                bgcolor: darken('#e8adad', 0.05),
+                textAlign: 'center',
+              }}
+              title="Notes"
+              className="text-center mb-3"
+            />
             <NotesDB />
             <ShowMoreNotes />
           </Card>

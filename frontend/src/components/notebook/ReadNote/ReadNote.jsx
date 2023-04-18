@@ -21,7 +21,9 @@ import {
 import { useState } from 'react';
 import parse from 'html-react-parser';
 import draftToHtml from 'draftjs-to-html';
+import FlagIcon from '@mui/icons-material/Flag';
 import { timeToExpire } from '../../../utilities/beautify-time';
+import Report from '../../report/Report';
 import TextEditor from '../../text-editor/TextEditor';
 
 // import ShareIcon from '@mui/icons-material/Share';
@@ -71,6 +73,16 @@ export default function ReadNote({ note, onGoBack }) {
   //   // Implement permission change logic here
   //   console.log(`Change permission for user ${user} to ${event.target.value}`);
   // };
+
+  const [openReport, setOpenReport] = useState(false);
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
   return (
     <div className="card m-3 mb-4">
       <div className="card-header">
@@ -82,111 +94,21 @@ export default function ReadNote({ note, onGoBack }) {
       <div className="card-body">
         <h4 className="card-title m-2">{title}</h4>
         <div className="card-text m-2">{parse(draftToHtml(body))}</div>
-        <div className="d-flex m-0 mb-0">
-          {/* <Button
-            variant="contained"
-            className="m-3"
-            startIcon={<ShareIcon />}
-            onClick={handleOpen}
-          >
-            Share
+        <div className="d-flex justify-content-between m-2 mb-0">
+          <Button className="m-1" onClick={onGoBack} variant="contained">
+            Go Back
           </Button>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Share
-              </Typography>
-              <form className="mt-2">
-                <TextField
-                  id="input-with-icon-textfield"
-                  label="Username"
-                  sx={{ marginRight: '20px', width: '200px' }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="standard"
-                  margin="normal"
-                  required
-                />
-                <TextField
-                  select
-                  label="Permissions"
-                  defaultValue="Edit"
-                  variant="standard"
-                  margin="normal"
-                  sx={{ width: '100px' }}
-                  required
-                >
-                  {permissions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <br />
-                <Button
-                  className="mt-2"
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                >
-                  Add User
-                </Button>
-              </form>
-              <hr />
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>User</TableCell>
-                      <TableCell>Permissions</TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.user}>
-                        <TableCell component="th" scope="row">
-                          {row.user}
-                        </TableCell>
-                        <Select
-                          className="m-3"
-                          value={row.permissions}
-                          onChange={(event) =>
-                            handlePermissionChange(row.user, event)
-                          }
-                        >
-                          {permissions.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-
-                        <TableCell>
-                          <IconButton
-                            onClick={() => handleRemoveClick(row.user)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          </Modal> */}
-          <Button onClick={onGoBack}>Go Back</Button>
+          <div className="ml-auto">
+            <Button
+              type="button"
+              variant="contained"
+              onClick={handleOpenReport}
+              startIcon={<FlagIcon />}
+            >
+              Report
+            </Button>
+            <Report open={openReport} handleClose={handleCloseReport} />
+          </div>
         </div>
       </div>
     </div>

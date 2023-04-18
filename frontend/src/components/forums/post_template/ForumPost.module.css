@@ -59,21 +59,21 @@
 }
 .postBorderBottom {
   position: inherit;
-  background-color: rgb(169, 235, 235);
+  background-color: #c9d6f0;
   border-radius: 0px 0px 25px 25px;
   box-shadow: 4px 6px var(--color-border-input-form) !important;
 }
 
 .postMidSection {
   position: inherit;
-  background-color: rgb(169, 235, 235);
-  border-radius: 0px 0px 0px 0px;  
+  background-color: #c9d6f0;
+  border-radius: 0px 0px 0px 0px;
   box-shadow: 4px 6px var(--color-border-input-form) !important;
 }
 
 .postedBorderupper {
   position: inherit;
-  background-color: rgb(169, 235, 235);
+  background-color: #c9d6f0;
   border-radius: 25px 25px 0px 0px;
   box-shadow: 4px 6px var(--color-border-input-form) !important;
 }

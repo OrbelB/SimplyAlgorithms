@@ -110,21 +110,35 @@ export default function QuizScreen({
             You scored {score} out of {questions.length}
           </h2>
           <div className="text-center">
-            <button
+            <Button
               type="button"
-              className="btn btn-primary m-3"
+              variant="contained"
+              color="primary"
+              sx={{ fontSize: '15px' }}
+              className="m-3"
               onClick={retry}
             >
               Restart Quiz
-            </button>
+            </Button>
             <br />
             <NavLink to="/quiz">
-              <button type="button" className="btn btn-secondary m-3">
+              <Button
+                type="button"
+                variant="contained"
+                color="secondary"
+                sx={{ fontSize: '15px' }}
+                className="m-3"
+              >
                 Go Back to Home Page
-              </button>
+              </Button>
             </NavLink>
           </div>
-          <Button type="button" variant="contained" onClick={handleOpenReport}>
+          <Button
+            type="button"
+            variant="contained"
+            sx={{ fontSize: '15px' }}
+            onClick={handleOpenReport}
+          >
             Report
           </Button>
           <Report open={openReport} handleClose={handleCloseReport} />
@@ -186,6 +200,8 @@ export default function QuizScreen({
                   disabled={userSelectAnswer.position !== -1}
                   className={buttonStyle(answer, index)}
                   style={{
+                    width: '75%',
+                    height: 'auto',
                     margin: '10px',
                     display: 'block',
                   }}
@@ -207,9 +223,9 @@ export default function QuizScreen({
                     stop();
                     nextQuestionChoice();
                   }}
-                  className="answerbutton mt-3"
+                  className="quizenterbutton mt-3"
                 >
-                  <h4>submit</h4>
+                  <h4>Submit</h4>
                 </button>
               ) : (
                 <button
@@ -218,7 +234,7 @@ export default function QuizScreen({
                   onClick={() => {
                     nextQuestionChoice();
                   }}
-                  className="answerbutton mt-3"
+                  className="quizenterbutton mt-3"
                 >
                   <h4>Next</h4>
                 </button>

@@ -1,72 +1,71 @@
 .preview-section {
-    background-color: #EDEDED !important;
-    border: 1px solid var(--color-border-input-form) !important;
-    border-radius: 10px 10px 10px 10px !important;
-    box-shadow: 10px 5px var(--color-border-input-form) !important;
+  background-color: #ededed !important;
+  border: 1px solid var(--color-border-input-form) !important;
+  border-radius: 10px 10px 10px 10px !important;
+  box-shadow: 10px 5px var(--color-border-input-form) !important;
 }
 
 .first-line {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .profile-pic {
-    padding: 10px 0px 0px 20px;
+  padding: 10px 0px 0px 20px;
 }
 
 .preview-username {
-    font-size: 1.5em;
-    text-align: left;
-    padding: 10px 0px 30px 20px;
+  font-size: 1.5em;
+  text-align: left;
+  padding: 10px 0px 30px 20px;
 }
 
 .preview-title {
-    text-align: left;
-    padding-left: 1em;
-    padding-bottom: 1em;
-} 
+  text-align: left;
+  padding-left: 1em;
+  padding-bottom: 1em;
+}
 
 .third-line {
-    display: flex;
-    flex-direction: row;    
+  display: flex;
+  flex-direction: row;
 }
 
 .left-side {
-    flex-wrap: left;
+  flex-wrap: left;
 }
 
 .right-side {
-    margin-left: 40vw;
+  margin-left: 40vw;
 }
-
 
 /* For related and recent posts section */
 
 .side-section {
-    height: auto;
-    background-color: #f0f5f5;
-    border: 1px solid black;
-    margin-bottom: 5%;
+  height: auto;
+  background-color: #f0f5f5;
+  border: 1px solid black;
+  margin-bottom: 5%;
 }
 
 .line-one {
-    display: flex;
-    flex-direction: row;
-    font-size: 1.4em;
+  display: flex;
+  flex-direction: row;
+  font-size: 1.4em;
 }
 
 .profile-pic {
-    padding: 10px 0px 0px 20px;
+  padding: 10px 0px 0px 20px;
 }
 
 .side-username {
-    font-size: 1em;
-    text-align: left;
-    padding: 10px 0px 30px 20px;
+  font-size: 1em;
+  text-align: left;
+  padding: 10px 0px 30px 20px;
 }
 
 .line-two {
-    font-size: 1.5em;
-    text-align: left;
-    padding-left: 1em;
-} 
+  font-size: 1.5em;
+  text-align: left;
+  padding-left: 1em;
+}

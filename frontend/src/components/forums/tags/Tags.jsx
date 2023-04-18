@@ -14,6 +14,7 @@ export default function Tags() {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const { totalPages, status } = useSelector((state) => state.tags);
+  const [activeTag, setActiveTag] = useState(null);
 
   const handleClick = (tagId) => {
     dispatch(
@@ -24,6 +25,7 @@ export default function Tags() {
       })
     );
     dispatch(forumsActions.filterForums(`${tagId}`));
+    setActiveTag(tagId);
   };
 
   const { handleSearch: filterTagsContaining, searchResults: filteredTags } =
@@ -54,7 +56,9 @@ export default function Tags() {
         {filteredTags?.map((tag) => (
           <Button
             key={tag?.tagId}
-            className={classes.category}
+            className={`${classes.category} ${
+              activeTag === tag?.tagId ? classes.activeCategory : ''
+            }`}
             onClick={() => handleClick(tag?.tagId)}
             type="button"
           >

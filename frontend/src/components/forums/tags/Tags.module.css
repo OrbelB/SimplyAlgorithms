@@ -1,9 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
 
 .category {
-  background-color: var(--color-bg-main) !important;
-  border-radius: 10px 10px 10px 10px !important;
-  border: 1px solid #4beff8 !important;
+  background-color: white !important;
+  border-radius: 10px !important;
+  border: 2px solid #ccc !important;
+  color: black !important;
+  font-family: 'Readex Pro', sans-serif !important;
+  font-size: 20px !important;
+  padding: 12px !important;
+  width: 100% !important;
+  margin-bottom: 20px !important;
+}
+
+.activeCategory {
+  background-color: var(--color-border-input-form) !important;
+  border-radius: 10px !important;
+  border: 2px solid #ccc !important;
   color: black !important;
   font-family: 'Readex Pro', sans-serif !important;
   font-size: 20px !important;
