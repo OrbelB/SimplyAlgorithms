@@ -74,9 +74,9 @@ public class UserController {
 
 
     @UserDeletePermission
-    @DeleteMapping(path = "/delete", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> delete(@RequestParam(name = "userId") UUID userId) {
-        return ResponseEntity.ok().body(userService.removeUser(userId));
+    @DeleteMapping(path = "/delete",  produces = "application/json")
+    public ResponseEntity<?> delete(@RequestParam(name = "userIdOrUsername") String userIdOrUsername) {
+        return ResponseEntity.ok().body(userService.removeUser(userIdOrUsername));
     }
 
 
@@ -139,7 +139,7 @@ public class UserController {
         return ResponseEntity.ok().body(map);
     }
 
-//  add the number of days to lock the acocunt
+//  add the number of days to lock the account
     @PutMapping(path = "/lock-account", produces = "application/json")
     @PreAuthorize("hasAuthority('users.crud')")
 //    @AdminPermission

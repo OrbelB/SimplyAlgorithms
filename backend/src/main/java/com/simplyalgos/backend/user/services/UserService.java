@@ -26,7 +26,7 @@ public interface UserService {
 
     boolean userExists(UUID userId);
 
-    UUID removeUser(UUID userId);
+    UUID removeUser(String userIdOrUsername);
 
 //    boolean userEmailExists(String email);
     User getUserByUsername(String username);
@@ -36,9 +36,9 @@ public interface UserService {
 
     boolean getUsername(GetUsernameDTO getUsernameDTO);
 
-    UserInformation changeUserRole(String usernameOrId, String role);
+    UUID changeUserRole(String usernameOrId, String role);
 
-    UserInformation LockUserAccount(String usernameOrId, int lengthOfLock, boolean accountNonLocked);
+    UUID LockUserAccount(String usernameOrId, int lengthOfLock, boolean accountNonLocked);
 
     boolean isUserLocked(String username);
 

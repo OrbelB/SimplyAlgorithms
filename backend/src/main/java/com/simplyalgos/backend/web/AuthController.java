@@ -1,7 +1,6 @@
 package com.simplyalgos.backend.web;
 
 import com.simplyalgos.backend.exceptions.CustomAccountLockedException;
-import com.simplyalgos.backend.exceptions.UserNotAuthorizedException;
 import com.simplyalgos.backend.user.dtos.ChangePasswordDTO;
 import com.simplyalgos.backend.user.dtos.GetUsernameDTO;
 import com.simplyalgos.backend.user.dtos.PasswordResetRequestDTO;
@@ -47,10 +46,14 @@ public class AuthController {
                 return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(authService.login(loginDTO));
             }
             throw new CustomAccountLockedException(MessageFormat
-                    .format("User: {0} account is locked, please check email for lock expire date", loginDTO.username()));
+                    .format(
+                            """
+                                    {0}, your account has been temporarily locked.
+                                    Please check your email for lock expire date
+                                    """,
+                            loginDTO.username()));
         }
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(authService.login(loginDTO));
-
     }
 
     @PostMapping("/token")

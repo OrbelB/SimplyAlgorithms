@@ -23,7 +23,12 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
 
 
+    <T>  Optional<T> findByUsername(String username, Class<T> type);
+
+
     <T> Page<T> findAllProjectedBy(Pageable pageable, Class<T> type);
 
     boolean existsByEmail(String email);
+
+    void deleteByUsername(String username);
 }

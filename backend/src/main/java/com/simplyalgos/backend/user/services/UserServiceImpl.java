@@ -10,10 +10,10 @@ import com.simplyalgos.backend.user.enums.UserRoles;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.repositories.RoleRepository;
 import com.simplyalgos.backend.user.repositories.UserRepository;
+import com.simplyalgos.backend.user.repositories.projections.UserAndUserIdOnly;
 import com.simplyalgos.backend.user.repositories.projections.UserInformationOnly;
 import com.simplyalgos.backend.user.security.Role;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
-import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 
 import java.sql.Timestamp;
 import java.text.MessageFormat;
@@ -36,6 +35,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
     private final UserMapper userMapper;
 
     private final StorageService storageService;
@@ -134,7 +134,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean usernameIsAvailable(String username) {
-        return !userRepository.existsByUsername(username);
+        try {
+            return !userRepository.existsById(UUID.fromString(username));
+        } catch (Exception e) {
+            return !userRepository.existsByUsername(username);
+        }
     }
 
     @Override
@@ -155,13 +159,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UUID removeUser(UUID userId) {
-        if (userRepository.existsById(userId)) {
-            userRepository.deleteById(userId);
-            return userId;
+    public UUID removeUser(String userIdOrUsername) {
+        Optional<UserAndUserIdOnly> user = userRepository.findByUsername(userIdOrUsername, UserAndUserIdOnly.class);
+        if(user.isPresent()){
+            userRepository.deleteById(user.get().getUserId());
+            return user.get().getUserId();
         }
-        throw new NoSuchElementException(MessageFormat.format("user with id {0} not found!",
-                userId.toString()));
+        if (userRepository.existsById(UUID.fromString(userIdOrUsername))) {
+            userRepository.deleteById(UUID.fromString(userIdOrUsername));
+            return UUID.fromString(userIdOrUsername);
+        }
+        throw new NoSuchElementException(MessageFormat.format("user with id or username {0} not found!",
+                userIdOrUsername));
     }
 
     @Override
@@ -196,7 +205,7 @@ public class UserServiceImpl implements UserService {
      * This method will change the user role
      */
     @Override
-    public UserInformation changeUserRole(String usernameOrId, String role) {
+    public UUID changeUserRole(String usernameOrId, String role) {
         if (roleRepository.existsByRoleName(role)) {
             User user = userRepository.findByUsername(usernameOrId).orElseGet(() ->
                     userRepository.findById(UUID.fromString(usernameOrId)).orElseThrow(() ->
@@ -210,38 +219,40 @@ public class UserServiceImpl implements UserService {
             // notify user of role change
             dashboardService.addRoleChangeNotification(user, roleToAdd.getRoleName());
             log.debug("USER: " + user.getUsername() + " ROLE CHANGED TO: " + role);
-            return userMapper.userToUserInformation(userRepository.save(user));
+            return userRepository.save(user).getUserId();
         }
         throw new ElementNotFoundException("ROLE: " + role + " NOT FOUND");
     }
 
     @Override
-    public UserInformation LockUserAccount(String usernameOrId, int lengthOfLock, boolean accountNonLocked) {
+    public UUID LockUserAccount(String usernameOrId, int lengthOfLock, boolean accountNonLocked) {
         User user = userRepository.findByUsername(usernameOrId).orElseGet(() ->
                 userRepository.findById(UUID.fromString(usernameOrId)).orElseThrow(() ->
                         new ElementNotFoundException("USERNAME OR USERID : " + usernameOrId + " NOT FOUND")
                 )
         );
 
-        if(lengthOfLock > 365){
+        if (lengthOfLock > 365) {
             lengthOfLock = 365;
         }
 
-        if(lengthOfLock < -365) {
+        if (lengthOfLock < -365) {
             lengthOfLock = -365;
         }
 
         String message =
                 "You account has been unlocked you may log in at any time :) \n welcome back";
         String subject = "Account has been unlocked";
+        log.info("USER: " + user.getUsername() + " ACCOUNT LOCKED: " + accountNonLocked);
         user.setAccountNonLocked(accountNonLocked);
+
         if (!accountNonLocked) {
             //Admin in locking the account
             user.setAccountLockExpireDate(daysToTimestamp(lengthOfLock));
             String formattedTimestamp = user.getAccountLockExpireDate()
                     .toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             message = "Hello, \n your account has been locked by an admin and will be unlocked on: "
-                    + formattedTimestamp +" \n If you believe this is an error Please reply to this email";
+                    + formattedTimestamp + " \n If you believe this is an error Please reply to this email";
             subject = "Account " + user.getUsername() + " has been locked";
 
         }
@@ -251,14 +262,18 @@ public class UserServiceImpl implements UserService {
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
         emailService.sendEmail(mailMessage);
-        return userMapper.userToUserInformation(userRepository.save(user));
+        return userRepository.save(user).getUserId();
     }
 
     @Override
     public boolean isUserLocked(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
-                        new NoSuchElementException("username note founds username: " + username));
+                        new NoSuchElementException(
+                                MessageFormat.
+                                        format("username: {0} not found in our records" , username)
+                        )
+                );
 
 //        log.debug("User information: " + user.getUsername() + " \n " + user.getAccountNonLocked());
 
@@ -277,7 +292,11 @@ public class UserServiceImpl implements UserService {
     public boolean accountLockExpired(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
-                        new NoSuchElementException("username note founds username: " + username));
+                        new NoSuchElementException(
+                                MessageFormat.
+                                        format("username: {0} not found in our records" , username)
+                        )
+                );
 
         Calendar cal = Calendar.getInstance();
 //        getAccountExpireDate hold the Timestamp date where the user's lock will be released;

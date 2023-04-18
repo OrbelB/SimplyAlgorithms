@@ -5,7 +5,6 @@ import com.simplyalgos.backend.universalReport.dto.UniversalReportDTO;
 import com.simplyalgos.backend.universalReport.service.UniversalReportService;
 import com.simplyalgos.backend.user.security.perms.AdminPermission;
 import com.simplyalgos.backend.utils.StringUtils;
-import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -68,21 +67,21 @@ public class UniversalReportController {
     @GetMapping(path = "/listIndividualReports", produces = "application/json")
     public ResponseEntity<?> listReportByIndividual(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                                    @RequestParam(name = "sortBy", defaultValue = "publicNote") String sortBy,
+                                                    @RequestParam(name = "sortBy", required = false) String sortBy,
                                                     @RequestParam(name = "userId") UUID userId,
                                                     @RequestParam(name = "individual") String individual){
         if (StringUtils.isNotNullAndEmptyOrBlank(individual)){
             if (individual.equals("victum")) {
                 return ResponseEntity.ok(URS
-                        .listByVictum(PageRequest.of(page, size, Sort.by(sortBy)), userId));
+                        .listByVictum(PageRequest.of(page, size), userId));
             }
             if (individual.equals("culprit")) {
                 return ResponseEntity.ok(URS
-                        .listByCulprit(PageRequest.of(page, size, Sort.by(sortBy)), userId));
+                        .listByCulprit(PageRequest.of(page, size), userId));
             }
             if (individual.equals("resolver")) {
                 return ResponseEntity.ok(URS
-                        .listByVictum(PageRequest.of(page, size, Sort.by(sortBy)), userId));
+                        .listByVictum(PageRequest.of(page, size), userId));
             }
 
         }
