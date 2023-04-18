@@ -2,9 +2,11 @@
 
 .category {
   background-color: white !important;
-  border-radius: 10px !important;
-  border: 2px solid #ccc !important;
   color: black !important;
+  border-radius: '4px' !important;
+  font-weight: 'bold' !important;
+  text-transform: 'uppercase' !important;
+  transition: 'box-shadow 0.2s ease-in-out' !important;
   font-family: 'Readex Pro', sans-serif !important;
   font-size: 20px !important;
   padding: 12px !important;
@@ -13,10 +15,12 @@
 }
 
 .activeCategory {
-  background-color: var(--color-border-input-form) !important;
-  border-radius: 10px !important;
-  border: 2px solid #ccc !important;
+  background-color: #7fa3eb !important;
   color: black !important;
+  border-radius: '4px' !important;
+  font-weight: 'bold' !important;
+  text-transform: 'uppercase' !important;
+  transition: 'box-shadow 0.2s ease-in-out' !important;
   font-family: 'Readex Pro', sans-serif !important;
   font-size: 20px !important;
   padding: 12px !important;
@@ -26,9 +30,14 @@
 
 .last-button {
   background-color: var(--color-border-input-form);
-  border-radius: 10px 10px 10px 10px;
-  width: 100% !important;
+  color: black !important;
+  border-radius: '4px' !important;
+  font-weight: 'bold' !important;
+  text-transform: 'uppercase' !important;
+  transition: 'box-shadow 0.2s ease-in-out' !important;
+  font-family: 'Readex Pro', sans-serif !important;
   font-size: 20px !important;
-  font-family: 'Readex Pro', sans-serif;
-  border: 1px solid #0f52d8;
+  padding: 12px !important;
+  width: 100% !important;
+  margin-bottom: 20px !important;
 }

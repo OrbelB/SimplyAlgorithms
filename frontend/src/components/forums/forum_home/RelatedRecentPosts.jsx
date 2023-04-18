@@ -48,7 +48,7 @@ export default function RelatedRecentPosts() {
 
   if (status === 'success') {
     return viewedForums?.map(({ pageId, userDto, title }) => (
-      <Card key={pageId} raised sx={{ marginBottom: 5 }}>
+      <Card raised key={pageId} sx={{ marginBottom: 5 }}>
         <CardActionArea
           sx={{ padding: '0.5rem 1rem' }}
           onClick={debounce(() => resetData(pageId), 100)}

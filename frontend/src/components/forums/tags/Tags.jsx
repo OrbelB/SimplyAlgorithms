@@ -55,12 +55,23 @@ export default function Tags() {
       <div className="mt-4 mb-4">
         {filteredTags?.map((tag) => (
           <Button
+            type="button"
+            variant="contained"
+            sx={{
+              boxShadow:
+                '0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)',
+              '&:hover': {
+                boxShadow:
+                  '0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12)',
+              },
+            }}
             key={tag?.tagId}
+            disableElevation
             className={`${classes.category} ${
               activeTag === tag?.tagId ? classes.activeCategory : ''
             }`}
             onClick={() => handleClick(tag?.tagId)}
-            type="button"
+            elevation={3}
           >
             {tag?.tag}
           </Button>
@@ -71,6 +82,15 @@ export default function Tags() {
             onClick={loadMoreTags}
             hidden={totalPages === page}
             type="button"
+            variant="contained"
+            sx={{
+              boxShadow:
+                '0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)',
+              '&:hover': {
+                boxShadow:
+                  '0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12)',
+              },
+            }}
           >
             Explore More...
           </Button>

@@ -27,12 +27,11 @@ export default function QuizDB({ userHistory }) {
           }) => (
             <Grid key={nanoid()} item xs={12} md={6} lg={4}>
               <Card
+                raised
                 sx={{
                   height: '100%',
-                  border: 2,
-                  borderColor: 'black',
-                  borderRadius: '20px',
-                  backgroundColor: '#d3d3d3',
+                  borderRadius: '5px',
+                  backgroundColor: '#E0E0E0',
                 }}
               >
                 <CardContent>

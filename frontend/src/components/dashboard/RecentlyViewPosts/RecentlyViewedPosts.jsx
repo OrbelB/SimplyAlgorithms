@@ -16,9 +16,10 @@ export default function RecentlyViewedPosts() {
   const navigate = useNavigate();
   return viewedForums.map(({ pageId, title, userDto }) => (
     <Card
+      raised
       key={pageId}
-      className="preview-sect card m-2 rounded"
-      variant="elevation"
+      sx={{ height: '100%', borderRadius: '5px' }}
+      className="m-2"
     >
       <CardActionArea
         onClick={() => {
@@ -38,7 +39,7 @@ export default function RecentlyViewedPosts() {
               {userDto?.username}
             </Typography>
           </div>
-          <Typography sx={{ display: 'block', marginTop: '20px' }} variant="h5">
+          <Typography sx={{ display: 'block' }} variant="h5">
             {title}
           </Typography>
         </CardContent>

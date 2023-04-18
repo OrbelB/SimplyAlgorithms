@@ -50,10 +50,10 @@ export default function ForumQuickView({
 
   return (
     <Card
+      raised
       ref={innerRef}
       key={pageId}
       sx={{ minWidth: 400, width: '100%' }}
-      raised
       className="preview-section mt-4 mb-4 me-4"
     >
       <CardActionArea

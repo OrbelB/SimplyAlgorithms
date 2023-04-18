@@ -26,7 +26,7 @@ export { POST_REVIEWS_WITHNORATING };
 
 export default function PostPreview() {
   return POST_REVIEWS_WITHNORATING.map(({ name, title }) => (
-    <Card key={nanoid()} className="m-2">
+    <Card raised key={nanoid()} className="m-2">
       <CardHeader
         avatar={<img alt="Profile Pic" className="profile-pic" />}
         title={
