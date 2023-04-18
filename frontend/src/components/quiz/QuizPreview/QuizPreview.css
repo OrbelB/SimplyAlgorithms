@@ -1,10 +1,14 @@
 .quizpreview {
-  border: 2px solid black;
+
   border-radius: 25px;
   width: 400px !important;
-  background-color: #d9d9d9;
+  background-color: #ffffff;
+  box-shadow: 1.5px 1.5px pink, 5px 5px hotpink;
+  transition: transform 3s ease-in-out;
+  will-change: transform;
 }
 .nav-hover:hover {
-  color: black;
+  color: rgb(238, 105, 134);
+  transform: translateX(-5px) translateY(-5px) scale(1.02);
  
 }

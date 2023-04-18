@@ -30,6 +30,7 @@ body, html, #root {
     --color-border-input-form: #789ADE;
     --color-border-input-form-invalid: #d78585;
     --color-nav-foot: #FDFCF4;
+    --color-quiz-home: #d7e5f4;
     --color-socials-hover:var(--color-bg-alg-dash);
 }
 
