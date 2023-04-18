@@ -93,7 +93,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
   );
   const [noteBody, setNoteBody] = useState(element?.noteBody ?? content);
   const [isPublic, setIsPublic] = useState(element?.isPublic === 1);
-  const removeHandler = () => {
+  const removeHandler = async () => {
     try {
       dispatch(
         deleteNote({ noteId: element.noteId, userId, jwtAccessToken })
@@ -258,6 +258,23 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     dispatch(updateExpireDateOnSharedNotes({ noteShareDTO, jwtAccessToken }));
   };
 
+  const [openDel, setOpenDel] = useState(false);
+  const messageDel =
+    'This action is irreversible! It cannot be undone. Only a magic genie could restore it!';
+
+  const handleOpenDel = () => {
+    setOpenDel(true);
+  };
+
+  const handleCloseDel = () => {
+    setOpenDel(false);
+  };
+
+  const handleConfirmDel = async () => {
+    await removeHandler(element.id);
+    setOpenDel(false);
+  };
+
   const [openAUS, setOpenAUS] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -300,9 +317,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
         <button
           type="button"
           className="btn btn-danger m-2"
-          onClick={() => {
-            removeHandler(element.id);
-          }}
+          onClick={handleOpenDel}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -316,6 +331,13 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
           </svg>
         </button>
+        <AreYouSureModal
+          open={openDel}
+          onClose={handleCloseDel}
+          onConfirm={handleConfirmDel}
+          title="Are you sure you want to delete this note?"
+          message={messageDel}
+        />
         <button
           type="button"
           className="btn btn-success m-2"
