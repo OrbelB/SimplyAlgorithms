@@ -1,28 +1,35 @@
 .line-one {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .profile-pic {
-    height: 50px;
-    width: 100px;
-    padding: 10px 0px 0px 20px;
+  height: 50px;
+  width: 100px;
+  padding: 10px 0px 0px 20px;
 }
 
 .preview-sect {
-    height: auto;
-    background-color: #ededed;
-    border: 1px solid black;
-    border-radius: 25px;
+  background-color: white;
+  color: black;
+  border-radius: '10px';
+  font-weight: 'bold';
+  text-transform: 'uppercase';
+  transition: 'box-shadow 0.2s ease-in-out';
+  font-family: 'Readex Pro', sans-serif;
+  font-size: 20px;
+  padding: 12px;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 .preview-department {
-    text-align: left;
-    padding: 10px 0px 30px 20px;
+  text-align: left;
+  padding: 10px 0px 30px 20px;
 }
 
 .line-two {
-    text-align: left;
-    padding-left: 20px;
-    padding-bottom: 40px;
-} 
+  text-align: left;
+  padding-left: 20px;
+  padding-bottom: 40px;
+}

@@ -33,37 +33,7 @@ export default function JoinQuiz({
   return (
     <div className="join-screen container-fluid vh-100 p-5">
       <div key={quiz.quizId} className="row">
-        <div className="col-md-8">
-          <h1 className="qname text-center display-4 mb-2">
-            {quiz.title.toUpperCase()}
-          </h1>
-          <p className="qname text-center mb-5">{quiz.description}</p>
-          {/* <h5 className="qdescription m-5 text-left">{quizDTO.title}</h5> */}
-          <div>
-            <Avatar
-              sx={{ width: 250, height: 250 }}
-              src={quiz.picture}
-              className="mx-auto my-3 border-2 border border-info"
-              alt="quiz picture"
-              loading="lazy"
-              variant="rounded"
-            />
-          </div>
-        </div>
-        <div className="col-md-2 qinfo col-sm-9 mb-3">
-          <div className="text-left mb-2">
-            <h5>Questions</h5>
-            <p className="fs-4">{amountOfQuestions}</p>
-          </div>
-          <div className="text-left">
-            {/* <h5>Time Limit</h5>
-            <p className="fs-4">None</p> */}
-            <h5>Created By </h5>
-            <p className="fs-5"> {createdBy.username} </p>
-            <p>Max Score: {quiz.score}</p>
-          </div>
-        </div>
-        <div className="col-auto text-end">
+        <div className="row-mb-2 text-end">
           <OptionsMenu
             handleOnDelete={handleDeleteQuiz}
             culpritUserId={createdBy?.userId}
@@ -73,17 +43,63 @@ export default function JoinQuiz({
             userId={createdBy.userId}
           />
         </div>
-      </div>
-      <div className="text-center mt-5">
-        <Button
-          type="button"
-          variant="contained"
-          color="primary"
-          sx={{ fontSize: '20px' }}
-          onClick={start}
-        >
-          Start Quiz
-        </Button>
+
+        <div className="col-md-4 mb-3 text-end">
+          <div className="col-auto">
+            <Avatar
+              sx={{
+                width: '15.625rem',
+                height: '15.625rem',
+                '@media (max-width: 768px)': {
+                  width: '10rem',
+                  height: '10rem',
+                },
+              }}
+              src={quiz.picture}
+              className="mx-auto my-3 border-2 border border-info"
+              alt="quiz picture"
+              loading="lazy"
+              variant="rounded"
+            />
+
+            <hr />
+            <div className="text-center mb-2">
+              <h5 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+                Questions
+              </h5>
+              <p style={{ fontSize: '1.6rem' }} className="fs-4">
+                {amountOfQuestions}
+              </p>
+            </div>
+            <div className="text-center">
+              <h5 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+                Created By{' '}
+              </h5>
+              <p style={{ fontSize: '1.4rem' }} className="fs-5">
+                {' '}
+                {createdBy.username}{' '}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-md-8">
+          <h1 className="qtitle text-center display-4 mb-2">
+            {quiz.title.toUpperCase()}
+          </h1>
+          <p className="qname text-start mb-5">{quiz.description}</p>
+          <div className="text-center mt-5">
+            <Button
+              type="button"
+              variant="contained"
+              color="primary"
+              sx={{ fontSize: '20px' }}
+              onClick={start}
+            >
+              Start Quiz
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

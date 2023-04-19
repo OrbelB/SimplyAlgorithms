@@ -77,7 +77,7 @@ export default function ShowMoreNotes() {
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog">
+        <div className="modal-dialog w-75">
           <div className="modal-content bt">
             <div className="modal-header">
               <h2 className="modal-title" id="staticBackdropLabel">

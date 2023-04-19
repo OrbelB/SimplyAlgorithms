@@ -5,12 +5,14 @@
   background-image: url('https://www.transparenttextures.com/patterns/bright-squares.png');
 }
 
+.qtitle,
 .qname,
 .qattempts,
 .qamount,
 .qdescription {
   font-family: 'Readex Pro', sans-serif;
 }
-.qinfo {
-  border-left: 1px solid black;
+.qname {
+  font-size: 1.5rem;
+  color: #333;
 }

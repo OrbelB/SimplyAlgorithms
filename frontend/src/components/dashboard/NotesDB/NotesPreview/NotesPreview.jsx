@@ -36,17 +36,14 @@ export default function HighlightsPreview({ privateNotes, innerRef }) {
 
   const comment = ({ title, noteBody, lastNode }) => (
     <Card
+      raised
       key={nanoid()}
       ref={lastNode}
       sx={{
         height: '100%',
-        border: 2,
-        borderColor: 'black',
-        borderRadius: '20px',
-        backgroundColor: '#d3d3d3',
-        boxShadow: 3,
+        borderRadius: '5px',
       }}
-      className="m-2"
+      className="p-2 m-2"
     >
       <CardContent>
         <Typography variant="h5" className="preview-title" gutterBottom>
