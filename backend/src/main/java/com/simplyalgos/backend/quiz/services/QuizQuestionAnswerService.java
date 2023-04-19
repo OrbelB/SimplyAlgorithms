@@ -21,4 +21,6 @@ public interface QuizQuestionAnswerService {
     List<QuizQuestionAnswerDTO> getAllQuizQuestionAnswer(UUID questionId);
     QuizQuestionAnswerDTO getQuizQuestionAnswer(UUID answerId, UUID questionId);
 
+    void removeMissingQuestionAnswers(List<UUID> answerIds, UUID questionId);
+
 }

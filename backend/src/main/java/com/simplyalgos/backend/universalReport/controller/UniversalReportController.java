@@ -68,20 +68,20 @@ public class UniversalReportController {
     public ResponseEntity<?> listReportByIndividual(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
                                                     @RequestParam(name = "sortBy", required = false) String sortBy,
-                                                    @RequestParam(name = "userId") UUID userId,
+                                                    @RequestParam(name = "userIdOrUsername") String userIdOrUsername,
                                                     @RequestParam(name = "individual") String individual){
         if (StringUtils.isNotNullAndEmptyOrBlank(individual)){
             if (individual.equals("victum")) {
                 return ResponseEntity.ok(URS
-                        .listByVictum(PageRequest.of(page, size), userId));
+                        .listByVictum(PageRequest.of(page, size), userIdOrUsername));
             }
             if (individual.equals("culprit")) {
                 return ResponseEntity.ok(URS
-                        .listByCulprit(PageRequest.of(page, size), userId));
+                        .listByCulprit(PageRequest.of(page, size), userIdOrUsername));
             }
             if (individual.equals("resolver")) {
                 return ResponseEntity.ok(URS
-                        .listByVictum(PageRequest.of(page, size), userId));
+                        .listByVictum(PageRequest.of(page, size), userIdOrUsername));
             }
 
         }

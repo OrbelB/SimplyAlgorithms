@@ -10,6 +10,14 @@ import java.util.UUID;
 public interface UniversalReportRepository extends JpaRepository<UniversalReport, UUID> {
 
     Page<UniversalReport> findAllByVictimUser_UserId(UUID userId ,Pageable pageable);
+    Page<UniversalReport> findAllByVictimUser_Username(String username, Pageable pageable);
 
     Page<UniversalReport> findAllByCulpritUser_UserId(UUID userId, Pageable pageable);
+    Page<UniversalReport> findAllByCulpritUser_Username(String username, Pageable pageable);
+
+    Page<UniversalReport> findAllByResolvedBy_UserId(UUID userId, Pageable pageable);
+
+    Page<UniversalReport> findAllByResolvedBy_Username(String username, Pageable pageable);
+
+
 }

@@ -31,11 +31,11 @@ public interface UniversalReportService {
     ObjectPagedList<?> listReport(Pageable pageable);
 
 
-    ObjectPagedList<?> listByVictum(Pageable pageable, UUID userId);
+    ObjectPagedList<?> listByVictum(Pageable pageable, String userIdOrUsername);
 
-    ObjectPagedList<?> listByCulprit(Pageable pageable, UUID userId);
+    ObjectPagedList<?> listByCulprit(Pageable pageable, String userIdOrUsername);
 
-    ObjectPagedList<?> listByResolver(Pageable pageable, UUID userId);
+    ObjectPagedList<?> listByResolver(Pageable pageable, String userIdOrUsername);
 
 
     void emailReportToAllAdmins(String subject, String body);

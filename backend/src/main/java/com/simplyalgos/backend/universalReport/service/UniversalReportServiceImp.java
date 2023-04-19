@@ -193,6 +193,7 @@ public class UniversalReportServiceImp implements  UniversalReportService{
                         MessageFormat.format("Report with Id {0} not found", reportId))));
     }
 
+//    UPDATE
     @Override
     public ObjectPagedList<?> listReport(Pageable pageable) {
         Page<UniversalReport> universalReportPage = urr.findAll(pageable);
@@ -209,9 +210,20 @@ public class UniversalReportServiceImp implements  UniversalReportService{
         );
     }
 
+//    UPDATE
     @Override
-    public ObjectPagedList<?> listByVictum(Pageable pageable, UUID userId) {
-        Page<UniversalReport> universalReportPage = urr.findAllByVictimUser_UserId(userId, pageable);
+    public ObjectPagedList<?> listByVictum(Pageable pageable, String userIdOrUsername) {
+
+        Page<UniversalReport> universalReportPage;
+
+        if (userIdOrUsername.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")) {
+            // userIdOrUsername is a UUID
+            universalReportPage = urr.findAllByVictimUser_UserId(UUID.fromString(userIdOrUsername), pageable);
+        } else {
+            // userIdOrUsername is a username
+            universalReportPage = urr.findAllByVictimUser_Username(userIdOrUsername, pageable);
+        }
+
         return new ObjectPagedList<>(
                 universalReportPage
                         .stream()
@@ -225,9 +237,20 @@ public class UniversalReportServiceImp implements  UniversalReportService{
         );
     }
 
+//    UPDATE
     @Override
-    public ObjectPagedList<?> listByCulprit(Pageable pageable, UUID userId) {
-        Page<UniversalReport> universalReportPage = urr.findAllByCulpritUser_UserId(userId, pageable);
+    public ObjectPagedList<?> listByCulprit(Pageable pageable, String userIdOrUsername) {
+
+        Page<UniversalReport> universalReportPage;
+
+        if (userIdOrUsername.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")) {
+            // userIdOrUsername is a UUID
+            universalReportPage = urr.findAllByCulpritUser_UserId(UUID.fromString(userIdOrUsername), pageable);
+        } else {
+            // userIdOrUsername is a username
+            universalReportPage = urr.findAllByCulpritUser_Username(userIdOrUsername, pageable);
+        }
+
         return new ObjectPagedList<>(
                 universalReportPage
                         .stream()
@@ -241,9 +264,20 @@ public class UniversalReportServiceImp implements  UniversalReportService{
         );
     }
 
+//  UPDATE
     @Override
-    public ObjectPagedList<?> listByResolver(Pageable pageable, UUID userId) {
-        Page<UniversalReport> universalReportPage = urr.findAll(pageable);
+    public ObjectPagedList<?> listByResolver(Pageable pageable, String userIdOrUsername) {
+
+        Page<UniversalReport> universalReportPage;
+
+        if (userIdOrUsername.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")) {
+            // userIdOrUsername is a UUID
+            universalReportPage = urr.findAllByResolvedBy_UserId(UUID.fromString(userIdOrUsername), pageable);
+        } else {
+            // userIdOrUsername is a username
+            universalReportPage = urr.findAllByResolvedBy_Username(userIdOrUsername, pageable);
+        }
+
         return new ObjectPagedList<>(
                 universalReportPage
                         .stream()

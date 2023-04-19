@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -13,4 +14,5 @@ public interface QuizQuestionAnswerRepository extends JpaRepository<QuestionAnsw
 
     List<QuestionAnswer> findAllByAnswerBelongsToQuestion_QuestionId(UUID questionId);
 
+    List<QuestionAnswer> findAllByAnswerIdNotInAndAnswerBelongsToQuestion_QuestionId(Collection<UUID> answerIdList, UUID questionId);
 }

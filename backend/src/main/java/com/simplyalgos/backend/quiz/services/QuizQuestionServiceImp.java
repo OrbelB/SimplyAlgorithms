@@ -112,6 +112,8 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
             else {
                 updatedQuizQuestionsDTO.add(updateQuizQuestionAndAnswers(quizQuestionDTO));
             }
+
+            // delete removed answers
         }
         return updatedQuizQuestionsDTO;
     }
@@ -122,11 +124,11 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
     public QuizQuestionDTO updateQuizQuestionAndAnswers(QuizQuestionDTO quizQuestionDTO) {
         Optional<QuizQuestion> optionalQuizQuestion = questionRepository.findById(quizQuestionDTO.getQuestionId());
         if (optionalQuizQuestion.isPresent()) {
-            if (quizQuestionDTO.isDeleteQuestion()) {
-                log.debug("Deleting question");
-                deleteQuizQuestion(quizQuestionDTO.getQuestionId());
-                return null;
-            } else {
+//            if (quizQuestionDTO.isDeleteQuestion()) {
+//                log.debug("Deleting question");
+//                deleteQuizQuestion(quizQuestionDTO.getQuestionId());
+//                return null;
+//            } else {
                 log.debug("Starting the update for questions");
                 optionalQuizQuestion.get().setQuestion(quizQuestionDTO.getQuestion());
 
@@ -146,7 +148,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
                 quizQuestionAnswerService.updateAllQuizQuestionAnswers(quizQuestionDTO);
                 return quizQuestionDTO;
             }
-        }
+//        }
         throw new NoSuchElementException(MessageFormat.format("Quiz question does not exists", quizQuestionDTO.getQuestionId()));
     }
 
