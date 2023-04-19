@@ -5,6 +5,7 @@ import { Button, Avatar } from '@mui/material';
 import OptionsMenu from '../../options-menu';
 import { deleteQuiz } from '../../../services/quiz';
 import { quizActions } from '../../../store/reducers/quiz-slice';
+import image from '../../../assets/quiz.png';
 
 export default function JoinQuiz({
   start,
@@ -31,7 +32,7 @@ export default function JoinQuiz({
     navigate(`/quiz/${quiz.quizId}/edit`);
   };
   return (
-    <div className="join-screen container-fluid vh-100 p-5">
+    <div className="join-screen container-fluid min-vh-150 vh-150 p-5">
       <div key={quiz.quizId} className="row">
         <div className="row-mb-2 text-end">
           <OptionsMenu
@@ -50,14 +51,18 @@ export default function JoinQuiz({
               sx={{
                 width: '15.625rem',
                 height: '15.625rem',
-                '@media (max-width: 768px)': {
+                '@media (max-width: 850px)': {
                   width: '10rem',
                   height: '10rem',
                 },
               }}
-              src={quiz.picture}
-              className="mx-auto my-3 border-2 border border-info"
-              alt="quiz picture"
+              src={
+                quiz.picture === null || quiz.picture === ''
+                  ? image
+                  : quiz.picture
+              }
+              className="mx-auto my-3"
+              alt={image}
               loading="lazy"
               variant="rounded"
             />
@@ -76,8 +81,10 @@ export default function JoinQuiz({
                 Created By{' '}
               </h5>
               <p style={{ fontSize: '1.4rem' }} className="fs-5">
-                {' '}
-                {createdBy.username}{' '}
+                {createdBy.username}
+              </p>
+              <p style={{ fontSize: '1.4rem' }} className="fs-5">
+                Max Score: {quiz.score}
               </p>
             </div>
           </div>
