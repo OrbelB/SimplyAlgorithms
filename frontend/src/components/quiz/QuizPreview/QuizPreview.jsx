@@ -34,8 +34,8 @@ export default function QuizDB({ quizList, status }) {
               return (
                 <div
                   key={nanoid()}
-                  className="col-auto col-md-3"
-                  style={{ marginStart: 5 }}
+                  className="col-auto col-sm-12 col-md-12 col-lg-6 col-xl-4 gx-2"
+                  style={{ marginStart: 5, marginBottom: 5 }}
                 >
                   <QuizCard
                     key={nanoid()}
@@ -53,7 +53,7 @@ export default function QuizDB({ quizList, status }) {
             return (
               <div
                 key={nanoid()}
-                className="col-auto col-md-3"
+                className="col-auto col-sm-12 col-md-12 col-lg-6 col-xl-4 gx-2"
                 style={{ marginStart: 5 }}
               >
                 <QuizCard

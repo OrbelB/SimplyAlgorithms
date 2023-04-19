@@ -60,6 +60,7 @@ export default function JoinQuiz({
             <p className="fs-4">None</p> */}
             <h5>Created By </h5>
             <p className="fs-5"> {createdBy.username} </p>
+            <p>Max Score: {quiz.score}</p>
           </div>
         </div>
         <div className="col-auto text-end">

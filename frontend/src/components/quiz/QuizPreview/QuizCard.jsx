@@ -14,7 +14,8 @@ import { quizActions } from '../../../store/reducers/quiz-slice';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   margin: 'auto',
-  background: '#F8F4E3',
+  minHeight: 690,
+  background: 'white',
   boxShadow: theme.shadows[3],
   borderRadius: 8,
   '&:hover': {
@@ -51,7 +52,7 @@ export default function QuizCard({
   createdBy,
   score,
   quizId,
-  description,
+  description = '',
   picture,
   lastElementChild,
 }) {
@@ -61,6 +62,11 @@ export default function QuizCard({
     dispatch(quizActions.resetData());
     navigate(`${quizId}`);
   };
+  const truncatedText =
+    description.substring(
+      0,
+      description.length > 256 ? 256 : description.length
+    ) + '...';
   return (
     <StyledCard ref={lastElementChild} variant="elevation">
       <CardActionArea onClick={handleNavigate}>
@@ -80,7 +86,7 @@ export default function QuizCard({
             <p>Max Score: {score}</p>
           </Typography>
           <Typography variant="body1" component="p" gutterBottom>
-            {description}
+            {truncatedText}
           </Typography>
           {/* <div className="row">
             <div className="col-5">
