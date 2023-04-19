@@ -60,6 +60,7 @@ public class QuizServiceImp implements QuizService {
         Page<Quiz> quizPage = quizRepository.findAll(pageable);
         return new ObjectPagedList<>(
                 quizPage.stream()
+                        .map(quizMapper::QuizToQuizListDTO)
                         .collect(Collectors.toList()),
                 PageRequest.of(
                         quizPage.getPageable().getPageNumber(),
@@ -73,6 +74,7 @@ public class QuizServiceImp implements QuizService {
         Page<Quiz> quizPage = quizRepository.findAllByTitleStartingWith(title, pageable);
         return new ObjectPagedList<>(
                 quizPage.stream()
+                        .map(quizMapper::QuizToQuizListDTO)
                         .collect(Collectors.toList()),
                 PageRequest.of(
                         quizPage.getPageable().getPageNumber(),
@@ -87,7 +89,7 @@ public class QuizServiceImp implements QuizService {
         Page<Quiz> quizPage = quizRepository.findAllByTagId_TagId(UUID.fromString(tag), pageable);
         return new ObjectPagedList<>(
                 quizPage.stream()
-                        .map(quizMapper::quizToQuizDTO)
+                        .map(quizMapper::QuizToQuizListDTO)
                         .collect(Collectors.toList()),
                 PageRequest.of(
                         quizPage.getPageable().getPageNumber(),

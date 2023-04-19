@@ -112,6 +112,8 @@ public class SecurityConfig {
                                                 "/quiz/list").permitAll()
                                         .requestMatchers(HttpMethod.GET,
                                                 "/wiki/list/**, wiki/list").permitAll()
+                                        .requestMatchers(HttpMethod.GET,
+                                                "/quiz/*").permitAll()
 //                        .requestMatchers(HttpMethod.GET,"/note/list**").permitAll()
                 )
                 .authorizeHttpRequests()

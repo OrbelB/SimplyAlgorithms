@@ -4,10 +4,7 @@ import com.simplyalgos.backend.quiz.dtos.FullQuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizQuestionDTO;
 import com.simplyalgos.backend.quiz.dtos.TakeQuizDTO;
-import com.simplyalgos.backend.quiz.security.CreateQuizPermission;
-import com.simplyalgos.backend.quiz.security.DeleteQuizPermission;
-import com.simplyalgos.backend.quiz.security.TakeQuizPermission;
-import com.simplyalgos.backend.quiz.security.UpdateQuizPermission;
+import com.simplyalgos.backend.quiz.security.*;
 import com.simplyalgos.backend.quiz.services.*;
 import com.simplyalgos.backend.user.security.perms.UserDeletePermission;
 import com.simplyalgos.backend.utils.StringUtils;
@@ -72,6 +69,7 @@ public class QuizController {
     }
 
 //    new and improved
+    @TakeQuizPermission
     @GetMapping(value = "/user-history")
     public ResponseEntity<?> getUserQuizHistory(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
@@ -80,10 +78,12 @@ public class QuizController {
             return ResponseEntity.ok(takeQuizAverageService.getTakeQuizAverageList(UUID.fromString(userId), PageRequest.of(page, size)));
     }
 
+    @QuizTeacherAdminPermission
     @GetMapping(value = "/user-history/{avgTakeQuizId}")
     public ResponseEntity<?> getAverageQuizScore(@PathVariable String avgTakeQuizId) {
         return ResponseEntity.ok(takeQuizAverageService.getAverageQuizScore(UUID.fromString(avgTakeQuizId)));
     }
+
 
 
     @UserDeletePermission
@@ -94,6 +94,7 @@ public class QuizController {
     }
 
 //    all scores gotten on specific quiz
+    @QuizTeacherAdminPermission
     @GetMapping(path = "/avgQuizScore", consumes = "application/json")
     public ResponseEntity<?> calculateAverageQuizScore(@RequestBody QuizDTO quizDTO) {
         return ResponseEntity.ok(takeQuizService.getAverageQuizScore(quizDTO.getQuizId()));
@@ -101,6 +102,7 @@ public class QuizController {
 
     //    Get all the scores a specific quiz taken by the user;
 
+    @QuizTeacherAdminPermission
     @GetMapping(path = "/userQuizScore")
     public ResponseEntity<?> getAllUserQuizScore(@RequestBody TakeQuizDTO takeQuizDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)

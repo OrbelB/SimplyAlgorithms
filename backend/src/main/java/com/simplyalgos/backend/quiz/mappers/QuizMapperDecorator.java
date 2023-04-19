@@ -33,6 +33,11 @@ public class QuizMapperDecorator implements QuizMapper{
     }
 
     @Override
+    public QuizListInfoDTO QuizToQuizListDTO(Quiz quiz) {
+        return null;
+    }
+
+    @Override
     public TakeQuizDTO takeQuizToTakeQuizDTO(TakeQuiz takeQuiz) {
         return quizMapper.takeQuizToTakeQuizDTO(takeQuiz);
     }
