@@ -35,10 +35,9 @@ export default function QuizDB({ quizList, status }) {
                 <div
                   key={nanoid()}
                   className="col-auto col-sm-12 col-md-12 col-lg-6 col-xl-4 gx-2"
-                  style={{ marginStart: 5, marginBottom: 5 }}
+                  style={{ marginStart: 5 }}
                 >
                   <QuizCard
-                    key={nanoid()}
                     quizId={quizId}
                     title={title}
                     score={score}
@@ -54,15 +53,15 @@ export default function QuizDB({ quizList, status }) {
               <div
                 key={nanoid()}
                 className="col-auto col-sm-12 col-md-12 col-lg-6 col-xl-4 gx-2"
-                style={{ marginStart: 5 }}
+                style={{ marginStart: 5, marginBottom: 5 }}
               >
                 <QuizCard
-                  key={nanoid()}
                   quizId={quizId}
                   title={title}
                   score={score}
                   createdBy={createdBy}
-                  lastElementChild={lastElementChild}
+                  description={description}
+                  picture={picture}
                 />
               </div>
             );

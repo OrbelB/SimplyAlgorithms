@@ -83,7 +83,7 @@ export default function QuizQuestionModule({
               }
               height="350px"
               width="350px"
-              className="rounded-4 m-4"
+              className="rounded-4 m-4 img-fluid"
               alt="question_image"
             />
             <input

@@ -15,9 +15,11 @@ import { quizActions } from '../../../store/reducers/quiz-slice';
 const StyledCard = styled(Card)(({ theme }) => ({
   margin: 'auto',
   minHeight: 690,
+  width: '100%',
   background: 'white',
   boxShadow: theme.shadows[3],
   borderRadius: 8,
+  marginTop: 0,
   '&:hover': {
     boxShadow: theme.shadows[8],
   },
@@ -63,18 +65,26 @@ export default function QuizCard({
     navigate(`${quizId}`);
   };
   const truncatedText =
-    description.substring(
-      0,
-      description.length > 256 ? 256 : description.length
-    ) + '...';
+    description != null
+      ? description.substring(
+          0,
+          description.length > 256 ? 256 : description.length
+        ) + '...'
+      : 'missing description';
   return (
     <StyledCard ref={lastElementChild} variant="elevation">
-      <CardActionArea onClick={handleNavigate}>
+      <CardActionArea
+        onClick={handleNavigate}
+        sx={{ minHeight: 690, marginTop: 0, paddingTop: 0 }}
+      >
         <CardMedia
           component="img"
           height="450"
           loading="lazy"
-          image={picture}
+          image={
+            picture ??
+            'https://canopylab.com/wp-content/uploads/2020/05/Working-with-adaptive-quizzes-A-beginners-guide.jpg'
+          }
           alt="quiz"
         />
         <CardContent>
@@ -83,30 +93,13 @@ export default function QuizCard({
           </Typography>
           <Typography variant="subtitle2" component="p" gutterBottom>
             Created by: {createdBy.username}
-            <p>Max Score: {score}</p>
           </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
+          <Typography variant="body2" component="p" gutterBottom>
+            Max Score: {score}
+          </Typography>
+          <Typography variant="body1" component="p" gutterBottom noWrap>
             {truncatedText}
           </Typography>
-          {/* <div className="row">
-            <div className="col-5">
-              <CircularProgressbar
-                value={score}
-                percentage={score}
-                text={`${score}%`}
-                strokeWidth="10"
-                styles={buildStyles({
-                  strokeLinecap: 'round',
-                  textSize: '18px',
-                  width: '50px',
-                  height: '50px',
-                  pathColor: `#0000FF`,
-                  textColor: 'black',
-                  trailColor: 'darkgray',
-                })}
-              />
-            </div>
-          </div> */}
         </CardContent>
       </CardActionArea>
     </StyledCard>

@@ -91,6 +91,12 @@ export const quizSlice = createSlice({
       state.quizListCurrPage = undefined;
       state.quizListTotalPages = undefined;
     },
+    updateQuizDescription: (state, action) => {
+      state.quizDTO.description = action.payload.description;
+    },
+    updateQuizPicture: (state, action) => {
+      state.quizDTO.picture = action.payload.picture;
+    },
     updateQuizListCurrPage: (state) => {
       state.quizListCurrPage += 1;
     },
