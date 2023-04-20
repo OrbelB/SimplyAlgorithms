@@ -15,9 +15,19 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  TableFooter,
+  TablePagination,
+  useTheme,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import { reportActions } from '../../../../store/reducers/report-slice';
+import { listReportByIndividual } from '../../../../services/universalReport';
 
 const style = {
   position: 'absolute',
@@ -31,16 +41,128 @@ const style = {
   p: 4,
 };
 
-export default function ReportTable({ reports, open, handleClose }) {
-  const [selectedReport, setSelectedReport] = useState(null);
+function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
 
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === 'rtl' ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
+
+export default function ReportTable({
+  reports,
+  open,
+  handleClose,
+  usernameOrId,
+  individual,
+}) {
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { currentPage, totalPages, totalElements } = useSelector(
+    (state) => state.report
+  );
+  const [fetchPage, setFetchPage] = useState(false);
+  const { jwtAccessToken } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const handleReportClick = (report) => {
     setSelectedReport(report);
   };
 
+  useEffect(() => {
+    if (currentPage + 1 <= totalPages && fetchPage) {
+      dispatch(
+        listReportByIndividual({
+          page: currentPage,
+          size: rowsPerPage,
+          userIdOrUsername: usernameOrId,
+          individual,
+          jwtAccessToken,
+        })
+      );
+      setFetchPage(false);
+    }
+  }, [
+    currentPage,
+    dispatch,
+    fetchPage,
+    individual,
+    jwtAccessToken,
+    rowsPerPage,
+    totalPages,
+    usernameOrId,
+  ]);
   const handleDialogClose = () => {
     setSelectedReport(null);
   };
+
+  const handleChangePage = (event, newPage) => {
+    dispatch(reportActions.updateCurrentPage(newPage));
+    setFetchPage(true);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    dispatch(reportActions.updateCurrentPage(0));
+  };
+
+  const emptyRows =
+    currentPage > 0
+      ? Math.max(0, (1 + currentPage) * rowsPerPage - reports.length)
+      : 0;
 
   const cellStyle = { borderRight: '1px solid #ccc' };
   const rowStyle = { borderBottom: '1px solid #ccc' };
@@ -74,17 +196,29 @@ export default function ReportTable({ reports, open, handleClose }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {reports.map((report) => (
+                {(rowsPerPage > 0
+                  ? reports.slice(
+                      currentPage * rowsPerPage,
+                      currentPage * rowsPerPage + rowsPerPage
+                    )
+                  : reports
+                ).map((report) => (
                   <TableRow key={report.reportId} sx={rowStyle}>
                     <TableCell sx={cellStyle}>{report.reportId}</TableCell>
                     <TableCell sx={cellStyle}>{report.foreignId}</TableCell>
-                    <TableCell sx={cellStyle}>{report.culpritUser}</TableCell>
-                    <TableCell sx={cellStyle}>{report.victimUser}</TableCell>
-                    <TableCell sx={cellStyle}>{report.resolvedBy}</TableCell>
+                    <TableCell sx={cellStyle}>
+                      {report.culpritUser?.username ?? ''}
+                    </TableCell>
+                    <TableCell sx={cellStyle}>
+                      {report.victimUser?.username ?? ''}
+                    </TableCell>
+                    <TableCell sx={cellStyle}>
+                      {report.resolvedBy?.username ?? ''}
+                    </TableCell>
                     <TableCell sx={cellStyle}>
                       {report.typeOfForeignId}
                     </TableCell>
-                    <TableCell sx={cellStyle}>{report.category}</TableCell>
+                    <TableCell sx={cellStyle}>{report.catagory}</TableCell>
                     <TableCell
                       sx={cellStyle}
                       onClick={() => handleReportClick(report)}
@@ -97,7 +231,33 @@ export default function ReportTable({ reports, open, handleClose }) {
                     <TableCell>{report.isResolved}</TableCell>
                   </TableRow>
                 ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    component="span"
+                    rowsPerPageOptions={[3, 5, 10]}
+                    colSpan={9}
+                    count={totalElements ?? 0}
+                    page={currentPage ?? 0}
+                    rowsPerPage={rowsPerPage ?? 5}
+                    SelectProps={{
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </Box>

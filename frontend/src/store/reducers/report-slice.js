@@ -24,6 +24,7 @@ const initialState = reportAdapter.getInitialState({
   reportId: undefined,
   currentPage: undefined,
   totalPages: undefined,
+  totalElements: undefined,
 });
 
 export const reportSlice = createSlice({
@@ -35,12 +36,16 @@ export const reportSlice = createSlice({
       state.report = {};
       state.status = 'idle';
       state.error = null;
+      state.totalElements = undefined;
       state.currentPage = undefined;
       state.currentPage = undefined;
       state.reportId = undefined;
     },
     removeReportId: (state) => {
       state.reportId = undefined;
+    },
+    updateCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -83,9 +88,10 @@ export const reportSlice = createSlice({
       })
       .addCase(listReports.fulfilled, (state, action) => {
         state.status = 'success';
-        const { number, totalPages, content } = action.payload;
+        const { number, totalPages, content, totalElements } = action.payload;
         state.currentPage = number;
         state.totalPages = totalPages;
+        state.totalElements = totalElements;
         reportAdapter.upsertMany(state, content);
       })
       .addCase(listReports.rejected, (state, action) => {
@@ -97,9 +103,10 @@ export const reportSlice = createSlice({
       })
       .addCase(listReportByIndividual.fulfilled, (state, action) => {
         state.status = 'success';
-        const { number, totalPages, content } = action.payload;
+        const { number, totalPages, content, totalElements } = action.payload;
         state.currentPage = number;
         state.totalPages = totalPages;
+        state.totalElements = totalElements;
         reportAdapter.upsertMany(state, content);
       })
       .addCase(listReportByIndividual.rejected, (state, action) => {
@@ -132,7 +139,12 @@ export const filterReportsByIndividual = createSelector(
     (state, individual, individualId) => ({ individual, individualId }),
   ],
   (reports, { individual, individualId }) => {
-    return reports.filter((report) => report[individual] === individualId);
+    return reports.filter(
+      (report) =>
+        report[individual]?.username?.toLowerCase() ===
+          individualId?.toLowerCase() ||
+        report[individual]?.userId === individualId
+    );
   }
 );
 

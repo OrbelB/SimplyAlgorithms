@@ -19,7 +19,7 @@ export default function ProfileTabForm() {
     valueIsValid: newBioIsValid,
     valueChangeHandler: newBioChangedHandler,
     reset: resetNewBioHandler,
-  } = useValidateInput((value) => value.trim() !== '', biography);
+  } = useValidateInput((value) => value?.trim() !== '', biography);
 
   let isFormValid = false;
   const handleImage = (e) => {
@@ -34,19 +34,22 @@ export default function ProfileTabForm() {
         (value) => (newProfilePicture = value)
       );
     }
-    dispatch(
-      updateUserData({
-        updatedUserData: {
-          userId: authUserId,
-          biography: newBio,
-          profilePicture:
-            images === undefined ? profilePicture : newProfilePicture,
-        },
-        accessToken: jwtAccessToken,
-      })
-    );
-    navigate('/userProfile');
-    resetNewBioHandler();
+    try {
+      dispatch(
+        updateUserData({
+          updatedUserData: {
+            userId: authUserId,
+            biography: newBio,
+            profilePicture:
+              images === undefined ? profilePicture : newProfilePicture,
+          },
+          accessToken: jwtAccessToken,
+        })
+      ).unwrap();
+    } finally {
+      navigate('/userProfile');
+      resetNewBioHandler();
+    }
   };
 
   if (newBioIsValid && (images?.name || profilePicture)) isFormValid = true;

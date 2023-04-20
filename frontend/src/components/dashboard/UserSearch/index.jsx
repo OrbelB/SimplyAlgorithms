@@ -47,6 +47,7 @@ export default function UserSearchSection() {
   const filteredReports = useSelector((state) =>
     filterReportsByIndividual(state, individualName, userIdOrUsername)
   );
+
   useLayoutEffect(() => {
     if (requestSubmmited && status === 'success') {
       setRoleToChangeTo('');
@@ -121,7 +122,7 @@ export default function UserSearchSection() {
           page: 0,
           size: 10,
           individual: individualType,
-          userId: userIdOrUsername,
+          userIdOrUsername,
           jwtAccessToken,
         })
       ).unwrap();
@@ -199,7 +200,7 @@ export default function UserSearchSection() {
         />
       )}
       {alertSnackBarType}
-      <form noValidate autoComplete="off">
+      <form autoComplete="off">
         <Card
           variant="elevation"
           sx={{ border: 2, borderColor: 'black' }}
@@ -395,6 +396,8 @@ export default function UserSearchSection() {
             <UserSearchModal
               reports={filteredReports}
               open={openUserReports}
+              individual={individualType}
+              usernameOrId={userIdOrUsername}
               handleClose={handleCloseUserReports}
             />
           </CardActions>

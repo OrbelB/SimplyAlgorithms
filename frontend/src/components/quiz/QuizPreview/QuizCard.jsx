@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   Card,
   CardActionArea,
@@ -8,7 +7,6 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import { styled } from '@mui/system';
 import { quizActions } from '../../../store/reducers/quiz-slice';
 import { beautifyTime } from '../../../utilities/beautify-time';
@@ -17,7 +15,6 @@ import defualtimage from '../../../assets/quiz.png';
 const StyledCard = styled(Card)(({ theme }) => ({
   margin: 'auto',
   minHeight: 690,
-  width: '100%',
   background: 'white',
   boxShadow: theme.shadows[3],
   borderRadius: 8,
@@ -79,7 +76,7 @@ export default function QuizCard({
     <StyledCard ref={lastElementChild} variant="elevation">
       <CardActionArea
         onClick={handleNavigate}
-        sx={{ minHeight: 690, marginTop: 0, paddingTop: 0 }}
+        sx={{ marginTop: 0, paddingTop: 0, minHeight: 690 }}
       >
         <CardMedia
           title={imageTitle}
@@ -89,8 +86,7 @@ export default function QuizCard({
           image={picture ?? defualtimage}
           alt="quiz"
           sx={{
-            padding: '0em 4.5em 0em 4.5em',
-            objectFit: 'contain',
+            objectFit: 'fill',
             bgcolor: '#D8D8D8',
           }}
         />

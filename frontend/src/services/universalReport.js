@@ -60,13 +60,13 @@ export const listReports = createAsyncThunk(
 export const listReportByIndividual = createAsyncThunk(
   'report/listIndividualReports',
   async (pageParams) => {
-    const { page, size, sortBy, userId, individual, jwtAccessToken } =
+    const { page, size, sortBy, userIdOrUsername, individual, jwtAccessToken } =
       pageParams;
     const res = await universalReportEndpoint.listReportByIndividual(
       page,
       size,
       sortBy,
-      userId,
+      userIdOrUsername,
       individual,
       jwtAccessToken
     );

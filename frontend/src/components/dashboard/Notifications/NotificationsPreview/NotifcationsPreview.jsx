@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import {
   removeSingleNotification,
   fetchUserNotifications,
+  fetchUser,
 } from '../../../../services/user';
 import { forumActions } from '../../../../store/reducers/forum-slice';
 import './NotificationsPreview.css';
 import { forumsActions } from '../../../../store/reducers/forums-slice';
 import { commentActions } from '../../../../store/reducers/comment-slice';
+import { topicActions } from '../../../../store/reducers/topic-slice';
 
 const NOTIFICATION_PREVIEWS = [
   {
@@ -55,8 +57,7 @@ export default function NotificationsPreview({ setShow, lastElementChild }) {
     return () => {};
   }, [authUserId, notifications?.length, dispatch, jwtAccessToken, status]);
 
-  // TODO: Refactor this function to be more dynamic and not hard coded.
-  function handleNavigation(notificationId, referenceId, message, title) {
+  async function handleNavigation(notificationId, referenceId, message, title) {
     if (message.includes('post.')) {
       setShow(false);
       dispatch(forumActions.resetData());
@@ -67,30 +68,23 @@ export default function NotificationsPreview({ setShow, lastElementChild }) {
         replace: true,
       });
     }
-    if (message.includes('replies')) {
-      if (title.includes('Binary Search Trees')) {
-        setShow(false);
+    if (message.includes('replies') || message.includes('reply')) {
+      setShow(false);
+      dispatch(topicActions.resetData());
+      dispatch(commentActions.resetData());
+      navigate(`/topic/${title}`, {
+        preventScrollReset: true,
+      });
+    }
 
-        navigate(`/search/binarysearchtree`, {
-          preventScrollReset: true,
-          replace: true,
-        });
-      }
-      if (title.includes('BFS')) {
+    if (message.includes('You have been promoted to')) {
+      try {
+        await dispatch(
+          fetchUser({ userId: authUserId, jwtAccessToken })
+        ).unwrap();
+      } finally {
         setShow(false);
-        navigate(`/search/bfs`, {
-          preventScrollReset: true,
-        });
-      }
-      if (title.includes('Bubble Sort')) {
-        setShow(false);
-        navigate(`/search/bfs`, {
-          preventScrollReset: true,
-        });
-      }
-      if (title.includes('Bubble Sort')) {
-        setShow(false);
-        navigate(`/search/bfs`, {
+        navigate(`/userprofile`, {
           preventScrollReset: true,
         });
       }

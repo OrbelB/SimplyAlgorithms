@@ -70,12 +70,12 @@ export const universalReportEndpoint = {
     page,
     size,
     sortBy,
-    userId,
+    userIdOrUsername,
     individual,
     jwtAccessToken
   ) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/listIndividualReports`, {
-      params: { page, size, sortBy, userId, individual },
+      params: { page, size, sortBy, userIdOrUsername, individual },
       headers: {
         'content-type': 'application/json',
         Authorization: 'Bearer ' + jwtAccessToken,

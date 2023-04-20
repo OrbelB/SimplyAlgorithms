@@ -48,11 +48,11 @@ export default function Quizhome() {
     }
   }, [status, quizList, dispatch, totalElements]);
   return (
-    <div className="container-fluid min-vh-100 g-0 m-0 p-0">
-      <div className="p-5 bottom-home">
+    <div className="container-fluid bottom-home min-vh-100 g-0 m-0 p-0">
+      <div className="p-5">
         <h1 className="quiz-logo text-center">QUIZZES</h1>
         <div className="row justify-content-between quiz-home-buttons mx-auto">
-          <div className="col ">
+          <div className="col-auto text-start">
             <SelectionList
               label="Sort By"
               options={SORTING_OPTIONS}
@@ -61,7 +61,7 @@ export default function Quizhome() {
               handleAction={handleSortBy}
             />
           </div>
-          <div className="col">
+          <div className="col-auto text-end">
             <input
               onChange={handleSearchQuiz}
               type="search"
