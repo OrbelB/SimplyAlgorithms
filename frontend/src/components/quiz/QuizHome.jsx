@@ -47,7 +47,6 @@ export default function Quizhome() {
       );
     }
   }, [status, quizList, dispatch, totalElements]);
-
   return (
     <div className="container-fluid min-vh-100 g-0 m-0 p-0">
       <div className="p-5 bottom-home">

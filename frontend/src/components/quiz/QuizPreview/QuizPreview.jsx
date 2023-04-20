@@ -27,7 +27,15 @@ export default function QuizDB({ quizList, status }) {
       <div className="row justify-content-around gy-5">
         {quizList.map(
           (
-            { quizId, title, score, createdBy, description, picture },
+            {
+              quizId,
+              title,
+              score,
+              createdBy,
+              description,
+              picture,
+              createdDate,
+            },
             index
           ) => {
             if (index + 1 === quizList.length) {
@@ -44,6 +52,7 @@ export default function QuizDB({ quizList, status }) {
                     createdBy={createdBy}
                     description={description}
                     picture={picture}
+                    createdDate={createdDate}
                     lastElementChild={lastElementChild}
                   />
                 </div>
@@ -62,6 +71,7 @@ export default function QuizDB({ quizList, status }) {
                   createdBy={createdBy}
                   description={description}
                   picture={picture}
+                  createdDate={createdDate}
                 />
               </div>
             );

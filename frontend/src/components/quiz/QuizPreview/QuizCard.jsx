@@ -11,6 +11,8 @@ import { useDispatch } from 'react-redux';
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import { styled } from '@mui/system';
 import { quizActions } from '../../../store/reducers/quiz-slice';
+import { beautifyTime } from '../../../utilities/beautify-time';
+import defualtimage from '../../../assets/quiz.png';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   margin: 'auto',
@@ -56,8 +58,10 @@ export default function QuizCard({
   quizId,
   description = '',
   picture,
+  createdDate,
   lastElementChild,
 }) {
+  const imageTitle = 'Quiz image for ' + title;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleNavigate = () => {
@@ -78,14 +82,17 @@ export default function QuizCard({
         sx={{ minHeight: 690, marginTop: 0, paddingTop: 0 }}
       >
         <CardMedia
+          title={imageTitle}
           component="img"
           height="450"
           loading="lazy"
-          image={
-            picture ??
-            'https://canopylab.com/wp-content/uploads/2020/05/Working-with-adaptive-quizzes-A-beginners-guide.jpg'
-          }
+          image={picture ?? defualtimage}
           alt="quiz"
+          sx={{
+            padding: '0em 4.5em 0em 4.5em',
+            objectFit: 'contain',
+            bgcolor: '#D8D8D8',
+          }}
         />
         <CardContent>
           <Typography variant="h5" component="h5" gutterBottom>
@@ -96,6 +103,8 @@ export default function QuizCard({
           </Typography>
           <Typography variant="body2" component="p" gutterBottom>
             Max Score: {score}
+            <br />
+            Created: {beautifyTime({ createdDate })}
           </Typography>
           <Typography variant="body1" component="p" gutterBottom noWrap>
             {truncatedText}

@@ -84,7 +84,9 @@ export default function JoinQuiz({
                 {createdBy.username}
               </p>
               <p style={{ fontSize: '1.4rem' }} className="fs-5">
-                Max Score: {quiz.score}
+                Max Score: {quiz.score} <br />
+                Created on:{' '}
+                {new Date(quiz.createdDate).toLocaleDateString('en-US')}
               </p>
             </div>
           </div>
