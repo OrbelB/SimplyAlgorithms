@@ -64,7 +64,11 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
         if (StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getPicture())) {
             quizQuestionBuilder.picture(
                     storageService.uploadImageFile(
-                            ImageUtils.convertProfilePicture(quizQuestionDTO.getPicture())
+                            ImageUtils.convertProfilePicture(
+                                    quizQuestionDTO.getPicture(),
+                                    "quiz-question-picture"
+                            )
+
                     )
             );
         }
@@ -108,8 +112,7 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
                 quizQuestionAnswerService.saveAllQuizQuestionAnswers(quizQuestionDTO);
                 updatedQuizQuestionsDTO.add(getQuizQuestion(quizQuestionDTO.getQuizId(), quizQuestionDTO.getQuestionId()));
                 log.debug("Added new QUestion Question: " + updatedQuizQuestionsDTO.size());
-            }
-            else {
+            } else {
                 updatedQuizQuestionsDTO.add(updateQuizQuestionAndAnswers(quizQuestionDTO));
             }
 
@@ -129,25 +132,25 @@ public class QuizQuestionServiceImp implements QuizQuestionService {
 //                deleteQuizQuestion(quizQuestionDTO.getQuestionId());
 //                return null;
 //            } else {
-                log.debug("Starting the update for questions");
-                optionalQuizQuestion.get().setQuestion(quizQuestionDTO.getQuestion());
+            log.debug("Starting the update for questions");
+            optionalQuizQuestion.get().setQuestion(quizQuestionDTO.getQuestion());
 
-                if (StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getPicture())) {
-                    File file = ImageUtils.convertProfilePicture(quizQuestionDTO.getPicture());
-                    if (StringUtils.isNotNullAndEmptyOrBlank(file)) {
-                        optionalQuizQuestion.get().setPicture(
-                                storageService.updateProfilePicture(
-                                        file,
-                                        optionalQuizQuestion.get().getPicture())
-                        );
-                    }
+            if (StringUtils.isNotNullAndEmptyOrBlank(quizQuestionDTO.getPicture())) {
+                File file = ImageUtils.convertProfilePicture(quizQuestionDTO.getPicture(), "quiz-question-picture");
+                if (StringUtils.isNotNullAndEmptyOrBlank(file)) {
+                    optionalQuizQuestion.get().setPicture(
+                            storageService.updateProfilePicture(
+                                    file,
+                                    optionalQuizQuestion.get().getPicture())
+                    );
                 }
-                questionRepository.saveAndFlush(optionalQuizQuestion.get());
-                log.debug("Question update has finished");
-
-                quizQuestionAnswerService.updateAllQuizQuestionAnswers(quizQuestionDTO);
-                return quizQuestionDTO;
             }
+            questionRepository.saveAndFlush(optionalQuizQuestion.get());
+            log.debug("Question update has finished");
+
+            quizQuestionAnswerService.updateAllQuizQuestionAnswers(quizQuestionDTO);
+            return quizQuestionDTO;
+        }
 //        }
         throw new NoSuchElementException(MessageFormat.format("Quiz question does not exists", quizQuestionDTO.getQuestionId()));
     }

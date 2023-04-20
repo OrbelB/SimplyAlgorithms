@@ -15,7 +15,7 @@ class ImageUtilsTest {
 
     @Test
     void convertProfilePicture() {
-        File file = ImageUtils.convertProfilePicture(DUMMY_IMAGE);
+        File file = ImageUtils.convertProfilePicture(DUMMY_IMAGE,"dummy-image");
 
         //checking if the file was created, not null, is a file, can be read and is not empty
         assert file != null;
@@ -24,7 +24,7 @@ class ImageUtilsTest {
 
     @Test
     void fileIsNull() {
-        File file = ImageUtils.convertProfilePicture("");
+        File file = ImageUtils.convertProfilePicture("", "");
         assertNull(file);
     }
 
@@ -32,13 +32,13 @@ class ImageUtilsTest {
     void fileIsNotBase64WithMessage() {
 
         // file not base 64 should return null
-        File file = ImageUtils.convertProfilePicture("test");
+        File file = ImageUtils.convertProfilePicture("test", "test");
         assertNull(file, "file is not base 64");
     }
 
     @Test
     void fileIsNotBase64AndIncludesComma() {
-        File file =  ImageUtils.convertProfilePicture("test,test");
+        File file =  ImageUtils.convertProfilePicture("test,test" , "test");
         assertNull(file, "file is not base 64 and includes comma");
     }
 }

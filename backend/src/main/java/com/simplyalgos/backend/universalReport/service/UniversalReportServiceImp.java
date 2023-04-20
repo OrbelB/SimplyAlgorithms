@@ -7,6 +7,7 @@ import com.simplyalgos.backend.universalReport.dto.UniversalReportDTO;
 import com.simplyalgos.backend.universalReport.enums.UniversalReportCategories;
 import com.simplyalgos.backend.universalReport.mapper.UniversalReportMapper;
 import com.simplyalgos.backend.universalReport.repository.UniversalReportRepository;
+import com.simplyalgos.backend.universalReport.repository.projections.UniversalReportInformation;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.user.enums.NotificationMessage;
 import com.simplyalgos.backend.user.enums.NotificationType;
@@ -103,7 +104,7 @@ public class UniversalReportServiceImp implements  UniversalReportService{
     }
 
     private String createTitle(UniversalReportDTO universalReportDTO){
-        return "new report has been created, ";
+        return "new report has been created ";
     }
 
     @Override
@@ -214,21 +215,18 @@ public class UniversalReportServiceImp implements  UniversalReportService{
     @Override
     public ObjectPagedList<?> listByVictum(Pageable pageable, String userIdOrUsername) {
 
-        Page<UniversalReport> universalReportPage;
+        Page<UniversalReportInformation> universalReportPage;
 
         if (userIdOrUsername.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")) {
             // userIdOrUsername is a UUID
-            universalReportPage = urr.findAllByVictimUser_UserId(UUID.fromString(userIdOrUsername), pageable);
+            universalReportPage = urr.findAllByVictimUser_UserId(UUID.fromString(userIdOrUsername), pageable, UniversalReportInformation.class);
         } else {
             // userIdOrUsername is a username
-            universalReportPage = urr.findAllByVictimUser_Username(userIdOrUsername, pageable);
+            universalReportPage = urr.findAllByVictimUser_Username(userIdOrUsername, pageable, UniversalReportInformation.class);
         }
 
         return new ObjectPagedList<>(
-                universalReportPage
-                        .stream()
-                        .map(universalReportMapper::UniversalReportToUniversalReportDTO)
-                        .collect(Collectors.toList()),
+                universalReportPage.toList(),
                 PageRequest.of(
                         universalReportPage.getPageable().getPageNumber(),
                         universalReportPage.getPageable().getPageSize(),
@@ -241,21 +239,18 @@ public class UniversalReportServiceImp implements  UniversalReportService{
     @Override
     public ObjectPagedList<?> listByCulprit(Pageable pageable, String userIdOrUsername) {
 
-        Page<UniversalReport> universalReportPage;
+        Page<UniversalReportInformation> universalReportPage;
 
         if (userIdOrUsername.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")) {
             // userIdOrUsername is a UUID
-            universalReportPage = urr.findAllByCulpritUser_UserId(UUID.fromString(userIdOrUsername), pageable);
+            universalReportPage = urr.findAllByCulpritUser_UserId(UUID.fromString(userIdOrUsername), pageable, UniversalReportInformation.class);
         } else {
             // userIdOrUsername is a username
-            universalReportPage = urr.findAllByCulpritUser_Username(userIdOrUsername, pageable);
+            universalReportPage = urr.findAllByCulpritUser_Username(userIdOrUsername, pageable, UniversalReportInformation.class);
         }
 
         return new ObjectPagedList<>(
-                universalReportPage
-                        .stream()
-                        .map(universalReportMapper::UniversalReportToUniversalReportDTO)
-                        .collect(Collectors.toList()),
+                universalReportPage.toList(),
                 PageRequest.of(
                         universalReportPage.getPageable().getPageNumber(),
                         universalReportPage.getPageable().getPageSize(),
@@ -268,21 +263,18 @@ public class UniversalReportServiceImp implements  UniversalReportService{
     @Override
     public ObjectPagedList<?> listByResolver(Pageable pageable, String userIdOrUsername) {
 
-        Page<UniversalReport> universalReportPage;
+        Page<UniversalReportInformation> universalReportPage;
 
         if (userIdOrUsername.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")) {
             // userIdOrUsername is a UUID
-            universalReportPage = urr.findAllByResolvedBy_UserId(UUID.fromString(userIdOrUsername), pageable);
+            universalReportPage = urr.findAllByResolvedBy_UserId(UUID.fromString(userIdOrUsername), pageable, UniversalReportInformation.class);
         } else {
             // userIdOrUsername is a username
-            universalReportPage = urr.findAllByResolvedBy_Username(userIdOrUsername, pageable);
+            universalReportPage = urr.findAllByResolvedBy_Username(userIdOrUsername, pageable, UniversalReportInformation.class);
         }
 
         return new ObjectPagedList<>(
-                universalReportPage
-                        .stream()
-                        .map(universalReportMapper::UniversalReportToUniversalReportDTO)
-                        .collect(Collectors.toList()),
+                universalReportPage.toList(),
                 PageRequest.of(
                         universalReportPage.getPageable().getPageNumber(),
                         universalReportPage.getPageable().getPageSize(),

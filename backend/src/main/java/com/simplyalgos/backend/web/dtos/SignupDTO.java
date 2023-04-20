@@ -27,7 +27,7 @@ public class SignupDTO {
         this.profilePicture = profilePicture;
     }
     public void setProfilePicture(String profilePicture) {
-        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture);
+        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture, "profile-picture");
     }
 
     @Builder
@@ -38,7 +38,7 @@ public class SignupDTO {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
-        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture);
+        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture, "profile-picture");
     }
 
 

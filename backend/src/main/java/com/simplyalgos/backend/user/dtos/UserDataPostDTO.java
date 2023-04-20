@@ -29,7 +29,7 @@ public class UserDataPostDTO {
     }
 
     public void setProfilePicture(String profilePicture) {
-        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture);
+        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture, "profile-picture");
     }
     String biography;
     String phoneNumber;
@@ -46,7 +46,7 @@ public class UserDataPostDTO {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture);
+        this.profilePicture = ImageUtils.convertProfilePicture(profilePicture, "profile-picture");
         this.biography = biography;
         this.phoneNumber = phoneNumber;
         this.createdDate = createdDate;

@@ -106,7 +106,7 @@ public class QuizServiceImp implements QuizService {
 
         var quizBuilder = Quiz.builder();
         if (StringUtils.isNotNullAndEmptyOrBlank(fullQuizDTO.getQuizDTO().getPicture())) {
-            File file = ImageUtils.convertProfilePicture(fullQuizDTO.getQuizDTO().getPicture());
+            File file = ImageUtils.convertProfilePicture(fullQuizDTO.getQuizDTO().getPicture(), "quiz-main-image");
             if (StringUtils.isNotNullAndEmptyOrBlank(file)) {
                 quizBuilder.picture(storageService.uploadImageFile(file));
             }
@@ -192,7 +192,7 @@ public class QuizServiceImp implements QuizService {
         quiz.setDescription(quizDTO.getDescription());
 
         if (StringUtils.isNotNullAndEmptyOrBlank(quizDTO.getPicture())) {
-            File file = ImageUtils.convertProfilePicture(quizDTO.getPicture());
+            File file = ImageUtils.convertProfilePicture(quizDTO.getPicture(), "quiz-main-image");
             if (StringUtils.isNotNullAndEmptyOrBlank(file)) {
                 quiz.setPicture(storageService.updateProfilePicture(file, quiz.getPicture()));
             }

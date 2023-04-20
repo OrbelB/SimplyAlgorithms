@@ -9,7 +9,7 @@ import java.io.*;
 @Slf4j
 public class ImageUtils {
 
-    public static File convertProfilePicture(String profilePicture) {
+    public static File convertProfilePicture(String profilePicture, String name) {
         if (!StringUtils.isNotNullAndEmptyOrBlank(profilePicture)) return null;
         String[] image = profilePicture.split(",");
 
@@ -23,7 +23,7 @@ public class ImageUtils {
             default -> "jpg";
         };
 
-        File picture = new File("profilePicture." + fileType);
+        File picture = new File(name + "." + fileType);
 
         // getting the bytes from the base 64 string
         byte[] data = DatatypeConverter.parseBase64Binary(image[1]);

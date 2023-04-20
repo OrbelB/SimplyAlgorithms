@@ -9,15 +9,15 @@ import java.util.UUID;
 
 public interface UniversalReportRepository extends JpaRepository<UniversalReport, UUID> {
 
-    Page<UniversalReport> findAllByVictimUser_UserId(UUID userId ,Pageable pageable);
-    Page<UniversalReport> findAllByVictimUser_Username(String username, Pageable pageable);
+    <T> Page<T> findAllByVictimUser_UserId(UUID userId ,Pageable pageable, Class<T> Type);
+    <T> Page<T> findAllByVictimUser_Username(String username, Pageable pageable, Class<T> Type);
 
-    Page<UniversalReport> findAllByCulpritUser_UserId(UUID userId, Pageable pageable);
-    Page<UniversalReport> findAllByCulpritUser_Username(String username, Pageable pageable);
+    <T> Page<T>  findAllByCulpritUser_UserId(UUID userId, Pageable pageable, Class<T> type);
+    <T> Page<T> findAllByCulpritUser_Username(String username, Pageable pageable, Class<T> type);
 
-    Page<UniversalReport> findAllByResolvedBy_UserId(UUID userId, Pageable pageable);
+    <T> Page<T>  findAllByResolvedBy_UserId(UUID userId, Pageable pageable, Class<T> type);
 
-    Page<UniversalReport> findAllByResolvedBy_Username(String username, Pageable pageable);
+    <T> Page<T>  findAllByResolvedBy_Username(String username, Pageable pageable, Class<T> Type);
 
 
 }

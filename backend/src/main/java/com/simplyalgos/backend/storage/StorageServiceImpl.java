@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
+import com.simplyalgos.backend.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +55,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     public String deleteFile(String fileName)  {
-        if (fileName.length() < BUCKET_URL_ENDPOINT.length()) return null;
+        if (!StringUtils.isNotNullAndEmptyOrBlank(fileName) || fileName.length() < BUCKET_URL_ENDPOINT.length()) return null;
         String filepath = fileName.replace(BUCKET_URL_ENDPOINT, "");
         log.debug(filepath + " check current value should be without the url ");
         s3Client.deleteObject(bucketName, filepath);

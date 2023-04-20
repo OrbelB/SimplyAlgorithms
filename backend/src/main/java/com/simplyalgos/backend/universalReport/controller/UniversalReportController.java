@@ -81,7 +81,7 @@ public class UniversalReportController {
             }
             if (individual.equals("resolver")) {
                 return ResponseEntity.ok(URS
-                        .listByVictum(PageRequest.of(page, size), userIdOrUsername));
+                        .listByResolver(PageRequest.of(page, size), userIdOrUsername));
             }
 
         }
