@@ -3,9 +3,9 @@ package com.simplyalgos.backend.quiz.services;
 import com.simplyalgos.backend.quiz.domains.Quiz;
 import com.simplyalgos.backend.quiz.dtos.FullQuizDTO;
 import com.simplyalgos.backend.quiz.dtos.QuizDTO;
-
 import com.simplyalgos.backend.quiz.mappers.QuizMapper;
 import com.simplyalgos.backend.quiz.repositories.QuizRepository;
+import com.simplyalgos.backend.quiz.repositories.projections.QuizInformation;
 import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.tag.dto.TagDTO;
@@ -15,24 +15,21 @@ import com.simplyalgos.backend.user.dtos.UserDataDTO;
 import com.simplyalgos.backend.user.mappers.UserMapper;
 import com.simplyalgos.backend.user.services.UserService;
 import com.simplyalgos.backend.utils.ImageUtils;
+import com.simplyalgos.backend.utils.StringUtils;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
-import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.simplyalgos.backend.utils.StringUtils;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -57,11 +54,9 @@ public class QuizServiceImp implements QuizService {
 
     @Override
     public ObjectPagedList<?> listQuizPages(Pageable pageable) { //why must i do this? why?
-        Page<Quiz> quizPage = quizRepository.findAll(pageable);
+        Page<QuizInformation> quizPage = quizRepository.findAllProjectedBy(pageable, QuizInformation.class);
         return new ObjectPagedList<>(
-                quizPage.stream()
-                        .map(quizMapper::QuizToQuizListDTO)
-                        .collect(Collectors.toList()),
+                quizPage.toList(),
                 PageRequest.of(
                         quizPage.getPageable().getPageNumber(),
                         quizPage.getPageable().getPageSize()),
@@ -71,11 +66,9 @@ public class QuizServiceImp implements QuizService {
 
     @Override
     public ObjectPagedList<?> listQuizPagesByTitle(Pageable pageable, String title) {
-        Page<Quiz> quizPage = quizRepository.findAllByTitleStartingWith(title, pageable);
+        Page<QuizInformation> quizPage = quizRepository.findAllByTitleStartingWith(title, pageable, QuizInformation.class);
         return new ObjectPagedList<>(
-                quizPage.stream()
-                        .map(quizMapper::QuizToQuizListDTO)
-                        .collect(Collectors.toList()),
+                quizPage.toList(),
                 PageRequest.of(
                         quizPage.getPageable().getPageNumber(),
                         quizPage.getPageable().getPageSize(),
@@ -86,11 +79,9 @@ public class QuizServiceImp implements QuizService {
 
     @Override
     public ObjectPagedList<?> listQuizPageWithTag(Pageable pageable, String tag) {
-        Page<Quiz> quizPage = quizRepository.findAllByTagId_TagId(UUID.fromString(tag), pageable);
+        Page<QuizInformation> quizPage = quizRepository.findAllByTagId_TagId(UUID.fromString(tag), pageable, QuizInformation.class);
         return new ObjectPagedList<>(
-                quizPage.stream()
-                        .map(quizMapper::QuizToQuizListDTO)
-                        .collect(Collectors.toList()),
+                quizPage.toList(),
                 PageRequest.of(
                         quizPage.getPageable().getPageNumber(),
                         quizPage.getPageable().getPageSize(),
