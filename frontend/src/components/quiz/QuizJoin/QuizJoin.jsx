@@ -32,7 +32,7 @@ export default function JoinQuiz({
     navigate(`/quiz/${quiz.quizId}/edit`);
   };
   return (
-    <div className="join-screen container-fluid min-vh-150 vh-150 p-5">
+    <div className="join-screen container-fluid p-5">
       <div key={quiz.quizId} className="row">
         <div className="row-mb-2 text-end">
           <OptionsMenu

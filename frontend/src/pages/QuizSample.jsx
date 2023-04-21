@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import QuizScreen from '../../components/quiz/QuizScreen/QuizScreen';
-import JoinQuiz from '../../components/quiz/QuizJoin/QuizJoin';
-import { fetchSingleQuiz } from '../../services/quiz';
-import useTimer from '../../hooks/use-timer';
+import QuizScreen from '../components/quiz/QuizScreen/QuizScreen';
+import JoinQuiz from '../components/quiz/QuizJoin/QuizJoin';
+import { fetchSingleQuiz } from '../services/quiz';
+import useTimer from '../hooks/use-timer';
+import '../components/quiz/QuizScreen/QuizScreen.css';
 
 export default function QuizSample() {
   const {
@@ -44,7 +45,7 @@ export default function QuizSample() {
 
   if (quizDTO !== {} && quizQuestionDTO !== {} && status === 'success') {
     return (
-      <div className="container-xxxl">
+      <div className="container-fluid g-0 quiz-screen min-vh-100">
         {isQuizStarted ? (
           <QuizScreen
             stop={stop}

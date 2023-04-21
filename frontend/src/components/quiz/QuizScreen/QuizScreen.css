@@ -2,8 +2,6 @@
 .quiz-screen {
   background-color: var(--color-bg-second);
   background-image: url('https://www.transparenttextures.com/patterns/bright-squares.png');
-  height: auto;
-  min-height: 100vh;
 }
 
 .question-count,

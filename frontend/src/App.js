@@ -24,7 +24,7 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const WikiPage = lazy(() => import('./pages/WikiPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const CreateWiki = lazy(() => import('./pages/CreateWiki'));
-const QuizSample = lazy(() => import('./pages/q_pages/QuizSample'));
+const QuizSample = lazy(() => import('./pages/QuizSample'));
 const PasswordResetPage = lazy(() =>
   import('./components/login/PasswordResetPage')
 );
@@ -101,14 +101,16 @@ function App() {
               <Route path="security" element={<SecurityTab />} />
               <Route path="notifications" element={<NotificationTab />} />
             </Route>
-            <Route path="/quiz">
-              <Route index element={<QuizPage />} />
+          </Route>
+
+          <Route path="/quiz">
+            <Route index element={<QuizPage />} />
+            <Route element={<RequireAuth />}>
               <Route path=":quizId/edit" element={<CreateQuiz />} />
               <Route path=":quizId" element={<QuizSample />} />
               <Route path="CreateQuiz" element={<CreateQuiz />} />
             </Route>
           </Route>
-
           {/* WIKI PAGES */}
           <Route path="/wiki" action={() => wikiActions.resetData()}>
             <Route index element={<Navigate replace to="Main Category" />} />
