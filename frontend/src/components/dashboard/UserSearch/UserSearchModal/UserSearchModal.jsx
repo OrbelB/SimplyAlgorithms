@@ -26,6 +26,7 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
+import styles from './UserSearchModal.module.css';
 import { reportActions } from '../../../../store/reducers/report-slice';
 import { listReportByIndividual } from '../../../../services/universalReport';
 
@@ -226,8 +227,8 @@ export default function ReportTable({
                       {report.report.substring(0, 50) + ' ...'}
                     </TableCell>
                     <TableCell sx={cellStyle}>{report.resolveNote}</TableCell>
-                    <TableCell sx={cellStyle}>{report.reportDate}</TableCell>
-                    <TableCell sx={cellStyle}>{report.resolveDate}</TableCell>
+                    <TableCell sx={cellStyle}>{report?.reportDate}</TableCell>
+                    <TableCell sx={cellStyle}>{report?.resolveDate}</TableCell>
                     <TableCell>{report.isResolved}</TableCell>
                   </TableRow>
                 ))}
@@ -240,9 +241,9 @@ export default function ReportTable({
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    component="span"
+                    className={styles.innerP}
                     rowsPerPageOptions={[3, 5, 10]}
-                    colSpan={9}
+                    colSpan={12}
                     count={totalElements ?? 0}
                     page={currentPage ?? 0}
                     rowsPerPage={rowsPerPage ?? 5}

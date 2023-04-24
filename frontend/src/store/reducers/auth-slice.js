@@ -78,7 +78,6 @@ export const authSlice = createSlice({
         state.userId = action.payload?.userId;
         state.jwtAccessToken = action.payload?.accessToken;
         state.jwtRefreshToken = action.payload?.refreshToken;
-        state.isLoggedIn = true;
         state.status = 'success';
       })
       .addCase(resetPasswordRequest.rejected, (state) => {
