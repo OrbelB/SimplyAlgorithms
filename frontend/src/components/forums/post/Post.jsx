@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { RiQuestionnaireFill } from 'react-icons/ri';
 import { Fab, TextareaAutosize, TextField, Tooltip } from '@mui/material';
@@ -37,6 +37,14 @@ export default function Post() {
     reset: resetMessageHandler,
   } = useValidateInput((value) => value.trim() !== '');
 
+  // use to reset data after create forum success and redirect to forum detail page
+  useEffect(() => {
+    if (pageId !== '' && status === 'successToIdle') {
+      dispatch(commentActions.resetData());
+      navigate(`${pageId}`, { replace: true });
+    }
+  }, [pageId, status, dispatch, navigate]);
+
   let canFormBeSubmitted = false;
   if (titleIsValid && messageIsValid) canFormBeSubmitted = true;
 
@@ -68,10 +76,6 @@ export default function Post() {
   const handleShow = () => {
     setShowSignUp(!showSignUp);
   };
-  if (pageId !== '' && status === 'successToIdle') {
-    dispatch(commentActions.resetData());
-    navigate(`${pageId}`, { replace: true });
-  }
 
   return (
     <>

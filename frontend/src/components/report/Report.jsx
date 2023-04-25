@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CloseIcon from '@mui/icons-material/Close';
 import './Report.css';
 import { createReport } from '../../services/universalReport';
+import LoadingBackdrop from '../loading/LoadingBackdrop';
 
 const style = {
   position: 'absolute',
@@ -91,6 +92,7 @@ export default function BasicModal({
   victumUserId,
   culpritUserId,
 }) {
+  const { status } = useSelector((state) => state.report);
   const [selectedReason, setSelectedReason] = useState('');
   const [reportDesc, setReportDesc] = useState('');
   const [, setTheReport] = useState([]);
@@ -134,6 +136,7 @@ export default function BasicModal({
         aria-describedby="modal-modal-description"
       >
         <Box className="reportModal" sx={style}>
+          {status === 'loading' && <LoadingBackdrop />}
           <IconButton
             onClick={handleClose}
             sx={{ position: 'absolute', margin: 3, top: 0, right: 0 }}
@@ -182,7 +185,12 @@ export default function BasicModal({
               required
             />
             <br />
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={status === 'loading'}
+            >
               submit
             </Button>
             <Button

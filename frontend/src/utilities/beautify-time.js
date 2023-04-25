@@ -21,7 +21,7 @@ export function beautifyTime({ createdDate }) {
 
     return `${timePassed} (${formattedDate})`;
   }
-  return null;
+  return '';
 }
 
 export function timeToExpire(date) {

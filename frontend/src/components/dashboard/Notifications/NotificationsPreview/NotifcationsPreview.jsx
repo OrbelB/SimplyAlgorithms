@@ -104,7 +104,7 @@ export default function NotificationsPreview({ setShow, lastElementChild }) {
         <div
           ref={lastElementChild}
           key={notificationId}
-          onClick={() =>
+          onDoubleClick={() =>
             handleNavigation(notificationId, referenceId, message, title)
           }
           role="button"
@@ -131,7 +131,7 @@ export default function NotificationsPreview({ setShow, lastElementChild }) {
       ) : (
         <div
           key={notificationId}
-          onClick={() =>
+          onDoubleClick={() =>
             handleNavigation(notificationId, referenceId, message, title)
           }
           role="button"

@@ -17,7 +17,7 @@ export default function OptionsMenu({
 }) {
   const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
   const authUserId = useSelector((state) => state.auth.userId);
-
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const onDelete = () => {
     handleOnDelete();
   };
@@ -31,8 +31,7 @@ export default function OptionsMenu({
   };
 
   // IF THE USER IS THE OWNER OF THE OBJECT
-  const permission = authUserId === userId || isAdmin;
-  const seeOptions = permission || canReply || isAdmin;
+  const permission = authUserId === userId;
 
   const [openReport, setOpenReport] = useState(false);
 
@@ -45,7 +44,7 @@ export default function OptionsMenu({
   };
 
   return (
-    seeOptions && (
+    isLoggedIn && (
       <div className="btn-group dropdown-center">
         <i
           role="button"
@@ -56,7 +55,7 @@ export default function OptionsMenu({
           tabIndex={0}
         />
         <div className="dropdown-menu">
-          {permission && (
+          {(permission || isAdmin) && (
             <i
               role="button"
               className="dropdown-item bi bi-trash text-danger"
@@ -69,7 +68,7 @@ export default function OptionsMenu({
               Delete
             </i>
           )}
-          {permission && (
+          {(permission || isAdmin) && (
             <i
               className="dropdown-item bi bi-pencil-fill"
               onClick={onEdit}

@@ -27,6 +27,11 @@ export default function CreateQuiz() {
       })
     );
   };
+  const isReadyToSubmit =
+    quizDTO.title &&
+    quizDTO.description &&
+    quizQuestionDTO.length > 0 &&
+    quizDTO.tag !== undefined;
   const navigate = useNavigate();
 
   const handleSubmitQuiz = async () => {
@@ -72,7 +77,8 @@ export default function CreateQuiz() {
     quizToEditId === quizDTO.quizId && Object.keys(userDTO).length !== 0 ? (
       <button
         type="button"
-        className="btn btn-lg btn-outline-info"
+        className="btn btn-lg btn-outline-success"
+        disabled={!isReadyToSubmit}
         onClick={handleUpdateQuiz}
       >
         update
@@ -80,7 +86,8 @@ export default function CreateQuiz() {
     ) : (
       <button
         type="button"
-        className="btn btn-lg btn-outline-info"
+        className="btn btn-lg btn-outline-success"
+        disabled={!isReadyToSubmit}
         onClick={handleSubmitQuiz}
       >
         create

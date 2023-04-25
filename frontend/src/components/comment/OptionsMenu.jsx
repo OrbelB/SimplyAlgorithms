@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Report from '../report/Report';
+import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 
 export default function OptionMenu({
   userId,
@@ -18,6 +19,8 @@ export default function OptionMenu({
   const onDeleteMessage = () => {
     handleDeleteMessage();
   };
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
 
   const onEditMessage = () => {
     handleIsEditCommentOpen();
@@ -26,8 +29,8 @@ export default function OptionMenu({
   const onReplyMessage = () => {
     handleCancelComment();
   };
+
   const permission = authUserId === userId;
-  const seeOptions = permission || canReply;
 
   const [openReport, setOpenReport] = useState(false);
 
@@ -39,7 +42,7 @@ export default function OptionMenu({
     setOpenReport(false);
   };
   return (
-    seeOptions && (
+    isLoggedIn && (
       <div className="btn-group dropup-center">
         <i
           role="button"
@@ -49,7 +52,7 @@ export default function OptionMenu({
           tabIndex={0}
         />
         <div className="dropdown-menu">
-          {permission && (
+          {(permission || isAdmin) && (
             <i
               role="button"
               className="dropdown-item bi bi-trash text-danger"

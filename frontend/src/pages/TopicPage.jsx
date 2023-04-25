@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Slide, useScrollTrigger } from '@mui/material';
 import FlagIcon from '@mui/icons-material/Flag';
@@ -28,6 +28,7 @@ import { commentVoteActions } from '../store/reducers/comment-vote-slice';
 export default function TopicPage() {
   const { topicName } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const { isLoggedIn, userId, jwtAccessToken } = useSelector(
     (state) => state.auth
@@ -148,6 +149,8 @@ export default function TopicPage() {
   const [openReport, setOpenReport] = useState(false);
 
   const handleOpenReport = () => {
+    if (!isLoggedIn)
+      navigate('/login', { replace: true, state: { from: location } });
     setOpenReport(true);
   };
 

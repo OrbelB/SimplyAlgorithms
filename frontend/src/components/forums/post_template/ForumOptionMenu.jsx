@@ -12,9 +12,11 @@ export default function ForumOptionMenu({ pageId, userId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { jwtAccessToken, userId: authUserId } = useSelector(
-    (state) => state.auth
-  );
+  const {
+    jwtAccessToken,
+    userId: authUserId,
+    isLoggedIn,
+  } = useSelector((state) => state.auth);
   const isAdmin = useJwtPermssionExists({ permission: 'ROLE_ADMIN' });
 
   const onDeleteForum = () => {
@@ -36,7 +38,7 @@ export default function ForumOptionMenu({ pageId, userId }) {
     });
   };
 
-  const permission = authUserId === userId || isAdmin;
+  const permission = authUserId === userId;
 
   const [openReport, setOpenReport] = useState(false);
 
@@ -49,7 +51,7 @@ export default function ForumOptionMenu({ pageId, userId }) {
   };
 
   return (
-    permission && (
+    isLoggedIn && (
       <div className="btn-group dropdown-center align-self-start p-0">
         <i
           role="button"
@@ -59,34 +61,38 @@ export default function ForumOptionMenu({ pageId, userId }) {
           aria-expanded="false"
         />
         <div className="dropdown-menu">
-          <i
-            role="button"
-            className="dropdown-item bi bi-trash text-danger"
-            onClick={onDeleteForum}
-            onKeyDown={(e) => {
-              if (e.key === 'enter') {
-                onDeleteForum();
-              }
-            }}
-            tabIndex={0}
-          >
-            {' '}
-            Delete
-          </i>
-          <i
-            className="dropdown-item bi bi-pencil-fill"
-            onClick={onEditForum}
-            role="button"
-            onKeyDown={(e) => {
-              if (e.key === 'enter') {
-                onEditForum();
-              }
-            }}
-            tabIndex={0}
-          >
-            {' '}
-            Edit
-          </i>
+          {(permission || isAdmin) && (
+            <i
+              role="button"
+              className="dropdown-item bi bi-trash text-danger"
+              onClick={onDeleteForum}
+              onKeyDown={(e) => {
+                if (e.key === 'enter') {
+                  onDeleteForum();
+                }
+              }}
+              tabIndex={0}
+            >
+              {' '}
+              Delete
+            </i>
+          )}
+          {permission && (
+            <i
+              className="dropdown-item bi bi-pencil-fill"
+              onClick={onEditForum}
+              role="button"
+              onKeyDown={(e) => {
+                if (e.key === 'enter') {
+                  onEditForum();
+                }
+              }}
+              tabIndex={0}
+            >
+              {' '}
+              Edit
+            </i>
+          )}
           <i
             className="dropdown-item bi bi-flag-fill text-primary"
             role="button"

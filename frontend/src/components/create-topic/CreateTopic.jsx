@@ -69,7 +69,8 @@ export default function CreateTopic() {
     (topicNameAvailable || topic?.title || title !== '') &&
     Object.values(process).length > 0 &&
     visualizer !== '' &&
-    attribution !== '';
+    attribution !== '' &&
+    wikiCategory !== '';
 
   // reset the state of the page in the event of the topic name been part of the url
   useEffect(() => {
@@ -84,7 +85,7 @@ export default function CreateTopic() {
     }
   }, [topicName.topicName]);
 
-  // used to fetch the topic data in the event of the topic name been part of the url
+  // use to fetch the topic data in the event of the topic name been part of the url
   // for editing purposes
   useEffect(() => {
     if (
@@ -96,7 +97,7 @@ export default function CreateTopic() {
     }
   }, [dispatch, topic, topicName.topicName, topicStatus]);
 
-  // used to set the state of the current edit page to the topic data
+  // use to set the state of the current edit page to the topic data
   // that is being edited in the event of the topic name been part of the url
   useEffect(() => {
     if (
