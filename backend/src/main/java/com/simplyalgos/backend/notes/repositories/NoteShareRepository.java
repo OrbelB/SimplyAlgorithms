@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ public interface NoteShareRepository extends JpaRepository<NoteShare, UUID> {
 
     Page<NoteShare> findAllByNote_NoteId(UUID noteId, Pageable pageable);
 
+    void deleteAllBySharedTo_UserIdAndShareDateBefore(UUID userId, Timestamp timestamp);
 
 
 }

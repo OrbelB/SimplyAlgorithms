@@ -8,13 +8,12 @@ import com.simplyalgos.backend.quiz.repositories.QuizRepository;
 import com.simplyalgos.backend.storage.StorageService;
 import com.simplyalgos.backend.utils.ImageUtils;
 import com.simplyalgos.backend.utils.StringUtils;
-import io.swagger.v3.core.util.Json;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.*;
 

@@ -57,11 +57,18 @@ public class NoteShareServiceImp implements NoteShareService {
 
     @Override
     public ObjectPagedList<?> listSharedNotes(UUID userId, Pageable pageable) {
+        // delete all the notes which expired date is before today's date
+        Timestamp timestamp = Timestamp.from(
+                Calendar
+                        .getInstance()
+                        .toInstant()
+                        .minus(1, ChronoUnit.DAYS)
+        );
+        noteShareRepository.deleteAllBySharedTo_UserIdAndShareDateBefore(userId, timestamp);
         Page<NoteShare> noteShares = noteShareRepository.findAllBySharedTo_UserId(userId, pageable);
         return new ObjectPagedList<>(
                 noteShares.stream()
                         .map(noteMapper::noteShareToFullShareNoteDTO)
-
                         .collect(Collectors.toList()),
                 PageRequest.of(
                         noteShares.getPageable().getPageNumber(),

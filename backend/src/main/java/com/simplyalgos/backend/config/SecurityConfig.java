@@ -8,6 +8,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.simplyalgos.backend.security.KeyUtils;
 import com.simplyalgos.backend.security.SimplyAlgoPasswordEncoderFactories;
+import com.simplyalgos.backend.user.enums.UserRoles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +25,7 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.ser
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
@@ -68,7 +66,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         //set cors enable and disable csrf since we are using stateless authentication
-        //TODO decide whether to add csrf authentication to prevent from getting slx injections
         http.cors().and().csrf().disable();
 
         //exception handler for users not authorized to access the resource
@@ -99,15 +96,15 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET,
                                                 "/wiki/**", "/wiki/name/available").permitAll()
                                         .requestMatchers(
-                                                "/email/*").permitAll()
+                                                "/email/*").hasRole(UserRoles.ADMIN.name())
                                         .requestMatchers(
                                                 "/error*").permitAll()
                                         .requestMatchers(
                                                 "/actuator/**").permitAll()
                                         .requestMatchers(
-                                                "/swagger-ui.html**").permitAll()
+                                                "/swagger-ui.html**").hasRole(UserRoles.ADMIN.name())
                                         .requestMatchers(
-                                                "/v3/**").permitAll()
+                                                "/v3/**").hasRole(UserRoles.ADMIN.name())
                                         .requestMatchers(HttpMethod.GET,
                                                 "/quiz/list").permitAll()
                                         .requestMatchers(HttpMethod.GET,
