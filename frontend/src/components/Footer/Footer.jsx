@@ -41,18 +41,18 @@ export default function Footer() {
               <NavLink
                 className={cx(style['nav-footer-link'])}
                 aria-current="page"
-                to="algorithms"
+                to="dashboard"
               >
-                Algorithms
+                Dashboard
               </NavLink>
             </li>
             <li className="pb-2">
               <NavLink
                 className={cx(style['nav-footer-link'])}
                 aria-current="page"
-                to="quiz"
+                to="wiki"
               >
-                Quizzes
+                Wiki
               </NavLink>
             </li>
             <li className="pb-2">
@@ -68,18 +68,9 @@ export default function Footer() {
               <NavLink
                 className={cx(style['nav-footer-link'])}
                 aria-current="page"
-                to="dashboard"
+                to="quiz"
               >
-                Dashboard
-              </NavLink>
-            </li>
-            <li className="pb-2">
-              <NavLink
-                className={cx(style['nav-footer-link'])}
-                aria-current="page"
-                to="aboutus"
-              >
-                About us
+                Quizzes
               </NavLink>
             </li>
           </ul>
@@ -89,26 +80,46 @@ export default function Footer() {
             'col-12 col-md-12 col-lg-3 col-xl-3 pt-4 g-0 text-md-left-side text-center fh-100 border-start border-dark'
           )}
         >
-          <h5 className="text-uppercase fw-old text-center ms-4">Socials</h5>
+          <h5 className="text-uppercase fw-old text-center ms-4">our hubs</h5>
           <ul className="m-0">
             <li className="pb-2">
-              <a className={cx(style['social-link'])} href="url">
-                Twitter
+              <a
+                className={cx(style['social-link'])}
+                href="https://github.com/OrbelB"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Orbel Baghdasian
               </a>
             </li>
             <li className="pb-2">
-              <a className={cx(style['social-link'])} href="url">
-                Youtube
+              <a
+                className={cx(style['social-link'])}
+                href="https://github.com/PDJefferson"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Jefferson Perez Diaz
               </a>
             </li>
             <li className="pb-2">
-              <a className={cx(style['social-link'])} href="url">
-                Linkedin
+              <a
+                className={cx(style['social-link'])}
+                href="https://github.com/floreskevin87"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Kevin Flores
               </a>
             </li>
             <li className="pb-2">
-              <a className={cx(style['social-link'])} href="url">
-                Instagram
+              <a
+                className={cx(style['social-link'])}
+                href="https://github.com/Joey-Codes"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Joseph Wang
               </a>
             </li>
           </ul>
@@ -117,7 +128,7 @@ export default function Footer() {
           <div className="row justify-content-center g-0 gy-3 ms-3">
             <h5 className="text-center ">CONTACT US</h5>
             <p className="text-center">
-              <span className={cx(style.email)}>info@gmail.com</span>
+              <span className={cx(style.email)}>algossimply@gmail.com</span>
             </p>
           </div>
           <div className="row justify-content-center text-center gy-3 g-0 ms-3">
