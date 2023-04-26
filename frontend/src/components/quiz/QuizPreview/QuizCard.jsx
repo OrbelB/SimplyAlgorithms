@@ -73,11 +73,12 @@ export default function QuizCard({
         ) + '...'
       : 'missing description';
   return (
-    <StyledCard ref={lastElementChild} variant="elevation">
-      <CardActionArea
-        onClick={handleNavigate}
-        sx={{ marginTop: 0, paddingTop: 0, minHeight: 690 }}
-      >
+    <StyledCard
+      ref={lastElementChild}
+      variant="elevation"
+      onClick={handleNavigate}
+    >
+      <CardActionArea sx={{ marginTop: 0, paddingTop: 0, height: 450 }}>
         <CardMedia
           title={imageTitle}
           component="img"
@@ -88,9 +89,11 @@ export default function QuizCard({
           sx={{
             objectFit: 'fill',
             bgcolor: '#D8D8D8',
+            width: '100%',
           }}
         />
-        <CardContent>
+
+        <CardContent sx={{ height: 'fill' }}>
           <Typography variant="h5" component="h5" gutterBottom>
             {title}
           </Typography>

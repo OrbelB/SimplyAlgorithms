@@ -3,8 +3,8 @@ import AccoutnTabForm from './AccountTabForm';
 
 export default function AccountTab() {
   return (
-    <div className="container mt-4">
-      <div className="row gutters-sm">
+    <div className="container m-4">
+      <div className="row gutters-m">
         <div className="col-md-4 d-none d-md-block">
           <div className="card">
             <div className="card-body">

@@ -307,7 +307,7 @@ export default function AccountTabForm() {
           </div>
         </div>
         <button type="button" className="btn btn-primary" onClick={submitForm}>
-          Confirm
+          Save
         </button>
         <button type="button" className="btn btn-light">
           Reset Changes

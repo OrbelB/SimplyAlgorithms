@@ -6,7 +6,13 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  Modal,
+  Box,
+  IconButton,
+  Typography,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { useState } from 'react';
 import NotesPreview from '../NotesPreview/NotesPreview';
 import useSearchBar from '../../../../hooks/use-searchBar';
 
@@ -15,6 +21,18 @@ import useSortBy from '../../../../hooks/use-sortBy';
 import { listUserNotes } from '../../../../services/note';
 
 export default function ShowMoreNotes() {
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    height: '75%',
+    width: '75%',
+    bgcolor: 'background.paper',
+    border: '1px solid black',
+    boxShadow: 24,
+    p: 4,
+  };
   const {
     status,
     currentPrivateNotePage,
@@ -51,84 +69,84 @@ export default function ShowMoreNotes() {
     status,
   });
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
-      {/* <!-- Button trigger modal --> */}
-
       <div className="text-center m-2">
         <Button
           type="button"
           variant="contained"
           className="btn btn-secondary"
-          data-bs-toggle="modal"
-          data-bs-target="#backdrop2"
+          onClick={handleOpen}
         >
           Show More
         </Button>
       </div>
-
-      {/* <!-- Modal --> */}
-      <div
-        className="modal fade"
-        id="backdrop2"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
       >
-        <div className="modal-dialog w-75">
-          <div className="modal-content bt">
-            <div className="modal-header">
-              <h2 className="modal-title" id="staticBackdropLabel">
-                Notes
-              </h2>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              />
+        <Box sx={style} className="bt">
+          <IconButton
+            onClick={handleClose}
+            sx={{ position: 'absolute', margin: 3, top: 0, right: 0 }}
+          >
+            <CloseIcon />
+          </IconButton>{' '}
+          <Typography
+            id="modal-modal-title"
+            className="m-2"
+            variant="h5"
+            component="h2"
+          >
+            Notes
+          </Typography>
+          <div className="secondline row" style={{ marginLeft: '-5px' }}>
+            <div className="col-5">
+              <div className="input-group">
+                <input
+                  type="search"
+                  id="form1"
+                  className="form-control"
+                  placeholder="Search..."
+                  onChange={handleSearch}
+                />
+              </div>
             </div>
-            <div className="modal-body">
-              <div className="secondline row">
-                <div className="col-5">
-                  <div className="input-group">
-                    <input
-                      type="search"
-                      id="form1"
-                      className="form-control"
-                      placeholder="Search..."
-                      onChange={handleSearch}
-                    />
-                  </div>
-                </div>
-                <div className="col-1">
-                  <FormControl sx={{ minWidth: 120 }} size="small">
-                    <InputLabel sx={{ color: 'black' }}>Sort By</InputLabel>
-                    <Select
-                      label="Sort By"
-                      autoWidth
-                      sx={{
-                        backgroundColor: 'lightblue',
-                      }}
-                      value={sortBy.get('sortBy') ?? ''}
-                      onChange={(e) => handleSortBy(e.target.value)}
-                    >
-                      <MenuItem value="">None</MenuItem>
-                      <MenuItem value="createdDate">Date</MenuItem>
-                      <MenuItem value="Alphabetical">Alphabetically</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-              </div>
-              <div className="thirdline">
-                <NotesPreview privateNotes={privateNotes} innerRef={lastNote} />
-              </div>
+            <div className="col-1">
+              <FormControl sx={{ minWidth: 120 }} size="small">
+                <InputLabel sx={{ color: 'black' }}>Sort By</InputLabel>
+                <Select
+                  label="Sort By"
+                  autoWidth
+                  sx={{
+                    backgroundColor: 'lightblue',
+                  }}
+                  value={sortBy}
+                  onChange={(e) => handleSortBy(e.target.value)}
+                >
+                  <MenuItem value="">None</MenuItem>
+                  <MenuItem value="createdDate">Date</MenuItem>
+                  <MenuItem value="Alphabetical">Alphabetically</MenuItem>
+                </Select>
+              </FormControl>
             </div>
           </div>
-        </div>
-      </div>
+          <div className="thirdline notes-preview-container mt-2">
+            <NotesPreview privateNotes={privateNotes} innerRef={lastNote} />
+          </div>
+        </Box>
+      </Modal>
     </>
   );
 }

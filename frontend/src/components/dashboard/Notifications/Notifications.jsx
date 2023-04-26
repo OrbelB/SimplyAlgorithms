@@ -44,19 +44,16 @@ export default function Notifications({ show, setShow }) {
         keyboard={false}
         onHide={() => setShow(false)}
       >
-        <Modal.Header closeButton className="btr text-center">
+        <Modal.Header
+          closeButton
+          className="btr text-center"
+          style={{ borderBottom: 'none' }}
+        >
           <Modal.Title>Notifications</Modal.Title>
         </Modal.Header>
         <Modal.Body className="btr">
-          <FormControl
-            sx={{
-              color: 'black',
-              width: '150px',
-            }}
-          >
-            <InputLabel id="my-select-label" sx={{ color: 'black' }}>
-              Sort By
-            </InputLabel>
+          <FormControl sx={{ minWidth: '150px' }}>
+            <InputLabel id="my-select-label">Sort By</InputLabel>
             <Select
               labelId="my-select-label"
               id="my-select"
@@ -64,7 +61,7 @@ export default function Notifications({ show, setShow }) {
               onChange={(e) => {
                 handleSortBy(e.target.value);
               }}
-              sx={{ color: 'black' }}
+              sx={{ backgroundColor: '#C7DDFF', borderRadius: '4px' }}
             >
               <MenuItem value="">None</MenuItem>
               <MenuItem value="Alphabetical">Alphabetically</MenuItem>

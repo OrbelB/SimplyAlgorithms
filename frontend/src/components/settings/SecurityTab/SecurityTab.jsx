@@ -3,7 +3,7 @@ import SecurityTabForm from './SecurityTabForm';
 
 export default function SecurityTab() {
   return (
-    <div className="container mt-4">
+    <div className="container m-4">
       <div className="row gutters-sm">
         <div className="col-md-4 d-none d-md-block">
           <div className="card">

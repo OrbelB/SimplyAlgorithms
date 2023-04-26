@@ -1,5 +1,4 @@
-.btr,
-.bts {
+.btr{
   padding-top: 15px;
   background-color: #d4baff;
 }
@@ -7,12 +6,4 @@
   font-size: 16px;
 }
 
-.bts {
-  border: 1px solid black;
-  border-radius: 25px;
-}
 
-.badge {
-  background-color: gray;
-  margin-left: 3px;
-}

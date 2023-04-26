@@ -1,3 +1,8 @@
 .bt {
     background-color: #E8ADAD;
 }
+.notes-preview-container {
+    overflow-y: auto;
+    max-height: calc(80vh - 200px); /* adjust the value based on your modal's height */
+  }
+  
