@@ -81,7 +81,7 @@ export default function QuizProgress({ userHistory }) {
                     type="radialBar"
                     width={300}
                     height={300}
-                    series={[Number(averageScore)]}
+                    series={[Number(averageScore.toFixed(1))]}
                     options={{
                       labels: ['Score'],
                       title: {
