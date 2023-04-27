@@ -32,6 +32,7 @@ public class TopicExternalResource {
     private String title;
     @CreationTimestamp
     private Timestamp createdDate;
+
     @ManyToOne
     @JoinColumn(name = "page_id", referencedColumnName = "page_id")
     @MapsId("pageId")

@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.utils.JsonToStringConverter;
-import lombok.*;
-
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 
 import java.util.*;
@@ -24,13 +26,19 @@ public class Topic extends BaseEntity {
 
     @Column(name = "video", nullable = true)
     private String video;
+
     @Convert(converter = JsonToStringConverter.class)
     @Column(name = "page_description", columnDefinition = "json")
     private Map<String, Object> pageDescription;
+
     private String source;
+
     private Integer upVotes;
+
     private Integer downVotes;
+
     private String visualizer;
+
     @Column(name = "url_path")
     private String urlPath;
 
@@ -66,7 +74,7 @@ public class Topic extends BaseEntity {
     private Set<TopicExternalResource> topicExternalResources = new HashSet<>();
 
     @OneToMany(mappedBy = "topicPage", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<CodeSnippet> codeSnippets =  new HashSet<>();
+    private Set<CodeSnippet> codeSnippets = new HashSet<>();
 
 
     @JsonIncludeProperties({"wikiCategory"})

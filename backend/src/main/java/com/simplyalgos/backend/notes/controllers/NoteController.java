@@ -5,7 +5,10 @@ import com.simplyalgos.backend.notes.dtos.FullShareNoteDTO;
 import com.simplyalgos.backend.notes.dtos.NoteShareDTO;
 import com.simplyalgos.backend.notes.dtos.PublicNoteDTO;
 import com.simplyalgos.backend.notes.dtos.UserNoteDTO;
-import com.simplyalgos.backend.notes.security.*;
+import com.simplyalgos.backend.notes.security.CreateNotePermission;
+import com.simplyalgos.backend.notes.security.NotePermission;
+import com.simplyalgos.backend.notes.security.PublicNotePermission;
+import com.simplyalgos.backend.notes.security.UpdateNotePermission;
 import com.simplyalgos.backend.notes.services.NoteShareService;
 import com.simplyalgos.backend.notes.services.PublicNotesService;
 import com.simplyalgos.backend.notes.services.UserNotesService;
@@ -284,18 +287,19 @@ public class NoteController {
 //    admin delete public note
 //    TESTED AND PASSED
     @AdminPermission
-    @DeleteMapping(path = "/deletePublicNoteAdmin", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> deletePublicNoteByAdmin(@RequestBody PublicNoteDTO publicNoteDTO) {
+    @DeleteMapping(path = "/deletePublicNoteAdmin", produces = "application/json")
+    public ResponseEntity<?> deletePublicNoteByAdmin(@RequestParam(name = "authorId") UUID authorId,
+                                                     @RequestParam(name = "noteId") UUID noteId) {
         userNotificationService.addNotification(
                 UUID.randomUUID(),
                 "Your public note has been deleted",
-                userService.getUser(publicNoteDTO.getUserNoteDTO().getCreatedBy().getUserId()),
+                userService.getUser(authorId),
                 NotificationMessage.SYSTEM_UPDATE
         );
 
         return ResponseEntity.status((HttpStatus.ACCEPTED))
                 .body(userNotesService.
-                        deleteNotePage(publicNoteDTO.getUserNoteDTO().getNoteId()));
+                        deleteNotePage(noteId));
     }
 
     //delete note --> delete the specified note

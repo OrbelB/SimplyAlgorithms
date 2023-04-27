@@ -228,7 +228,12 @@ public class TopicServiceImpl implements TopicService {
                 .externalResourceLink(externalResource.getExternalResourceLink())
                 .pageId(topic.getPageId())
                 .build()).collect(Collectors.toSet());
-        // delete the ones that are not in the list
+
+
+        // removing the ones that are not in the list from the topic entity itself
+        topic.getTopicExternalResources().removeIf(topicExternalResource ->
+                !topicExternalResourceIds.contains(topicExternalResource.getTopicExternalResourceId()));
+        // delete the ones that are not in the list from the database
         topicExternalResourceRepository
                 .removeByTopicExternalResourceIdNotInAndTopicPage(topicExternalResourceIds, topic);
     }
@@ -257,7 +262,10 @@ public class TopicServiceImpl implements TopicService {
                 .pageId(page.getPageId())
                 .languageTitle(codeSnippetDTO.getLanguageTitle())
                 .build()).collect(Collectors.toSet());
-        // remove the ones not present in the list
+
+        // removing the ones that are not in the list from the topic entity itself
+        page.getCodeSnippets().removeIf(codeSnippet -> !codeSnippetIds.contains(codeSnippet.getCodeSnippetId()));
+        // remove the ones not present in the list from the database
         codeSnippetRepository.removeByCodeSnippetIdNotInAndTopicPage(codeSnippetIds, page);
     }
 
