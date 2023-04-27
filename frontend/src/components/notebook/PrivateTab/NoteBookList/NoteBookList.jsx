@@ -217,6 +217,16 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     }
   };
 
+  const [shareErr, setShareErr] = useState(false);
+
+  const handleCloseShareErr = () => {
+    setShareErr(false);
+  };
+
+  const handleConfirmShareErr = () => {
+    setShareErr(false);
+  };
+
   const handleShareNote = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -232,6 +242,8 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
       await dispatch(
         shareNote({ noteShareDTO, userNoteDTO, jwtAccessToken })
       ).unwrap();
+    } catch (err) {
+      setShareErr(true);
     } finally {
       setShareTo('');
       setSharePermission('Read');
@@ -474,6 +486,12 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
                 >
                   Add User
                 </Button>
+                <AreYouSureModal
+                  open={shareErr}
+                  onClose={handleCloseShareErr}
+                  onConfirm={handleConfirmShareErr}
+                  title="ERROR: User not found! Check your spelling"
+                />
               </form>
               <hr />
               <TableContainer component={Paper} key={sharedToo.length}>
