@@ -16,6 +16,7 @@ import {
   updateExpireDateOnSharedNotes,
   updateSharedUserNote,
   savePublicNote,
+  deletePublicNoteByAdmin,
 } from '../../services/note';
 
 const initialState = {
@@ -325,6 +326,19 @@ export const noteSlice = createSlice({
         }
       })
       .addCase(savePublicNote.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(deletePublicNoteByAdmin.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(deletePublicNoteByAdmin.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.publicNotes = state.publicNotes.filter(
+          (note) => note.userNoteDTO.noteId !== action.payload
+        );
+      })
+      .addCase(deletePublicNoteByAdmin.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       });

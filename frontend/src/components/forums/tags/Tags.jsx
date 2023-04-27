@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { Input, Button } from '@mui/material';
-
+import { useSearchParams } from 'react-router-dom';
 import { selectAllTags } from '../../../store/reducers/tags-slice';
 import classes from './Tags.module.css';
 import { forumsActions } from '../../../store/reducers/forums-slice';
@@ -15,6 +15,7 @@ export default function Tags() {
   const [page, setPage] = useState(1);
   const { totalPages, status } = useSelector((state) => state.tags);
   const [activeTag, setActiveTag] = useState(null);
+  const [searchParams] = useSearchParams();
 
   const handleClick = (tagId) => {
     dispatch(
@@ -24,10 +25,23 @@ export default function Tags() {
         tagId,
       })
     );
-    dispatch(forumsActions.filterForums(`${tagId}`));
-    setActiveTag(tagId);
-  };
 
+    if (!tagId) {
+      setActiveTag('');
+      dispatch(forumsActions.filterForums(''));
+      dispatch(forumsActions.sortForums(''));
+      return;
+    }
+
+    if (tagId === activeTag) {
+      dispatch(forumsActions.filterForums(''));
+      setActiveTag('');
+      return;
+    }
+    setActiveTag(tagId);
+    dispatch(forumsActions.filterForums(`${tagId}`));
+  };
+  const [searchValue, setSearchValue] = useState(searchParams.get('tag') ?? '');
   const { handleSearch: filterTagsContaining, searchResults: filteredTags } =
     useSearchBar({
       searchFrom: tags,
@@ -49,7 +63,11 @@ export default function Tags() {
       <h1 className="category-label">Categories</h1>
       <Input
         placeholder="Search Category..."
-        onChange={(e) => filterTagsContaining(e)}
+        value={searchValue}
+        onChange={(e) => {
+          setSearchValue(e.target.value);
+          filterTagsContaining(e);
+        }}
         fullWidth
       />
       <div className="mt-4 mb-4">

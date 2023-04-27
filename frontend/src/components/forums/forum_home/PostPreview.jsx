@@ -1,6 +1,5 @@
 import './PostPreview.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMemo } from 'react';
 import { Card, Typography, CardContent } from '@mui/material';
 import { styled } from '@mui/system';
 import { forumActions } from '../../../store/reducers/forum-slice';
@@ -25,12 +24,9 @@ const StyledDescription = styled(Typography)({
 });
 
 export default function PostPreview({ forums }) {
-  const {
-    totalPages,
-    currentPage,
-    status,
-    filterBy: filterForumBy,
-  } = useSelector((state) => state.forums);
+  const { totalPages, currentPage, status } = useSelector(
+    (state) => state.forums
+  );
 
   const { lastElementChild: lastElement } = usePaginationWithInfiniteScroll({
     totalPages,
@@ -43,14 +39,6 @@ export default function PostPreview({ forums }) {
   });
   const { reportId } = useSelector((state) => state.forum);
   const dispatch = useDispatch();
-  const showedForums = useMemo(() => {
-    if (filterForumBy !== '') {
-      return forums.filter((forum) =>
-        forum.tags.find((tag) => tag.tagId === filterForumBy)
-      );
-    }
-    return forums;
-  }, [filterForumBy, forums]);
 
   const removeReportId = () => {
     dispatch(forumActions.removeSingleReportId());
@@ -65,9 +53,9 @@ export default function PostPreview({ forums }) {
           removeData={removeReportId}
         />
       )}
-      {showedForums.length > 0 ? (
-        showedForums.map((forum, index) => {
-          if (showedForums.length === index + 1) {
+      {forums.length > 0 ? (
+        forums.map((forum, index) => {
+          if (forums.length === index + 1) {
             return (
               <ForumQuickView
                 innerRef={lastElement}

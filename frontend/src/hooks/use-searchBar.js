@@ -34,7 +34,7 @@ export default function useSearchBar({
   }, [searchFrom, searchTerm, valueSearched]);
 
   const handleSearch = debounce((e) => {
-    searchParam.set('filterBy', e.target.value);
+    searchParam.set(valueSearched, e.target.value);
     if (status === 'loading' || status === 'pending') return;
     setSearchParam(searchParam, {
       replace: true,
@@ -43,10 +43,10 @@ export default function useSearchBar({
       actionToDispatch({
         page: 0,
         size: 20,
-        filterBy: searchParam.get('filterBy'),
+        filterBy: searchParam.get(valueSearched),
         jwtAccessToken,
         userId,
-        [valueSearched]: searchParam.get('filterBy'),
+        [valueSearched]: searchParam.get(valueSearched),
       })
     );
     setSearchTerm(e.target.value);

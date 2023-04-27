@@ -220,21 +220,14 @@ export const noteEndpoints = {
         },
       }
     ),
-  deletePublicNoteByAdmin: (publicNoteDTO, jwtAccessToken) =>
-    destroy(
-      `${PUBLIC_ENDPOINT_ROUTE}/deletePublicNoteAdmin`,
-      {
-        userNoteDTO: {
-          noteId: publicNoteDTO?.userNoteDTO.noteId,
-        },
+  deletePublicNoteByAdmin: (authorId, noteId, jwtAccessToken) =>
+    destroy(`${PUBLIC_ENDPOINT_ROUTE}/deletePublicNoteAdmin`, {
+      params: { authorId, noteId },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtAccessToken,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwtAccessToken,
-        },
-      }
-    ),
+    }),
   deleteNote: (userId, noteId, jwtAccessToken) =>
     destroy(`${PUBLIC_ENDPOINT_ROUTE}/delete`, {
       params: { userId, noteId },

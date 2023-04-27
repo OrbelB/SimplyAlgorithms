@@ -8,17 +8,20 @@ import Post from '../post/Post';
 import RelatedRecentPost from './RelatedRecentPosts';
 import Tags from '../tags/Tags';
 import { fetchForumList } from '../../../services/forum';
-import {
-  forumsActions,
-  selectSortedForums,
-} from '../../../store/reducers/forums-slice';
+import { selectFilteredAndSortedForums } from '../../../store/reducers/forums-slice';
 import useSearchBar from '../../../hooks/use-searchBar';
 
 export default function Forums() {
   const [activeButton, setActiveButton] = useState('upVotes');
   const { isLoggedIn, jwtAccessToken } = useSelector((state) => state.auth);
   const { status: forumsStatus } = useSelector((state) => state.forums);
-  const forums = useSelector(selectSortedForums);
+  const [searchParams, setSearchParms] = useSearchParams();
+  const forums = useSelector((state) =>
+    selectFilteredAndSortedForums(state, searchParams.get('sortBy')?.toString())
+  );
+  const [searchValue, setSearchValue] = useState(
+    searchParams.get('title') ?? ''
+  );
   const { handleSearch: filterPagesContaining, searchResults: filteredPages } =
     useSearchBar({
       searchFrom: forums,
@@ -27,25 +30,25 @@ export default function Forums() {
       debounceTime: 500,
       status: forumsStatus,
     });
-  const [sortBy, setSortBy] = useSearchParams();
+
   const dispatch = useDispatch();
   const sortForums = (e) => {
-    dispatch(forumsActions.sortForums(e.target.id));
     if (
-      (e.target.id === '' && sortBy.get('sortBy') === '') ||
-      (sortBy.get('sortBy') && sortBy.get('sortBy').toString() === e.target.id)
+      (e.target.id === '' && searchParams.get('sortBy') === '') ||
+      (searchParams.get('sortBy') &&
+        searchParams.get('sortBy').toString() === e.target.id)
     ) {
       return;
     }
-    sortBy.set('sortBy', e.target.id);
-    setSortBy(sortBy, {
+    searchParams.set('sortBy', e.target.id);
+    setSearchParms(searchParams, {
       replace: true,
     });
     dispatch(
       fetchForumList({
         page: 0,
         size: 10,
-        sortBy: sortBy.get('sortBy').toString(),
+        sortBy: searchParams.get('sortBy')?.toString(),
       })
     );
   };
@@ -128,7 +131,11 @@ export default function Forums() {
           <Input
             className="mb-5"
             placeholder="Search By Name..."
-            onChange={(e) => filterPagesContaining(e)}
+            value={searchValue}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              filterPagesContaining(e);
+            }}
             fullWidth
           />
           <PostPreview forums={filteredPages} />

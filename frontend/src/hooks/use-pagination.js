@@ -11,13 +11,13 @@ export default function usePaginationWithInfiniteScroll({
   status,
   jwtAccessToken,
 }) {
-  // use to get the last element of the comment list
+  // use to get the last element of the list
   const lastElementRef = useRef();
-  // to load more comments when the user scrolls to the bottom of the comment list
+  // to load more items when the user scrolls to the last element of the list
   const [loadMore, setLoadMore] = useState(false);
   const dispatch = useDispatch();
 
-  // fetches the next page of comments when the user scrolls to the bottom of the comment list
+  // fetches the next page of items when the user scrolls to the last element of the list
   useEffect(() => {
     if (totalPages && totalPages >= currPage && loadMore) {
       dispatch(
@@ -40,13 +40,14 @@ export default function usePaginationWithInfiniteScroll({
     totalPages,
   ]);
 
-  // this callback function is used to observe the current last element of the comment list
-  // and checks if the user has scrolled to the bottom of the comment list
-  // if the user has scrolled to the bottom of the comment list, then it will trigger the fetch
+  // this callback function is used to observe the current last element of the list.
+  // Checks if the user has scrolled to the bottom of the list, if so,
+  // then it will trigger the fetch
   const lastElementChild = useCallback(
     (node) => {
       if (status === 'pending') return;
-      // disconnect the observer from the previous last element to connect it to the new last element
+      // disconnect the observer from the previous last element to connect it
+      // to the new last element
       if (lastElementRef.current) lastElementRef.current.disconnect();
       // create a new observer to observe the new last element
       lastElementRef.current = new IntersectionObserver((entries) => {

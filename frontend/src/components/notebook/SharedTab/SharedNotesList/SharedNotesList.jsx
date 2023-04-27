@@ -60,27 +60,36 @@ export default function SharedNotesList({ notes }) {
     if (toEdit === true && selectedNote !== null) {
       return <EditNote note={selectedNote} onGoBack={handleGoBackEdit} />;
     }
-    return notes?.map(({ userNoteDTO, noteShareDTO }, index) => {
-      if (notes.length === index + 1) {
+    return notes.length === 0 ? (
+      <div className="card m-3">
+        <div className="card-body">
+          <h5 className="card-title"> Message: </h5>
+          <p className="card-text"> There are no notes available.</p>
+        </div>
+      </div>
+    ) : (
+      notes?.map(({ userNoteDTO, noteShareDTO }, index) => {
+        if (notes.length === index + 1) {
+          return (
+            <ShareNoteCard
+              key={noteShareDTO.shareId}
+              noteShareDTO={noteShareDTO}
+              userNoteDTO={userNoteDTO}
+              handleClick={handleClick}
+              innerRef={lastSharedNote}
+            />
+          );
+        }
         return (
           <ShareNoteCard
             key={noteShareDTO.shareId}
             noteShareDTO={noteShareDTO}
             userNoteDTO={userNoteDTO}
             handleClick={handleClick}
-            innerRef={lastSharedNote}
           />
         );
-      }
-      return (
-        <ShareNoteCard
-          key={noteShareDTO.shareId}
-          noteShareDTO={noteShareDTO}
-          userNoteDTO={userNoteDTO}
-          handleClick={handleClick}
-        />
-      );
-    });
+      })
+    );
   }, [toRead, toEdit, selectedNote, notes, lastSharedNote]);
 
   return renderNote;

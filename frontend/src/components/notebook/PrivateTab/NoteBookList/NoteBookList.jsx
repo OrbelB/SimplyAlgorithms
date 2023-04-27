@@ -1,28 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import { useState, useMemo } from 'react';
-import {
-  Box,
-  Button,
-  InputAdornment,
-  MenuItem,
-  Modal,
-  TextField,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  Chip,
-} from '@mui/material';
+import { Button, Typography, Chip } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
-import CloseIcon from '@mui/icons-material/Close';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import parse from 'html-react-parser';
 import draftToHtml from 'draftjs-to-html';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,16 +11,12 @@ import {
   listSharedToo,
   privateNote,
   publicizeNote,
-  shareNote,
-  unShareNote,
-  updateEditPermission,
-  updateExpireDateOnSharedNotes,
   updateUserNote,
 } from '../../../../services/note';
 // import { updateSharedEditPermission } from '../../../../store/reducers/note-slice';
-import { timeToExpire } from '../../../../utilities/beautify-time';
 import useJwtPermssionExists from '../../../../hooks/use-jwtPermission';
 import AreYouSureModal from '../../../AreYourSureModal/AreYouSureModal';
+import ShareModal from './ShareModal';
 
 const content = {
   blocks: [
@@ -61,7 +36,7 @@ const content = {
 export default function NoteBookList({ element, sharedToo, innerRef }) {
   const dispatch = useDispatch();
   const isStudent = useJwtPermssionExists({ permission: 'ROLE_STUDENT' });
-  const [shareDays, setShareDays] = useState(15);
+
   const { status } = useSelector((state) => state.note);
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
   const [editPage, setEditPage] = useState(false);
@@ -75,22 +50,8 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     return parsedContent;
   }, [element?.noteBody]);
 
-  const [shareTo, setShareTo] = useState('');
-  const [sharePermission, setSharePermission] = useState('Read');
   const [noteTitle, setNoteTitle] = useState(element?.title ?? '');
-  // eslint-disable-next-line no-unused-vars
-  const [sharePermissions, setSharePermissions] = useState(
-    () =>
-      new Map(
-        sharedToo?.map((item) => [
-          item.shareId,
-          item.canEdit ? 'Edit' : 'Read',
-        ]) ?? []
-      )
-  );
-  const [expireDays, setExpireDays] = useState(
-    () => new Map(sharedToo?.map((item) => [item.shareId, 0]) ?? [])
-  );
+
   const [noteBody, setNoteBody] = useState(element?.noteBody ?? content);
   const [isPublic, setIsPublic] = useState(element?.isPublic === 1);
   const removeHandler = async () => {
@@ -102,17 +63,7 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
       // future logic
     }
   };
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 600,
-    bgcolor: 'background.paper',
-    border: '1px solid black',
-    boxShadow: 24,
-    p: 4,
-  };
+
   const [open, setOpen] = useState(false);
   const handleOpen = async () => {
     try {
@@ -130,28 +81,6 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     }
   };
   const handleClose = () => setOpen(false);
-  const permissions = [
-    {
-      value: 'Read',
-      label: 'Read',
-    },
-    {
-      value: 'Edit',
-      label: 'Edit',
-    },
-  ];
-
-  const handleRemoveClick = async (shareId) => {
-    // Implement remove logic here
-    dispatch(unShareNote({ shareId, jwtAccessToken }));
-  };
-
-  // const handlePermissionChange = (shareId, user, event) => {
-  //   // Implement permission change logic here
-  //   dispatch(
-  //     updateSharedEditPermission({ shareId, canEdit: event.target.value })
-  //   );
-  // };
 
   // handles updating the note private/public status
   const handleUpdatingIsPublic = async () => {
@@ -215,59 +144,6 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
     } finally {
       setEditPage(false);
     }
-  };
-
-  const [shareErr, setShareErr] = useState(false);
-
-  const handleCloseShareErr = () => {
-    setShareErr(false);
-  };
-
-  const handleConfirmShareErr = () => {
-    setShareErr(false);
-  };
-
-  const handleShareNote = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const noteShareDTO = {
-      shareToUserName: shareTo,
-      canEdit: sharePermission === 'Edit',
-      numberOfDaysToShare: shareDays,
-    };
-    const userNoteDTO = {
-      noteId: element.noteId,
-    };
-    try {
-      await dispatch(
-        shareNote({ noteShareDTO, userNoteDTO, jwtAccessToken })
-      ).unwrap();
-    } catch (err) {
-      setShareErr(true);
-    } finally {
-      setShareTo('');
-      setSharePermission('Read');
-    }
-  };
-
-  const handleSaveSharedChanges = async (shareId) => {
-    // Implement save changes logic here
-    const canEdit = sharePermissions.get(shareId) === 'Edit';
-    const amountOfDays = expireDays.get(shareId);
-    const noteShareDTO = {
-      shareToUserName: shareTo,
-      shareId,
-      canEdit,
-      numberOfDaysToShare: amountOfDays,
-    };
-
-    if (
-      canEdit !== sharedToo.find((item) => item.shareId === shareId).canEdit
-    ) {
-      dispatch(updateEditPermission({ userId, shareId, jwtAccessToken }));
-    }
-    if (amountOfDays === undefined || amountOfDays === 0) return;
-    dispatch(updateExpireDateOnSharedNotes({ noteShareDTO, jwtAccessToken }));
   };
 
   const [openDel, setOpenDel] = useState(false);
@@ -404,183 +280,12 @@ export default function NoteBookList({ element, sharedToo, innerRef }) {
           >
             Share
           </Button>
-          <Modal
+          <ShareModal
+            handleClose={handleClose}
+            element={element}
             open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <IconButton
-                onClick={handleClose}
-                sx={{ position: 'absolute', margin: 3, top: 0, right: 0 }}
-              >
-                <CloseIcon />
-              </IconButton>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Share
-              </Typography>
-              <form
-                className="mt-2"
-                onSubmit={handleShareNote}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <TextField
-                  id="input-with-icon-textfield"
-                  label="Username"
-                  sx={{ marginRight: '20px', width: '200px' }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
-                    ),
-                  }}
-                  value={shareTo}
-                  onChange={(e) => setShareTo(e.target.value)}
-                  variant="standard"
-                  margin="normal"
-                  required
-                />
-                <TextField
-                  select
-                  label="Permissions"
-                  defaultValue={sharePermission}
-                  variant="standard"
-                  margin="normal"
-                  sx={{ marginRight: '20px', width: '100px' }}
-                  required
-                  onChange={(e) => setSharePermission(e.target.value)}
-                >
-                  {permissions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  label="Set Days to Share"
-                  variant="standard"
-                  type="number"
-                  margin="normal"
-                  value={shareDays}
-                  onChange={(e) => setShareDays(e.target.value)}
-                  sx={{ marginRight: '20px', width: '150px' }}
-                  inputProps={{
-                    min: 1,
-                    max: 365,
-                  }}
-                >
-                  {/* set number of days left to expire here */}
-                </TextField>
-                <Button
-                  className="mt-2"
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  style={{ display: 'block', marginTop: '20px' }}
-                >
-                  Add User
-                </Button>
-                <AreYouSureModal
-                  open={shareErr}
-                  onClose={handleCloseShareErr}
-                  onConfirm={handleConfirmShareErr}
-                  title="ERROR: User not found! Check your spelling"
-                />
-              </form>
-              <hr />
-              <TableContainer component={Paper} key={sharedToo.length}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>User</TableCell>
-                      <TableCell>Permissions</TableCell>
-                      <TableCell>Expires (Days)</TableCell>
-                      <TableCell />
-                      <TableCell />
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {sharedToo?.map((userShared) => (
-                      <TableRow key={userShared.shareId}>
-                        <TableCell component="th" scope="row">
-                          {userShared.shareToUserName}
-                        </TableCell>
-                        <TableCell>
-                          <TextField
-                            select
-                            className="m-3 w-100"
-                            label={userShared.canEdit ? 'Edit' : 'Read'}
-                            onChange={(event) => {
-                              setSharePermissions((prev) => {
-                                return prev.set(
-                                  userShared.shareId,
-                                  event.target.value
-                                );
-                              });
-                            }}
-                          >
-                            {permissions.map((option) => (
-                              <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                              </MenuItem>
-                            ))}
-                          </TextField>
-                        </TableCell>
-                        <TableCell>
-                          <TextField
-                            type="number"
-                            label={timeToExpire(userShared.expireDate)}
-                            inputProps={{
-                              min:
-                                0 - Number(timeToExpire(userShared.expireDate)),
-                              max: 365,
-                            }}
-                            onChange={(e) =>
-                              setExpireDays((prev) => {
-                                return prev.set(
-                                  userShared.shareId,
-                                  e.target.value
-                                );
-                              })
-                            }
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <IconButton
-                            type="button"
-                            onClick={() =>
-                              handleRemoveClick(
-                                userShared.shareId,
-                                userShared.shareToUserName
-                              )
-                            }
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
-                        <TableCell>
-                          <IconButton
-                            type="button"
-                            onClick={() =>
-                              handleSaveSharedChanges(userShared.shareId)
-                            }
-                          >
-                            <SaveIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          </Modal>
+            sharedToo={sharedToo}
+          />
           <Button
             type="button"
             variant="contained"

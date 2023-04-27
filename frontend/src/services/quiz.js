@@ -16,8 +16,14 @@ export const fetchSingleQuiz = createAsyncThunk(
 export const fetchQuizList = createAsyncThunk(
   'quiz/list',
   async (pageParams) => {
-    const { page, size, filterBy, sortBy } = pageParams;
-    const response = await quizEndpoints.list(page, size, filterBy, sortBy);
+    const { page, size, filterBy, sortBy, title } = pageParams;
+    const response = await quizEndpoints.list(
+      page,
+      size,
+      filterBy,
+      sortBy,
+      title
+    );
     return response.data;
   }
 );

@@ -7,14 +7,23 @@ import { fetchForumList } from '../services/forum';
 
 export default function ForumPage() {
   const status = useSelector((state) => state.forums.status);
-  const [sortBy] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const forumsUpdateStore = useMemo(() => {
     return {
       conditions: [status === 'idle'],
       actions: [[fetchForumList]],
-      arguments: [[{ page: 0, size: 10, sortBy: sortBy.get('sortBy') }]],
+      arguments: [
+        [
+          {
+            page: 0,
+            size: 10,
+            sortBy: searchParams.get('sortBy'),
+            title: searchParams.get('title'),
+          },
+        ],
+      ],
     };
-  }, [sortBy, status]);
+  }, [searchParams, status]);
 
   useUpdateStore(
     forumsUpdateStore.conditions,

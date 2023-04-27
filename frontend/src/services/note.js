@@ -221,10 +221,12 @@ export const privateNote = createAsyncThunk('note/privateNote', async (par) => {
 export const deletePublicNoteByAdmin = createAsyncThunk(
   'note/deletePublicNoteAdmin',
   async (par) => {
-    const { publicNoteDTO, accessToken } = par;
+    const { authorId, noteId, jwtAccessToken } = par;
+
     const res = await noteEndpoints.deletePublicNoteByAdmin(
-      publicNoteDTO,
-      accessToken
+      authorId,
+      noteId,
+      jwtAccessToken
     );
 
     return res.data;

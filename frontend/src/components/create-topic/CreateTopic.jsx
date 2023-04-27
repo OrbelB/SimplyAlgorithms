@@ -196,11 +196,19 @@ export default function CreateTopic() {
 
   const handleReferenceChange = useCallback(
     (index, event) => {
-      const data = [...references];
-      data[index][event.target.name] = event.target.value;
-      setReferences(data);
+      setReferences((prevReferences) =>
+        prevReferences.map((reference, i) => {
+          if (i === index) {
+            return {
+              ...reference,
+              [event.target.name]: event.target.value,
+            };
+          }
+          return reference;
+        })
+      );
     },
-    [references]
+    [setReferences]
   );
 
   const addReferences = () => {
@@ -219,11 +227,19 @@ export default function CreateTopic() {
 
   const handleSnippetChange = useCallback(
     (index, event) => {
-      const data = [...snippets];
-      data[index][event.target.name] = event.target.value;
-      setSnippets(data);
+      setSnippets((prevSnippets) =>
+        prevSnippets.map((snippet, i) => {
+          if (i === index) {
+            return {
+              ...snippet,
+              [event.target.name]: event.target.value,
+            };
+          }
+          return snippet;
+        })
+      );
     },
-    [snippets]
+    [setSnippets]
   );
 
   const addSnippets = () => {

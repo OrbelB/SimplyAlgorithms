@@ -10,9 +10,9 @@ export const quizEndpoints = {
         Authorization: `Bearer ${jwtAccessToken}`,
       },
     }),
-  list: (page, size, filterBy, sortBy) =>
+  list: (page, size, filterBy, sortBy, title) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/list`, {
-      params: { page, size, filterBy, sortBy },
+      params: { page, size, filterBy, sortBy, title },
     }),
   listUserHistory: (page, size, userId, jwtAccessToken) =>
     get(`${PUBLIC_ENDPOINT_ROUTE}/user-history`, {

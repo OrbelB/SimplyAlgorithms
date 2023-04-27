@@ -1,14 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect, useCallback } from 'react';
-import { Button } from '@mui/material';
-import parse from 'html-react-parser';
-import draftToHtml from 'draftjs-to-html';
-import FlagIcon from '@mui/icons-material/Flag';
-import Report from '../../../report/Report';
+import { useState, useEffect } from 'react';
 import usePaginationWithInfiniteScroll from '../../../../hooks/use-pagination';
 import { updateCurrentPublicNotePage } from '../../../../store/reducers/note-slice';
 import { listPublicNotes, savePublicNote } from '../../../../services/note';
 import AlertSnackBar from '../../../alert-messages-snackbar/AlertSnackBar';
+import PubNoteCard from './PubNoteCard';
 
 export default function PubNoteList({ notes }) {
   const { jwtAccessToken, userId } = useSelector((state) => state.auth);
@@ -28,6 +24,7 @@ export default function PubNoteList({ notes }) {
   });
   const [noteSaved, setNoteSaved] = useState({ status: false, index: null });
   const [saved, setSaved] = useState(new Array(notes?.length).fill(false));
+
   useEffect(() => {
     if (status === 'success' && noteSaved.index !== null) {
       const newSaved = [...saved];
@@ -65,16 +62,6 @@ export default function PubNoteList({ notes }) {
       />
     );
 
-  const handleNoteBodyHTML = useCallback((noteBody) => {
-    let htmlContent = draftToHtml(noteBody);
-    htmlContent = htmlContent.replace(
-      /<img([^>]+)>/gi,
-      `<img$1 class="img-fluid" loading="lazy">`
-    );
-    const parsedContent = parse(htmlContent);
-    return parsedContent;
-  }, []);
-
   const [openReport, setOpenReport] = useState(false);
 
   const handleOpenReport = () => {
@@ -88,82 +75,46 @@ export default function PubNoteList({ notes }) {
   return (
     <>
       {noteSaved.status && alertMessage}
-      {notes?.map(({ userNoteDTO }, index) => {
-        if (index + 1 === notes.length) {
-          return (
-            <div
-              key={userNoteDTO.noteId}
-              ref={lastPublicNote}
-              className="card m-3 mb-4"
-            >
-              <div className="card-body">
-                <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
-                <h6 className="text-secondary m-2">
-                  {`Created By: ${userNoteDTO?.createdBy?.username}`}
-                </h6>
-                <div className="card-text m-3">
-                  {handleNoteBodyHTML(userNoteDTO?.noteBody)}
-                </div>
-                <div className="m-2 mb-0 d-flex justify-content-between">
-                  <Button
-                    type="button"
-                    variant="contained"
-                    onClick={handleOpenReport}
-                    startIcon={<FlagIcon />}
-                  >
-                    Report
-                  </Button>
-                  <Report
-                    open={openReport}
-                    handleClose={handleCloseReport}
-                    culpritUserId={userNoteDTO?.createdBy?.userId}
-                    foreignId={userNoteDTO?.noteId}
-                    typeOfForeignId="note"
-                    victumUserId={userId}
-                  />
-                  <Button
-                    variant="contained"
-                    color={saved[index] ? 'error' : 'success'}
-                    onClick={() => handleClick(index, userNoteDTO.noteId)}
-                    disabled={saved[index]}
-                  >
-                    {saved[index] ? 'Unsave Note' : 'Save Note'}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          );
-        }
-        return (
-          <div key={userNoteDTO.noteId} className="card m-3 mb-4">
-            <div className="card-body">
-              <h4 className="card-title m-2">{userNoteDTO?.title}</h4>
-              <div className="card-text m-2">
-                {handleNoteBodyHTML(userNoteDTO?.noteBody)}
-              </div>
-              <div className="m-2 mb-0 d-flex justify-content-between">
-                <Button
-                  type="button"
-                  variant="contained"
-                  onClick={handleOpenReport}
-                  startIcon={<FlagIcon />}
-                >
-                  Report
-                </Button>
-                <Report open={openReport} handleClose={handleCloseReport} />
-                <Button
-                  variant="contained"
-                  color={saved[index] ? 'error' : 'success'}
-                  onClick={() => handleClick(index, userNoteDTO.noteId)}
-                  disabled={saved[index]}
-                >
-                  {saved[index] ? 'Unsave Note' : 'Save Note'}
-                </Button>
-              </div>
-            </div>
+      {notes?.length === 0 ? (
+        <div className="card m-3">
+          <div className="card-body">
+            <h5 className="card-title"> Message: </h5>
+            <p className="card-text"> There are no public notes available.</p>
           </div>
-        );
-      })}
+        </div>
+      ) : (
+        notes?.map(({ userNoteDTO, publicShareId }, index) => {
+          if (index + 1 === notes.length) {
+            return (
+              <PubNoteCard
+                key={publicShareId}
+                userNoteDTO={userNoteDTO}
+                handleClick={handleClick}
+                handleCloseReport={handleCloseReport}
+                handleOpenReport={handleOpenReport}
+                index={index}
+                lastPublicNote={lastPublicNote}
+                openReport={openReport}
+                userId={userId}
+                saved={saved}
+              />
+            );
+          }
+          return (
+            <PubNoteCard
+              key={publicShareId}
+              userNoteDTO={userNoteDTO}
+              handleClick={handleClick}
+              handleCloseReport={handleCloseReport}
+              handleOpenReport={handleOpenReport}
+              index={index}
+              openReport={openReport}
+              userId={userId}
+              saved={saved}
+            />
+          );
+        })
+      )}
     </>
   );
 }

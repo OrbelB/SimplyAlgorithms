@@ -108,4 +108,34 @@ export const selectSortedForums = createSelector(
       return b[sortBy.toString().trim()] - a[sortBy.toString().trim()];
     })
 );
+
+export const selectFilteredAndSortedForums = createSelector(
+  [
+    selectAllForums,
+    (state, sortBy) => ({ filterBy: state.forums.filterBy, sortBy }),
+  ],
+  (forums, { filterBy, sortBy = '' }) => {
+    const filteredForums = filterBy
+      ? forums.filter((forum) =>
+          forum.tags.find((tag) => tag.tagId === filterBy)
+        )
+      : forums;
+    return filteredForums.sort((a, b) => {
+      if (sortBy === 'title') {
+        return a.title
+          .trim()
+          .localeCompare(b.title.trim(), undefined, { sensitivity: 'base' });
+      }
+      if (sortBy === 'createdDate') {
+        return b.createdDate.localeCompare(a.createdDate);
+      }
+      if (sortBy === 'upVotes') {
+        return b[sortBy.toString().trim()] - a[sortBy.toString().trim()];
+      }
+      // fallback to not sorting
+      return filteredForums;
+    });
+  }
+);
+
 export const forumsActions = forumsSlice.actions;
