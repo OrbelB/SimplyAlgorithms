@@ -1,12 +1,11 @@
 package com.simplyalgos.backend.quiz.domains;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
-import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
-import lombok.*;
-
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
@@ -40,6 +39,7 @@ public class QuestionAnswer {
     @JsonIncludeProperties({"questionId"})
     @ManyToOne
     @JoinColumn(name = "question_id", referencedColumnName = "question_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private QuizQuestion answerBelongsToQuestion;
 
 }

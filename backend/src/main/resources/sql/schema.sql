@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(60),
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
+    lock_expire_date datetime,
     dob DATE,
     profile_picture VARCHAR(255),
     password  VARCHAR(255),
@@ -337,6 +338,7 @@ CREATE TABLE quiz (
 	quiz_id VARCHAR(36) NOT NULL DEFAULT(UUID_TO_BIN(uuid())) PRIMARY KEY,
     created_date TIMESTAMP DEFAULT(CURRENT_TIME()),
     title VARCHAR(60) NOT NULL,
+    user_id varchar(36),
     score INT,
     tag_id  VARCHAR(36) NOT NULL,
 	FOREIGN KEY (tag_id) REFERENCES tag(tag_id)

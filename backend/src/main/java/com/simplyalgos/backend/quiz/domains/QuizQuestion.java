@@ -2,17 +2,15 @@ package com.simplyalgos.backend.quiz.domains;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.simplyalgos.backend.quiz.dtos.QuizQuestionAnswerDTO;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
-
-import jakarta.persistence.*;
-
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
@@ -46,6 +44,7 @@ public class QuizQuestion {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Quiz belongsToThisQuiz;
 
 

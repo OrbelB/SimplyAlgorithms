@@ -5,11 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.simplyalgos.backend.tag.domains.Tag;
 import com.simplyalgos.backend.user.domains.User;
 import com.simplyalgos.backend.utils.StringUtils;
+import jakarta.persistence.CascadeType;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserTypeLegacyBridge;
 
 import jakarta.persistence.*;
@@ -70,6 +69,7 @@ public class Quiz {
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User createdBy;
 
     public void setTag(Tag tag){
