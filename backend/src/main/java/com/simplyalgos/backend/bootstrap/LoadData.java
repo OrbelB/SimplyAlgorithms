@@ -1,6 +1,8 @@
 package com.simplyalgos.backend.bootstrap;
 
 import com.nimbusds.jose.shaded.gson.GsonBuilder;
+import com.simplyalgos.backend.chatty.domain.Chatty;
+import com.simplyalgos.backend.chatty.repositories.ChattyRepository;
 import com.simplyalgos.backend.comment.enums.CommentType;
 import com.simplyalgos.backend.page.domains.Wiki;
 import com.simplyalgos.backend.page.repositories.WikiRepository;
@@ -33,6 +35,8 @@ import java.util.Set;
 public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
     private final WikiRepository wikiRepository;
     private final AuthorityRepository authorityRepository;
+
+    private final ChattyRepository chattyRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -45,8 +49,6 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
     private String adminEmail;
 
 
-    @Value("${BOT_PASSWORD}")
-    private String botPassword;
 
     @Transactional
     @Override
@@ -241,8 +243,8 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         userRepository.save(
                 User.builder()
                         .username("Chatty")
-                        .password(passwordEncoder.encode(botPassword))
-                        .email("bot@this.com")
+                        .password(passwordEncoder.encode(adminPassword))
+                        .email(adminEmail)
                         .dob(Date.valueOf(LocalDate.of(2000, 1, 1)))
                         .firstName("Chatty")
                         .lastName("AI")
@@ -264,5 +266,21 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                         .role(adminRole)
                         .build()
         );
+
+        //add default chatty profile
+        chattyRepository.save(
+                Chatty.builder()
+                        .chattyDesc("default profile")
+                        .maxInputToken(400)
+                        .maxOutputToken(400)
+                        .delateSetting(4) //once an hour
+                        .remainingDelays(4)
+                        .maxReplies(5) //max number of forum questions it can answer per activation
+                        .profileEnabled((short) 1)
+                        .model("gpt-3.5-turbo")
+                        .temperature(0.7)
+                        .build()
+        );
     }
+
 }
