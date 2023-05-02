@@ -151,23 +151,6 @@ export default function UserSearchSection() {
       setRequestSubmmited(true);
     }
   };
-  // const reports = [
-  //   {
-  //     reportId: '123',
-  //     foreignId: '456',
-  //     culpritUser: '789',
-  //     victimUser: '101',
-  //     resolvedBy: '112',
-  //     typeOfForeignId: 'something',
-  //     category: 'profanity',
-  //     report:
-  //       'here will be a description of the report, and this will be seen once clicked',
-  //     resolveNote: 'Removed offensive language',
-  //     reportDate: '2022-03-25',
-  //     resolveDate: '2022-03-25',
-  //     isResolved: 'Yes',
-  //   },
-  // ];
 
   const submitDeleteAccountRequest = async () => {
     if (userId === userIdOrUsername) {

@@ -15,6 +15,7 @@ import useJwtPermssionExists from '../../hooks/use-jwtPermission';
 import { fetchUserHistory } from '../../services/quiz';
 import UserSearchSection from './UserSearch';
 import { topicActions } from '../../store/reducers/topic-slice';
+import BotSettings from './BotSettings';
 
 export default function Dashboard() {
   const { status: quizStatus, userHistory } = useSelector(
@@ -137,9 +138,16 @@ export default function Dashboard() {
           </Card>
         </div>
         {isAdmin && (
-          <div className="col-lg-4 mt-2">
+          <div className="col-lg-3 mt-2">
             <Card>
               <UserSearchSection />
+            </Card>
+          </div>
+        )}
+        {isAdmin && (
+          <div className="col-lg-3 mt-2">
+            <Card>
+              <BotSettings />
             </Card>
           </div>
         )}
