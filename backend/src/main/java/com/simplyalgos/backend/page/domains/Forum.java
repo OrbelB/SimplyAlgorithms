@@ -42,12 +42,14 @@ public class Forum extends BaseEntity {
     private Boolean noActivity = true;
 
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "user_id"))
     private User createdBy;
 
+
     @Builder
-    public Forum(UUID pageId, Date createdDate, String title, String descriptionText, String photo, String video, int downVotes, int upVotes, PageEntity pageEntityId, User createdBy) {
+    public Forum(UUID pageId, Date createdDate, String title, String descriptionText, String photo,
+                 String video, int downVotes, int upVotes, PageEntity pageEntityId, boolean noActivity, User createdBy) {
         super(pageId, createdDate, title);
         this.descriptionText = descriptionText;
         this.photo = photo;
@@ -55,6 +57,7 @@ public class Forum extends BaseEntity {
         this.downVotes = downVotes;
         this.upVotes = upVotes;
         this.pageEntityId = pageEntityId;
+        this.noActivity = noActivity;
         this.createdBy = createdBy;
     }
 }

@@ -11,7 +11,7 @@ public interface ChattyService {
 
     boolean isAppropriate(String textBody);
 
-    String generateForumResponse(String username, String title, String textBody);
+    String generateForumResponse(String username, String title, String textBody, Chatty chatty);
 
 //    this will be called in the scheduler to find empty forum post to answer.
     void beginChattyForumResponse();

@@ -29,7 +29,7 @@ import java.util.*;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ChattyServiceImp implements ChattyService{
+public class ChattyServiceImp implements ChattyService {
 
     private final ChattyRepository chattyRepository;
 
@@ -58,8 +58,25 @@ public class ChattyServiceImp implements ChattyService{
     }
 
     @Override
-    public String generateForumResponse(String username, String title, String textBody) {
-        return null;
+    public String generateForumResponse(String username, String title, String textBody, Chatty chatty) {
+        String input = "Your name is Chatty, answer " + username + "'s forum question " + textBody;
+        ChatRequest request = ChatRequest.builder()
+                .model(chatty.getModel())
+                .messages(List.of(Message.builder().role("user").content(input).build()))
+                .n(1)
+                .maxTokens(chatty.getMaxInputToken() + 10)
+                .temperature(chatty.getTemperature())
+                .build();
+        ChatResponse openAPIResponse = restTemplate.postForObject(chatty.getApiURL(), request, ChatResponse.class);
+
+
+        if (openAPIResponse == null || openAPIResponse.getChoices() == null || openAPIResponse.getChoices().isEmpty()) {
+            // deal with this
+            return "Sorry " + username + " I didnt understand your question :(." +
+                    " I would reccomend deleting this post and revising it with a more cleare question";
+        }
+        // return the first openAPIResponse
+        return openAPIResponse.getChoices().get(0).getMessage().getContent();
     }
 
     @Override
