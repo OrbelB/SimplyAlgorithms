@@ -42,4 +42,6 @@ public interface ForumService {
     ForumInformation addForumUserView(UUID userId, UUID pageId);
 
     List<?> listForumsByUserViewForums(UUID userId, Pageable pageable);
+
+    void updateActivity(UUID forumId, boolean activity);
 }

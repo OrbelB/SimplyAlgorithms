@@ -199,6 +199,7 @@ CREATE TABLE forum_page (
     video VARCHAR(255),
     up_votes INT NOT NULL,
     down_votes INT NOT NULL,
+    no_activity TINYINT NOT NULL DEFAULT (1)
     FOREIGN KEY(page_id) REFERENCES page_entity(page_id)
 		ON DELETE CASCADE,
 	FOREIGN KEY(user_id) REFERENCES users(user_id)

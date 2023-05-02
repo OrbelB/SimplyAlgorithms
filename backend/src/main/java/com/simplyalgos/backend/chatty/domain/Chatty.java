@@ -22,16 +22,17 @@ import java.util.UUID;
 public class Chatty {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Type(value = UserTypeLegacyBridge.class,
-            parameters = @Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
-                    value = "org.hibernate.type.UUIDCharType"))
+//    @GeneratedValue(generator = "UUID")
+//    @GenericGenerator(
+//            name = "UUID",
+//            strategy = "org.hibernate.id.UUIDGenerator"
+//    )
+//    @Type(value = UserTypeLegacyBridge.class,
+//            parameters = @Parameter(name = UserTypeLegacyBridge.TYPE_NAME_PARAM_KEY,
+//                    value = "org.hibernate.type.UUIDCharType"))
     @Column(length = 36, name = "chatty_id  ")
-    private UUID chattyId;
+    @Builder.Default
+    private String chattyId = "chatty";
 
     @Column(length = 512, name = "chatty_desc")
     private String chattyDesc;
@@ -59,6 +60,9 @@ public class Chatty {
 
     @Column(name = "temperature")
     private double temperature;
+
+    @Column(name = "api_url", length = 256)
+    private String apiURL;
 }
 
 //

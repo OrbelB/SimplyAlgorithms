@@ -89,6 +89,7 @@ public class ForumServiceImpl implements ForumService {
                         .photo(forumDTO.getPhoto())
                         .video(forumDTO.getVideo())
                         .title(forumDTO.getTitle())
+                        .noActivity(true)
                         .build()
         );
 
@@ -234,6 +235,11 @@ public class ForumServiceImpl implements ForumService {
                         .stream()
                 )
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateActivity(UUID forumId, boolean activity) {
+        forumRepository.updateNoActivityByPageId(forumId.toString(), activity);
     }
 
     private void removedViewedForumsPerUser(UUID userId) {

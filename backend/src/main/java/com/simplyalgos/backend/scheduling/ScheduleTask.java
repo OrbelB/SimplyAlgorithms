@@ -24,17 +24,16 @@ public class ScheduleTask {
 
     private final ChattyService chattyService;
 
-    @Scheduled(cron = "0 */15 * * * *")
+    @Scheduled(cron = "0 0 0/6 * * *")
     public void ScheduledServiceCall() {
-        log.debug("CHECKING FOR ALL EXPIRED PASSWORD RESET TOKENS");
-        int t = 0;
-        for(int i = 0; i < 10; i++){
-            i = i + 1 + i;
-            t = i;
-        }
-        log.info("THE I IS " + t);
+//        log.debug("CHECKING FOR ALL EXPIRED PASSWORD RESET TOKENS");
 //        passwordResetTokenService.printAllTokens();
-        chattyService.beginChattyForumResponse();
         passwordResetTokenService.deleteExpiredPasswordResetTokens();
+    }
+
+    @Scheduled(cron = "0 0/15 * * * *")
+//    @Scheduled(fixedDelay = 10000, initialDelay = 60000)
+    public void chattySchedule() {
+        chattyService.beginChattyForumResponse();
     }
 }

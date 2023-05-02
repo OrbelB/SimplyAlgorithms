@@ -270,6 +270,7 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
         //add default chatty profile
         chattyRepository.save(
                 Chatty.builder()
+                        .chattyId("chatty")
                         .chattyDesc("default profile")
                         .maxInputToken(400)
                         .maxOutputToken(400)
@@ -279,6 +280,7 @@ public class LoadData implements ApplicationListener<ContextRefreshedEvent> {
                         .profileEnabled((short) 1)
                         .model("gpt-3.5-turbo")
                         .temperature(0.7)
+                        .apiURL("https://api.openai.com/v1/chat/completions")
                         .build()
         );
     }

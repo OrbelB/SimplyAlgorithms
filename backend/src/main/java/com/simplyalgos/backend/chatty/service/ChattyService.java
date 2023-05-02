@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.chatty.service;
 
-import com.simplyalgos.backend.chatty.dto.chattyDTO;
+import com.simplyalgos.backend.chatty.domain.Chatty;
+import com.simplyalgos.backend.chatty.dto.ChattyDTO;
 import com.simplyalgos.backend.web.pagination.ObjectPagedList;
 import org.springframework.data.domain.Pageable;
 
@@ -15,15 +16,17 @@ public interface ChattyService {
 //    this will be called in the scheduler to find empty forum post to answer.
     void beginChattyForumResponse();
 
-    ObjectPagedList<?> listChattyProfiles(Pageable pageable);
+//    ObjectPagedList<?> listChattyProfiles(Pageable pageable);
 
-    chattyDTO createProfile(chattyDTO chattyDTO);
+    ChattyDTO createProfile(ChattyDTO chattyDTO);
 
-    chattyDTO updateProdile(chattyDTO chattyDTO);
+    ChattyDTO updateProfile(ChattyDTO chattyDTO);
 
-    boolean deleteProfile(chattyDTO chattyDTO);
+    ChattyDTO getChattyProfile();
 
-    chattyDTO setMainProfile(chattyDTO chattyDTO);
+//    boolean deleteProfile(ChattyDTO chattyDTO);
+
+//    ChattyDTO setMainProfile(ChattyDTO chattyDTO);
 
     String testFunction(UUID forumId, String extra);
 

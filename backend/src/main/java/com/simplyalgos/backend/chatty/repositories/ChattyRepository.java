@@ -7,8 +7,5 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ChattyRepository extends JpaRepository<Chatty, UUID> {
-
-
-    Optional<Chatty> findByProfileEnabled(short enabled);
+public interface ChattyRepository extends JpaRepository<Chatty, String> {
 }

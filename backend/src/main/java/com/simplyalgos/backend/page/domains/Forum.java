@@ -1,11 +1,14 @@
 package com.simplyalgos.backend.page.domains;
 
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.simplyalgos.backend.user.domains.User;
-import lombok.*;
-
 import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.Type;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -33,6 +36,10 @@ public class Forum extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id", nullable = false)
     private PageEntity pageEntityId;
+
+
+    @Column(name = "no_activity")
+    private Boolean noActivity = true;
 
     @JsonIncludeProperties({"userId", "username", "profilePicture"})
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
