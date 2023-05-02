@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Modal,
   Table,
@@ -18,17 +19,28 @@ import {
   TableFooter,
   TablePagination,
   useTheme,
+  TextField,
+  Select,
+  MenuItem,
 } from '@mui/material';
+import debounce from 'lodash.debounce';
 import CloseIcon from '@mui/icons-material/Close';
-import { useEffect, useState } from 'react';
+import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
+import AlertSnackBar from '../../../alert-messages-snackbar/AlertSnackBar';
 import styles from './UserSearchModal.module.css';
 import { reportActions } from '../../../../store/reducers/report-slice';
-import { listReportByIndividual } from '../../../../services/universalReport';
+import {
+  deleteReport,
+  listReportByIndividual,
+  updateReport,
+} from '../../../../services/universalReport';
 
 const style = {
   position: 'absolute',
@@ -111,13 +123,14 @@ export default function ReportTable({
   usernameOrId,
   individual,
 }) {
+  const [message, setMessage] = useState('');
   const [selectedReport, setSelectedReport] = useState(null);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { currentPage, totalPages, totalElements } = useSelector(
+  const { currentPage, totalPages, totalElements, status } = useSelector(
     (state) => state.report
   );
   const [fetchPage, setFetchPage] = useState(false);
-  const { jwtAccessToken } = useSelector((state) => state.auth);
+  const { jwtAccessToken, userId } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleReportClick = (report) => {
     setSelectedReport(report);
@@ -168,8 +181,122 @@ export default function ReportTable({
   const cellStyle = { borderRight: '1px solid #ccc' };
   const rowStyle = { borderBottom: '1px solid #ccc' };
 
+  const [openEdit, setOpenEdit] = useState([]);
+
+  const [showSnackBar, setShowSnackBar] = useState(false);
+  const handleEditMessage = (reportId) => {
+    setOpenEdit((prev) => {
+      if (prev.find((item) => item.reportId === reportId)) {
+        return prev.map((item) => {
+          if (item.reportId === reportId) {
+            return {
+              ...item,
+              editResolveNote: !item.editResolveNote,
+            };
+          }
+          return item;
+        });
+      }
+      return [
+        ...prev,
+        {
+          reportId,
+          editResolveNote: true,
+          editIsResolved: false,
+        },
+      ];
+    });
+  };
+
+  const handleIsResolved = (reportId) => {
+    setOpenEdit((prev) => {
+      if (prev.find((item) => item.reportId === reportId)) {
+        return prev.map((item) => {
+          if (item.reportId === reportId) {
+            return {
+              ...item,
+              editIsResolved: !item.editIsResolved,
+            };
+          }
+          return item;
+        });
+      }
+      return [
+        ...prev,
+        {
+          reportId,
+          editResolveNote: false,
+          editIsResolved: true,
+        },
+      ];
+    });
+  };
+
+  const changeMessage = useCallback(
+    debounce((newMessage, reportId) => {
+      dispatch(
+        reportActions.updateResolveNote({
+          reportId,
+          resolveNote: newMessage,
+        })
+      );
+    }, 600),
+    [dispatch]
+  );
+
+  const handleUpdateReport = async (report) => {
+    let resolvedBy = null;
+    if (report.isResolved === 'yes') resolvedBy = { userId };
+    const universalReportDTO = {
+      ...report,
+      resolvedBy,
+    };
+    try {
+      await dispatch(
+        updateReport({ universalReportDTO, jwtAccessToken })
+      ).unwrap();
+    } finally {
+      setShowSnackBar(true);
+    }
+  };
+
+  const handleDeleteReport = async (reportId) => {
+    try {
+      await dispatch(deleteReport({ reportId, jwtAccessToken })).unwrap();
+    } finally {
+      setShowSnackBar(true);
+    }
+  };
+
+  const showAlertReportSubmitted = useMemo(() => {
+    if (status === 'updatedSuccesfully' && showSnackBar) {
+      return (
+        <AlertSnackBar
+          passedMessage="report updated successfully!"
+          typeMessage="success"
+          removeData={() => {
+            setShowSnackBar(false);
+          }}
+        />
+      );
+    }
+    if (status === 'failed' && showSnackBar) {
+      return (
+        <AlertSnackBar
+          passedMessage="Something went wrong, please try again later!"
+          typeMessage="error"
+          removeData={() => {
+            setShowSnackBar(false);
+          }}
+        />
+      );
+    }
+    return null;
+  }, [dispatch, showSnackBar, status]);
+
   return (
     <>
+      {showAlertReportSubmitted}
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <IconButton
@@ -193,7 +320,9 @@ export default function ReportTable({
                   <TableCell sx={cellStyle}>resolveNote</TableCell>
                   <TableCell sx={cellStyle}>reportDate</TableCell>
                   <TableCell sx={cellStyle}>resolveDate</TableCell>
-                  <TableCell>isResolved</TableCell>
+                  <TableCell sx={cellStyle}>isResolved</TableCell>
+                  <TableCell sx={cellStyle}>save changes</TableCell>
+                  <TableCell>delete report</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -214,7 +343,7 @@ export default function ReportTable({
                       {report.victimUser?.username ?? ''}
                     </TableCell>
                     <TableCell sx={cellStyle}>
-                      {report.resolvedBy?.username ?? ''}
+                      {report.resolvedBy?.username ?? 'not resolved'}
                     </TableCell>
                     <TableCell sx={cellStyle}>
                       {report.typeOfForeignId}
@@ -226,10 +355,97 @@ export default function ReportTable({
                     >
                       {report.report.substring(0, 50) + ' ...'}
                     </TableCell>
-                    <TableCell sx={cellStyle}>{report.resolveNote}</TableCell>
+                    <TableCell
+                      sx={cellStyle}
+                      onDoubleClick={() => {
+                        handleEditMessage(report.reportId);
+                        setMessage(report.resolveNote);
+                      }}
+                    >
+                      {openEdit.find(
+                        (item) => item.reportId === report.reportId
+                      )?.editResolveNote ? (
+                        <TextField
+                          value={message}
+                          onChange={(e) => {
+                            const newMessage = e.target.value;
+                            setMessage(newMessage);
+                            changeMessage(newMessage, report.reportId);
+                          }}
+                          onBlur={() =>
+                            setOpenEdit(
+                              (prev) =>
+                                (prev = prev.filter(
+                                  (item) => item.reportId !== report.reportId
+                                )) && prev
+                            )
+                          }
+                        />
+                      ) : (
+                        report.resolveNote
+                      )}
+                    </TableCell>
                     <TableCell sx={cellStyle}>{report?.reportDate}</TableCell>
                     <TableCell sx={cellStyle}>{report?.resolveDate}</TableCell>
-                    <TableCell>{report.isResolved}</TableCell>
+                    <TableCell
+                      sx={cellStyle}
+                      onDoubleClick={() => handleIsResolved(report.reportId)}
+                    >
+                      {openEdit.find(
+                        (item) => item.reportId === report.reportId
+                      )?.editIsResolved ? (
+                        <Select
+                          value={report.isResolved}
+                          onChange={(e) =>
+                            dispatch(
+                              reportActions.updateisResolved({
+                                reportId: report.reportId,
+                                isResolved: e.target.value,
+                              })
+                            )
+                          }
+                          onBlur={() =>
+                            setOpenEdit(
+                              (prev) =>
+                                (prev = prev.filter(
+                                  (item) => item.reportId !== report.reportId
+                                )) && prev
+                            )
+                          }
+                        >
+                          <MenuItem value="yes">yes</MenuItem>
+                          <MenuItem value="no">no</MenuItem>
+                        </Select>
+                      ) : (
+                        report.isResolved
+                      )}
+                    </TableCell>
+                    <TableCell sx={cellStyle}>
+                      <Button
+                        endIcon={<SaveIcon />}
+                        type="button"
+                        onClick={() => handleUpdateReport(report)}
+                        disabled={status === 'loading'}
+                        color="success"
+                        variant="contained"
+                      >
+                        save
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        type="button"
+                        endIcon={<DeleteIcon />}
+                        color="error"
+                        variant="contained"
+                        disabled={
+                          report.isResolved === 'no' || status === 'loading'
+                        }
+                        onClick={() => handleDeleteReport(report.reportId)}
+                      >
+                        delete
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
                 {emptyRows > 0 && (

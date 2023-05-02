@@ -41,6 +41,15 @@ export const reportSlice = createSlice({
       state.currentPage = undefined;
       state.reportId = undefined;
     },
+    updateResolveNote: (state, action) => {
+      const { reportId, resolveNote } = action.payload;
+      const report = { id: reportId, changes: { resolveNote } };
+      reportAdapter.updateMany(state, [report]);
+    },
+    updateisResolved: (state, action) => {
+      const { reportId, isResolved } = action.payload;
+      reportAdapter.upsertMany(state, [{ reportId, isResolved }]);
+    },
     removeReportId: (state) => {
       state.reportId = undefined;
     },
@@ -65,8 +74,9 @@ export const reportSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(updateReport.fulfilled, (state, action) => {
-        state.status = 'success';
-        reportAdapter.upsertOne(state, action.payload);
+        const updatedReport = action.payload;
+        reportAdapter.upsertOne(state, updatedReport);
+        state.status = 'updatedSuccesfully';
       })
       .addCase(updateReport.rejected, (state, action) => {
         state.status = 'failed';

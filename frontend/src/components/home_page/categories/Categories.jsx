@@ -36,23 +36,9 @@ export default function Categories() {
                   <Typography gutterBottom variant="h3" component="h3">
                     {subCategory.wikiName}
                   </Typography>
-                  {/* <Typography
-                    variant="body1"
-                    color="#F8F8F8"
-                    textAlign="center"
-                  >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                  </Typography> */}
                 </CardContent>
               </CardActionArea>
             </Card>
-            /* <Button
-                style={{ backgroundColor: subCategory.rgb }}
-                className="topic"
-                onClick={() => handleRedirect(subCategory.wikiName)}
-              >
-                {subCategory.wikiName}
-              </Button> */
           ))}
         </div>
       </div>
