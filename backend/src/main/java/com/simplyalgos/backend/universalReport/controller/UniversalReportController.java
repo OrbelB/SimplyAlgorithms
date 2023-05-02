@@ -37,8 +37,7 @@ public class UniversalReportController {
     @AdminPermission
     @PutMapping(path = "/updateReport", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateReport(@RequestBody UniversalReportDTO universalReportDTO){
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(URS.updateReport(universalReportDTO));
+        return ResponseEntity.accepted().body(URS.updateReport(universalReportDTO));
     }
 
     @AdminPermission

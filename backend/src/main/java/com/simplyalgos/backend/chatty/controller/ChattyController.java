@@ -8,21 +8,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
-@CrossOrigin(methods = {RequestMethod.GET, RequestMethod.PUT})
+@CrossOrigin
 @RequestMapping("chatty")
 @Slf4j
 @RestController
-@AdminPermission
 public class ChattyController {
     private final ChattyService chattyService;
 
-
     @AdminPermission
     @GetMapping(path = "/get-chatty-setting", produces = "application/json")
-    public ResponseEntity<?> fetchChatty(@RequestParam String username) {
+    public ResponseEntity<?> fetchChatty() {
         return ResponseEntity.ok(chattyService.getChattyProfile());
     }
 

@@ -28,8 +28,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.text.MessageFormat;
+import java.time.Instant;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -178,8 +181,14 @@ public class UniversalReportServiceImp implements  UniversalReportService{
         universalReport.setCatagory(universalReportDTO.getCatagory());
         universalReport.setReport(universalReportDTO.getReport());
         universalReport.setResolveNote(universalReportDTO.getResolveNote());
-        universalReport.setResolveDate(universalReportDTO.getResolveDate());
         universalReport.setIsResolved(universalReportDTO.getIsResolved());
+        if(Objects.equals(universalReportDTO.getIsResolved(),"yes")){
+            universalReport.setResolveDate(Timestamp.from(Instant.now()));
+
+        }else {
+            universalReport.setResolvedBy(null);
+            universalReport.setResolveDate(null);
+        }
 
         if(universalReportDTO.getIsResolved().equals("resolved")){
             notifyUserRegardingClosedReport(universalReportDTO);

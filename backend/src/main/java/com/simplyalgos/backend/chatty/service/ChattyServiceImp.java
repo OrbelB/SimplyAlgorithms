@@ -59,7 +59,7 @@ public class ChattyServiceImp implements ChattyService {
 
     @Override
     public String generateForumResponse(String username, String title, String textBody, Chatty chatty) {
-        String input = "Your name is Chatty, answer " + username + "'s forum question " + textBody;
+        String input = "answer " + username + "'s forum question: " + textBody;
         ChatRequest request = ChatRequest.builder()
                 .model(chatty.getModel())
                 .messages(List.of(Message.builder().role("user").content(input).build()))
@@ -180,10 +180,11 @@ public class ChattyServiceImp implements ChattyService {
             chatty.get().setMaxInputToken(chattyDTO.getMaxInputToken());
             chatty.get().setMaxOutputToken(chattyDTO.getMaxOutputToken());
             chatty.get().setDelateSetting(chattyDTO.getDelateSetting());
-            chatty.get().setRemainingDelays(chattyDTO.getDelateSetting());
+            chatty.get().setRemainingDelays(chattyDTO.getRemainingDelays());
             chatty.get().setMaxReplies(chattyDTO.getMaxReplies());
             chatty.get().setModel(chattyDTO.getModel());
             chatty.get().setApiURL(chattyDTO.getApiURL());
+            chatty.get().setProfileEnabled(chattyDTO.getProfileEnabled());
             if (chattyDTO.getTemperature() >= 0 && chattyDTO.getTemperature() <= 1) {
                 chatty.get().setTemperature(chattyDTO.getTemperature());
             } else {
