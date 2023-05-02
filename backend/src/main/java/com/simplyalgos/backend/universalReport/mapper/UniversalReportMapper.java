@@ -9,15 +9,21 @@ import org.mapstruct.*;
 public interface UniversalReportMapper {
 
 
-    @Mapping(source = "culpritUser.userId", target = "culpritUser")
-    @Mapping(source = "victimUser.userId", target = "victimUser")
-    @Mapping(source = "resolvedBy.userId", target = "resolvedBy")
+    @Mapping(source = "culpritUser.userId", target = "culpritUser.userId")
+    @Mapping(source = "victimUser.userId", target = "victimUser.userId")
+    @Mapping(source = "resolvedBy.userId", target = "resolvedBy.userId")
+    @Mapping(source = "culpritUser.username", target = "culpritUser.username")
+    @Mapping(source = "victimUser.username", target = "victimUser.username")
+    @Mapping(source = "resolvedBy.username", target = "resolvedBy.username")
     @Mapping(source = "typeOfForeignId", target = "typeOfForeignId")
     UniversalReportDTO UniversalReportToUniversalReportDTO(UniversalReport universalReport);
 
-    @Mapping(target = "culpritUser.userId", source = "culpritUser")
-    @Mapping(target = "victimUser.userId", source = "victimUser")
-    @Mapping(target = "resolvedBy.userId", source = "resolvedBy")
+    @Mapping(source = "culpritUser.userId", target = "culpritUser.userId")
+    @Mapping(source = "victimUser.userId", target = "victimUser.userId")
+    @Mapping(source = "resolvedBy.userId", target = "resolvedBy.userId")
+    @Mapping(source = "culpritUser.username", target = "culpritUser.username")
+    @Mapping(source = "victimUser.username", target = "victimUser.username")
+    @Mapping(source = "resolvedBy.username", target = "resolvedBy.username")
     @Mapping(source = "typeOfForeignId", target = "typeOfForeignId")
     UniversalReport UniversalReportDTOToUniversalReport(UniversalReportDTO universalReportDTO);
 

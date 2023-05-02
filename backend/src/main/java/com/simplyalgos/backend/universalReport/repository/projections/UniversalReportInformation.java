@@ -34,7 +34,7 @@ public interface UniversalReportInformation {
     String getIsResolved();
 
     @Value("#{target.resolveNote}")
-    String getResolvedNote();
+    String getResolveNote();
 
 
     @Value("#{target.resolvedBy}")

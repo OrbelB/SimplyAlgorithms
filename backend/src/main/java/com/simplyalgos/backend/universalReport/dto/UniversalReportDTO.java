@@ -1,6 +1,7 @@
 package com.simplyalgos.backend.universalReport.dto;
 
 
+import com.simplyalgos.backend.user.dtos.UserIdAndUsername;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,11 +18,9 @@ public class UniversalReportDTO {
 
     UUID reportId;  // SET IN BACKEND
     UUID foreignId; //NOT NULL
-    UUID culpritUser;
-    UUID victimUser; //NOT NULL
-    UUID resolvedBy;
-
-
+    UserIdAndUsername culpritUser;
+    UserIdAndUsername  victimUser; //NOT NULL
+    UserIdAndUsername  resolvedBy;
     String typeOfForeignId; //NOT NULL
     String catagory;        //NOT NULL -> profanity, incorrectInfo, error, other
     String report;          //NOT NULL

@@ -70,11 +70,11 @@ public class UniversalReportServiceImp implements  UniversalReportService{
                         .typeOfForeignId(universalReportDTO.getTypeOfForeignId())
                         .catagory(universalReportDTO.getCatagory())
                         .report(universalReportDTO.getReport())
-                        .victimUser(userService.getUser(universalReportDTO.getVictimUser()))
+                        .victimUser(userService.getUser(universalReportDTO.getVictimUser().userId()))
                         .isResolved("No").build();
                 if(StringUtils.isNotNullAndEmptyOrBlank(universalReportDTO.getCulpritUser())){
                     newReport.setCulpritUser (userService
-                            .getUser(universalReportDTO.getCulpritUser()));
+                            .getUser(universalReportDTO.getCulpritUser().userId()));
                 }
                 UniversalReport universalReport = urr.saveAndFlush(newReport);
                 notifyAllAdminsAboutNewReport(universalReportMapper
@@ -131,7 +131,7 @@ public class UniversalReportServiceImp implements  UniversalReportService{
 
     @Override
     public void notifyUserRegardingClosedReport(UniversalReportDTO universalReportDTO) {
-        User user = userService.getUser(universalReportDTO.getVictimUser());
+        User user = userService.getUser(universalReportDTO.getVictimUser().userId());
         if (userPreferenceService.isNotificationEnableForType(NotificationType.SPECIAL_UPDATES, user.getUserId())){
             log.debug("Sending a resolved notification to user");
             userNotificationService.addUniversalReportNotification(
@@ -170,10 +170,10 @@ public class UniversalReportServiceImp implements  UniversalReportService{
             universalReport.setTypeOfForeignId(universalReport.getTypeOfForeignId());
         }
         if (StringUtils.isNotNullAndEmptyOrBlank(universalReportDTO.getResolvedBy())){
-            universalReport.setResolvedBy(userService.getUser(universalReportDTO.getResolvedBy()));
+            universalReport.setResolvedBy(userService.getUser(universalReportDTO.getResolvedBy().userId()));
         }
         if(StringUtils.isNotNullAndEmptyOrBlank(universalReportDTO.getCulpritUser())){
-            universalReport.setCulpritUser(userService.getUser(universalReportDTO.getCulpritUser()));
+            universalReport.setCulpritUser(userService.getUser(universalReportDTO.getCulpritUser().userId()));
         }
         universalReport.setCatagory(universalReportDTO.getCatagory());
         universalReport.setReport(universalReportDTO.getReport());
