@@ -11,10 +11,22 @@ export default function MeetTeam() {
         <h1 className="teampage-title">MEET THE TEAM</h1>
         <br />
         <div className="title-description">
-          Simply Algorithms was created by a team of 4 college students with the
-          goal of making a one-stop shop platform for all things algorithms.
-          Below you can find information about each team member with links to
-          their other projects.
+          Thank you for visiting the Simply Algorithms website. SA is our senior
+          project for class Comp 490 & 491 at the California State University,
+          Northridge. Our goal for this website is to create a one stop shop for
+          learning all things algorithms. Our team would not have been able to
+          achieve so much without the help of our professor, Afshin Amini. Our
+          website aims to help beginners who have just started learning about
+          computer science by providing them with all of the necessary tools for
+          studying. Students have access to our wiki / topic page where they can
+          read and visualize the information. Students can continue their
+          education by asking questions on our forums, testing their knowledge
+          by taking quizzes, and tracking their progress using the dashboard.
+          Lastly and most importantly, students have access to a private
+          notebook which they can take notes, share notes, and save public
+          notes. Additionally, verified users (teachers) and admins are given
+          the ability to create new topic pages, quizzes, and public notes for
+          all students to use and learn from. We hope you enjoy your visit.
         </div>
       </div>
       <div className="team-members">
@@ -23,20 +35,35 @@ export default function MeetTeam() {
           <div className="description-1">
             <img className="portrait" alt="beautiful face pic" src={image1} />
             <div className="member-bio">
-              Meet Orbel, the one and only! This larger-than-life personality is
-              a force to be reckoned with. With a personality that is as
-              flamboyant as his rainbow-colored hair, Orbel is impossible to
-              ignore. From a young age, Orbel was destined for greatness. Born
-              into a family of circus performers, he was a natural-born
-              entertainer. He quickly mastered every act, from tightrope walking
-              to juggling flaming torches. But Orbel was never content with just
-              being a performer - he wanted to be a star. He also became a
-              social media sensation, dancing for millions of followers on
-              TikTok. He is a dirty immigrant.
+              For this project Orbel took the role of Project Manager where he
+              managed the team`s schedule using Jira, as well as holding weekly
+              meetings where he and the team discussed their progress. Orbel
+              managed the workflow by assigning tasks to his fellow team members
+              and monitoring their progress. Also, as a project manager he was
+              responsible for general administrative tasks. His second role in
+              the team was as a backend developer where he researched and
+              developed the backend portion of the quizzes, notes, universal
+              reports, and other minor features. Orbel aimed to create flexible
+              and dynamic code which can be added on to or handle increased
+              load. Lastly, he also contributed to minor front end development.
+            </div>
+            <div className="member-bio">
+              Outside the project, Orbel is a graduate of California State
+              university, Northridge (CSUN) with a bachelors in Computer
+              Science. His career goal is to attain a role working with data
+              science and machine learning. Orbel am grateful to everyone who
+              has supported him thus far.
             </div>
             <a href="https://github.com/OrbelB">
               <button className="glow-on-hover g1" type="button">
                 <h2>Github</h2>
+              </button>
+            </a>
+            <br />
+            <br />
+            <a href="https://www.linkedin.com/in/orbel-baghdasian/">
+              <button className="glow-on-hover g1" type="button">
+                <h2>Linkedin</h2>
               </button>
             </a>
           </div>
@@ -46,20 +73,30 @@ export default function MeetTeam() {
           <div className="description-2">
             <img className="portrait" alt="beautiful face pic" src={image2} />
             <div className="member-bio">
-              Meet Jefferson, the world-record holder for the longest time spent
-              staring at a wall. That`s right, Jefferson has spent a whopping
-              273 hours staring at a blank wall without moving or blinking. Born
-              and raised in a small town, Jefferson always knew he was destined
-              for greatness. But he didn`t quite know how to achieve it until he
-              discovered his talent for staring at walls. It started as a joke -
-              he was bored one day and decided to see how long he could stare at
-              a wall without blinking. The rest, as they say, is history. When
-              he`s not staring at walls, Jefferson enjoys counting the number of
-              times his cat blinks in a minute.
+              For this project Jefferson took the role of Fullstack Developer
+              where he worked on both the frontend and backend functionalities.
+              His responsibilites included determining the design of many of the
+              site`s features, as well as integrating the frontend with the
+              backend to ensure that all features worked efficiently.
+            </div>
+            <div className="member-bio">
+              Jefferson is a full stack developer with expertise in Java, Spring
+              Boot, JavaScript, AWS, and ReactJS. He is passionate about
+              creating innovative solutions that meet user needs and business
+              requirements. He thrives on solving complex problems and
+              continuously improving my skills in an environment that is
+              constantly evolving and working with the latest technologies.
             </div>
             <a href="https://github.com/PDJefferson">
               <button className="glow-on-hover g2" type="button">
                 <h2>Github</h2>
+              </button>
+            </a>
+            <br />
+            <br />
+            <a href="https://www.linkedin.com/in/pdjefferson/">
+              <button className="glow-on-hover g2" type="button">
+                <h2>Linkedin</h2>
               </button>
             </a>
           </div>
@@ -69,20 +106,21 @@ export default function MeetTeam() {
           <div className="description-3">
             <img className="portrait" alt="beautiful face pic" src={image3} />
             <div className="member-bio">
-              Kevin is a mysterious figure who was born without a face. He has
-              been the subject of much speculation and rumor. Some say he`s a
-              figment of people`s imaginations, while others claim to have seen
-              him in person. He`s said to communicate through gestures and
-              written notes, as he`s unable to speak. Many who have supposedly
-              encountered him describe him as having an otherworldly presence.
-              Some skeptics believe that the rumors about him are simply a
-              product of the internet age, where information -and
-              misinformation- can spread quickly and easily. Despite the doubts
-              and speculation, we are somewhat confident Kevin actually exists.
+              For this project, Kevin took the role of frontend developer where
+              he worked on the UI design for functionalities like the user
+              dashboard and quizzes, as well as implementing these components in
+              the frontend. kevin should add more stuff about himself here
             </div>
             <a href="https://github.com/floreskevin87">
               <button className="glow-on-hover g3" type="button">
                 <h2>Github</h2>
+              </button>
+            </a>
+            <br />
+            <br />
+            <a href="https://www.linkedin.com/in/kevin-flores-2005a0173">
+              <button className="glow-on-hover g3" type="button">
+                <h2>Linkedin</h2>
               </button>
             </a>
           </div>
@@ -92,21 +130,28 @@ export default function MeetTeam() {
           <div className="description-4">
             <img className="portrait" alt="beautiful face pic" src={image4} />
             <div className="member-bio">
-              Joey is not your average college student. In fact, he`s not really
-              a college student at all. Joey is a highly trained spy, working
-              for a secret Chinese intelligence network embedded within the
-              college system. Masquerading as a college student, Joey has
-              infiltrated several universities across the country. His mission
-              is to gather intelligence on the inner workings of the American
-              education system. Despite his covert operations, Joey has managed
-              to maintain a low profile on campus. He`s known by his classmates
-              as a nice and dedicated student. Little do they know that he`s
-              actually gathering information that will be used to achieve
-              China`s geopolitical dominance.
+              For this project, Joseph took the role of frontend developer where
+              he worked on the implementation of components such as the forums
+              and wiki. Additionally, he also worked on the design of the site,
+              which includes the themes and colors of the user interfaces.
+              Secondly, Joseph also worked on some of the UI designs for these
+              components with the other members to ensure the interfaces would
+              be simple and accessible to the users.
+            </div>
+            <div className="member-bio">
+              Joseph is a graduate of CSUN and hopes to work as a frontend
+              developer as a career.
             </div>
             <a href="https://github.com/joey-codes">
               <button className="glow-on-hover g4" type="button">
                 <h2>Github</h2>
+              </button>
+            </a>
+            <br />
+            <br />
+            <a href="https://www.linkedin.com/in/joseph-wang-642258274/">
+              <button className="glow-on-hover g4" type="button">
+                <h2>Linkedin</h2>
               </button>
             </a>
           </div>
