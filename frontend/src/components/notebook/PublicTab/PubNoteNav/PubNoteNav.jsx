@@ -27,7 +27,7 @@ export default function PubNoteNav() {
     searchFrom: publicNotes,
     actionToDispatch: listPublicNotes,
     valueSearched: 'userNoteDTO.title',
-    debounceTime: 500,
+    debounceTime: 650,
   });
   const { sortBy, handleSortBy } = useSortBy({
     actionToDispatch: listPublicNotes,

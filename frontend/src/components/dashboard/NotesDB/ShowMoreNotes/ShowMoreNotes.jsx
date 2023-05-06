@@ -59,7 +59,7 @@ export default function ShowMoreNotes() {
     userId,
     jwtAccessToken,
     status,
-    debounceTime: 500,
+    debounceTime: 700,
   });
 
   const { sortBy, handleSortBy } = useSortBy({

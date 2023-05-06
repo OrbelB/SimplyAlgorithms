@@ -439,7 +439,9 @@ export default function ReportTable({
                         color="error"
                         variant="contained"
                         disabled={
-                          report.isResolved === 'no' || status === 'loading'
+                          report.isResolved === 'No' ||
+                          report.isResolved === 'no' ||
+                          status === 'loading'
                         }
                         onClick={() => handleDeleteReport(report.reportId)}
                       >
@@ -449,7 +451,7 @@ export default function ReportTable({
                   </TableRow>
                 ))}
                 {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableRow sx={{ height: 53 * emptyRows }}>
                     <TableCell colSpan={6} />
                   </TableRow>
                 )}

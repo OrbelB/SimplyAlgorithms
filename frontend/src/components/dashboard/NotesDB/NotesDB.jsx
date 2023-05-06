@@ -15,7 +15,7 @@ export default function NotesDB() {
     userId,
     jwtAccessToken,
     status,
-    debounceTime: 500,
+    debounceTime: 650,
   });
 
   const { sortBy, handleSortBy } = useSortBy({

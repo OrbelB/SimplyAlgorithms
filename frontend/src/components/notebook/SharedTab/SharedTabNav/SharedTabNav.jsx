@@ -28,7 +28,7 @@ export default function SharedTab() {
     searchFrom: sharedNotes,
     actionToDispatch: listSharedNotes,
     valueSearched: 'userNoteDTO.title',
-    debounceTime: 500,
+    debounceTime: 650,
   });
 
   return (

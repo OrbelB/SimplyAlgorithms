@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useMemo, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import debounce from 'lodash.debounce';
@@ -7,7 +8,7 @@ export default function useSearchBar({
   searchFrom,
   valueSearched,
   actionToDispatch,
-  debounceTime = 350,
+  debounceTime = 600,
   status,
   userId,
   jwtAccessToken,
@@ -33,24 +34,35 @@ export default function useSearchBar({
     });
   }, [searchFrom, searchTerm, valueSearched]);
 
-  const handleSearch = debounce((e) => {
-    searchParam.set(valueSearched, e.target.value);
-    if (status === 'loading' || status === 'pending') return;
-    setSearchParam(searchParam, {
-      replace: true,
-    });
-    dispatch(
-      actionToDispatch({
-        page: 0,
-        size: 20,
-        filterBy: searchParam.get(valueSearched),
-        jwtAccessToken,
-        userId,
-        [valueSearched]: searchParam.get(valueSearched),
-      })
-    );
-    setSearchTerm(e.target.value);
-  }, debounceTime);
+  const handleSearch = useCallback(
+    debounce((e) => {
+      searchParam.set(valueSearched, e.target.value);
+      if (status === 'loading' || status === 'pending') return;
+      setSearchParam(searchParam, {
+        replace: true,
+      });
+      dispatch(
+        actionToDispatch({
+          page: 0,
+          size: 20,
+          filterBy: searchParam.get(valueSearched),
+          jwtAccessToken,
+          userId,
+          [valueSearched]: searchParam.get(valueSearched),
+        })
+      );
+      setSearchTerm(e.target.value);
+    }, debounceTime),
+    [
+      searchParam,
+      dispatch,
+      actionToDispatch,
+      status,
+      valueSearched,
+      jwtAccessToken,
+      userId,
+    ]
+  );
 
   return { searchTerm, handleSearch, searchResults };
 }

@@ -30,7 +30,7 @@ export default function Quizhome() {
       searchFrom: quizList,
       valueSearched: 'title',
       actionToDispatch: fetchQuizList,
-      debounceTime: 500,
+      debounceTime: 600,
     });
   useEffect(() => {
     if (

@@ -17,7 +17,7 @@ export default function NotebookHome({ notes, setNotes, sharedToo }) {
     userId,
     jwtAccessToken,
     status,
-    debounceTime: 500,
+    debounceTime: 650,
   });
 
   const { lastElementChild: lastNote } = usePaginationWithInfiniteScroll({

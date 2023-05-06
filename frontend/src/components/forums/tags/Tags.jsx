@@ -47,7 +47,7 @@ export default function Tags() {
       searchFrom: tags,
       valueSearched: 'tag',
       actionToDispatch: fetchTags,
-      debounceTime: 500,
+      debounceTime: 600,
       status,
     });
 

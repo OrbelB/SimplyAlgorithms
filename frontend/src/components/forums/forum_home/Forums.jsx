@@ -27,7 +27,7 @@ export default function Forums() {
       searchFrom: forums,
       valueSearched: 'title',
       actionToDispatch: fetchForumList,
-      debounceTime: 500,
+      debounceTime: 600,
       status: forumsStatus,
     });
 

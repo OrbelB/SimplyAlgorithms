@@ -2,8 +2,22 @@
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import { styled } from '@mui/system';
 import { wikiActions } from '../../../store/reducers/wiki-slice';
 import './Categories.css';
+
+const CustomCard = styled(Card)(() => ({
+  backgroundColor: 'gray',
+  color: 'white',
+  fontSize: '2.2vw',
+  fontFamily: 'Readex Pro, sans-serif',
+  marginBottom: '1em',
+  marginInline: '1em',
+  borderRadius: '5px',
+  border: '15px solid transparent',
+  padding: '0.7em 0 0.7em 0',
+  width: '440px',
+}));
 
 export default function Categories() {
   const dispatch = useDispatch();
@@ -21,10 +35,10 @@ export default function Categories() {
       <div className="container-xl">
         <div className="row justify-content-around">
           {subCategories.map((subCategory) => (
-            <Card
+            <CustomCard
               elevation={6}
               variant="elevation"
-              className="col-6 col-sm-6 text-center topic"
+              className="col-6 col-sm-6 text-center"
               style={{ backgroundColor: subCategory.rgb }}
               key={subCategory.wikiId}
             >
@@ -38,7 +52,7 @@ export default function Categories() {
                   </Typography>
                 </CardContent>
               </CardActionArea>
-            </Card>
+            </CustomCard>
           ))}
         </div>
       </div>
