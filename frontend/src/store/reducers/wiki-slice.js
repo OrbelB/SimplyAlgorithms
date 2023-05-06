@@ -40,17 +40,41 @@ export const wikiSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchSingleWiki.fulfilled, (state, action) => {
-        state.status = 'success';
         const links = {
           title: action.payload.wikiName,
           pages: [],
         };
+
         if (action.payload.isParentChild === 'parent') {
-          links.pages = action.payload.wikiChildren.map((child) => {
+          // sort wiki children by title in alphabetical order
+          const sortedWikiChildren = action.payload.wikiChildren.sort(
+            (a, b) => {
+              if (a.wikiChild.wikiName < b.wikiChild.wikiName) {
+                return -1;
+              }
+              if (a.wikiChild.wikiName > b.wikiChild.wikiName) {
+                return 1;
+              }
+              return 0;
+            }
+          );
+          links.pages = sortedWikiChildren.map((child) => {
             return { title: child.wikiChild.wikiName };
           });
         } else if (action.payload.isParentChild === 'child') {
-          links.pages = action.payload.wikiTopicPages.map((topicPage) => {
+          // sort wiki parents by title in alphabetical order
+          const sortedWikiParents = action.payload.wikiTopicPages.sort(
+            (a, b) => {
+              if (a.topicPage.title < b.topicPage.title) {
+                return -1;
+              }
+              if (a.topicPage.title > b.topicPage.title) {
+                return 1;
+              }
+              return 0;
+            }
+          );
+          links.pages = sortedWikiParents.map((topicPage) => {
             return { title: topicPage.topicPage.title };
           });
         }
@@ -58,6 +82,7 @@ export const wikiSlice = createSlice({
           ...action.payload,
           links,
         };
+        state.status = 'success';
       })
       .addCase(fetchSingleWiki.rejected, (state, action) => {
         state.status = 'failed';
@@ -111,7 +136,7 @@ export const wikiSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchSubCategories.fulfilled, (state, action) => {
-        state.status = 'success';
+        state.status = 'idle';
         if (action.payload.length === 0) return;
         state.subCategories = action.payload.map((subCategory) => {
           return {

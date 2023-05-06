@@ -15,13 +15,16 @@ export default function WikiPage() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchSingleWiki(wikiName));
       dispatch(getNameAvailability({ name: wikiName, jwtAccessToken }));
     }
-    if (wikiName !== wiki?.wikiName && status === 'success') {
+    if (
+      wiki?.wikiName !== undefined &&
+      wikiName !== wiki?.wikiName &&
+      status === 'success'
+    ) {
       dispatch(wikiActions.resetData());
     }
   }, [status, wiki, wikiName, dispatch, jwtAccessToken]);
@@ -36,7 +39,7 @@ export default function WikiPage() {
     return parse(htmlContent);
   }, [wiki?.description]);
 
-  if (nameAvailable) {
+  if (nameAvailable === true) {
     dispatch(wikiActions.resetData());
     navigate('/wiki/new/create', { replace: true });
   }
@@ -46,7 +49,7 @@ export default function WikiPage() {
     navigate('/wiki/Main Category', { replace: true });
   }
 
-  if (wiki && status === 'success') {
+  if (wiki && wiki?.links && status === 'success') {
     return (
       <WikiHome
         title={wikiName}
