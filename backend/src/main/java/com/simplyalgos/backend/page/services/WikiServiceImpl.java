@@ -20,9 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -43,7 +41,7 @@ public class WikiServiceImpl implements WikiService {
 
     @Override
     public Set<WikiInformation> getWikiMainCategories() {
-        return wikiRepository.findAllByIsParentChild("child", WikiInformation.class);
+        return wikiRepository.findAllByIsParentChild_OrderByWikiNameAsc("child", WikiInformation.class);
     }
 
 
@@ -54,7 +52,7 @@ public class WikiServiceImpl implements WikiService {
      */
     @Override
     public Set<?> getSubCategories() {
-        return wikiRepository.findAllByIsParentChild("child", WikiNameAndIdOnly.class);
+        return wikiRepository.findAllByIsParentChild_OrderByWikiNameAsc("child", WikiNameAndIdOnly.class);
     }
 
 
@@ -89,12 +87,12 @@ public class WikiServiceImpl implements WikiService {
      */
     @Override
     public Wiki getWiki(String wikiName) {
-        return wikiRepository.getWikiByWikiName(wikiName).orElseThrow(ElementNotFoundException::new);
+       return wikiRepository.getWikiByWikiName(wikiName).orElseThrow(ElementNotFoundException::new);
     }
 
     @Override
     public Set<WikiInfo> getAllWikiSubCategoriesBasicInfo() {
-        return wikiRepository.findAllByIsParentChild("child", WikiInfo.class);
+        return wikiRepository.findAllByIsParentChild_OrderByWikiNameAsc("child", WikiInfo.class);
     }
 
 

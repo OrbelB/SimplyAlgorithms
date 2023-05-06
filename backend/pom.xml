@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.simplyalgos</groupId>
     <artifactId>backend</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>1.0.1-BLUEJAY</version>
     <name>backend</name>
     <description>backend</description>
     <properties>

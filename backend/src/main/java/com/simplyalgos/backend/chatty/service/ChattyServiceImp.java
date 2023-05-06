@@ -48,9 +48,13 @@ public class ChattyServiceImp implements ChattyService {
 
     private final String WARNING_MESSAGE = "\n\nThis is an AI generated answer, Chatty's answer may be wrong ";
 
+    private RestTemplate restTemplate;
+
     @Qualifier("chattyRestTemplate")
     @Autowired
-    private RestTemplate restTemplate;
+    private void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public boolean isAppropriate(String textBody) {
