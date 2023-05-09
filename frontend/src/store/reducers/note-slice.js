@@ -85,12 +85,15 @@ export const noteSlice = createSlice({
       .addCase(listPublicNotes.fulfilled, (state, action) => {
         state.status = 'success';
         const { content, number, totalPages } = action.payload;
-        state.publicNotes = content.concat(
-          state.publicNotes.filter(
+        state.publicNotes = state.publicNotes
+          .filter(
             (note) =>
-              !content.find((n) => n.publicShareId === note.publicShareId)
+              !content.find(
+                (updatedNote) =>
+                  updatedNote.publicShareId === note.publicShareId
+              )
           )
-        );
+          .concat(content);
         state.currentPublicNotePage = number;
         state.totalPublicNotePages = totalPages;
       })
@@ -104,14 +107,15 @@ export const noteSlice = createSlice({
       .addCase(listSharedNotes.fulfilled, (state, action) => {
         state.status = 'success';
         const { content, number, totalPages } = action.payload;
-        state.sharedNotes = content.concat(
-          state.sharedNotes.filter(
+        state.sharedNotes = state.sharedNotes
+          .filter(
             (note) =>
               !content.find(
-                (n) => n.noteShareDTO.shareId === note.noteShareDTO.shareId
+                (udpatedNote) =>
+                  udpatedNote.noteShareDTO.shareId === note.noteShareDTO.shareId
               )
           )
-        );
+          .concat(content);
         state.currentSharedNotePage = number;
         state.totalSharedNotePages = totalPages;
       })
@@ -178,12 +182,9 @@ export const noteSlice = createSlice({
       .addCase(listUserNotes.fulfilled, (state, action) => {
         state.status = 'success';
         const { content, number, totalPages } = action.payload;
-        state.privateNotes = content.concat(
-          state.privateNotes.filter(
-            (note) => !content.find((n) => n.noteId === note.noteId)
-          )
-        );
-
+        state.privateNotes = state.privateNotes
+          .filter((note) => !content.find((n) => n.noteId === note.noteId))
+          .concat(content);
         state.currentPrivateNotePage = number;
         state.totalPrivateNotePages = totalPages;
       })

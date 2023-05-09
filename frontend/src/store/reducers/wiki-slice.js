@@ -166,7 +166,7 @@ export const wikiSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchWikiLinks.fulfilled, (state, action) => {
-        state.status = 'success';
+        state.status = 'idle';
         state.wikiLinks = action.payload;
       })
       .addCase(fetchWikiLinks.rejected, (state, action) => {

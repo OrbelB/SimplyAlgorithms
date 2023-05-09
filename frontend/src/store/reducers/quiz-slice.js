@@ -209,18 +209,14 @@ export const quizSlice = createSlice({
       })
       .addCase(fetchQuizList.fulfilled, (state, action) => {
         state.status = 'success';
-
+        const { number, content, totalPages, totalElements } = action.payload;
         // add the previous state to the new state if it is not a duplicate
-        state.quizList = action.payload.content.concat(
-          state.quizList.filter((quiz) => {
-            return !action.payload.content.find(
-              (quiz2) => quiz2.quizId === quiz.quizId
-            );
-          })
-        );
-        state.quizListCurrPage = action.payload.pageNumber;
-        state.quizListTotalPages = action.payload.totalPages;
-        state.totalElements = action.payload.totalElements;
+        state.quizList = state.quizList
+          .filter((quiz) => !content.find((q) => q.quizId === quiz.quizId))
+          .concat(content);
+        state.quizListCurrPage = number;
+        state.quizListTotalPages = totalPages;
+        state.totalElements = totalElements;
       })
       .addCase(fetchQuizList.rejected, (state, action) => {
         state.status = 'failed';

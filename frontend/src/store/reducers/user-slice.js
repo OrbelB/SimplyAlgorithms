@@ -269,15 +269,14 @@ export const userSlice = createSlice({
       .addCase(fetchUserNotifications.fulfilled, (state, action) => {
         const { content, number, totalPages } = action.payload;
 
-        state.notifications = content.concat(
-          state.notifications.filter(
-            (n) =>
+        state.notifications = state.notifications
+          .filter(
+            (notification) =>
               !content.find(
-                (notification) =>
-                  notification.notificationId === n.notificationId
+                (n) => n.notificationId === notification.notificationId
               )
           )
-        );
+          .concat(content);
         state.notificationsCurrPage = number;
         state.notificationsTotalPages = totalPages;
         state.status = 'success';

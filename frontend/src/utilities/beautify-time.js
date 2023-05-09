@@ -1,20 +1,23 @@
 import { differenceInDays, formatDistanceToNow, parseISO } from 'date-fns';
 
-// function offsetTimezone(date) {
-//   const offset = date.getTimezoneOffset();
-//   return new Date(date.getTime() - offset * 60 * 1000);
-// }
+function offsetTimezone(date) {
+  const offset = date.getTimezoneOffset();
+  return date.getUTCDate() === date.getDate()
+    ? new Date(date.getTime() - offset * 60 * 1000)
+    : date;
+}
 
 export function beautifyTime({ createdDate }) {
   if (createdDate) {
     // create a new date object from the ISO string
     const date = new Date(createdDate);
+    const offSetDate = offsetTimezone(date);
 
     // use toLocaleString to convert to the user's local time
-    const formattedDate = date.toLocaleString();
+    const formattedDate = offSetDate.toLocaleString();
 
     // use format distance to now and add minutes add
-    const timePassed = formatDistanceToNow(date, {
+    const timePassed = formatDistanceToNow(offSetDate, {
       addSuffix: true,
       includeSeconds: true,
     });
@@ -26,7 +29,8 @@ export function beautifyTime({ createdDate }) {
 
 export function timeToExpire(date) {
   const now = new Date();
-  const expireDate = new Date(date).toISOString();
+  const currentDate = offsetTimezone(new Date(date));
+  const expireDate = new Date(currentDate).toISOString();
   const expirationDate = parseISO(expireDate);
   return differenceInDays(expirationDate, now);
 }
